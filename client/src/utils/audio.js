@@ -1,47 +1,52 @@
+// Cache to store the base64 audio strings so we don't repeatedly fetch the same text
+const audioCache = new Map();
+
 /**
- * Plays the given text using the browser's native SpeechSynthesis API.
- * Uses a basic hash function on the `seedString` to dynamically alter
- * the pitch slightly, giving each sentence/article its own "identity".
+ * Plays the given text by fetching MP3 audio from the backend Google Cloud TTS proxy.
  * 
  * @param {string} text - The text to speak.
- * @param {string} seedString - A unique identifier (e.g., ID or title) to seed the pitch.
+ * @param {string} seedString - (Ignored in GCP TTS, kept for API compatibility)
  * @param {string} lang - The language code (default 'fi-FI').
  */
-export const playAudio = (text, seedString = '', lang = 'fi-FI') => {
-  if (!('speechSynthesis' in window)) {
-    console.warn("Speech Synthesis API not supported in this browser.");
+export const playAudio = async (text, seedString = '', lang = 'fi-FI') => {
+  if (!text) return;
+
+  // Use the cached audio if we've already fetched it
+  if (audioCache.has(text)) {
+    playBase64Audio(audioCache.get(text));
     return;
   }
 
-  // Cancel any ongoing speech
-  window.speechSynthesis.cancel();
+  try {
+    const response = await fetch('http://localhost:5000/api/tts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text })
+    });
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
+    const data = await response.json();
 
-  // Simple string hash function to generate a pseudo-random but deterministic number
-  let hash = 0;
-  for (let i = 0; i < seedString.length; i++) {
-    hash = seedString.charCodeAt(i) + ((hash << 5) - hash);
+    if (data.success && data.audioContent) {
+      // Store in cache
+      audioCache.set(text, data.audioContent);
+      // Play it
+      playBase64Audio(data.audioContent);
+    } else {
+      console.error('Failed to fetch TTS audio:', data.error);
+      alert(`TTS Error: ${data.error}. Please check your GOOGLE_TTS_API_KEY.`);
+    }
+  } catch (error) {
+    console.error('Network error fetching TTS:', error);
   }
-  
-  // Convert hash to a 0-1 range
-  const randomScale = Math.abs(Math.sin(hash));
-
-  // Base pitch is 1. We vary it from 0.8 to 1.3 to create different identities.
-  const pitch = 0.8 + (randomScale * 0.5);
-  utterance.pitch = pitch;
-
-  // We can also slightly vary the rate (speed). Default is 1. Range: 0.9 to 1.1
-  const rate = 0.9 + (randomScale * 0.2);
-  utterance.rate = rate;
-
-  // Try to find a specific native voice for the language if available
-  const voices = window.speechSynthesis.getVoices();
-  const targetVoice = voices.find(voice => voice.lang.includes(lang.split('-')[0]));
-  if (targetVoice) {
-    utterance.voice = targetVoice;
-  }
-
-  window.speechSynthesis.speak(utterance);
 };
+
+/**
+ * Helper to play a base64 encoded MP3 string
+ * @param {string} base64Audio 
+ */
+function playBase64Audio(base64Audio) {
+  const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
+  audio.play().catch(e => console.error("Error playing audio:", e));
+}
