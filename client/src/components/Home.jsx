@@ -102,39 +102,43 @@ export default function Home() {
                     </div>
                   </div>
                   
-                  <div className="lesson-actions">
-                    <button 
-                      className="level-btn"
-                      onClick={() => handleLevelClick(lesson.title, 1)}
-                    >
-                      L1 (Choice)
-                    </button>
-                    <button 
-                      className="level-btn"
-                      onClick={() => handleLevelClick(lesson.title, 2)}
-                    >
-                      L2 (Words)
-                    </button>
-                    <button 
-                      className="level-btn"
-                      onClick={() => handleLevelClick(lesson.title, 3)}
-                    >
-                      L3 (Type)
-                    </button>
-                    <button 
-                      className="level-btn"
-                      onClick={() => handleLevelClick(lesson.title, 3, 'speaking')}
-                      style={{ backgroundColor: 'var(--accent)', color: 'white', borderColor: 'var(--accent)' }}
-                    >
-                      🎙️ Speak
-                    </button>
-                    <button 
-                      className="level-btn"
-                      onClick={() => handleLevelClick(lesson.title, 1, 'matching')}
-                      style={{ backgroundColor: '#ce82ff', color: 'white', borderColor: '#ce82ff' }}
-                    >
-                      🧩 Match
-                    </button>
+                  <div className="lesson-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      <button 
+                        className="level-btn"
+                        onClick={() => handleLevelClick(lesson.title, 1)}
+                      >
+                        L1 (Choice)
+                      </button>
+                      <button 
+                        className="level-btn"
+                        onClick={() => handleLevelClick(lesson.title, 2)}
+                      >
+                        L2 (Words)
+                      </button>
+                      <button 
+                        className="level-btn"
+                        onClick={() => handleLevelClick(lesson.title, 3)}
+                      >
+                        L3 (Type)
+                      </button>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      <button 
+                        className="level-btn"
+                        onClick={() => handleLevelClick(lesson.title, 3, 'speaking')}
+                        style={{ backgroundColor: 'var(--accent)', color: 'white', borderColor: 'var(--accent)' }}
+                      >
+                        🎙️ Speak
+                      </button>
+                      <button 
+                        className="level-btn"
+                        onClick={() => handleLevelClick(lesson.title, 1, 'matching')}
+                        style={{ backgroundColor: '#ce82ff', color: 'white', borderColor: '#ce82ff' }}
+                      >
+                        🧩 Match
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -144,11 +148,11 @@ export default function Home() {
         </div>
       ))}
 
-      <div className="progress-actions">
-        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=matching')} style={{ marginRight: '16px', backgroundColor: '#ce82ff', color: 'white' }}>
+      <div className="progress-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
+        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=matching')} style={{ backgroundColor: '#ce82ff', color: 'white' }}>
           🧩 Practice Word Match
         </button>
-        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=speaking')} style={{ marginRight: '16px' }}>
+        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=speaking')}>
           🎙️ Practice Speaking
         </button>
         <button className="btn-secondary reset-btn" onClick={handleResetProgress}>Reset Progress</button>
