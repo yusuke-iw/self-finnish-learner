@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  const { text } = req.body;
+  const { text, speed } = req.body;
   const apiKey = process.env.GOOGLE_TTS_API_KEY;
 
   if (!apiKey) {
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
       body: JSON.stringify({
         input: { text },
         voice: { languageCode: 'fi-FI', name: 'fi-FI-Wavenet-A' },
-        audioConfig: { audioEncoding: 'MP3' }
+        audioConfig: { audioEncoding: 'MP3', speakingRate: speed || 1.0 }
       })
     });
 

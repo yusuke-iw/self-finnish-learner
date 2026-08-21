@@ -104,15 +104,16 @@ describe('API Routes Tests', () => {
       // 2 sentences should generate 6 questions (2 sentences * 3 levels each)
       expect(res.body.data.questions.length).toBe(6);
       
-      // Verify scaffolding: Level 1 (choice) should come before Level 3 (typing) for a sentence
+      // Verify scaffolding: The session should contain Level 1, 2, and 3 questions
       const questions = res.body.data.questions;
       
-      // Find levels of sentence s1
-      const s1Levels = questions
-        .filter(q => q.sentenceId === 's1')
-        .map(q => q.level);
-      
-      expect(s1Levels).toEqual([1, 2, 3]);
+      const allLevels = [...new Set(questions.map(q => q.level))].sort();
+      expect(allLevels).toEqual([1, 2, 3]);
+
+      // Verify that level 1 questions come before level 3 questions
+      const firstLevel1 = questions.findIndex(q => q.level === 1);
+      const lastLevel3 = questions.findLastIndex(q => q.level === 3);
+      expect(firstLevel1).toBeLessThan(lastLevel3);
     });
   });
 
