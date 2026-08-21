@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { generateSession, checkAnswer } from '../api';
+import { playAudio } from '../utils/audio';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Session() {
@@ -271,9 +272,16 @@ export default function Session() {
           <div className={`feedback ${feedback.isPerfect ? 'correct' : feedback.hasTypo ? 'typo' : 'incorrect'}`}>
             <div>
               {feedback.isPerfect ? 'Correct!' : feedback.hasTypo ? 'Correct, but you have a typo.' : 'Incorrect.'}
-              {(!feedback.isPerfect) && (
+              <div className="correct-answer-container">
                 <span className="correct-text">Correct answer: {feedback.correctText}</span>
-              )}
+                <button 
+                  className="btn-audio" 
+                  onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId)}
+                  title="Listen"
+                >
+                  🔊
+                </button>
+              </div>
             </div>
           </div>
         )}

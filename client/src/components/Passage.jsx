@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchPassages, fetchPassageById } from '../api';
+import { playAudio } from '../utils/audio';
 
 export default function Passage() {
   const [passages, setPassages] = useState([]);
@@ -37,7 +38,16 @@ export default function Passage() {
           </div>
           
           <div className="passage-reading">
-            <h3>Reading</h3>
+            <div className="reading-header-audio">
+              <h3>Reading</h3>
+              <button 
+                className="btn-audio" 
+                onClick={() => playAudio(selectedPassage.text, selectedPassage._id)}
+                title="Listen to passage"
+              >
+                🔊
+              </button>
+            </div>
             <p className="passage-text">{selectedPassage.text}</p>
             
             <div className="passage-translation-toggle">
