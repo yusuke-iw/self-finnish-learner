@@ -1,0 +1,48 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const connectDB = require('./config/db');
+
+// Import routes
+const sentencesRouter = require('./routes/sentences');
+const passagesRouter = require('./routes/passages');
+const sessionsRouter = require('./routes/sessions');
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(helmet());
+app.use(express.json());
+
+// API Routes
+app.use('/api/sentences', sentencesRouter);
+app.use('/api/passages', passagesRouter);
+app.use('/api/sessions', sessionsRouter);
+
+// Centralized error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.statusCode || 500).json({
+    success: false,
+    error: err.message || 'Internal Server Error'
+  });
+});
+
+const PORT = process.env.PORT || 5000;
+
+// Start server
+const start = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error(`Startup error: ${error.message}`);
+    process.exit(1);
+  }
+};
+
+start();
