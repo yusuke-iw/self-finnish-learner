@@ -38,12 +38,92 @@ function shuffle(array) {
   return arr;
 }
 
+const categoryVocab = {
+  "Asiointi ja Matkustaminen": [
+    { fi: 'Juna', en: 'Train' },
+    { fi: 'Aika', en: 'Time' },
+    { fi: 'Huone', en: 'Room' },
+    { fi: 'Yö', en: 'Night' },
+    { fi: 'Asema', en: 'Station' },
+    { fi: 'Kuitti', en: 'Receipt' },
+    { fi: 'Euro', en: 'Euro' },
+    { fi: 'Matka', en: 'Journey' }
+  ],
+  "Menneet ajat": [
+    { fi: 'Vuosi', en: 'Year' },
+    { fi: 'Eilen', en: 'Yesterday' },
+    { fi: 'Kirja', en: 'Book' },
+    { fi: 'Saapua', en: 'Arrive' },
+    { fi: 'Lähteä', en: 'Leave' },
+    { fi: 'Aika', en: 'Time' },
+    { fi: 'Nähdä', en: 'See' }
+  ],
+  "Työelämä ja Opiskelu": [
+    { fi: 'Yritys', en: 'Company' },
+    { fi: 'Työntekijä', en: 'Employee' },
+    { fi: 'Asiakas', en: 'Customer' },
+    { fi: 'Kokous', en: 'Meeting' },
+    { fi: 'Työpaikka', en: 'Job position' },
+    { fi: 'Vahvuus', en: 'Strength' },
+    { fi: 'Heikkous', en: 'Weakness' }
+  ],
+  "Konditionaali ja Potentiaali": [
+    { fi: 'Loma', en: 'Vacation' },
+    { fi: 'Aika', en: 'Time' },
+    { fi: 'Raportti', en: 'Report' },
+    { fi: 'Koti', en: 'Home' },
+    { fi: 'Kala', en: 'Fish' },
+    { fi: 'Liha', en: 'Meat' },
+    { fi: 'Mieluummin', en: 'Rather' }
+  ],
+  "Yhteiskunta ja Ympäristö": [
+    { fi: 'Ilmasto', en: 'Climate' },
+    { fi: 'Haaste', en: 'Challenge' },
+    { fi: 'Ympäristö', en: 'Environment' },
+    { fi: 'Hallitus', en: 'Government' },
+    { fi: 'Demokratia', en: 'Democracy' },
+    { fi: 'Energia', en: 'Energy' },
+    { fi: 'Vero', en: 'Tax' }
+  ],
+  "Lauseenvastikkeet": [
+    { fi: 'Virhe', en: 'Mistake' },
+    { fi: 'Ulkomaat', en: 'Abroad' },
+    { fi: 'Tehtävä', en: 'Task' },
+    { fi: 'Sade', en: 'Rain' },
+    { fi: 'Matka', en: 'Journey' },
+    { fi: 'Heti', en: 'Immediately' },
+    { fi: 'Koti', en: 'Home' }
+  ],
+  "Abstraktit keskustelut": [
+    { fi: 'Vastuu', en: 'Responsibility' },
+    { fi: 'Yksilö', en: 'Individual' },
+    { fi: 'Kieli', en: 'Language' },
+    { fi: 'Prosessi', en: 'Process' },
+    { fi: 'Taide', en: 'Art' },
+    { fi: 'Todellisuus', en: 'Reality' },
+    { fi: 'Totuus', en: 'Truth' }
+  ]
+};
+
+function getMatchingVocab(category) {
+  let pool = [];
+  if (category && categoryVocab[category]) {
+    pool = shuffle([...categoryVocab[category]]);
+  }
+  if (pool.length < 5) {
+    const extra = shuffle([...vocabularyBank]).slice(0, 5 - pool.length);
+    pool = [...pool, ...extra];
+  }
+  return pool.slice(0, 5);
+}
+
 // POST /api/sessions/generate
 router.post('/generate', async (req, res, next) => {
   try {
     const sentenceCount = req.body.sentenceCount || 3;
     const category = req.body.category;
     const requestedLevel = req.body.level ? Number(req.body.level) : null;
+    const exerciseType = req.body.exerciseType;
 
     let availableSentences = [];
 
@@ -76,21 +156,46 @@ router.post('/generate', async (req, res, next) => {
     const level3Questions = [];
 
     selectedSentences.forEach((sentence) => {
+      if (exerciseType === 'speaking') {
+        level3Questions.push({
+          sentenceId: sentence._id.toString(),
+          level: 3,
+          type: 'speaking',
+          prompt: sentence.text,
+          correctAnswer: sentence.text
+        });
+        return;
+      }
+
       // Level 1: Choice Question or Matching Pairs
-      if (!requestedLevel || requestedLevel === 1) {
-        const isMatching = Math.random() > 0.5;
+      if ((!exerciseType && (!requestedLevel || requestedLevel === 1)) || exerciseType === 'matching') {
+        const isMatching = exerciseType === 'matching' ? true : Math.random() > 0.5;
 
         if (isMatching) {
           // Generate Matching Pairs
-          const selectedVocab = shuffle([...vocabularyBank]).slice(0, 5);
+          const selectedVocab = getMatchingVocab(category);
           const pairs = selectedVocab.map(v => ({ id: Math.random().toString(36).substring(7), ...v }));
           
-          let tokens = [];
+          let fiTokens = [];
+          let enTokens = [];
           pairs.forEach(p => {
-            tokens.push({ id: p.id, text: p.fi, lang: 'fi' });
-            tokens.push({ id: p.id, text: p.en, lang: 'en' });
+            fiTokens.push({ id: p.id, text: p.fi, lang: 'fi' });
+            enTokens.push({ id: p.id, text: p.en, lang: 'en' });
           });
-          tokens = shuffle(tokens);
+          fiTokens = shuffle(fiTokens);
+          enTokens = shuffle(enTokens);
+          
+          const isFiLeft = Math.random() > 0.5;
+          let tokens = [];
+          for (let i = 0; i < 5; i++) {
+            if (isFiLeft) {
+              tokens.push(fiTokens[i]);
+              tokens.push(enTokens[i]);
+            } else {
+              tokens.push(enTokens[i]);
+              tokens.push(fiTokens[i]);
+            }
+          }
 
           level1Questions.push({
             sentenceId: 'matching-warmup-' + Math.random(),
@@ -119,7 +224,7 @@ router.post('/generate', async (req, res, next) => {
       }
 
       // Level 2: Word Bank Question
-      if (!requestedLevel || requestedLevel === 2) {
+      if ((!exerciseType && (!requestedLevel || requestedLevel === 2)) || exerciseType === 'word-bank') {
         const wrongSentences = availableSentences.filter(s => s._id.toString() !== sentence._id.toString());
         const isReverse = Math.random() > 0.5;
 
@@ -179,7 +284,7 @@ router.post('/generate', async (req, res, next) => {
       }
 
       // Level 3: Typing, Fill in the Blank, or Speaking
-      if (!requestedLevel || requestedLevel === 3) {
+      if (!exerciseType && (!requestedLevel || requestedLevel === 3)) {
         const rand = Math.random();
         
         if (rand > 0.66) {
