@@ -91,14 +91,6 @@ export default function Home() {
                   <div 
                     className={`path-node ${isCompleted ? 'completed-node' : ''}`}
                     style={{ borderColor: nodeBorderColor }}
-                    onClick={() => {
-                      if (!isCompleted) {
-                        navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=${currentLevel}`);
-                      } else {
-                        // User can still practice, let's load a random level 3 session
-                        navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=3`);
-                      }
-                    }}
                     title={lesson.description}
                   >
                     <div className="node-icon" style={{ color: nodeIconColor }}>{nodeIcon}</div>
@@ -111,8 +103,28 @@ export default function Home() {
                     <div className="node-tooltip">
                       <div className="node-title">{lesson.title}</div>
                       <div className="node-desc">{lesson.description}</div>
-                      <div className="node-start" style={{ color: nodeBorderColor }}>
-                        {isCompleted ? 'Practice →' : `Start Level ${currentLevel} →`}
+                      <div className="node-level-selector">
+                        <button 
+                          className="level-btn"
+                          style={{ borderColor: nodeBorderColor, color: nodeBorderColor }}
+                          onClick={(e) => { e.stopPropagation(); navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=1`); }}
+                        >
+                          Level 1
+                        </button>
+                        <button 
+                          className="level-btn"
+                          style={{ borderColor: nodeBorderColor, color: nodeBorderColor }}
+                          onClick={(e) => { e.stopPropagation(); navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=2`); }}
+                        >
+                          Level 2
+                        </button>
+                        <button 
+                          className="level-btn"
+                          style={{ borderColor: nodeBorderColor, color: nodeBorderColor }}
+                          onClick={(e) => { e.stopPropagation(); navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=3`); }}
+                        >
+                          Level 3
+                        </button>
                       </div>
                     </div>
                   </div>
