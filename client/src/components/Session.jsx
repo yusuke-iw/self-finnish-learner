@@ -8,6 +8,7 @@ export default function Session() {
   const navigate = useNavigate();
   const categoryParam = searchParams.get('category');
   const levelParam = searchParams.get('level') ? Number(searchParams.get('level')) : null;
+  const exerciseTypeParam = searchParams.get('exerciseType');
 
   const [session, setSession] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -34,15 +35,15 @@ export default function Session() {
 
   // Auto-start if category and level are provided
   useEffect(() => {
-    if (categoryParam && levelParam && !session && !isStarting && !isFinished) {
-      startSession(5, categoryParam, levelParam);
+    if ((categoryParam && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
+      startSession(5, categoryParam, levelParam, exerciseTypeParam);
     }
-  }, [categoryParam, levelParam, session, isStarting, isFinished]);
+  }, [categoryParam, levelParam, exerciseTypeParam, session, isStarting, isFinished]);
 
-  const startSession = async (count = sentenceCount, cat = categoryParam, lvl = levelParam) => {
+  const startSession = async (count = sentenceCount, cat = categoryParam, lvl = levelParam, ext = exerciseTypeParam) => {
     setIsStarting(true);
     try {
-      const res = await generateSession(count, cat, lvl);
+      const res = await generateSession(count, cat, lvl, ext);
       if (res.data.success) {
         setSession(res.data.data);
         setCurrentIndex(0);

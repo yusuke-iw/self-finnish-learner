@@ -62,8 +62,10 @@ export default function Home() {
     }
   };
 
-  const handleLevelClick = (lessonTitle, level) => {
-    navigate(`/sessions?category=${encodeURIComponent(lessonTitle)}&level=${level}`);
+  const handleLevelClick = (lessonTitle, level, ext) => {
+    let url = `/sessions?category=${encodeURIComponent(lessonTitle)}&level=${level}`;
+    if (ext) url += `&exerciseType=${ext}`;
+    navigate(url);
   };
 
   return (
@@ -119,6 +121,20 @@ export default function Home() {
                     >
                       L3 (Type)
                     </button>
+                    <button 
+                      className="level-btn"
+                      onClick={() => handleLevelClick(lesson.title, 3, 'speaking')}
+                      style={{ backgroundColor: 'var(--accent)', color: 'white', borderColor: 'var(--accent)' }}
+                    >
+                      🎙️ Speak
+                    </button>
+                    <button 
+                      className="level-btn"
+                      onClick={() => handleLevelClick(lesson.title, 1, 'matching')}
+                      style={{ backgroundColor: '#ce82ff', color: 'white', borderColor: '#ce82ff' }}
+                    >
+                      🧩 Match
+                    </button>
                   </div>
                 </div>
               );
@@ -129,6 +145,12 @@ export default function Home() {
       ))}
 
       <div className="progress-actions">
+        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=matching')} style={{ marginRight: '16px', backgroundColor: '#ce82ff', color: 'white' }}>
+          🧩 Practice Word Match
+        </button>
+        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=speaking')} style={{ marginRight: '16px' }}>
+          🎙️ Practice Speaking
+        </button>
         <button className="btn-secondary reset-btn" onClick={handleResetProgress}>Reset Progress</button>
       </div>
 
