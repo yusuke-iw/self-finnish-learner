@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchSentences } from '../api';
+import { playAudio } from '../utils/audio';
 
 export default function GuidebookModal({ unit, onClose }) {
   const [sentences, setSentences] = useState([]);
@@ -46,7 +47,16 @@ export default function GuidebookModal({ unit, onClose }) {
                 sentences.map(sentence => (
                   <div key={sentence._id} className="grammar-note-card">
                     <div className="grammar-phrase">
-                      <span className="phrase-fi">{sentence.text}</span>
+                      <div className="phrase-fi-container">
+                        <span className="phrase-fi">{sentence.text}</span>
+                        <button 
+                          className="btn-audio" 
+                          onClick={() => playAudio(sentence.text, sentence._id)}
+                          title="Listen"
+                        >
+                          🔊
+                        </button>
+                      </div>
                       <span className="phrase-en">{sentence.translation}</span>
                     </div>
                     {sentence.grammarNotes && (
