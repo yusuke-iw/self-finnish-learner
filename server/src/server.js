@@ -8,6 +8,7 @@ const connectDB = require('./config/db');
 const sentencesRouter = require('./routes/sentences');
 const passagesRouter = require('./routes/passages');
 const sessionsRouter = require('./routes/sessions');
+const ttsRouter = require('./routes/tts');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/api/sentences', sentencesRouter);
 app.use('/api/passages', passagesRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/tts', ttsRouter);
 
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
