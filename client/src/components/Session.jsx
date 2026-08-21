@@ -457,7 +457,7 @@ export default function Session() {
               return (
                 <button
                   key={`${token.id}-${token.lang}-${idx}`}
-                  className={`btn-option ${isSelected ? 'selected' : ''} ${isMatched ? 'correct' : ''} ${isWrong ? 'incorrect' : ''}`}
+                  className={`choice-btn ${isSelected ? 'selected' : ''} ${isMatched ? 'correct-choice' : ''} ${isWrong ? 'wrong-choice' : ''}`}
                   onClick={() => handleMatchingTokenClick(token)}
                   disabled={isMatched || isChecking}
                   style={{ 
