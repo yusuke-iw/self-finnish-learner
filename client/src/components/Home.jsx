@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import GuidebookModal from './GuidebookModal';
 
 const units = [
   {
@@ -46,6 +47,7 @@ const units = [
 export default function Home() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState({});
+  const [activeGuidebook, setActiveGuidebook] = useState(null);
 
   useEffect(() => {
     const savedProgress = JSON.parse(localStorage.getItem('finnishLearnerProgress') || '{}');
@@ -69,7 +71,7 @@ export default function Home() {
               <h2 className="unit-header-title">{unit.title}</h2>
               <p className="unit-header-desc">{unit.description}</p>
             </div>
-            <button className="unit-guide-btn" style={{ color: unit.color }}>Guidebook</button>
+            <button className="unit-guide-btn" style={{ color: unit.color }} onClick={() => setActiveGuidebook(unit)}>Guidebook</button>
           </div>
 
           <div className="learning-path">
@@ -126,6 +128,10 @@ export default function Home() {
       <div className="progress-actions">
         <button className="btn-secondary reset-btn" onClick={handleResetProgress}>Reset Progress</button>
       </div>
+
+      {activeGuidebook && (
+        <GuidebookModal unit={activeGuidebook} onClose={() => setActiveGuidebook(null)} />
+      )}
     </div>
   );
 }
