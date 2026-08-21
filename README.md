@@ -39,10 +39,7 @@ This project is built using the **MERN** stack (with Vite replacing Create React
 ## 📦 Getting Started
 
 1. **Install Dependencies:**
-   Run `npm install` in both the root, `client`, and `server` directories.
+   From the root directory, run `npm run install-all`. This will install dependencies for the root, client, and server.
    
-2. **Start the Backend Server:**
-   Navigate to `/server` and run `npm run dev`. The server will run on port 5000 (with an automatic memory-fallback mode if MongoDB is not connected).
-   
-3. **Start the Frontend Client:**
-   Navigate to `/client` and run `npm run dev`. The Vite dev server will start on port 5173.
+2. **Start the Application:**
+   From the root directory, run `npm run dev`. This uses `concurrently` to start both the backend server (port 5000) and the frontend client (port 5173) simultaneously.
