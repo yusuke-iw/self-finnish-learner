@@ -20,6 +20,7 @@ router.post('/generate', async (req, res, next) => {
   try {
     const sentenceCount = req.body.sentenceCount || 3;
     const category = req.body.category;
+    const requestedLevel = req.body.level ? Number(req.body.level) : null;
 
     let availableSentences = [];
 
@@ -53,55 +54,62 @@ router.post('/generate', async (req, res, next) => {
 
     selectedSentences.forEach((sentence) => {
       // Level 1: Choice Question
-      const wrongSentences = availableSentences.filter(s => s._id.toString() !== sentence._id.toString());
-      const wrongOptions = shuffle(wrongSentences)
-        .slice(0, 3)
-        .map(s => s.text);
-      const options = shuffle([sentence.text, ...wrongOptions]);
+      if (!requestedLevel || requestedLevel === 1) {
+        const wrongSentences = availableSentences.filter(s => s._id.toString() !== sentence._id.toString());
+        const wrongOptions = shuffle(wrongSentences)
+          .slice(0, 3)
+          .map(s => s.text);
+        const options = shuffle([sentence.text, ...wrongOptions]);
 
-      level1Questions.push({
-        sentenceId: sentence._id.toString(),
-        level: 1,
-        type: 'choice',
-        prompt: sentence.translation,
-        correctAnswer: sentence.text,
-        options
-      });
-
-      // Level 2: Word Bank Question
-      const cleanWords = sentence.text
-        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '')
-        .split(/\s+/)
-        .filter(w => w.length > 0);
-      
-      const distractors = [];
-      if (wrongSentences.length > 0) {
-        const randomWrongText = wrongSentences[Math.floor(Math.random() * wrongSentences.length)].text;
-        const randomWrongWords = randomWrongText.split(/\s+/).filter(w => w.length > 2);
-        if (randomWrongWords.length > 0) {
-          distractors.push(randomWrongWords[Math.floor(Math.random() * randomWrongWords.length)]);
-        }
+        level1Questions.push({
+          sentenceId: sentence._id.toString(),
+          level: 1,
+          type: 'choice',
+          prompt: sentence.translation,
+          correctAnswer: sentence.text,
+          options
+        });
       }
 
-      const wordBank = shuffle([...cleanWords, ...distractors]);
+      // Level 2: Word Bank Question
+      if (!requestedLevel || requestedLevel === 2) {
+        const wrongSentences = availableSentences.filter(s => s._id.toString() !== sentence._id.toString());
+        const cleanWords = sentence.text
+          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '')
+          .split(/\s+/)
+          .filter(w => w.length > 0);
+        
+        const distractors = [];
+        if (wrongSentences.length > 0) {
+          const randomWrongText = wrongSentences[Math.floor(Math.random() * wrongSentences.length)].text;
+          const randomWrongWords = randomWrongText.split(/\s+/).filter(w => w.length > 2);
+          if (randomWrongWords.length > 0) {
+            distractors.push(randomWrongWords[Math.floor(Math.random() * randomWrongWords.length)]);
+          }
+        }
 
-      level2Questions.push({
-        sentenceId: sentence._id.toString(),
-        level: 2,
-        type: 'word-bank',
-        prompt: sentence.translation,
-        correctAnswer: sentence.text,
-        wordBank
-      });
+        const wordBank = shuffle([...cleanWords, ...distractors]);
+
+        level2Questions.push({
+          sentenceId: sentence._id.toString(),
+          level: 2,
+          type: 'word-bank',
+          prompt: sentence.translation,
+          correctAnswer: sentence.text,
+          wordBank
+        });
+      }
 
       // Level 3: Typing Question
-      level3Questions.push({
-        sentenceId: sentence._id.toString(),
-        level: 3,
-        type: 'typing',
-        prompt: sentence.translation,
-        correctAnswer: sentence.text
-      });
+      if (!requestedLevel || requestedLevel === 3) {
+        level3Questions.push({
+          sentenceId: sentence._id.toString(),
+          level: 3,
+          type: 'typing',
+          prompt: sentence.translation,
+          correctAnswer: sentence.text
+        });
+      }
     });
 
     const questions = [
