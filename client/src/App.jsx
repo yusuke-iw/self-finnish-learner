@@ -12,7 +12,6 @@ function App() {
           <h1 className="logo">Finnish Learner</h1>
           <ul className="nav-links">
             <li><Link to="/">Home</Link></li>
-            <li><Link to="/sessions">Quiz</Link></li>
             <li><Link to="/passages">Passages</Link></li>
           </ul>
         </nav>
