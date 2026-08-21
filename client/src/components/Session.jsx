@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { generateSession, checkAnswer } from '../api';
 import { playAudio } from '../utils/audio';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -13,8 +13,16 @@ export default function Session() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sentenceCount, setSentenceCount] = useState(5);
   
-  const [inputValue, setInputValue] = useState('');
-  const [selectedWords, setSelectedWords] = useState([]);
+  const [selectedWords, setSelectedWords] = useState([]); // for word bank
+  const [inputValue, setInputValue] = useState(''); // for typing, fill-in, and speaking
+  
+  // Matching Pairs state
+  const [selectedMatchingTokens, setSelectedMatchingTokens] = useState([]);
+  const [matchedPairIds, setMatchedPairIds] = useState([]);
+  const [wrongMatch, setWrongMatch] = useState(false);
+  
+  // Speaking state
+  const [isRecording, setIsRecording] = useState(false);
   
   const [feedback, setFeedback] = useState(null);
   const [isChecking, setIsChecking] = useState(false);
@@ -65,12 +73,90 @@ export default function Session() {
   };
 
   const resetInput = () => {
-    setInputValue('');
-    setSelectedWords([]);
     setFeedback(null);
+    setSelectedWords([]);
+    setInputValue('');
+    setSelectedMatchingTokens([]);
+    setMatchedPairIds([]);
+    setWrongMatch(false);
+    setIsChecking(false);
   };
 
   const currentQuestion = session?.questions[currentIndex];
+
+  const handleMatchingTokenClick = (token) => {
+    if (matchedPairIds.includes(token.id) || wrongMatch || isChecking) return;
+
+    if (selectedMatchingTokens.length === 0) {
+      setSelectedMatchingTokens([token]);
+    } else if (selectedMatchingTokens.length === 1) {
+      const prevToken = selectedMatchingTokens[0];
+      
+      if (prevToken === token) {
+        // Deselect
+        setSelectedMatchingTokens([]);
+        return;
+      }
+      
+      if (prevToken.id === token.id) {
+        // Match!
+        const newMatched = [...matchedPairIds, token.id];
+        setMatchedPairIds(newMatched);
+        setSelectedMatchingTokens([]);
+        
+        playAudio('Oikein!', null, 'fi-FI', 1.0); // simple feedback sound
+        
+        // If all matched
+        if (newMatched.length === currentQuestion.pairs.length) {
+          setIsChecking(true);
+          setFeedback({
+            isCorrect: true,
+            isPerfect: true,
+            correctText: 'All pairs matched!'
+          });
+        }
+      } else {
+        // Wrong match
+        setSelectedMatchingTokens([prevToken, token]);
+        setWrongMatch(true);
+        setTimeout(() => {
+          setSelectedMatchingTokens([]);
+          setWrongMatch(false);
+        }, 800);
+      }
+    }
+  };
+
+  const handleMicClick = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser. Please use Chrome or Edge.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'fi-FI';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    setIsRecording(true);
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInputValue(transcript);
+      setIsRecording(false);
+    };
+
+    recognition.onerror = (event) => {
+      console.error(event.error);
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.start();
+  };
 
   const handleCheck = async () => {
     if (!currentQuestion) return;
@@ -78,9 +164,9 @@ export default function Session() {
     let answer = '';
     if (currentQuestion.type === 'choice') {
       answer = inputValue;
-    } else if (currentQuestion.type === 'word-bank') {
+    } else if (currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') {
       answer = selectedWords.join(' ');
-    } else if (currentQuestion.type === 'typing') {
+    } else if (currentQuestion.type === 'typing' || currentQuestion.type === 'fill-in-the-blank' || currentQuestion.type === 'speaking') {
       answer = inputValue;
     }
 
@@ -88,10 +174,17 @@ export default function Session() {
 
     setIsChecking(true);
     try {
-      const res = await checkAnswer({
+      const payload = {
         sentenceId: currentQuestion.sentenceId,
-        userInput: answer
-      });
+        userInput: answer,
+        questionType: currentQuestion.type
+      };
+      
+      if (currentQuestion.type === 'fill-in-the-blank') {
+        payload.missingWord = currentQuestion.missingWord;
+      }
+      
+      const res = await checkAnswer(payload);
 
       if (res.data.success) {
         const result = res.data.data;
@@ -125,6 +218,7 @@ export default function Session() {
     } else {
       setSelectedWords([...selectedWords, word]);
     }
+    playAudio(word, word);
   };
 
   if (isFinished) {
@@ -206,8 +300,55 @@ export default function Session() {
         </div>
         
         <div className="question-prompt">
-          <span className="instruction">Translate this sentence:</span>
-          {currentQuestion.prompt}
+          <span className="instruction">
+            {currentQuestion.isListening 
+              ? (currentQuestion.type === 'typing' ? 'Type what you hear:' : 'Type the missing word:') 
+              : currentQuestion.type === 'word-bank-reverse' 
+                ? 'Write this in English:' 
+                : currentQuestion.type === 'fill-in-the-blank' 
+                  ? 'Type the missing word:' 
+                  : currentQuestion.type === 'matching'
+                    ? 'Tap the matching pairs:'
+                    : currentQuestion.type === 'speaking'
+                      ? 'Read this sentence out loud:'
+                      : 'Translate this sentence:'}
+          </span>
+          <div className="prompt-text-container" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px', fontWeight: 'bold' }}>
+            {currentQuestion.isListening ? (
+              <div className="listening-audio-controls" style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '16px', background: 'var(--bg-card-hover)', borderRadius: 'var(--radius-md)' }}>
+                <button 
+                  className="btn-audio prompt-audio" 
+                  onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 1.0)}
+                  title="Listen (Normal Speed)"
+                  style={{ padding: '12px', fontSize: '24px', background: 'var(--accent)' }}
+                >
+                  🔊
+                </button>
+                <button 
+                  className="btn-audio prompt-audio slow" 
+                  onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 0.6)}
+                  title="Listen (Slow)"
+                  style={{ padding: '8px', fontSize: '20px', border: '1px solid var(--accent)' }}
+                >
+                  🐢
+                </button>
+              </div>
+            ) : (
+              <>
+                {(currentQuestion.type === 'word-bank-reverse' || currentQuestion.type === 'fill-in-the-blank' || currentQuestion.type === 'speaking') && (
+                  <button 
+                    className="btn-audio prompt-audio" 
+                    onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId)}
+                    title="Listen"
+                    style={{ padding: '6px' }}
+                  >
+                    🔊
+                  </button>
+                )}
+                {currentQuestion.type !== 'matching' && currentQuestion.prompt}
+              </>
+            )}
+          </div>
         </div>
 
         {currentQuestion.type === 'choice' && (
@@ -223,7 +364,12 @@ export default function Session() {
                 <button 
                   key={idx} 
                   className={cls}
-                  onClick={() => !feedback && setInputValue(opt)}
+                  onClick={() => {
+                    if (!feedback) {
+                      setInputValue(opt);
+                      playAudio(opt, opt);
+                    }
+                  }}
                   disabled={!!feedback}
                 >
                   {opt}
@@ -233,7 +379,7 @@ export default function Session() {
           </div>
         )}
 
-        {currentQuestion.type === 'word-bank' && (
+        {(currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') && (
           <div className="word-bank-area">
             <div className={`word-bank-answer ${selectedWords.length > 0 ? 'has-words' : ''}`}>
               {selectedWords.map((word, idx) => (
@@ -268,6 +414,93 @@ export default function Session() {
           </div>
         )}
 
+        {currentQuestion.type === 'fill-in-the-blank' && (
+          <div className="fill-in-the-blank-area" style={{ marginTop: '20px', fontSize: '1.2rem', lineHeight: '2' }}>
+            <span className="prefix">{currentQuestion.prefix}</span>
+            <input 
+              type="text" 
+              className="blank-input"
+              style={{
+                width: `${Math.max(3, inputValue.length || currentQuestion.missingWord.length)}ch`,
+                minWidth: '60px',
+                border: 'none',
+                borderBottom: '2px solid var(--border)',
+                background: 'transparent',
+                color: '#fff',
+                fontSize: '1.2rem',
+                textAlign: 'center',
+                margin: '0 8px',
+                outline: 'none'
+              }}
+              value={inputValue}
+              onChange={e => setInputValue(e.target.value)}
+              disabled={!!feedback}
+              autoFocus
+            />
+            <span className="suffix">{currentQuestion.suffix}</span>
+          </div>
+        )}
+
+        {currentQuestion.type === 'matching' && (
+          <div className="matching-grid" style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 1fr', 
+            gap: '12px', 
+            marginTop: '20px' 
+          }}>
+            {currentQuestion.tokens.map((token, idx) => {
+              const isMatched = matchedPairIds.includes(token.id);
+              const isSelected = selectedMatchingTokens.includes(token);
+              const isWrong = isSelected && wrongMatch;
+
+              return (
+                <button
+                  key={`${token.id}-${token.lang}-${idx}`}
+                  className={`btn-option ${isSelected ? 'selected' : ''} ${isMatched ? 'correct' : ''} ${isWrong ? 'incorrect' : ''}`}
+                  onClick={() => handleMatchingTokenClick(token)}
+                  disabled={isMatched || isChecking}
+                  style={{ 
+                    padding: '16px', 
+                    fontSize: '18px', 
+                    opacity: isMatched ? 0 : 1, 
+                    pointerEvents: isMatched ? 'none' : 'auto',
+                    transition: 'opacity 0.3s'
+                  }}
+                >
+                  {token.text}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {currentQuestion.type === 'speaking' && (
+          <div className="speaking-area" style={{ textAlign: 'center', marginTop: '20px' }}>
+            <button 
+              className="btn-mic" 
+              onClick={handleMicClick}
+              disabled={isRecording || !!feedback}
+              style={{
+                background: isRecording ? '#ff4b4b' : 'var(--accent)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '50%',
+                width: '80px',
+                height: '80px',
+                fontSize: '32px',
+                cursor: 'pointer',
+                boxShadow: isRecording ? '0 0 15px #ff4b4b' : 'none',
+                transition: 'all 0.3s'
+              }}
+            >
+              🎤
+            </button>
+            <div style={{ marginTop: '16px', minHeight: '30px', fontSize: '18px', color: 'var(--text-muted)' }}>
+              {isRecording ? "Listening..." : inputValue ? `"${inputValue}"` : "Tap microphone to speak"}
+            </div>
+          </div>
+        )}
+
         {feedback && (
           <div className={`feedback ${feedback.isPerfect ? 'correct' : feedback.hasTypo ? 'typo' : 'incorrect'}`}>
             <div>
@@ -288,13 +521,15 @@ export default function Session() {
 
         <div className="question-actions">
           {!feedback ? (
-            <button 
-              className="btn-check" 
-              onClick={handleCheck}
-              disabled={isChecking || (currentQuestion.type === 'word-bank' && selectedWords.length === 0) || (currentQuestion.type !== 'word-bank' && !inputValue)}
-            >
-              Check Answer
-            </button>
+            currentQuestion.type !== 'matching' && (
+              <button 
+                className="btn-check" 
+                onClick={handleCheck}
+                disabled={isChecking || ((currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') && selectedWords.length === 0) || (currentQuestion.type !== 'word-bank' && currentQuestion.type !== 'word-bank-reverse' && !inputValue)}
+              >
+                Check Answer
+              </button>
+            )
           ) : (
             <button className="btn-next" onClick={handleNext}>
               Continue

@@ -7,13 +7,16 @@ const audioCache = new Map();
  * @param {string} text - The text to speak.
  * @param {string} seedString - (Ignored in GCP TTS, kept for API compatibility)
  * @param {string} lang - The language code (default 'fi-FI').
+ * @param {number} speed - The speaking rate (e.g., 1.0 for normal, 0.6 for slow)
  */
-export const playAudio = async (text, seedString = '', lang = 'fi-FI') => {
+export const playAudio = async (text, seedString = '', lang = 'fi-FI', speed = 1.0) => {
   if (!text) return;
 
+  const cacheKey = `${text}_${speed}`;
+
   // Use the cached audio if we've already fetched it
-  if (audioCache.has(text)) {
-    playBase64Audio(audioCache.get(text));
+  if (audioCache.has(cacheKey)) {
+    playBase64Audio(audioCache.get(cacheKey));
     return;
   }
 
@@ -23,14 +26,14 @@ export const playAudio = async (text, seedString = '', lang = 'fi-FI') => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text })
+      body: JSON.stringify({ text, speed })
     });
 
     const data = await response.json();
 
     if (data.success && data.audioContent) {
       // Store in cache
-      audioCache.set(text, data.audioContent);
+      audioCache.set(cacheKey, data.audioContent);
       // Play it
       playBase64Audio(data.audioContent);
     } else {
