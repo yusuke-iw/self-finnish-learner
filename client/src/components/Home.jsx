@@ -7,7 +7,7 @@ const units = [
     id: 1,
     title: 'Unit 1: A2 Foundations',
     description: 'Basic daily life and past tenses',
-    color: '#58cc02', // Duolingo green
+    color: '#58cc02', // Green
     lessons: [
       { id: 'l1', title: 'Asiointi ja Matkustaminen', description: 'Running errands, travel' },
       { id: 'l2', title: 'Menneet ajat', description: 'Past tenses: Imperfect & Perfect' },
@@ -17,7 +17,7 @@ const units = [
     id: 2,
     title: 'Unit 2: B1 Intermediate',
     description: 'Worklife and conditional mood',
-    color: '#ce82ff', // Duolingo purple
+    color: '#ce82ff', // Purple
     lessons: [
       { id: 'l3', title: 'Työelämä ja Opiskelu', description: 'Worklife, job interviews' },
       { id: 'l4', title: 'Konditionaali ja Potentiaali', description: 'Conditional mood "-isi-"' },
@@ -27,7 +27,7 @@ const units = [
     id: 3,
     title: 'Unit 3: B2 Advanced',
     description: 'Society and participle phrases',
-    color: '#00cd9c', // Duolingo cyan
+    color: '#00cd9c', // Cyan
     lessons: [
       { id: 'l5', title: 'Yhteiskunta ja Ympäristö', description: 'Society, politics' },
       { id: 'l6', title: 'Lauseenvastikkeet', description: 'Complex participle phrases' },
@@ -37,7 +37,7 @@ const units = [
     id: 4,
     title: 'Unit 4: C1 Mastery',
     description: 'Abstract and nuanced discussions',
-    color: '#ff9600', // Duolingo orange
+    color: '#ff9600', // Orange
     lessons: [
       { id: 'l7', title: 'Abstraktit keskustelut', description: 'Nuanced abstract topics, idioms' }
     ]
@@ -61,6 +61,10 @@ export default function Home() {
     }
   };
 
+  const handleLevelClick = (lessonTitle, level) => {
+    navigate(`/sessions?category=${encodeURIComponent(lessonTitle)}&level=${level}`);
+  };
+
   return (
     <div className="home-path-container">
       {units.map((unit) => (
@@ -71,64 +75,50 @@ export default function Home() {
               <h2 className="unit-header-title">{unit.title}</h2>
               <p className="unit-header-desc">{unit.description}</p>
             </div>
-            <button className="unit-guide-btn" style={{ color: unit.color }} onClick={() => setActiveGuidebook(unit)}>Guidebook</button>
+            <button className="unit-guide-btn" style={{ color: unit.color }} onClick={() => setActiveGuidebook(unit)}>
+              Guidebook
+            </button>
           </div>
 
-          <div className="learning-path">
-            {unit.lessons.map((lesson, index) => {
-              const offset = index % 2 === 0 ? '-30px' : '30px';
-              const isLast = index === unit.lessons.length - 1;
+          <div className="curriculum-list">
+            {unit.lessons.map((lesson) => {
               const currentLevel = progress[lesson.title] || 1;
               const isCompleted = currentLevel > 3;
 
-              // If fully completed, use gold color for the node styling
-              const nodeBorderColor = isCompleted ? '#ffd900' : unit.color;
-              const nodeIconColor = isCompleted ? '#ffd900' : unit.color;
-              const nodeIcon = isCompleted ? '🏆' : '★';
-
               return (
-                <div key={lesson.id} className="path-node-container" style={{ transform: `translateX(${offset})` }}>
-                  <div 
-                    className={`path-node ${isCompleted ? 'completed-node' : ''}`}
-                    style={{ borderColor: nodeBorderColor }}
-                    title={lesson.description}
-                  >
-                    <div className="node-icon" style={{ color: nodeIconColor }}>{nodeIcon}</div>
-                    
-                    {/* Crown badge indicating level */}
-                    <div className="node-crown">
-                      {isCompleted ? 'MAX' : `L${currentLevel}`}
-                    </div>
-
-                    <div className="node-tooltip">
-                      <div className="node-title">{lesson.title}</div>
-                      <div className="node-desc">{lesson.description}</div>
-                      <div className="node-level-selector">
-                        <button 
-                          className="level-btn"
-                          style={{ borderColor: nodeBorderColor, color: nodeBorderColor }}
-                          onClick={(e) => { e.stopPropagation(); navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=1`); }}
-                        >
-                          Level 1
-                        </button>
-                        <button 
-                          className="level-btn"
-                          style={{ borderColor: nodeBorderColor, color: nodeBorderColor }}
-                          onClick={(e) => { e.stopPropagation(); navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=2`); }}
-                        >
-                          Level 2
-                        </button>
-                        <button 
-                          className="level-btn"
-                          style={{ borderColor: nodeBorderColor, color: nodeBorderColor }}
-                          onClick={(e) => { e.stopPropagation(); navigate(`/sessions?category=${encodeURIComponent(lesson.title)}&level=3`); }}
-                        >
-                          Level 3
-                        </button>
-                      </div>
+                <div key={lesson.id} className="lesson-card" style={{ borderLeftColor: unit.color }}>
+                  <div className="lesson-info">
+                    <h3 className="lesson-title">{lesson.title}</h3>
+                    <p className="lesson-desc">{lesson.description}</p>
+                    <div className="lesson-status">
+                      {isCompleted ? (
+                        <span className="status-badge" style={{ backgroundColor: '#ffd900', color: '#000' }}>🏆 Mastered</span>
+                      ) : (
+                        <span className="status-badge" style={{ backgroundColor: unit.color }}>Current: Level {currentLevel}</span>
+                      )}
                     </div>
                   </div>
-                  {!isLast && <div className="path-line" style={{ backgroundColor: unit.color, opacity: 0.3 }}></div>}
+                  
+                  <div className="lesson-actions">
+                    <button 
+                      className="level-btn"
+                      onClick={() => handleLevelClick(lesson.title, 1)}
+                    >
+                      L1 (Choice)
+                    </button>
+                    <button 
+                      className="level-btn"
+                      onClick={() => handleLevelClick(lesson.title, 2)}
+                    >
+                      L2 (Words)
+                    </button>
+                    <button 
+                      className="level-btn"
+                      onClick={() => handleLevelClick(lesson.title, 3)}
+                    >
+                      L3 (Type)
+                    </button>
+                  </div>
                 </div>
               );
             })}

@@ -1041,63 +1041,83 @@
   opacity: 0.9;
 }
 
-.learning-path {
+.curriculum-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
+  gap: 16px;
   width: 100%;
-  max-width: 600px;
 }
 
-.path-node-container {
+.lesson-card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-.path-node {
-  width: 80px;
-  height: 80px;
   background: var(--bg-card);
-  border: 4px solid var(--accent);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-  transition: all 0.3s var(--ease);
-  box-shadow: 0 4px 20px rgba(0, 255, 170, 0.2);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--accent); /* Overridden inline by unit color */
+  border-radius: var(--radius-md);
+  padding: 20px;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
-.path-node:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 30px rgba(0, 255, 170, 0.4);
+@media (min-width: 600px) {
+  .lesson-card {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
-.node-crown {
-  position: absolute;
-  bottom: -10px;
-  right: -10px;
-  background: #ffc800;
+
+.lesson-info {
+  flex: 1;
+}
+
+.lesson-title {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
   color: #fff;
-  font-weight: 800;
-  font-size: 12px;
-  padding: 4px 8px;
+}
+
+.lesson-desc {
+  margin: 0 0 12px 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.lesson-status {
+  display: inline-block;
+}
+
+.status-badge {
+  padding: 4px 10px;
   border-radius: 12px;
-  border: 2px solid var(--bg-card);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  z-index: 3;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
 }
 
-.completed-node {
-  background: rgba(255, 217, 0, 0.1);
+.lesson-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.completed-node:hover {
-  background: rgba(255, 217, 0, 0.3);
+.level-btn {
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.level-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+  transform: translateY(-2px);
 }
 
 .progress-actions {
@@ -1281,106 +1301,4 @@
 .reading-header-audio h3 {
   margin: 0;
 }
-.node-icon {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--accent);
-}
-
-.path-node:hover .node-icon {
-  color: #fff;
-}
-
-.path-node:hover {
-  background: var(--accent);
-}
-
-.path-line {
-  width: 10px;
-  height: 60px;
-  background: var(--border);
-  margin-top: -10px;
-  margin-bottom: -10px;
-  z-index: 1;
-}
-
-/* Tooltip for nodes */
-.node-tooltip {
-  position: absolute;
-  left: 110px;
-  top: 50%;
-  transform: translateY(-50%) scale(0.9);
-  background: var(--bg-card-hover);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  width: 250px;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s var(--ease);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  z-index: 10;
-}
-
-/* Invisible bridge to prevent hover loss when moving mouse to tooltip */
-.node-tooltip::before {
-  content: '';
-  position: absolute;
-  left: -40px;
-  top: 0;
-  width: 40px;
-  height: 100%;
-}
-
-.path-node:hover .node-tooltip,
-.node-tooltip:hover {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(-50%) scale(1);
-}
-
-.node-level {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--primary);
-  margin-bottom: 4px;
-}
-
-.node-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 8px;
-  line-height: 1.2;
-}
-
-.node-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-  line-height: 1.4;
-}
-
-.node-level-selector {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.level-btn {
-  background: transparent;
-  border: 1px solid;
-  border-radius: var(--radius-sm);
-  padding: 6px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  flex: 1;
-  text-align: center;
-}
-
-.level-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
+/* Cleaned up old node styles */
