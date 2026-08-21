@@ -1116,6 +1116,130 @@
 .reset-btn:hover {
   background: rgba(255, 75, 75, 0.1);
 }
+
+/* Guidebook Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  padding: 20px;
+}
+
+.guidebook-modal {
+  background: var(--bg-card);
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.guidebook-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.guidebook-header h2 {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+}
+
+.guidebook-header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.guidebook-close-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0 10px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.guidebook-close-btn:hover {
+  opacity: 1;
+}
+
+.guidebook-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.guidebook-loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+.guidebook-sentences {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grammar-note-card {
+  background: var(--bg-card-hover);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--accent);
+}
+
+.grammar-phrase {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.phrase-fi {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.phrase-en {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.grammar-explanation {
+  background: var(--bg-card);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: #ddd;
+  line-height: 1.4;
+}
+
+.grammar-explanation strong {
+  color: var(--accent);
+}
 .node-icon {
   font-size: 28px;
   font-weight: 800;
