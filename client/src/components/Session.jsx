@@ -6,6 +6,7 @@ export default function Session() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const categoryParam = searchParams.get('category');
+  const levelParam = searchParams.get('level') ? Number(searchParams.get('level')) : null;
 
   const [session, setSession] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,17 +23,17 @@ export default function Session() {
 
   const [isStarting, setIsStarting] = useState(false);
 
-  // Auto-start if category is provided
+  // Auto-start if category and level are provided
   useEffect(() => {
-    if (categoryParam && !session && !isStarting && !isFinished) {
-      startSession(5, categoryParam);
+    if (categoryParam && levelParam && !session && !isStarting && !isFinished) {
+      startSession(5, categoryParam, levelParam);
     }
-  }, [categoryParam, session, isStarting, isFinished]);
+  }, [categoryParam, levelParam, session, isStarting, isFinished]);
 
-  const startSession = async (count = sentenceCount, cat = categoryParam) => {
+  const startSession = async (count = sentenceCount, cat = categoryParam, lvl = levelParam) => {
     setIsStarting(true);
     try {
-      const res = await generateSession(count, cat);
+      const res = await generateSession(count, cat, lvl);
       if (res.data.success) {
         setSession(res.data.data);
         setCurrentIndex(0);
@@ -45,6 +46,21 @@ export default function Session() {
       alert(err.response?.data?.error || 'Failed to generate session');
     }
     setIsStarting(false);
+  };
+
+  const handleSessionComplete = () => {
+    // Only increment progress if passed from module path
+    if (categoryParam && levelParam) {
+      let progress = JSON.parse(localStorage.getItem('finnishLearnerProgress') || '{}');
+      const currentProgressLevel = progress[categoryParam] || 1;
+      
+      // If they just beat the level they were on, increment it (max 4, where 4 = fully complete)
+      if (levelParam === currentProgressLevel && currentProgressLevel < 4) {
+        progress[categoryParam] = currentProgressLevel + 1;
+        localStorage.setItem('finnishLearnerProgress', JSON.stringify(progress));
+      }
+    }
+    navigate('/');
   };
 
   const resetInput = () => {
@@ -134,7 +150,7 @@ export default function Session() {
             </div>
           </div>
           <div className="summary-actions">
-            <button className="btn-primary" onClick={() => navigate('/')}>Back to Path</button>
+            <button className="btn-primary" onClick={handleSessionComplete}>Back to Path</button>
             <button className="btn-secondary" onClick={() => setSession(null)}>Try Again</button>
           </div>
         </div>
@@ -146,7 +162,7 @@ export default function Session() {
     return (
       <div className="session-page">
         <div className="session-setup">
-          <h2>{categoryParam ? `Loading ${categoryParam}...` : 'Start a Quiz Session'}</h2>
+          <h2>{categoryParam ? `Loading Level ${levelParam}...` : 'Start a Quiz Session'}</h2>
           {!categoryParam && (
             <>
               <p>Practice with scaffolded exercises that adapt to your level.</p>
