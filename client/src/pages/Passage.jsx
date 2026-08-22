@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchPassages, fetchPassageById } from '../api';
+import { fetchPassages, fetchPassageById } from '../services/api';
 import { playAudio } from '../utils/audio';
 
 export default function Passage() {

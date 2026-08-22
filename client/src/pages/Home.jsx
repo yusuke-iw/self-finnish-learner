@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import GuidebookModal from './GuidebookModal';
+import GuidebookModal from '../components/GuidebookModal';
 
 const units = [
   {

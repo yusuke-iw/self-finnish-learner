@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const connectDB = require('./config/db');
+const errorHandler = require('./middleware/errorHandler');
 
 // Import routes
 const sentencesRouter = require('./routes/sentences');
@@ -24,13 +25,7 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/api/tts', ttsRouter);
 
 // Centralized error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.statusCode || 500).json({
-    success: false,
-    error: err.message || 'Internal Server Error'
-  });
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

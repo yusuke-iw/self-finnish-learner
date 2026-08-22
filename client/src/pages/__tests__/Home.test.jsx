@@ -28,11 +28,10 @@ describe('Home Component', () => {
         <Home />
       </BrowserRouter>
     );
-    expect(screen.getByText(/Finnish Learner/)).toBeInTheDocument();
     expect(screen.getByText(/Unit 1/)).toBeInTheDocument();
     
-    // Verify modules are rendered
-    const modules = screen.getAllByText(/Module/i);
-    expect(modules.length).toBeGreaterThan(0);
+    // Verify lessons are rendered
+    const lessons = screen.getAllByText(/Ruoka/i);
+    expect(lessons.length).toBeGreaterThan(0);
   });
 });

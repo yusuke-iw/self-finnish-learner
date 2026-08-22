@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchSentences } from '../api';
+import { fetchSentences } from "../services/api";
 import { playAudio } from '../utils/audio';
 
 export default function GuidebookModal({ unit, onClose }) {

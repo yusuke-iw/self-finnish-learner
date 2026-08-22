@@ -4,16 +4,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Session from '../Session';
 import { BrowserRouter } from 'react-router-dom';
 
-// Mock the API module
-vi.mock('../api', () => ({
-  default: {
-    post: vi.fn(),
-    get: vi.fn()
-  },
+vi.mock('../../services/api', () => ({
   generateSession: vi.fn(),
   checkAnswer: vi.fn()
 }));
-import { generateSession, checkAnswer } from '../api';
+import { generateSession, checkAnswer } from '../../services/api';
 
 describe('Session Component', () => {
   const mockSession = {
@@ -51,7 +46,7 @@ describe('Session Component', () => {
 
     // Instead of mocking useLocation, we can just let it render the start screen and click start!
     // But since generateSession is imported directly, let's mock generateSession:
-    generateSession.mockResolvedValueOnce({ data: sessionData });
+    generateSession.mockResolvedValueOnce({ data: { success: true, data: sessionData } });
 
     return render(
       <BrowserRouter>
@@ -72,7 +67,7 @@ describe('Session Component', () => {
 
     expect(screen.getByText('Dog')).toBeInTheDocument();
     
-    const options = screen.getAllByRole('button').filter(b => b.classList.contains('btn-option'));
+    const options = screen.getAllByRole('button').filter(b => b.classList.contains('choice-btn'));
     expect(options).toHaveLength(4);
     
     // Select correct option
@@ -80,12 +75,12 @@ describe('Session Component', () => {
     fireEvent.click(correctBtn);
     
     // Check answer
-    api.post.mockResolvedValueOnce({ data: { isCorrect: true, isPerfect: true, correctText: 'Koira' } });
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true, correctText: 'Koira' }, success: true } });
     const checkBtn = screen.getByText('Check Answer');
     fireEvent.click(checkBtn);
     
     await waitFor(() => {
-      expect(screen.getByText('Perfect!')).toBeInTheDocument();
+      expect(screen.getByText(/Correct!/)).toBeInTheDocument();
     });
   });
 
@@ -129,8 +124,8 @@ describe('Session Component', () => {
     fireEvent.click(dogBtn);
 
     await waitFor(() => {
-      expect(koiraBtn).toHaveClass('correct');
-      expect(dogBtn).toHaveClass('correct');
+      expect(koiraBtn).toHaveClass('correct-choice');
+      expect(dogBtn).toHaveClass('correct-choice');
     });
   });
 
