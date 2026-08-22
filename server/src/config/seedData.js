@@ -5,6 +5,23 @@ const sentences = [
   { _id: "m1_3", text: "Voitko neuvoa minulle tien rautatieasemalle?", translation: "Can you show me the way to the railway station?", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Neuvoa tien (show the way), asemalle (allative)" },
   { _id: "m1_4", text: "Otatko kuitin?", translation: "Do you want the receipt?", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Kuitin (accusative)" },
   { _id: "m1_5", text: "Maksaako tämä enemmän kuin kymmenen euroa?", translation: "Does this cost more than ten euros?", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Maksaako (does it cost), enemmän kuin (more than)" },
+  { _id: "m1_6", text: "Missä on lähin apteekki?", translation: "Where is the nearest pharmacy?", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Missä on (where is), lähin (nearest)" },
+  { _id: "m1_7", text: "Yksi lippu Helsinkiin, kiitos.", translation: "One ticket to Helsinki, please.", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Lippu (ticket), Helsinkiin (illative)" },
+  { _id: "m1_8", text: "Voinko maksaa kortilla?", translation: "Can I pay by card?", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Voinko (can I), kortilla (adessive for instrument)" },
+  { _id: "m1_9", text: "Bussi numero viisi menee keskustaan.", translation: "Bus number five goes to the city center.", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Menee (goes), keskustaan (illative)" },
+  { _id: "m1_10", text: "Tarvitsen apua matkatavaroiden kanssa.", translation: "I need help with the luggage.", difficulty: "easy", category: "Asiointi ja Matkustaminen", grammarNotes: "Tarvitsen (I need), kanssa (with + genitive)" },
+  
+  { _id: "m1_11", text: "Saisinko ruokalistan, kiitos?", translation: "Could I get the menu, please?", difficulty: "easy", category: "Ruoka ja Juoma", grammarNotes: "Saisinko (could I get), ruokalistan (accusative)" },
+  { _id: "m1_12", text: "Minulla on nälkä ja jano.", translation: "I am hungry and thirsty.", difficulty: "easy", category: "Ruoka ja Juoma", grammarNotes: "Minulla on (I have)" },
+  { _id: "m1_13", text: "Mitä suosittelette lounaaksi?", translation: "What do you recommend for lunch?", difficulty: "easy", category: "Ruoka ja Juoma", grammarNotes: "Suosittelette (you recommend), lounaaksi (translative)" },
+  { _id: "m1_14", text: "Otan kupin kahvia ja korvapuustin.", translation: "I'll take a cup of coffee and a cinnamon bun.", difficulty: "easy", category: "Ruoka ja Juoma", grammarNotes: "Otan (I take), kupin (accusative)" },
+  { _id: "m1_15", text: "Lasku, kiitos.", translation: "The bill, please.", difficulty: "easy", category: "Ruoka ja Juoma", grammarNotes: "Lasku (the bill)" },
+
+  { _id: "m1_16", text: "Tämä on minun ystäväni Mikko.", translation: "This is my friend Mikko.", difficulty: "easy", category: "Perhe ja Ystävät", grammarNotes: "Minun (my), ystäväni (friend + possessive suffix)" },
+  { _id: "m1_17", text: "Kuinka monta sisarusta sinulla on?", translation: "How many siblings do you have?", difficulty: "easy", category: "Perhe ja Ystävät", grammarNotes: "Kuinka monta (how many), sisarusta (partitive)" },
+  { _id: "m1_18", text: "Minun perheeseeni kuuluu neljä ihmistä.", translation: "My family consists of four people.", difficulty: "easy", category: "Perhe ja Ystävät", grammarNotes: "Perheeseeni (illative + possessive), kuuluu (belongs to)" },
+  { _id: "m1_19", text: "Mikä sinun nimesi on?", translation: "What is your name?", difficulty: "easy", category: "Perhe ja Ystävät", grammarNotes: "Mikä (what), nimesi (name + possessive)" },
+  { _id: "m1_20", text: "Olemme tunteneet toisemme monta vuotta.", translation: "We have known each other for many years.", difficulty: "easy", category: "Perhe ja Ystävät", grammarNotes: "Olemme tunteneet (perfect tense), toisemme (each other)" },
 
   // Module 2 (A2/B1)
   { _id: "m2_1", text: "Minä asuin Helsingissä viisi vuotta sitten.", translation: "I lived in Helsinki five years ago.", difficulty: "medium", category: "Menneet ajat", grammarNotes: "Asuin (imperfect)" },
@@ -76,6 +93,40 @@ const passages = [
       { word: "tuoreita", translation: "fresh (partitive plural)" },
       { word: "mansikoita", translation: "strawberries (partitive plural)" },
       { word: "nauttii", translation: "enjoys" }
+    ]
+  },
+  {
+    _id: "p3",
+    title: "Matka Lappiin",
+    text: "Talvella monet suomalaiset matkustavat Lappiin hiihtämään ja nauttimaan lumesta. Juna Helsingistä Rovaniemelle kestää noin kahdeksan tuntia. Yöjunassa voi nukkua mukavasti hytissä. Aamulla, kun juna saapuu perille, ulkona on usein pakkasta ja paljon lunta. Ihmiset pukeutuvat lämpimästi ja lähtevät heti ulos. Jotkut vuokraavat moottorikelkan, toiset taas hiihtävät pitkiä matkoja metsässä. Illalla kaikki menevät tietysti saunaan rentoutumaan kylmän päivän jälkeen.",
+    translation: "In winter, many Finns travel to Lapland to ski and enjoy the snow. The train from Helsinki to Rovaniemi takes about eight hours. On the night train, you can sleep comfortably in a cabin. In the morning, when the train arrives, it is often freezing outside and there is a lot of snow. People dress warmly and go outside immediately. Some rent a snowmobile, while others ski long distances in the forest. In the evening, everyone naturally goes to the sauna to relax after a cold day.",
+    category: "Winter Travel",
+    vocabulary: [
+      { word: "matkustavat", translation: "they travel" },
+      { word: "hiihtämään", translation: "to ski (illative of 3rd infinitive)" },
+      { word: "kestää", translation: "takes (time)" },
+      { word: "hytissä", translation: "in a cabin (inessive)" },
+      { word: "pakkasta", translation: "freezing weather (partitive)" },
+      { word: "pukeutuvat", translation: "they dress" },
+      { word: "moottorikelkan", translation: "snowmobile (accusative)" },
+      { word: "rentoutumaan", translation: "to relax (illative of 3rd infinitive)" }
+    ]
+  },
+  {
+    _id: "p4",
+    title: "Suomalainen koulujärjestelmä",
+    text: "Suomen koulujärjestelmä on maailmankuulu. Lapset aloittavat koulun yleensä seitsemänvuotiaina. Peruskoulu kestää yhdeksän vuotta, ja se on kaikille ilmainen. Koulussa tarjotaan myös ilmainen ja terveellinen lämmin lounas joka päivä. Opettajat ovat korkeasti koulutettuja, sillä heillä kaikilla on yliopistotutkinto. Suomalaisessa koulussa ei ole paljon kokeita tai kotitehtäviä verrattuna moniin muihin maihin. Sen sijaan korostetaan leikkiä, luovuutta ja yhdessä oppimista. Tavoitteena on antaa jokaiselle lapselle yhtäläiset mahdollisuudet oppia ja menestyä elämässä taustasta riippumatta.",
+    translation: "The Finnish school system is world-famous. Children usually start school at the age of seven. Comprehensive school lasts nine years, and it is free for everyone. The school also provides a free and healthy warm lunch every day. Teachers are highly educated, as they all have a university degree. In a Finnish school, there are not many exams or homework compared to many other countries. Instead, play, creativity, and learning together are emphasized. The goal is to give every child equal opportunities to learn and succeed in life, regardless of their background.",
+    category: "Society & Education",
+    vocabulary: [
+      { word: "maailmankuulu", translation: "world-famous" },
+      { word: "peruskoulu", translation: "comprehensive school" },
+      { word: "ilmainen", translation: "free of charge" },
+      { word: "yliopistotutkinto", translation: "university degree" },
+      { word: "kokeita", translation: "exams (partitive plural)" },
+      { word: "korostetaan", translation: "is emphasized (passive)" },
+      { word: "yhtäläiset mahdollisuudet", translation: "equal opportunities" },
+      { word: "riippumatta", translation: "regardless of (+ elative)" }
     ]
   }
 ];

@@ -11,6 +11,8 @@ const units = [
     color: '#58cc02', // Green
     lessons: [
       { id: 'l1', title: 'Asiointi ja Matkustaminen', description: 'Running errands, travel' },
+      { id: 'l1b', title: 'Ruoka ja Juoma', description: 'Food, drink, and restaurants' },
+      { id: 'l1c', title: 'Perhe ja Ystävät', description: 'Family members and relationships' },
       { id: 'l2', title: 'Menneet ajat', description: 'Past tenses: Imperfect & Perfect' },
     ]
   },
