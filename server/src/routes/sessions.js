@@ -49,6 +49,26 @@ const categoryVocab = {
     { fi: 'Euro', en: 'Euro' },
     { fi: 'Matka', en: 'Journey' }
   ],
+  "Ruoka ja Juoma": [
+    { fi: 'Ruoka', en: 'Food' },
+    { fi: 'Juoma', en: 'Drink' },
+    { fi: 'Ravintola', en: 'Restaurant' },
+    { fi: 'Aamiainen', en: 'Breakfast' },
+    { fi: 'Lounas', en: 'Lunch' },
+    { fi: 'Illallinen', en: 'Dinner' },
+    { fi: 'Kahvi', en: 'Coffee' },
+    { fi: 'Vesi', en: 'Water' }
+  ],
+  "Perhe ja Ystävät": [
+    { fi: 'Perhe', en: 'Family' },
+    { fi: 'Ystävä', en: 'Friend' },
+    { fi: 'Äiti', en: 'Mother' },
+    { fi: 'Isä', en: 'Father' },
+    { fi: 'Veli', en: 'Brother' },
+    { fi: 'Sisko', en: 'Sister' },
+    { fi: 'Lapsi', en: 'Child' },
+    { fi: 'Nimi', en: 'Name' }
+  ],
   "Menneet ajat": [
     { fi: 'Vuosi', en: 'Year' },
     { fi: 'Eilen', en: 'Yesterday' },
