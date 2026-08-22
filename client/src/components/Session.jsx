@@ -219,7 +219,10 @@ export default function Session() {
     } else {
       setSelectedWords([...selectedWords, word]);
     }
-    playAudio(word, word);
+    
+    if (currentQuestion && currentQuestion.type !== 'word-bank-reverse') {
+      playAudio(word, word);
+    }
   };
 
   if (isFinished) {
@@ -507,14 +510,19 @@ export default function Session() {
             <div>
               {feedback.isPerfect ? 'Correct!' : feedback.hasTypo ? 'Correct, but you have a typo.' : 'Incorrect.'}
               <div className="correct-answer-container">
-                <span className="correct-text">Correct answer: {feedback.correctText}</span>
-                <button 
-                  className="btn-audio" 
-                  onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId)}
-                  title="Listen"
-                >
-                  🔊
-                </button>
+                <div>
+                  <span className="correct-text">Answer: {feedback.correctText}</span>
+                  {currentQuestion.type !== 'word-bank-reverse' && (
+                    <button 
+                      className="btn-audio"
+                      onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId)}
+                      title="Listen to correct answer"
+                      style={{ marginLeft: '12px', padding: '4px 8px', fontSize: '14px' }}
+                    >
+                      🔊
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
