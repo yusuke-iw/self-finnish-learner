@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Home from './components/Home';
-import Session from './components/Session';
-import Passage from './components/Passage';
-import './App.css';
+import Home from './pages/Home';
+import Session from './pages/Session';
+import Passage from './pages/Passage';
+import './assets/App.css';
 
 function App() {
   return (

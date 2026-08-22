@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { generateSession, checkAnswer } from '../api';
+import { generateSession, checkAnswer } from '../services/api';
 import { playAudio } from '../utils/audio';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
