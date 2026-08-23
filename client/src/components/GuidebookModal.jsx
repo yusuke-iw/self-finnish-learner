@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchSentences } from "../services/api";
 import { playAudio } from '../utils/audio';
 

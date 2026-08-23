@@ -163,4 +163,123 @@ describe('Session Component', () => {
     // unless we capture the mock instance.
     // For now, we just ensure it renders and clicking doesn't crash.
   });
+
+  it('renders a word-bank question correctly', async () => {
+    const wordBankSession = {
+      _id: 'session-wb',
+      questions: [
+        {
+          sentenceId: 'wb1',
+          level: 2,
+          type: 'word-bank',
+          prompt: 'I speak Finnish.',
+          correctAnswer: 'Minä puhun suomea.',
+          wordBank: ['Minä', 'puhun', 'suomea', 'koira']
+        }
+      ]
+    };
+    renderComponent(wordBankSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Translate this sentence:')).toBeInTheDocument();
+    });
+    
+    // Click words in word bank
+    fireEvent.click(screen.getByText('Minä'));
+    fireEvent.click(screen.getByText('puhun'));
+    fireEvent.click(screen.getByText('suomea'));
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true, correctText: 'Minä puhun suomea.' }, success: true } });
+    fireEvent.click(screen.getByText('Check Answer'));
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Correct!/)).toBeInTheDocument();
+    });
+  });
+
+  it('renders a fill-in-the-blank question correctly', async () => {
+    const fillSession = {
+      _id: 'session-fib',
+      questions: [
+        {
+          sentenceId: 'fib1',
+          level: 3,
+          type: 'fill-in-the-blank',
+          prompt: 'I speak Finnish.',
+          prefix: 'Minä ',
+          missingWord: 'puhun',
+          suffix: ' suomea.',
+          correctAnswer: 'Minä puhun suomea.'
+        }
+      ]
+    };
+    renderComponent(fillSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Type the missing word:')).toBeInTheDocument();
+    });
+    
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'puhun' } });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true, correctText: 'Minä puhun suomea.' }, success: true } });
+    fireEvent.click(screen.getByText('Check Answer'));
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Correct!/)).toBeInTheDocument();
+    });
+  });
+
+  it('renders a typing question correctly', async () => {
+    const typingSession = {
+      _id: 'session-typ',
+      questions: [
+        {
+          sentenceId: 'typ1',
+          level: 3,
+          type: 'typing',
+          prompt: 'I speak Finnish.',
+          correctAnswer: 'Minä puhun suomea.'
+        }
+      ]
+    };
+    renderComponent(typingSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Translate this sentence:')).toBeInTheDocument();
+    });
+    
+    const input = screen.getByPlaceholderText('Type in Finnish...');
+    fireEvent.change(input, { target: { value: 'Minä puhun suomea.' } });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true, correctText: 'Minä puhun suomea.' }, success: true } });
+    fireEvent.click(screen.getByText('Check Answer'));
+    
+    await waitFor(() => {
+      expect(screen.getByText(/Correct!/)).toBeInTheDocument();
+    });
+  });
+
+  it('handles incorrect answer gracefully', async () => {
+    renderComponent();
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Translate this sentence:')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Kissa'));
+    
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: false, correctText: 'Koira' }, success: true } });
+    fireEvent.click(screen.getByText('Check Answer'));
+    
+    await waitFor(() => {
+      expect(document.querySelector('.feedback.incorrect')).toBeInTheDocument();
+      expect(document.querySelector('.correct-text').textContent).toContain('Koira');
+    });
+  });
 });
+
