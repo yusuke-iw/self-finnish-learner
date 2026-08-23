@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { generateSession, checkAnswer } from '../services/api';
 import { playAudio } from '../utils/audio';
+import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../utils/feedbackSounds';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Session() {
@@ -110,6 +111,7 @@ export default function Session() {
         // If all matched
         if (newMatched.length === currentQuestion.pairs.length) {
           setIsChecking(true);
+          playCorrectSound();
           setFeedback({
             isCorrect: true,
             isPerfect: true,
@@ -120,6 +122,7 @@ export default function Session() {
         // Wrong match
         setSelectedMatchingTokens([prevToken, token]);
         setWrongMatch(true);
+        playIncorrectSound();
         setTimeout(() => {
           setSelectedMatchingTokens([]);
           setWrongMatch(false);
@@ -192,10 +195,13 @@ export default function Session() {
         setFeedback(result);
         if (result.isPerfect) {
           setScore(s => ({ ...s, correct: s.correct + 1 }));
+          playCorrectSound();
         } else if (result.hasTypo) {
           setScore(s => ({ ...s, typo: s.typo + 1 }));
+          playCorrectSound();
         } else {
           setScore(s => ({ ...s, incorrect: s.incorrect + 1 }));
+          playIncorrectSound();
         }
       }
     } catch (err) {
@@ -210,6 +216,7 @@ export default function Session() {
       resetInput();
     } else {
       setIsFinished(true);
+      playLessonCompleteSound();
     }
   };
 
