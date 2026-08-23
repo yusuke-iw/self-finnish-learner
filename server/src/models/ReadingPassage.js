@@ -50,6 +50,10 @@ const readingPassageSchema = new mongoose.Schema({
   category: {
     type: String,
     trim: true
+  },
+  difficulty: {
+    type: String,
+    trim: true
   }
 }, {
   timestamps: true

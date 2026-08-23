@@ -73,6 +73,7 @@ const passages = [
     text: "Pekka tykkää saunasta. Lauantaina hän lämmittää puusaunan. Saunassa on erittäin kuuma, noin kahdeksankymmentä astetta. Pekka heittää löylyä kiukaalle. Sitten hän juo kylmää vettä ja katsoo järvelle.",
     translation: "Pekka likes sauna. On Saturday, he heats up the wooden sauna. In the sauna, it is very hot, about 80 degrees. Pekka throws water on the stove. Then he drinks cold water and looks at the lake.",
     category: "Culture & Daily Life",
+    difficulty: "A1/A2",
     vocabulary: [
       { word: "tykkää", translation: "likes" },
       { word: "lämmittää", translation: "heats up" },
@@ -104,6 +105,7 @@ const passages = [
     text: "Helsingin kauppatorilla on paljon ihmisiä kesällä. Maija menee torikahvilaan. Hän tilaa korvapuustin ja kahvin. Torilla myydään myös tuoreita mansikoita ja herneitä. Maija nauttii auringosta meren rannalla.",
     translation: "There are many people at Helsinki Market Square in summer. Maija goes to the market cafe. She orders a cinnamon bun and a coffee. Fresh strawberries and peas are also sold at the market. Maija enjoys the sun by the seaside.",
     category: "Helsinki Travel",
+    difficulty: "A2",
     vocabulary: [
       { word: "kauppatorilla", translation: "at the market square" },
       { word: "korvapuustin", translation: "cinnamon bun (accusative)" },
@@ -135,6 +137,7 @@ const passages = [
     text: "Talvella monet suomalaiset matkustavat Lappiin hiihtämään ja nauttimaan lumesta. Juna Helsingistä Rovaniemelle kestää noin kahdeksan tuntia. Yöjunassa voi nukkua mukavasti hytissä. Aamulla, kun juna saapuu perille, ulkona on usein pakkasta ja paljon lunta. Ihmiset pukeutuvat lämpimästi ja lähtevät heti ulos. Jotkut vuokraavat moottorikelkan, toiset taas hiihtävät pitkiä matkoja metsässä. Illalla kaikki menevät tietysti saunaan rentoutumaan kylmän päivän jälkeen.",
     translation: "In winter, many Finns travel to Lapland to ski and enjoy the snow. The train from Helsinki to Rovaniemi takes about eight hours. On the night train, you can sleep comfortably in a cabin. In the morning, when the train arrives, it is often freezing outside and there is a lot of snow. People dress warmly and go outside immediately. Some rent a snowmobile, while others ski long distances in the forest. In the evening, everyone naturally goes to the sauna to relax after a cold day.",
     category: "Winter Travel",
+    difficulty: "B1",
     vocabulary: [
       { word: "matkustavat", translation: "they travel" },
       { word: "hiihtämään", translation: "to ski (illative of 3rd infinitive)" },
@@ -169,6 +172,7 @@ const passages = [
     text: "Suomen koulujärjestelmä on maailmankuulu. Lapset aloittavat koulun yleensä seitsemänvuotiaina. Peruskoulu kestää yhdeksän vuotta, ja se on kaikille ilmainen. Koulussa tarjotaan myös ilmainen ja terveellinen lämmin lounas joka päivä. Opettajat ovat korkeasti koulutettuja, sillä heillä kaikilla on yliopistotutkinto. Suomalaisessa koulussa ei ole paljon kokeita tai kotitehtäviä verrattuna moniin muihin maihin. Sen sijaan korostetaan leikkiä, luovuutta ja yhdessä oppimista. Tavoitteena on antaa jokaiselle lapselle yhtäläiset mahdollisuudet oppia ja menestyä elämässä taustasta riippumatta.",
     translation: "The Finnish school system is world-famous. Children usually start school at the age of seven. Comprehensive school lasts nine years, and it is free for everyone. The school also provides a free and healthy warm lunch every day. Teachers are highly educated, as they all have a university degree. In a Finnish school, there are not many exams or homework compared to many other countries. Instead, play, creativity, and learning together are emphasized. The goal is to give every child equal opportunities to learn and succeed in life, regardless of their background.",
     category: "Society & Education",
+    difficulty: "B2/C1",
     vocabulary: [
       { word: "maailmankuulu", translation: "world-famous" },
       { word: "peruskoulu", translation: "comprehensive school" },

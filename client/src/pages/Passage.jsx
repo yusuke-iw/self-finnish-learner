@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchPassages, fetchPassageById } from '../services/api';
 import { playAudio } from '../utils/audio';
 import { playCorrectSound, playIncorrectSound } from '../utils/feedbackSounds';
@@ -9,14 +9,37 @@ export default function Passage() {
   const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState({});
+  const [completedPassages, setCompletedPassages] = useState({});
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}');
+    setCompletedPassages(saved);
+  }, []);
 
   const handleAnswer = (qIndex, optionIndex, correctIndex) => {
     if (answers[qIndex] !== undefined) return;
     
-    setAnswers(prev => ({ ...prev, [qIndex]: optionIndex }));
+    const newAnswers = { ...answers, [qIndex]: optionIndex };
+    setAnswers(newAnswers);
     
     if (optionIndex === correctIndex) {
       playCorrectSound();
+      
+      const totalQuestions = selectedPassage.questions.length;
+      let allCorrect = true;
+      for (let i = 0; i < totalQuestions; i++) {
+        const selected = newAnswers[i];
+        if (selected === undefined || selected !== selectedPassage.questions[i].correctAnswerIndex) {
+          allCorrect = false;
+          break;
+        }
+      }
+      
+      if (allCorrect) {
+        const updatedProgress = { ...completedPassages, [selectedPassage._id]: true };
+        setCompletedPassages(updatedProgress);
+        localStorage.setItem('finnishLearnerPassagesProgress', JSON.stringify(updatedProgress));
+      }
     } else {
       playIncorrectSound();
     }
@@ -47,7 +70,12 @@ export default function Passage() {
           </button>
           
           <div className="passage-header">
-            <h2>{selectedPassage.title}</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <h2>{selectedPassage.title}</h2>
+              {completedPassages[selectedPassage._id] && (
+                <span className="status-badge" style={{ backgroundColor: '#ffd900', color: '#000', fontSize: '0.9rem', padding: '4px 8px' }}>🏆 Mastered</span>
+              )}
+            </div>
             <span className="category-tag">{selectedPassage.difficulty}</span>
           </div>
           
@@ -172,12 +200,29 @@ export default function Passage() {
             });
           }}>
             <div className="passage-card-info">
-              <h3>{p.title}</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3>{p.title}</h3>
+                {completedPassages[p._id] && <span title="Mastered">✅</span>}
+              </div>
               <span className="category-tag">{p.difficulty}</span>
             </div>
             <div className="passage-card-arrow">→</div>
           </div>
         ))}
+      </div>
+      
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px', marginBottom: '32px' }}>
+        <button 
+          className="btn-secondary reset-btn" 
+          onClick={() => {
+            if (window.confirm("Are you sure you want to reset your passage progress?")) {
+              localStorage.removeItem('finnishLearnerPassagesProgress');
+              setCompletedPassages({});
+            }
+          }}
+        >
+          Reset Progress
+        </button>
       </div>
     </div>
   );
