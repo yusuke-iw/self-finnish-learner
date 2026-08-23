@@ -3,16 +3,16 @@ const { passages } = require('../config/seedData');
 
 exports.getPassages = async (req, res) => {
   try {
-    const dbPassages = await ReadingPassage.find().select('title translation category').exec();
+    const dbPassages = await ReadingPassage.find().select('title translation category difficulty').exec();
     if (Array.isArray(dbPassages) && dbPassages.length > 0) {
       return res.json({ success: true, data: dbPassages, source: 'database' });
     }
     // Fallback to memory seed data if DB returns nothing
-    const listData = passages.map(({ _id, title, translation, category }) => ({ _id, title, translation, category }));
+    const listData = passages.map(({ _id, title, translation, category, difficulty }) => ({ _id, title, translation, category, difficulty }));
     return res.json({ success: true, data: listData, source: 'memory' });
   } catch (error) {
     // On any error, fallback to memory data
-    const listData = passages.map(({ _id, title, translation, category }) => ({ _id, title, translation, category }));
+    const listData = passages.map(({ _id, title, translation, category, difficulty }) => ({ _id, title, translation, category, difficulty }));
     return res.json({ success: true, data: listData, source: 'memory' });
   }
 };
