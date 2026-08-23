@@ -79,6 +79,23 @@ const passages = [
       { word: "löylyä", translation: "steam thrown on sauna rocks" },
       { word: "kiukaalle", translation: "onto the sauna stove" },
       { word: "järvelle", translation: "towards the lake" }
+    ],
+    questions: [
+      {
+        questionText: "Mitä Pekka tekee lauantaina? (What does Pekka do on Saturday?)",
+        options: ["Hän lämmittää puusaunan", "Hän menee uimaan", "Hän nukkuu"],
+        correctAnswerIndex: 0
+      },
+      {
+        questionText: "What does the word 'löylyä' refer to?",
+        options: ["A cold drink", "Steam from water thrown on hot rocks", "A sauna towel"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "In the sentence 'Pekka tykkää saunasta', the word 'saunasta' is in which case?",
+        options: ["Illative (into)", "Inessive (in)", "Elative (from/about)"],
+        correctAnswerIndex: 2
+      }
     ]
   },
   {
@@ -93,6 +110,23 @@ const passages = [
       { word: "tuoreita", translation: "fresh (partitive plural)" },
       { word: "mansikoita", translation: "strawberries (partitive plural)" },
       { word: "nauttii", translation: "enjoys" }
+    ],
+    questions: [
+      {
+        questionText: "Mitä Maija tilaa kahvilassa? (What does Maija order in the cafe?)",
+        options: ["Jäätelöä ja vettä", "Korvapuustin ja kahvin", "Mansikoita ja herneitä"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "Which word means 'fresh' in Finnish?",
+        options: ["Kesä", "Tuoreita", "Vanha"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "In the sentence 'Maija menee torikahvilaan', what case is 'torikahvilaan'?",
+        options: ["Illative (into)", "Adessive (on/at)", "Allative (onto)"],
+        correctAnswerIndex: 0
+      }
     ]
   },
   {
@@ -110,6 +144,23 @@ const passages = [
       { word: "pukeutuvat", translation: "they dress" },
       { word: "moottorikelkan", translation: "snowmobile (accusative)" },
       { word: "rentoutumaan", translation: "to relax (illative of 3rd infinitive)" }
+    ],
+    questions: [
+      {
+        questionText: "Mitä ihmiset tekevät illalla? (What do people do in the evening?)",
+        options: ["Hiihtävät metsässä", "Menevät saunaan rentoutumaan", "Nukkuvat hytissä"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "What does 'pakkasta' mean?",
+        options: ["Freezing weather", "A snowmobile", "A long distance"],
+        correctAnswerIndex: 0
+      },
+      {
+        questionText: "Which of the following is the 3rd person plural (they) form of the verb?",
+        options: ["Matkustaa", "Matkustamme", "Matkustavat"],
+        correctAnswerIndex: 2
+      }
     ]
   },
   {
@@ -127,6 +178,23 @@ const passages = [
       { word: "korostetaan", translation: "is emphasized (passive)" },
       { word: "yhtäläiset mahdollisuudet", translation: "equal opportunities" },
       { word: "riippumatta", translation: "regardless of (+ elative)" }
+    ],
+    questions: [
+      {
+        questionText: "Kuinka pitkä peruskoulu on? (How long is comprehensive school?)",
+        options: ["Seitsemän vuotta", "Yhdeksän vuotta", "Kaksitoista vuotta"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "What is the English translation of 'ilmainen'?",
+        options: ["Expensive", "Healthy", "Free of charge"],
+        correctAnswerIndex: 2
+      },
+      {
+        questionText: "In the word 'seitsemänvuotiaina' (at the age of seven), what case ending is used?",
+        options: ["Essive (-na)", "Translative (-ksi)", "Partitive (-a/-ä)"],
+        correctAnswerIndex: 0
+      }
     ]
   }
 ];
