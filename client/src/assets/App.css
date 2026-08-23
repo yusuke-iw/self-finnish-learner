@@ -61,7 +61,7 @@
 .main-content {
   flex: 1;
   padding: 40px 32px 64px;
-  max-width: 960px;
+  max-width: 1600px;
   width: 100%;
   margin: 0 auto;
   animation: fadeIn 0.4s var(--ease);
@@ -620,8 +620,9 @@
    ================================================================ */
 
 .passages-page {
-  max-width: 800px;
+  max-width: 1800px;
   margin: 0 auto;
+  padding: 0 32px;
 }
 
 .passages-page > h2 {
