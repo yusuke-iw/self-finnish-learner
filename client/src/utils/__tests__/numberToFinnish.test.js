@@ -17,6 +17,12 @@ describe('replaceNumbersWithFinnishWords', () => {
     expect(replaceNumbersWithFinnishWords('90')).toBe('yhdeksänkymmentä');
   });
 
+  it('should replace numbers 11 to 19', () => {
+    expect(replaceNumbersWithFinnishWords('11')).toBe('yksitoista');
+    expect(replaceNumbersWithFinnishWords('15')).toBe('viisitoista');
+    expect(replaceNumbersWithFinnishWords('19')).toBe('yhdeksäntoista');
+  });
+
   it('should replace numbers 21 to 99', () => {
     expect(replaceNumbersWithFinnishWords('21')).toBe('kaksikymmentäyksi');
     expect(replaceNumbersWithFinnishWords('55')).toBe('viisikymmentäviisi');
@@ -39,5 +45,12 @@ describe('replaceNumbersWithFinnishWords', () => {
     expect(replaceNumbersWithFinnishWords('')).toBe('');
     expect(replaceNumbersWithFinnishWords(null)).toBe(null);
     expect(replaceNumbersWithFinnishWords(undefined)).toBe(undefined);
+  });
+});
+
+import { numberToFinnishWord } from '../numberToFinnish';
+describe('numberToFinnishWord', () => {
+  it('should fallback to string for numbers >= 1000', () => {
+    expect(numberToFinnishWord(1000)).toBe('1000');
   });
 });

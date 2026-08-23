@@ -260,7 +260,7 @@ export default function Session() {
           </div>
           <div className="summary-actions">
             <button className="btn-primary" onClick={handleSessionComplete}>Back to Path</button>
-            <button className="btn-secondary" onClick={() => setSession(null)}>Try Again</button>
+            <button className="btn-secondary" onClick={() => { setSession(null); setIsFinished(false); }}>Try Again</button>
           </div>
         </div>
       </div>

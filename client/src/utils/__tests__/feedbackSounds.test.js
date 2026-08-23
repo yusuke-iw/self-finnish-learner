@@ -1,4 +1,4 @@
-import { playCorrectSound, playIncorrectSound } from '../feedbackSounds';
+import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../feedbackSounds';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('feedbackSounds utility', () => {
@@ -51,6 +51,12 @@ describe('feedbackSounds utility', () => {
     expect(mockContext.createGain).toHaveBeenCalled();
     expect(mockOscillator.start).toHaveBeenCalled();
     expect(mockOscillator.stop).toHaveBeenCalled();
+  });
+
+  it('should play lesson complete sound without errors', () => {
+    expect(() => {
+      playLessonCompleteSound();
+    }).not.toThrow();
   });
 
   it('should handle lack of AudioContext gracefully', () => {

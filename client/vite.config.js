@@ -17,5 +17,8 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
+    coverage: {
+      exclude: ['src/main.jsx', 'src/services/api.js', 'vite.config.js']
+    }
   },
 })

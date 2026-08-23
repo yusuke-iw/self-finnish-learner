@@ -1,7 +1,7 @@
 const ones = ['nolla', 'yksi', 'kaksi', 'kolme', 'neljä', 'viisi', 'kuusi', 'seitsemän', 'kahdeksan', 'yhdeksän'];
 const tens = ['', 'kymmenen', 'kaksikymmentä', 'kolmekymmentä', 'neljäkymmentä', 'viisikymmentä', 'kuusikymmentä', 'seitsemänkymmentä', 'kahdeksankymmentä', 'yhdeksänkymmentä'];
 
-function numberToFinnishWord(num) {
+export function numberToFinnishWord(num) {
   if (num < 10) return ones[num];
   if (num === 10) return 'kymmenen';
   if (num < 20) return ones[num - 10] + 'toista';

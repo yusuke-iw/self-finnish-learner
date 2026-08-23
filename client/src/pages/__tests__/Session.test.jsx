@@ -8,7 +8,11 @@ vi.mock('../../services/api', () => ({
   generateSession: vi.fn(),
   checkAnswer: vi.fn()
 }));
+vi.mock('../../utils/audio', () => ({
+  playAudio: vi.fn()
+}));
 import { generateSession, checkAnswer } from '../../services/api';
+import { playAudio } from '../../utils/audio';
 
 describe('Session Component', () => {
   const mockSession = {
@@ -26,9 +30,14 @@ describe('Session Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
     // Mock the state returned by useLocation or just render it plainly
     // Session uses useLocation to get state.session
+  });
+
+  afterEach(() => {
+    delete global.window.SpeechRecognition;
+    delete global.window.webkitSpeechRecognition;
   });
 
   const renderComponent = (sessionData = mockSession) => {
@@ -46,7 +55,7 @@ describe('Session Component', () => {
 
     // Instead of mocking useLocation, we can just let it render the start screen and click start!
     // But since generateSession is imported directly, let's mock generateSession:
-    generateSession.mockResolvedValueOnce({ data: { success: true, data: sessionData } });
+    generateSession.mockResolvedValue({ data: { success: true, data: sessionData } });
 
     return render(
       <BrowserRouter>
@@ -54,6 +63,57 @@ describe('Session Component', () => {
       </BrowserRouter>
     );
   };
+
+  it('handles speaking question recording events and typo feedback', async () => {
+    const speakingSession = {
+      _id: 'session-speak',
+      questions: [
+        {
+          sentenceId: 'speak1',
+          level: 3,
+          type: 'speaking',
+          prompt: 'Cat',
+          correctAnswer: 'Kissa'
+        }
+      ]
+    };
+    renderComponent(speakingSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Tap microphone to speak')).toBeInTheDocument();
+    });
+
+    const mockRecognition = {
+      start: vi.fn(),
+      stop: vi.fn(),
+      onresult: null,
+      onerror: null,
+      onend: null
+    };
+    global.window.SpeechRecognition = vi.fn().mockImplementation(() => mockRecognition);
+    global.window.webkitSpeechRecognition = vi.fn().mockImplementation(() => mockRecognition);
+
+    fireEvent.click(screen.getByText('🎤'));
+    
+    // simulate onend
+    expect(mockRecognition.onend).not.toBeNull();
+    mockRecognition.onend();
+    
+    // Now trigger result
+    mockRecognition.onresult({ results: [[{ transcript: 'Kisa' }]] });
+    
+    await waitFor(() => {
+      expect(screen.getByText('"Kisa"')).toBeInTheDocument();
+    });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: false, hasTypo: true }, success: true } });
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(document.querySelector('.feedback.typo')).toBeInTheDocument();
+    });
+  });
 
   it('renders a choice question correctly', async () => {
     renderComponent();
@@ -281,5 +341,225 @@ describe('Session Component', () => {
       expect(document.querySelector('.correct-text').textContent).toContain('Koira');
     });
   });
-});
 
+  it('handles generateSession error gracefully', async () => {
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    renderComponent();
+    generateSession.mockRejectedValueOnce({ response: { data: { error: 'Failed' } } });
+    
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith('Failed');
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+
+    alertSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('renders a word-bank-reverse question correctly', async () => {
+    const reverseSession = {
+      _id: 'session-wbr',
+      questions: [
+        {
+          sentenceId: 'wbr1',
+          level: 2,
+          type: 'word-bank-reverse',
+          prompt: 'Kissa',
+          correctAnswer: 'Cat',
+          wordBank: ['Cat', 'Dog', 'Mouse']
+        }
+      ]
+    };
+    renderComponent(reverseSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Write this in English:')).toBeInTheDocument();
+    });
+  });
+
+  it('renders listening audio controls correctly', async () => {
+    const listeningSession = {
+      _id: 'session-lis',
+      questions: [
+        {
+          sentenceId: 'lis1',
+          level: 3,
+          type: 'typing',
+          prompt: 'Kissa',
+          correctAnswer: 'Kissa',
+          isListening: true
+        }
+      ]
+    };
+    renderComponent(listeningSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByTitle('Listen (Normal Speed)')).toBeInTheDocument();
+      expect(screen.getByTitle('Listen (Slow)')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTitle('Listen (Normal Speed)'));
+    expect(playAudio).toHaveBeenCalledWith('Kissa', 'lis1', 'fi-FI', 1.0);
+
+    fireEvent.click(screen.getByTitle('Listen (Slow)'));
+    expect(playAudio).toHaveBeenCalledWith('Kissa', 'lis1', 'fi-FI', 0.6);
+  });
+
+  it('deselects a word in word-bank question', async () => {
+    const wordBankSession = {
+      _id: 'session-wb',
+      questions: [
+        {
+          sentenceId: 'wb1',
+          level: 2,
+          type: 'word-bank',
+          prompt: 'Cat',
+          correctAnswer: 'Kissa',
+          wordBank: ['Kissa', 'Koira', 'Hiiri']
+        }
+      ]
+    };
+    renderComponent(wordBankSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Kissa')).toBeInTheDocument();
+    });
+
+    const kissaChip = screen.getByText('Kissa');
+    
+    // Select
+    fireEvent.click(kissaChip);
+    expect(screen.getAllByText('Kissa').length).toBe(2); // one in pool, one in answer
+
+    // Deselect
+    const answerChips = document.querySelectorAll('.word-bank-answer .word-chip');
+    fireEvent.click(answerChips[0]); // deselect
+  });
+
+  it('handles session complete correctly', async () => {
+    const singleQuestionSession = {
+      _id: 'session-single',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        }
+      ]
+    };
+    renderComponent(singleQuestionSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Koira')).toBeInTheDocument();
+    });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true }, success: true } });
+    fireEvent.click(screen.getByText('Koira'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Session Complete!')).toBeInTheDocument();
+      expect(screen.getByText('100%')).toBeInTheDocument();
+    });
+    
+    // Click Try Again
+    fireEvent.click(screen.getByText('Try Again'));
+    await waitFor(() => {
+      expect(screen.getByText('Start a Quiz Session')).toBeInTheDocument();
+    });
+  });
+
+  it('handles checkAnswer error gracefully', async () => {
+    checkAnswer.mockRejectedValueOnce(new Error('Network Error'));
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const testSession = {
+      _id: 'session-single',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        }
+      ]
+    };
+    renderComponent(testSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Koira')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Koira'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('navigates to the next question if available', async () => {
+    const multiSession = {
+      _id: 'session-multi',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        },
+        {
+          sentenceId: 's2',
+          level: 1,
+          type: 'choice',
+          prompt: 'Cat',
+          correctAnswer: 'Kissa',
+          options: ['Kissa', 'Koira']
+        }
+      ]
+    };
+    renderComponent(multiSession);
+    fireEvent.click(screen.getByText('Start Session'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Dog')).toBeInTheDocument();
+    });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true }, success: true } });
+    fireEvent.click(screen.getByText('Koira'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Cat')).toBeInTheDocument();
+    });
+  });
+});
