@@ -163,4 +163,105 @@ describe('Passage Component', () => {
     // Local storage should be empty
     expect(localStorage.getItem('finnishLearnerPassagesProgress')).toBeNull();
   });
+
+  it('does not reset progress if confirm is cancelled', async () => {
+    window.confirm = vi.fn().mockReturnValue(false);
+    localStorage.setItem('finnishLearnerPassagesProgress', JSON.stringify({ p1: true }));
+    
+    render(<Passage />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Test Passage 1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Reset Progress'));
+    expect(screen.getByTitle('Mastered')).toBeInTheDocument();
+  });
+
+  it('handles fetchPassages error gracefully', async () => {
+    fetchPassages.mockRejectedValue(new Error('Network error'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(<Passage />);
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Loading passages...')).not.toBeInTheDocument();
+    });
+
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  it('handles fetchPassageById error gracefully', async () => {
+    fetchPassageById.mockRejectedValue(new Error('Network error'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(<Passage />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Test Passage 1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Test Passage 1'));
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalled();
+    });
+    consoleSpy.mockRestore();
+  });
+
+  it('toggles translation visibility', async () => {
+    render(<Passage />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Test Passage 1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Test Passage 1'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Knowledge Check')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText('This is a test.')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Show Translation'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('This is a test.')).toBeInTheDocument();
+      expect(screen.getByText('Hide Translation')).toBeInTheDocument();
+    });
+  });
+
+  it('handles multiple questions where one is correct but others are not yet answered', async () => {
+    const multiQuestionPassage = {
+      _id: 'p-multi',
+      title: 'Multi Passage',
+      text: 'Multi',
+      questions: [
+        { questionText: 'Q1', options: ['A', 'B'], correctAnswerIndex: 0 },
+        { questionText: 'Q2', options: ['C', 'D'], correctAnswerIndex: 0 }
+      ]
+    };
+    fetchPassageById.mockResolvedValueOnce({ data: { success: true, data: multiQuestionPassage } });
+
+    render(<Passage />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Test Passage 1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Test Passage 1')); // Will fetch p-multi because of the mockResolvedValueOnce
+
+    await waitFor(() => {
+      expect(screen.getByText('Q1')).toBeInTheDocument();
+    });
+
+    // Answer Q1 correctly
+    fireEvent.click(screen.getByText('A'));
+    expect(playCorrectSound).toHaveBeenCalled();
+
+    // Mastery badge should not be present yet because Q2 is unanswered
+    expect(screen.queryByText('🏆 Mastered')).not.toBeInTheDocument();
+  });
 });
