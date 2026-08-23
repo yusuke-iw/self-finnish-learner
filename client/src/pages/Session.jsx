@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { generateSession, checkAnswer } from '../services/api';
 import { playAudio } from '../utils/audio';
 import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../utils/feedbackSounds';
+import { replaceNumbersWithFinnishWords } from '../utils/numberToFinnish';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Session() {
@@ -146,7 +147,8 @@ export default function Session() {
     setIsRecording(true);
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+      let transcript = event.results[0][0].transcript;
+      transcript = replaceNumbersWithFinnishWords(transcript);
       setInputValue(transcript);
       setIsRecording(false);
     };
