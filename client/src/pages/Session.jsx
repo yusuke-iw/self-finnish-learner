@@ -106,7 +106,8 @@ export default function Session() {
         setMatchedPairIds(newMatched);
         setSelectedMatchingTokens([]);
         
-        playAudio('Oikein!', null, 'fi-FI', 1.0); // simple feedback sound
+        const fiText = prevToken.lang === 'fi' ? prevToken.text : token.text;
+        playAudio(fiText, null, 'fi-FI', 1.0);
         
         // If all matched
         if (newMatched.length === currentQuestion.pairs.length) {
