@@ -264,4 +264,51 @@ describe('Passage Component', () => {
     // Mastery badge should not be present yet because Q2 is unanswered
     expect(screen.queryByText('🏆 Mastered')).not.toBeInTheDocument();
   });
+
+  it('saves and restores passage answers from localStorage', async () => {
+    const multiQuestionPassage = {
+      _id: 'p-multi-save',
+      title: 'Multi Save Passage',
+      text: 'Multi save',
+      questions: [
+        { questionText: 'Q1', options: ['A', 'B'], correctAnswerIndex: 0 },
+        { questionText: 'Q2', options: ['C', 'D'], correctAnswerIndex: 1 }
+      ]
+    };
+    fetchPassageById.mockResolvedValue({ data: { success: true, data: multiQuestionPassage } });
+
+    render(<Passage />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('Test Passage 1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Test Passage 1'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Q1')).toBeInTheDocument();
+    });
+
+    // Answer Q1 correctly
+    fireEvent.click(screen.getByText('A'));
+    expect(playCorrectSound).toHaveBeenCalled();
+
+    // Verify it is marked as correct
+    const aBtn = screen.getByText('A');
+    expect(aBtn).toHaveClass('correct-choice');
+
+    // Go back to list
+    fireEvent.click(screen.getByText('← Back to Passages'));
+
+    // Re-open passage
+    fireEvent.click(screen.getByText('Test Passage 1'));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Q1')).toBeInTheDocument();
+    });
+
+    // Q1 should STILL be marked as correct (restored from localStorage)
+    const restoredABtn = screen.getByText('A');
+    expect(restoredABtn).toHaveClass('correct-choice');
+  });
 });
