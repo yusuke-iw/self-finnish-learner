@@ -562,4 +562,93 @@ describe('Session Component', () => {
       expect(screen.getByText('Cat')).toBeInTheDocument();
     });
   });
+
+  it('allows picking multiple identical words in word bank', async () => {
+    const identicalWordsSession = {
+      _id: 'session-identical',
+      questions: [
+        {
+          sentenceId: 'ident1',
+          level: 1,
+          type: 'word-bank',
+          prompt: 'A cat and a dog',
+          correctAnswer: 'Kissa ja Kissa', 
+          wordBank: ['Kissa', 'ja', 'Kissa', 'koira']
+        }
+      ]
+    };
+    renderComponent(identicalWordsSession);
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByText('A cat and a dog')).toBeInTheDocument();
+    });
+
+    const kissaButtons = screen.getAllByText('Kissa');
+    // There should be 2 pool buttons
+    expect(kissaButtons.length).toBe(2);
+
+    // Click first 'Kissa'
+    fireEvent.click(kissaButtons[0]);
+    // Click second 'Kissa'
+    fireEvent.click(kissaButtons[1]);
+
+    // Check Answer
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(checkAnswer).toHaveBeenCalledWith({
+        sentenceId: 'ident1',
+        userInput: 'Kissa Kissa',
+        questionType: 'word-bank'
+      });
+    });
+  });
+
+  it('updates score correctly for matching questions', async () => {
+    const matchingSession = {
+      _id: 'session-match-score',
+      questions: [
+        {
+          sentenceId: 'match1',
+          level: 1,
+          type: 'matching',
+          prompt: 'Match the words',
+          pairs: [{ id: 'p1', fi: 'Kissa', en: 'Cat' }],
+          tokens: [
+            { id: 'p1', text: 'Kissa', lang: 'fi' },
+            { id: 'p1', text: 'Cat', lang: 'en' }
+          ]
+        }
+      ]
+    };
+
+    renderComponent(matchingSession);
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Tap the matching pairs:')).toBeInTheDocument();
+    });
+
+    const kissaBtn = screen.getByText('Kissa');
+    const catBtn = screen.getByText('Cat');
+
+    // Click matching pair
+    fireEvent.click(kissaBtn);
+    fireEvent.click(catBtn);
+
+    // Wait for the feedback state to set
+    await waitFor(() => {
+      expect(screen.getByText(/All pairs matched!/i)).toBeInTheDocument();
+    });
+
+    // Click Next/Continue
+    fireEvent.click(screen.getByText('Continue'));
+
+    // Should finish session and show 100%
+    await waitFor(() => {
+      expect(screen.getByText('Session Complete!')).toBeInTheDocument();
+    });
+    expect(screen.getByText('100%')).toBeInTheDocument();
+  });
 });
