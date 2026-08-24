@@ -119,6 +119,7 @@ export default function Session() {
             isPerfect: true,
             correctText: 'All pairs matched!'
           });
+          setScore(s => ({ ...s, correct: s.correct + 1 }));
         }
       } else {
         // Wrong match
@@ -172,7 +173,7 @@ export default function Session() {
     if (currentQuestion.type === 'choice') {
       answer = inputValue;
     } else if (currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') {
-      answer = selectedWords.join(' ');
+      answer = selectedWords.map(idx => currentQuestion.wordBank[idx]).join(' ');
     } else if (currentQuestion.type === 'typing' || currentQuestion.type === 'fill-in-the-blank' || currentQuestion.type === 'speaking') {
       answer = inputValue;
     }
@@ -224,10 +225,10 @@ export default function Session() {
   };
 
   const toggleWord = (word, index) => {
-    if (selectedWords.includes(word)) {
-      setSelectedWords(selectedWords.filter((_, i) => i !== selectedWords.indexOf(word)));
+    if (selectedWords.includes(index)) {
+      setSelectedWords(selectedWords.filter(i => i !== index));
     } else {
-      setSelectedWords([...selectedWords, word]);
+      setSelectedWords([...selectedWords, index]);
     }
     
     if (currentQuestion && currentQuestion.type !== 'word-bank-reverse') {
@@ -396,15 +397,18 @@ export default function Session() {
         {(currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') && (
           <div className="word-bank-area">
             <div className={`word-bank-answer ${selectedWords.length > 0 ? 'has-words' : ''}`}>
-              {selectedWords.map((word, idx) => (
-                <span key={idx} className="word-chip in-slot" onClick={() => !feedback && toggleWord(word, idx)}>{word}</span>
-              ))}
+              {selectedWords.map((wordIdx, idx) => {
+                const word = currentQuestion.wordBank[wordIdx];
+                return (
+                  <span key={idx} className="word-chip in-slot" onClick={() => !feedback && toggleWord(word, wordIdx)}>{word}</span>
+                );
+              })}
             </div>
             <div className="word-bank-pool">
               {currentQuestion.wordBank.map((word, idx) => (
                 <span 
                   key={idx} 
-                  className={`word-chip ${selectedWords.includes(word) ? 'in-answer' : ''}`}
+                  className={`word-chip ${selectedWords.includes(idx) ? 'in-answer' : ''}`}
                   onClick={() => !feedback && toggleWord(word, idx)}
                 >
                   {word}
