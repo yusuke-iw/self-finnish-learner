@@ -28,7 +28,6 @@ This project is built using the **MERN** stack (with Vite replacing Create React
 - **React 19:** Component-based UI.
 - **Vite:** Extremely fast frontend tooling and bundling.
 - **React Router DOM:** For seamless single-page application (SPA) routing.
-- **Zustand:** Lightweight state management.
 - **Vanilla CSS:** Custom design system utilizing CSS variables for consistent theming.
 
 **Backend:**
