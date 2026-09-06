@@ -8,12 +8,14 @@ import {
   getQuestionsByTopic
 } from '../data/grammarData';
 import { playAudio } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 import '../assets/App.css';
 
 const LOCAL_STORAGE_MISTAKES_KEY = 'finnish_grammar_mistakes';
 
 function GrammarPractice() {
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
   const [searchParams] = useSearchParams();
   const initialTopic = searchParams.get('topic') || 'all';
 
@@ -196,11 +198,11 @@ function GrammarPractice() {
         <div className="practice-setup-card">
           <div className="setup-header">
             <button className="back-hub-link" onClick={() => navigate('/grammar')}>
-              ← 文法体系トップへ戻る
+              {t('drillStudio.backToHub')}
             </button>
-            <h1 className="setup-title">🎯 文法演習スタジオ（Drill Studio）</h1>
+            <h1 className="setup-title">{t('drillStudio.title')}</h1>
             <p className="setup-subtitle">
-              フィンランド語の文法規則・格変化・動詞活用を反復ドリルで身につけましょう。
+              {t('drillStudio.subtitle')}
             </p>
           </div>
 
@@ -208,11 +210,11 @@ function GrammarPractice() {
           <div className="setup-stats-banner">
             <div className="stat-pill">
               <span className="stat-icon">📚</span>
-              <span>利用可能な総問題数: <strong>{getAllPracticeQuestions().length}問</strong></span>
+              <span>{t('drillStudio.totalAvailable')} <strong>{getAllPracticeQuestions().length}問</strong></span>
             </div>
             <div className="stat-pill">
               <span className="stat-icon">⚠️</span>
-              <span>弱点バンク: <strong>{mistakeBank.length}問</strong></span>
+              <span>{t('drillStudio.weaknessTitle')} <strong>{mistakeBank.length}問</strong></span>
             </div>
             {mistakeBank.length > 0 && (
               <button
@@ -223,7 +225,7 @@ function GrammarPractice() {
                   handleStartDrill(true);
                 }}
               >
-                🔥 弱点集中特訓を始める ({mistakeBank.length}問)
+                {t('drillStudio.weaknessBtn', { count: mistakeBank.length })}
               </button>
             )}
           </div>
@@ -232,7 +234,7 @@ function GrammarPractice() {
           <div className="setup-options-grid">
             {/* Category Filter */}
             <div className="setup-section">
-              <label className="section-label">1. 特訓カテゴリを選択</label>
+              <label className="section-label">{t('drillStudio.stepCategory')}</label>
               <div className="filter-chips">
                 {GRAMMAR_CATEGORIES.map((cat) => (
                   <button
@@ -244,7 +246,7 @@ function GrammarPractice() {
                       setSelectedTopic('all');
                     }}
                   >
-                    {cat.label}
+                    {language === 'en' ? t(`grammarCategories.${cat.id}`) : cat.label}
                   </button>
                 ))}
               </div>
@@ -252,13 +254,13 @@ function GrammarPractice() {
 
             {/* Topic Filter */}
             <div className="setup-section">
-              <label className="section-label">2. 特定の文法トピックに絞り込む（任意）</label>
+              <label className="section-label">{t('drillStudio.stepTopic')}</label>
               <select
                 className="topic-select"
                 value={selectedTopic}
                 onChange={(e) => setSelectedTopic(e.target.value)}
               >
-                <option value="all">すべてのトピック（総合演習）</option>
+                <option value="all">{t('drillStudio.allTopics')}</option>
                 {grammarTopics
                   .filter((t) => selectedCategory === 'all' || t.category === selectedCategory)
                   .map((t) => (
@@ -271,42 +273,42 @@ function GrammarPractice() {
 
             {/* Question Format */}
             <div className="setup-section">
-              <label className="section-label">3. 出題形式</label>
+              <label className="section-label">{t('drillStudio.stepFormat')}</label>
               <div className="format-chips">
                 <button
                   type="button"
                   className={`filter-chip ${selectedType === 'all' ? 'active' : ''}`}
                   onClick={() => setSelectedType('all')}
                 >
-                  🎲 すべての形式
+                  {t('drillStudio.formatAll')}
                 </button>
                 <button
                   type="button"
                   className={`filter-chip ${selectedType === 'choice' ? 'active' : ''}`}
                   onClick={() => setSelectedType('choice')}
                 >
-                  🔘 4択クイズ
+                  {t('drillStudio.formatChoice')}
                 </button>
                 <button
                   type="button"
                   className={`filter-chip ${selectedType === 'typing' ? 'active' : ''}`}
                   onClick={() => setSelectedType('typing')}
                 >
-                  ⌨️ 記述・タイピング入力
+                  {t('drillStudio.formatTyping')}
                 </button>
                 <button
                   type="button"
                   className={`filter-chip ${selectedType === 'wordbank' ? 'active' : ''}`}
                   onClick={() => setSelectedType('wordbank')}
                 >
-                  🧩 並び替え・チップ
+                  {t('drillStudio.formatWordbank')}
                 </button>
               </div>
             </div>
 
             {/* Question Count */}
             <div className="setup-section">
-              <label className="section-label">4. 問題数</label>
+              <label className="section-label">{t('drillStudio.stepCount')}</label>
               <div className="count-buttons">
                 {[5, 10, 15].map((cnt) => (
                   <button
@@ -315,7 +317,7 @@ function GrammarPractice() {
                     className={`count-btn ${questionCount === cnt ? 'active' : ''}`}
                     onClick={() => setQuestionCount(cnt)}
                   >
-                    {cnt} 問
+                    {t('drillStudio.questionsCount', { count: cnt })}
                   </button>
                 ))}
               </div>
@@ -328,7 +330,7 @@ function GrammarPractice() {
               className="start-session-btn"
               onClick={() => handleStartDrill(false)}
             >
-              🚀 ドリルを開始する
+              {t('drillStudio.startBtn')}
             </button>
           </div>
         </div>
@@ -426,8 +428,8 @@ function GrammarPractice() {
             {currentQ.type === 'wordbank' && (
               <div className="drill-wordbank-area">
                 <div className="drill-selected-slot">
-                  <span className="slot-label">選択した回答:</span>
-                  <span className="slot-value">{currentAnswer || '（下の単語チップを選択してください）'}</span>
+                  <span className="slot-label">{t('drillStudio.selectedAnswerLabel')}</span>
+                  <span className="slot-value">{currentAnswer || t('drillStudio.selectChipHint')}</span>
                 </div>
                 <div className="drill-chips-grid">
                   {currentQ.words.map((w, idx) => {
@@ -462,7 +464,7 @@ function GrammarPractice() {
                 <input
                   type="text"
                   className="drill-typing-input"
-                  placeholder={currentQ.hint || 'フィンランド語を入力...'}
+                  placeholder={currentQ.hint || t('drillStudio.inputPlaceholder')}
                   value={currentAnswer}
                   disabled={isSubmitted}
                   autoFocus
@@ -471,7 +473,7 @@ function GrammarPractice() {
 
                 {!isSubmitted && (
                   <div className="drill-keyboard-helpers">
-                    <span className="helper-label">特殊文字:</span>
+                    <span className="helper-label">{language === 'en' ? 'Special Chars:' : '特殊文字:'}</span>
                     {['ä', 'ö', 'Ä', 'Ö'].map((ch) => (
                       <button
                         key={ch}
@@ -492,15 +494,15 @@ function GrammarPractice() {
           {isSubmitted && (
             <div className={`drill-feedback-banner ${isCorrect ? 'feed-correct' : 'feed-wrong'}`}>
               <div className="feed-header">
-                <span className="feed-status-icon">{isCorrect ? '✅ 正解！' : '❌ 不正解'}</span>
+                <span className="feed-status-icon">{isCorrect ? t('drillStudio.correctBanner') : t('drillStudio.incorrectBanner')}</span>
                 {!isCorrect && (
                   <span className="correct-answer-pill">
-                    正解: <strong>{currentQ.answer}</strong>
+                    {t('drillStudio.correctAnswerLabel')} <strong>{currentQ.answer}</strong>
                   </span>
                 )}
               </div>
               <div className="feed-explanation">
-                <p>💡 <strong>解説:</strong> {currentQ.explanation}</p>
+                <p>💡 <strong>{t('drillStudio.explanationLabel')}</strong> {currentQ.explanation}</p>
               </div>
             </div>
           )}
@@ -514,7 +516,7 @@ function GrammarPractice() {
                 disabled={!currentAnswer || !currentAnswer.trim()}
                 onClick={handleSubmitAnswer}
               >
-                回答を確認する (Enter)
+                {language === 'en' ? 'Submit Answer (Enter)' : '回答を確認する (Enter)'}
               </button>
             ) : (
               <button
@@ -523,7 +525,7 @@ function GrammarPractice() {
                 autoFocus
                 onClick={handleNextQuestion}
               >
-                {currentIndex + 1 < questions.length ? '次の問題へ ➔' : '結果を見る 🎉'}
+                {currentIndex + 1 < questions.length ? t('drillStudio.nextBtn') : t('drillStudio.finishBtn')}
               </button>
             )}
           </div>
@@ -537,30 +539,30 @@ function GrammarPractice() {
             <span className="summary-trophy">
               {score === questions.length ? '🏆' : score >= questions.length * 0.7 ? '🌟' : '💪'}
             </span>
-            <h1 className="summary-title">演習セッション完了！</h1>
+            <h1 className="summary-title">{t('drillStudio.completedTitle')}</h1>
             <p className="summary-msg">
               {score === questions.length
-                ? '完璧です！全問正解を達成しました！'
+                ? (language === 'en' ? 'Awesome! Perfect score on all exercises!' : '完璧です！全問正解を達成しました！')
                 : score >= questions.length * 0.7
-                ? '素晴らしい成果です！着実に文法力が身についています。'
-                : 'ナイスファイト！間違えた問題を復習して再挑戦しましょう。'}
+                ? (language === 'en' ? 'Great progress! Your grammar skills are improving fast.' : '素晴らしい成果です！着実に文法力が身についています。')
+                : (language === 'en' ? 'Good effort! Review the missed questions and try again.' : 'ナイスファイト！間違えた問題を復習して再挑戦しましょう。')}
             </p>
           </div>
 
           <div className="summary-stats-grid">
             <div className="summary-stat-box">
-              <span className="stat-label">正解数 / 出題数</span>
+              <span className="stat-label">{language === 'en' ? 'Score' : '正解数 / 出題数'}</span>
               <span className="stat-number">{score} / {questions.length}</span>
               <span className="stat-sub">({Math.round((score / questions.length) * 100)}%)</span>
             </div>
             <div className="summary-stat-box">
-              <span className="stat-label">最高連続正解</span>
-              <span className="stat-number">{maxStreak} 問</span>
+              <span className="stat-label">{t('drillStudio.maxStreakLabel')}</span>
+              <span className="stat-number">{maxStreak} {language === 'en' ? 'Qs' : '問'}</span>
               <span className="stat-sub">Streak 🔥</span>
             </div>
             <div className="summary-stat-box">
-              <span className="stat-label">所要時間</span>
-              <span className="stat-number">{elapsedTime} 秒</span>
+              <span className="stat-label">{t('drillStudio.timeLabel')}</span>
+              <span className="stat-number">{elapsedTime} {language === 'en' ? 's' : '秒'}</span>
               <span className="stat-sub">Time ⏱️</span>
             </div>
           </div>
@@ -568,15 +570,16 @@ function GrammarPractice() {
           {/* Mistakes review */}
           {sessionMistakes.length > 0 && (
             <div className="summary-mistakes-section">
-              <h3>⚠️ 今回間違えた問題 ({sessionMistakes.length}問)</h3>
+              <h3>⚠️ {language === 'en' ? `Review Missed Questions (${sessionMistakes.length})` : `今回間違えた問題 (${sessionMistakes.length}問)`}</h3>
               <div className="mistakes-list">
                 {sessionMistakes.map((m, idx) => (
                   <div key={idx} className="mistake-item-card">
                     <div className="mistake-item-topic">
                       <span className="topic-badge">{m.topicTitle}</span>
                     </div>
-                    <p className="mistake-q">問: {m.question}</p>
-                    <p className="mistake-ans">正解: <strong>{m.answer}</strong></p>
+                    <p className="mistake-q">{language === 'en' ? 'Question:' : '問:'} {m.question}</p>
+                    <p className="mistake-your-ans">{language === 'en' ? 'Your answer:' : 'あなたの回答:'} <span className="your-ans-text">{m.userAnswer || '未回答'}</span></p>
+                    <p className="mistake-correct-ans">{language === 'en' ? 'Correct answer:' : '正解:'} <strong>{m.answer}</strong></p>
                     <p className="mistake-exp">💡 {m.explanation}</p>
                   </div>
                 ))}
@@ -584,51 +587,43 @@ function GrammarPractice() {
             </div>
           )}
 
-          <div className="summary-footer-actions">
+          {/* Action Buttons */}
+          <div className="summary-actions-grid">
             {sessionMistakes.length > 0 && (
               <button
                 type="button"
-                className="retry-mistakes-btn"
+                className="summary-btn btn-weakness"
                 onClick={() => {
-                  setQuestions(sessionMistakes);
-                  setCurrentIndex(0);
-                  setCurrentAnswer('');
-                  setIsSubmitted(false);
-                  setIsCorrect(false);
-                  setScore(0);
-                  setStreak(0);
-                  setMaxStreak(0);
-                  setSessionMistakes([]);
-                  setStartTime(Date.now());
-                  setMode('session');
+                  setSelectedCategory('mistakes');
+                  handleStartDrill(true);
                 }}
               >
-                🔥 間違えた問題だけを再特訓 ({sessionMistakes.length}問)
+                {t('drillStudio.retryWeaknessBtn', { count: sessionMistakes.length })}
               </button>
             )}
 
             <button
               type="button"
-              className="replay-btn"
+              className="summary-btn btn-retry"
               onClick={() => handleStartDrill(false)}
             >
-              🔄 同じ設定でもう一度解く
+              {t('drillStudio.retrySameBtn')}
             </button>
 
             <button
               type="button"
-              className="return-setup-btn"
+              className="summary-btn btn-settings"
               onClick={() => setMode('setup')}
             >
-              ⚙️ 特訓設定を変える
+              {t('drillStudio.changeSettingsBtn')}
             </button>
 
             <button
               type="button"
-              className="return-hub-btn"
+              className="summary-btn btn-home"
               onClick={() => navigate('/grammar')}
             >
-              📖 文法一覧に戻る
+              {t('drillStudio.backToHubBtn')}
             </button>
           </div>
         </div>

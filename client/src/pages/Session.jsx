@@ -4,8 +4,10 @@ import { playAudio } from '../utils/audio';
 import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../utils/feedbackSounds';
 import { replaceNumbersWithFinnishWords } from '../utils/numberToFinnish';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Session() {
+  const { language, t } = useLanguage();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const categoryParam = searchParams.get('category');
@@ -522,15 +524,19 @@ export default function Session() {
         {feedback && (
           <div className={`feedback ${feedback.isPerfect ? 'correct' : feedback.hasTypo ? 'typo' : 'incorrect'}`}>
             <div>
-              {feedback.isPerfect ? 'Correct!' : feedback.hasTypo ? 'Correct, but you have a typo.' : 'Incorrect.'}
+              {feedback.isPerfect
+                ? (language === 'en' ? 'Correct!' : '正解！')
+                : feedback.hasTypo
+                ? (language === 'en' ? 'Correct, but you have a typo.' : '正解ですが、タイポ（誤字）があります。')
+                : (language === 'en' ? 'Incorrect.' : '不正解')}
               <div className="correct-answer-container">
                 <div>
-                  <span className="correct-text">Answer: {feedback.correctText}</span>
+                  <span className="correct-text">{language === 'en' ? 'Answer:' : '正解:'} {feedback.correctText}</span>
                   {currentQuestion.type !== 'word-bank-reverse' && (
                     <button 
                       className="btn-audio"
                       onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId)}
-                      title="Listen to correct answer"
+                      title={language === 'en' ? 'Listen to correct answer' : '正解の発音を聞く'}
                       style={{ marginLeft: '12px', padding: '4px 8px', fontSize: '14px' }}
                     >
                       🔊
@@ -550,12 +556,12 @@ export default function Session() {
                 onClick={handleCheck}
                 disabled={isChecking || ((currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') && selectedWords.length === 0) || (currentQuestion.type !== 'word-bank' && currentQuestion.type !== 'word-bank-reverse' && !inputValue)}
               >
-                Check Answer
+                {language === 'en' ? 'Check Answer' : '回答を確認する'}
               </button>
             )
           ) : (
             <button className="btn-next" onClick={handleNext}>
-              Continue
+              {language === 'en' ? 'Continue' : '次へ ➔'}
             </button>
           )}
         </div>

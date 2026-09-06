@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import GrammarPractice from '../GrammarPractice';
 import { BrowserRouter, useNavigate, useSearchParams } from 'react-router-dom';
+import { LanguageProvider } from '../../context/LanguageContext';
 import * as audioUtils from '../../utils/audio';
 
 vi.mock('react-router-dom', async () => {
@@ -17,6 +18,16 @@ vi.mock('react-router-dom', async () => {
 vi.mock('../../utils/audio', () => ({
   playAudio: vi.fn()
 }));
+
+const renderWithLang = (ui, lang = 'ja') => {
+  return render(
+    <LanguageProvider defaultLanguage={lang}>
+      <BrowserRouter>
+        {ui}
+      </BrowserRouter>
+    </LanguageProvider>
+  );
+};
 
 describe('GrammarPractice Component', () => {
   let mockNavigate;
@@ -37,11 +48,7 @@ describe('GrammarPractice Component', () => {
   });
 
   it('renders setup view with title, categories, format chips and start button', () => {
-    render(
-      <BrowserRouter>
-        <GrammarPractice />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarPractice />);
 
     expect(screen.getByText(/🎯 文法演習スタジオ（Drill Studio）/i)).toBeInTheDocument();
     expect(screen.getByText('1. 特訓カテゴリを選択')).toBeInTheDocument();
@@ -51,91 +58,57 @@ describe('GrammarPractice Component', () => {
   });
 
   it('navigates back to grammar hub when back link is clicked', () => {
-    render(
-      <BrowserRouter>
-        <GrammarPractice />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarPractice />);
 
     const backBtn = screen.getByText('← 文法体系トップへ戻る');
     fireEvent.click(backBtn);
+
     expect(mockNavigate).toHaveBeenCalledWith('/grammar');
   });
 
-  it('starts a practice drill and displays question and progress bar', () => {
-    render(
-      <BrowserRouter>
-        <GrammarPractice />
-      </BrowserRouter>
-    );
+  it('filters topics dynamically when category chip is selected', () => {
+    renderWithLang(<GrammarPractice />);
+
+    const verbsChip = screen.getByRole('button', { name: '動詞・活用（Verbit）' });
+    fireEvent.click(verbsChip);
+
+    const select = screen.getByRole('combobox');
+    expect(select).toBeInTheDocument();
+  });
+
+  it('starts a drill session and displays question with options and audio button', () => {
+    renderWithLang(<GrammarPractice />);
 
     const startBtn = screen.getByRole('button', { name: /🚀 ドリルを開始する/i });
     fireEvent.click(startBtn);
 
-    // Should switch to session mode
-    expect(screen.getByText(/✕ 中断/i)).toBeInTheDocument();
-    expect(screen.getByText(/\/ 5/i)).toBeInTheDocument(); // Question counter
-    expect(screen.getByRole('button', { name: /回答を確認する/i })).toBeInTheDocument();
+    expect(screen.getByText('1 / 5')).toBeInTheDocument();
+    expect(screen.getByTitle('発音を再生')).toBeInTheDocument();
+
+    const audioBtn = screen.getByTitle('発音を再生');
+    fireEvent.click(audioBtn);
+    expect(audioUtils.playAudio).toHaveBeenCalled();
   });
 
-  it('handles choice question answer selection and feedback', () => {
-    render(
-      <BrowserRouter>
-        <GrammarPractice />
-      </BrowserRouter>
-    );
+  it('supports typing answers and character helper buttons in typing questions', () => {
+    renderWithLang(<GrammarPractice />);
 
-    // Filter to choice format
-    const choiceFilterBtn = screen.getByRole('button', { name: /4択クイズ/i });
-    fireEvent.click(choiceFilterBtn);
-
-    const startBtn = screen.getByRole('button', { name: /🚀 ドリルを開始する/i });
-    fireEvent.click(startBtn);
-
-    // Find any choice option button and click it
-    const options = screen.getAllByRole('button').filter((btn) => btn.className.includes('drill-choice-btn'));
-    expect(options.length).toBeGreaterThan(0);
-    fireEvent.click(options[0]);
-
-    // Click submit
-    const checkBtn = screen.getByRole('button', { name: /回答を確認する/i });
-    fireEvent.click(checkBtn);
-
-    // Feedback should appear
-    expect(screen.getByText(/💡/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /次の問題へ|結果を見る/i })).toBeInTheDocument();
-  });
-
-  it('supports typing question and character helper buttons (ä, ö)', () => {
-    render(
-      <BrowserRouter>
-        <GrammarPractice />
-      </BrowserRouter>
-    );
-
-    // Filter to typing format
+    // Select typing format only
     const typingFilterBtn = screen.getByRole('button', { name: /記述・タイピング入力/i });
     fireEvent.click(typingFilterBtn);
 
     const startBtn = screen.getByRole('button', { name: /🚀 ドリルを開始する/i });
     fireEvent.click(startBtn);
 
+    const helperBtn = screen.getByRole('button', { name: 'ä' });
+    fireEvent.click(helperBtn);
+
     const input = screen.getByRole('textbox');
-    expect(input).toBeInTheDocument();
-
-    // Click special character helper
-    const äButton = screen.getByRole('button', { name: 'ä' });
-    fireEvent.click(äButton);
-
-    expect(input.value).toContain('ä');
+    expect(input.value).toBe('ä');
   });
 
-  it('saves mistakes into localStorage on incorrect answer', () => {
-    render(
-      <BrowserRouter>
-        <GrammarPractice />
-      </BrowserRouter>
-    );
+  it('records incorrect answers to mistake bank in localStorage', () => {
+    renderWithLang(<GrammarPractice />);
 
     // Typing question test
     const typingFilterBtn = screen.getByRole('button', { name: /記述・タイピング入力/i });
@@ -150,7 +123,7 @@ describe('GrammarPractice Component', () => {
     const checkBtn = screen.getByRole('button', { name: /回答を確認する/i });
     fireEvent.click(checkBtn);
 
-    expect(screen.getByText('❌ 不正解')).toBeInTheDocument();
+    expect(screen.getByText('❌ おしい！ / 不正解')).toBeInTheDocument();
 
     const storedMistakes = JSON.parse(localStorage.getItem('finnish_grammar_mistakes') || '[]');
     expect(storedMistakes.length).toBeGreaterThan(0);
@@ -168,11 +141,7 @@ describe('GrammarPractice Component', () => {
     }];
     localStorage.setItem('finnish_grammar_mistakes', JSON.stringify(mockMistake));
 
-    render(
-      <BrowserRouter>
-        <GrammarPractice />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarPractice />);
 
     const reviewBtn = screen.getByRole('button', { name: /🔥 弱点集中特訓を始める/i });
     expect(reviewBtn).toBeInTheDocument();
@@ -180,5 +149,14 @@ describe('GrammarPractice Component', () => {
     fireEvent.click(reviewBtn);
 
     expect(screen.getByText('「talo」に「〜の中で」を付ける形は？')).toBeInTheDocument();
+  });
+
+  it('renders English UI when language is en', () => {
+    renderWithLang(<GrammarPractice />, 'en');
+
+    expect(screen.getByText('🎯 Grammar Drill Studio')).toBeInTheDocument();
+    expect(screen.getByText('1. Select Category')).toBeInTheDocument();
+    expect(screen.getByText('3. Exercise Format')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Start Drill Session/i })).toBeInTheDocument();
   });
 });

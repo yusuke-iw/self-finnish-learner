@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSentences } from "../services/api";
 import { playAudio } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function GuidebookModal({ unit, onClose }) {
+  const { language, t } = useLanguage();
   const [sentences, setSentences] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,24 +27,26 @@ export default function GuidebookModal({ unit, onClose }) {
     loadSentences();
   }, [unit]);
 
+  const unitTitle = language === 'ja' && unit.titleJa ? unit.titleJa : unit.title;
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="guidebook-modal" onClick={e => e.stopPropagation()}>
         <div className="guidebook-header" style={{ backgroundColor: unit.color }}>
           <div className="guidebook-header-content">
-            <h2>{unit.title} Guidebook</h2>
-            <p>Key Phrases & Grammar Notes</p>
+            <h2>{unitTitle} {language === 'ja' ? 'ガイドブック' : 'Guidebook'}</h2>
+            <p>{language === 'ja' ? '重要フレーズ ＆ 文法ノート' : 'Key Phrases & Grammar Notes'}</p>
           </div>
           <button className="guidebook-close-btn" onClick={onClose}>×</button>
         </div>
 
         <div className="guidebook-content">
           {isLoading ? (
-            <div className="guidebook-loading">Loading notes...</div>
+            <div className="guidebook-loading">{language === 'ja' ? '読み込み中...' : 'Loading notes...'}</div>
           ) : (
             <div className="guidebook-sentences">
               {sentences.length === 0 ? (
-                <p>No grammar notes available for this unit yet.</p>
+                <p>{language === 'ja' ? 'このユニットの文法ノートはまだありません。' : 'No grammar notes available for this unit yet.'}</p>
               ) : (
                 sentences.map(sentence => (
                   <div key={sentence._id} className="grammar-note-card">

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { grammarTopics, GRAMMAR_CATEGORIES } from '../data/grammarData';
 import { playAudio } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 import '../assets/App.css';
 
 function GrammarDetail() {
   const { topicId } = useParams();
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
 
   const topic = grammarTopics.find((t) => t.id === topicId);
 
@@ -20,9 +22,9 @@ function GrammarDetail() {
   if (!topic) {
     return (
       <div className="grammar-detail-container">
-        <h2>文法項目が見つかりませんでした。</h2>
+        <h2>{t('grammarDetail.notFound')}</h2>
         <button className="back-btn" onClick={() => navigate('/grammar')}>
-          ← 文法一覧へ戻る
+          {t('grammarDetail.backToHub')}
         </button>
       </div>
     );
@@ -180,10 +182,19 @@ function GrammarDetail() {
                   </button>
                 </div>
                 <div className="example-translations">
-                  <p className="japanese-text">🇯🇵 {ex.japanese}</p>
-                  <p className="english-text">🇬🇧 {ex.english}</p>
+                  {language === 'ja' ? (
+                    <>
+                      <p className="japanese-text">🇯🇵 {ex.japanese}</p>
+                      {ex.english && <p className="english-text">🇬🇧 {ex.english}</p>}
+                    </>
+                  ) : (
+                    <>
+                      <p className="english-text" style={{ fontSize: '1.05rem', fontWeight: 600 }}>🇬🇧 {ex.english || ex.japanese}</p>
+                      {ex.japanese && <p className="japanese-text" style={{ opacity: 0.8 }}>🇯🇵 {ex.japanese}</p>}
+                    </>
+                  )}
                 </div>
-                {ex.note && <div className="example-note">💡 ポイント: {ex.note}</div>}
+                {ex.note && <div className="example-note">{t('grammarDetail.pointLabel')} {ex.note}</div>}
               </div>
             ))}
           </div>

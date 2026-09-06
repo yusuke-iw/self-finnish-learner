@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import GrammarHub from '../GrammarHub';
 import GrammarDetail from '../GrammarDetail';
 import { BrowserRouter, useNavigate, useParams } from 'react-router-dom';
+import { LanguageProvider } from '../../context/LanguageContext';
 import * as audioUtils from '../../utils/audio';
 
 vi.mock('react-router-dom', async () => {
@@ -19,6 +20,16 @@ vi.mock('../../utils/audio', () => ({
   playAudio: vi.fn()
 }));
 
+const renderWithLang = (ui, lang = 'ja') => {
+  return render(
+    <LanguageProvider defaultLanguage={lang}>
+      <BrowserRouter>
+        {ui}
+      </BrowserRouter>
+    </LanguageProvider>
+  );
+};
+
 describe('GrammarHub Component', () => {
   let mockNavigate;
 
@@ -32,11 +43,7 @@ describe('GrammarHub Component', () => {
   });
 
   it('renders title, category tabs and grammar topic cards', () => {
-    render(
-      <BrowserRouter>
-        <GrammarHub />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarHub />);
 
     expect(screen.getByText(/フィンランド語 文法・イディオム体系学習/i)).toBeInTheDocument();
     expect(screen.getByText('母音調和 (Vokaaliharmonia)')).toBeInTheDocument();
@@ -45,11 +52,7 @@ describe('GrammarHub Component', () => {
   });
 
   it('filters topics by category tab', () => {
-    render(
-      <BrowserRouter>
-        <GrammarHub />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarHub />);
 
     const idiomTab = screen.getByRole('button', { name: 'イディオム・口語（Idiomit & Puhekieli）' });
     fireEvent.click(idiomTab);
@@ -59,11 +62,7 @@ describe('GrammarHub Component', () => {
   });
 
   it('filters topics by search query', () => {
-    render(
-      <BrowserRouter>
-        <GrammarHub />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarHub />);
 
     const searchInput = screen.getByPlaceholderText(/文法項目やキーワードを検索/i);
     fireEvent.change(searchInput, { target: { value: 'Partitiivi' } });
@@ -73,11 +72,7 @@ describe('GrammarHub Component', () => {
   });
 
   it('navigates to topic detail page when card is clicked', () => {
-    render(
-      <BrowserRouter>
-        <GrammarHub />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarHub />);
 
     const cardTitle = screen.getByText('母音調和 (Vokaaliharmonia)');
     fireEvent.click(cardTitle);
@@ -86,15 +81,19 @@ describe('GrammarHub Component', () => {
   });
 
   it('navigates to drill studio from GrammarHub banner', () => {
-    render(
-      <BrowserRouter>
-        <GrammarHub />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarHub />);
 
     const drillBtn = screen.getByRole('button', { name: /🚀 今すぐ特訓を始める/i });
     fireEvent.click(drillBtn);
     expect(mockNavigate).toHaveBeenCalledWith('/grammar/practice');
+  });
+
+  it('renders English UI when language is set to en', () => {
+    renderWithLang(<GrammarHub />, 'en');
+
+    expect(screen.getByText(/Finnish Grammar & Idioms Curriculum/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Start Drilling Now/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Cases \(Sijamuodot\)/i })).toBeInTheDocument();
   });
 });
 
@@ -112,22 +111,14 @@ describe('GrammarDetail Component', () => {
   });
 
   it('renders topic title and rules', () => {
-    render(
-      <BrowserRouter>
-        <GrammarDetail />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarDetail />);
 
     expect(screen.getByText('母音調和 (Vokaaliharmonia)')).toBeInTheDocument();
     expect(screen.getByText(/前母音グループ/i)).toBeInTheDocument();
   });
 
   it('switches tabs to view examples and triggers TTS audio playback', () => {
-    render(
-      <BrowserRouter>
-        <GrammarDetail />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarDetail />);
 
     const examplesTab = screen.getByRole('button', { name: /🔊 例文と発音/i });
     fireEvent.click(examplesTab);
@@ -141,11 +132,7 @@ describe('GrammarDetail Component', () => {
   });
 
   it('navigates to drill studio with topic filter when clicked in quiz tab', () => {
-    render(
-      <BrowserRouter>
-        <GrammarDetail />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarDetail />);
 
     const quizTab = screen.getByRole('button', { name: /✏️ 確認テスト/i });
     fireEvent.click(quizTab);
@@ -157,11 +144,7 @@ describe('GrammarDetail Component', () => {
   });
 
   it('allows answering practice quiz and shows score summary', () => {
-    render(
-      <BrowserRouter>
-        <GrammarDetail />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarDetail />);
 
     const quizTab = screen.getByRole('button', { name: /✏️ 確認テスト/i });
     fireEvent.click(quizTab);
@@ -194,11 +177,7 @@ describe('GrammarDetail Component', () => {
   it('shows not found message for invalid topicId', () => {
     useParams.mockReturnValue({ topicId: 'invalid-topic-id' });
 
-    render(
-      <BrowserRouter>
-        <GrammarDetail />
-      </BrowserRouter>
-    );
+    renderWithLang(<GrammarDetail />);
 
     expect(screen.getByText('文法項目が見つかりませんでした。')).toBeInTheDocument();
   });

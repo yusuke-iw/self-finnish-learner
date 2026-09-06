@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { fetchPassages, fetchPassageById } from '../services/api';
 import { playAudio } from '../utils/audio';
 import { playCorrectSound, playIncorrectSound } from '../utils/feedbackSounds';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Passage() {
+  const { language, t } = useLanguage();
   const [passages, setPassages] = useState([]);
   const [selectedPassage, setSelectedPassage] = useState(null);
   const [showTranslation, setShowTranslation] = useState(false);
@@ -76,14 +78,16 @@ export default function Passage() {
       <div className="passages-page">
         <div className="passage-detail">
           <button className="passage-back-btn" onClick={() => setSelectedPassage(null)}>
-            ← Back to Passages
+            {language === 'en' ? '← Back to Passages' : '← パッセージ一覧に戻る'}
           </button>
           
           <div className="passage-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <h2>{selectedPassage.title}</h2>
               {completedPassages[selectedPassage._id] && (
-                <span className="status-badge" style={{ backgroundColor: '#ffd900', color: '#000', fontSize: '0.9rem', padding: '4px 8px' }}>🏆 Mastered</span>
+                <span className="status-badge" style={{ backgroundColor: '#ffd900', color: '#000', fontSize: '0.9rem', padding: '4px 8px' }}>
+                  {language === 'en' ? '🏆 Mastered' : '🏆 完全習得'}
+                </span>
               )}
             </div>
             <span className="category-tag">{selectedPassage.difficulty}</span>
@@ -93,11 +97,11 @@ export default function Passage() {
             <div className="passage-left-column" style={{ flex: '1 1 500px', maxHeight: 'calc(100vh - 200px)', overflowY: 'auto', paddingRight: '16px' }}>
               <div className="passage-reading">
                 <div className="reading-header-audio" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                  <h3 style={{ margin: 0, fontSize: '24px' }}>Reading</h3>
+                  <h3 style={{ margin: 0, fontSize: '24px' }}>{language === 'en' ? 'Reading' : '本文 (Reading)'}</h3>
                   <button 
                     className="btn-audio" 
                     onClick={() => playAudio(selectedPassage.text, selectedPassage._id)}
-                    title="Listen to passage"
+                    title={language === 'en' ? 'Listen to passage' : '発音を聞く'}
                   >
                     🔊
                   </button>
@@ -109,12 +113,14 @@ export default function Passage() {
                     className="toggle-btn"
                     onClick={() => setShowTranslation(!showTranslation)}
                   >
-                    {showTranslation ? 'Hide Translation' : 'Show Translation'}
+                    {showTranslation
+                      ? (language === 'en' ? 'Hide Translation' : '対訳を隠す')
+                      : (language === 'en' ? 'Show Translation' : '対訳を表示')}
                   </button>
                   
                   {showTranslation && (
                     <div className="translation-text" style={{ fontSize: '16px', lineHeight: '1.6', marginTop: '16px', padding: '16px', backgroundColor: 'var(--bg-card)', borderRadius: '8px' }}>
-                      {selectedPassage.translation}
+                      {language === 'ja' && selectedPassage.translationJa ? selectedPassage.translationJa : selectedPassage.translation}
                     </div>
                   )}
                 </div>
@@ -122,12 +128,14 @@ export default function Passage() {
               
               {selectedPassage.vocabulary && selectedPassage.vocabulary.length > 0 && (
                 <div className="passage-vocabulary" style={{ marginTop: '48px' }}>
-                  <h3 style={{ marginBottom: '24px', fontSize: '24px' }}>Vocabulary</h3>
+                  <h3 style={{ marginBottom: '24px', fontSize: '24px' }}>{language === 'en' ? 'Vocabulary' : '単語・語彙 (Vocabulary)'}</h3>
                   <div className="vocab-grid">
                     {selectedPassage.vocabulary.map((v, i) => (
                       <div key={i} className="vocab-item" style={{ padding: '12px', background: 'var(--bg-card)', borderRadius: '8px', marginBottom: '8px' }}>
                         <span className="vocab-word" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>{v.word}</span>
-                        <span className="vocab-translation" style={{ color: 'var(--text-secondary)' }}>{v.translation}</span>
+                        <span className="vocab-translation" style={{ color: 'var(--text-secondary)' }}>
+                          {language === 'ja' && v.translationJa ? v.translationJa : v.translation}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -138,7 +146,7 @@ export default function Passage() {
             <div className="passage-right-column" style={{ flex: '1 1 400px', maxHeight: 'calc(100vh - 200px)', overflowY: 'auto', padding: '24px', backgroundColor: 'var(--bg-card-hover)', borderRadius: '12px' }}>
               {selectedPassage.questions && selectedPassage.questions.length > 0 && (
                 <div className="passage-quiz">
-                  <h3 style={{ margin: 0, marginBottom: '24px', fontSize: '24px' }}>Knowledge Check</h3>
+                  <h3 style={{ margin: 0, marginBottom: '24px', fontSize: '24px' }}>{language === 'en' ? 'Knowledge Check' : '理解度チェック (Knowledge Check)'}</h3>
                   <div className="quiz-questions">
                     {selectedPassage.questions.map((q, qIndex) => {
                       const answered = answers[qIndex] !== undefined;
@@ -173,10 +181,10 @@ export default function Passage() {
                             })}
                           </div>
                           {answered && selectedOption === q.correctAnswerIndex && (
-                            <p style={{ color: 'var(--success)', marginTop: '8px', fontWeight: 'bold' }}>Correct!</p>
+                            <p style={{ color: 'var(--success)', marginTop: '8px', fontWeight: 'bold' }}>{language === 'en' ? 'Correct!' : '正解！'}</p>
                           )}
                           {answered && selectedOption !== q.correctAnswerIndex && (
-                            <p style={{ color: 'var(--error)', marginTop: '8px', fontWeight: 'bold' }}>Incorrect.</p>
+                            <p style={{ color: 'var(--error)', marginTop: '8px', fontWeight: 'bold' }}>{language === 'en' ? 'Incorrect.' : '不正解'}</p>
                           )}
                         </div>
                       );
@@ -193,8 +201,8 @@ export default function Passage() {
 
   return (
     <div className="passages-page">
-      <h2>Reading Passages</h2>
-      <p>Immerse yourself in Finnish texts and learn words in context.</p>
+      <h2>{language === 'en' ? 'Reading Passages' : '読解パッセージ (Reading Passages)'}</h2>
+      <p>{language === 'en' ? 'Immerse yourself in Finnish texts and learn words in context.' : '生きたフィンランド語テキストと読解クイズで語彙や文脈を学びましょう。'}</p>
       
       <div className="passage-list">
         {passages.map(p => (
@@ -225,13 +233,16 @@ export default function Passage() {
         <button 
           className="btn-secondary reset-btn" 
           onClick={() => {
-            if (window.confirm("Are you sure you want to reset your passage progress?")) {
+            const confirmMsg = language === 'en'
+              ? "Are you sure you want to reset your passage progress?"
+              : "読解パッセージの進捗をリセットしてもよろしいですか？";
+            if (window.confirm(confirmMsg)) {
               localStorage.removeItem('finnishLearnerPassagesProgress');
               setCompletedPassages({});
             }
           }}
         >
-          Reset Progress
+          {language === 'en' ? 'Reset Progress' : '読解履歴をリセット'}
         </button>
       </div>
     </div>

@@ -4,9 +4,11 @@ import GuidebookModal from '../components/GuidebookModal';
 import LessonCard from '../components/LessonCard';
 import { units } from '../data/curriculumData';
 import { useProgressStore } from '../store/useProgressStore';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
   const { progress, resetProgress, loadProgress } = useProgressStore();
   const [activeGuidebook, setActiveGuidebook] = useState(null);
 
@@ -15,7 +17,7 @@ export default function Home() {
   }, [loadProgress]);
 
   const handleResetProgress = () => {
-    if (window.confirm("Are you sure you want to reset all your progress?")) {
+    if (window.confirm(t('home.resetConfirm'))) {
       resetProgress();
     }
   };
@@ -28,42 +30,55 @@ export default function Home() {
 
   return (
     <div className="home-path-container">
-      {units.map((unit) => (
-        <div key={unit.id} className="unit-section">
-          
-          <div className="unit-header" style={{ backgroundColor: unit.color }}>
-            <div className="unit-header-content">
-              <h2 className="unit-header-title">{unit.title}</h2>
-              <p className="unit-header-desc">{unit.description}</p>
+      {units.map((unit) => {
+        const unitTitle = language === 'ja' && unit.titleJa ? unit.titleJa : unit.title;
+        const unitDesc = language === 'ja' && unit.descriptionJa ? unit.descriptionJa : unit.description;
+
+        return (
+          <div key={unit.id} className="unit-section">
+            <div className="unit-header" style={{ backgroundColor: unit.color }}>
+              <div className="unit-header-content">
+                <h2 className="unit-header-title">{unitTitle}</h2>
+                <p className="unit-header-desc">{unitDesc}</p>
+              </div>
+              <button
+                className="unit-guide-btn"
+                style={{ color: unit.color }}
+                onClick={() => setActiveGuidebook(unit)}
+              >
+                {t('home.guidebook')}
+              </button>
             </div>
-            <button className="unit-guide-btn" style={{ color: unit.color }} onClick={() => setActiveGuidebook(unit)}>
-              Guidebook
-            </button>
-          </div>
 
-          <div className="curriculum-list">
-            {unit.lessons.map((lesson) => (
-              <LessonCard
-                key={lesson.id}
-                lesson={lesson}
-                unitColor={unit.color}
-                currentLevel={progress[lesson.title] || 1}
-                onLevelClick={handleLevelClick}
-              />
-            ))}
+            <div className="curriculum-list">
+              {unit.lessons.map((lesson) => (
+                <LessonCard
+                  key={lesson.id}
+                  lesson={lesson}
+                  unitColor={unit.color}
+                  currentLevel={progress[lesson.title] || 1}
+                  onLevelClick={handleLevelClick}
+                />
+              ))}
+            </div>
           </div>
-
-        </div>
-      ))}
+        );
+      })}
 
       <div className="progress-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
-        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=matching')} style={{ backgroundColor: '#ce82ff', color: 'white' }}>
-          🧩 Practice Word Match
+        <button
+          className="btn-primary"
+          onClick={() => navigate('/sessions?exerciseType=matching')}
+          style={{ backgroundColor: '#ce82ff', color: 'white' }}
+        >
+          {t('home.practiceMatch')}
         </button>
         <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=speaking')}>
-          🎙️ Practice Speaking
+          {t('home.practiceSpeaking')}
         </button>
-        <button className="btn-secondary reset-btn" onClick={handleResetProgress}>Reset Progress</button>
+        <button className="btn-secondary reset-btn" onClick={handleResetProgress}>
+          {t('home.resetProgress')}
+        </button>
       </div>
 
       {activeGuidebook && (
