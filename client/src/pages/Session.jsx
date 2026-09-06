@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { generateSession, checkAnswer } from '../services/api';
 import { playAudio } from '../utils/audio';
+import { getRandomSpeaker } from '../utils/speakers';
 import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../utils/feedbackSounds';
 import { replaceNumbersWithFinnishWords } from '../utils/numberToFinnish';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -17,6 +18,7 @@ export default function Session() {
   const [session, setSession] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [sentenceCount, setSentenceCount] = useState(5);
+  const [currentSpeaker, setCurrentSpeaker] = useState(() => getRandomSpeaker());
   
   const [selectedWords, setSelectedWords] = useState([]); // for word bank
   const [inputValue, setInputValue] = useState(''); // for typing, fill-in, and speaking
@@ -51,6 +53,7 @@ export default function Session() {
       if (res.data.success) {
         setSession(res.data.data);
         setCurrentIndex(0);
+        setCurrentSpeaker(getRandomSpeaker());
         setIsFinished(false);
         setScore({ correct: 0, typo: 0, incorrect: 0 });
         resetInput();
@@ -87,6 +90,10 @@ export default function Session() {
     setIsChecking(false);
   };
 
+  useEffect(() => {
+    setCurrentSpeaker(getRandomSpeaker());
+  }, [currentIndex, session?._id]);
+
   const currentQuestion = session?.questions[currentIndex];
 
   const handleMatchingTokenClick = (token) => {
@@ -110,7 +117,7 @@ export default function Session() {
         setSelectedMatchingTokens([]);
         
         const fiText = prevToken.lang === 'fi' ? prevToken.text : token.text;
-        playAudio(fiText, null, 'fi-FI', 1.0);
+        playAudio(fiText, null, 'fi-FI', 1.0, currentSpeaker);
         
         // If all matched
         if (newMatched.length === currentQuestion.pairs.length) {
@@ -234,7 +241,7 @@ export default function Session() {
     }
     
     if (currentQuestion && currentQuestion.type !== 'word-bank-reverse') {
-      playAudio(word, word);
+      playAudio(word, word, 'fi-FI', 1.0, currentSpeaker);
     }
   };
 
@@ -312,8 +319,32 @@ export default function Session() {
       </div>
 
       <div className={`question-card ${feedback?.isCorrect ? 'correct-flash' : ''} ${feedback && !feedback.isCorrect ? 'incorrect-flash' : ''}`}>
-        <div className={`level-badge level-${currentQuestion.level}`}>
-          Level {currentQuestion.level}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div className={`level-badge level-${currentQuestion.level}`} style={{ margin: 0 }}>
+            Level {currentQuestion.level}
+          </div>
+          {currentSpeaker && (
+            <div 
+              data-testid="speaker-badge" 
+              className="speaker-badge"
+              title={currentSpeaker.description}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 10px',
+                borderRadius: '9999px',
+                fontSize: '0.85rem',
+                fontWeight: '500',
+                backgroundColor: 'var(--bg-card-hover, rgba(255,255,255,0.08))',
+                color: 'var(--text-secondary, #94a3b8)',
+                border: '1px solid var(--border-color, rgba(255,255,255,0.1))'
+              }}
+            >
+              <span style={{ fontSize: '1rem' }}>{currentSpeaker.icon}</span>
+              <span>{currentSpeaker.name}</span>
+            </div>
+          )}
         </div>
         
         <div className="question-prompt">
@@ -335,7 +366,7 @@ export default function Session() {
               <div className="listening-audio-controls" style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '16px', background: 'var(--bg-card-hover)', borderRadius: 'var(--radius-md)' }}>
                 <button 
                   className="btn-audio prompt-audio" 
-                  onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 1.0)}
+                  onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
                   title="Listen (Normal Speed)"
                   style={{ padding: '12px', fontSize: '24px', background: 'var(--accent)' }}
                 >
@@ -343,7 +374,7 @@ export default function Session() {
                 </button>
                 <button 
                   className="btn-audio prompt-audio slow" 
-                  onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 0.6)}
+                  onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 0.6, currentSpeaker)}
                   title="Listen (Slow)"
                   style={{ padding: '8px', fontSize: '20px', border: '1px solid var(--accent)' }}
                 >
@@ -355,7 +386,7 @@ export default function Session() {
                 {(currentQuestion.type === 'word-bank-reverse' || currentQuestion.type === 'fill-in-the-blank' || currentQuestion.type === 'speaking') && (
                   <button 
                     className="btn-audio prompt-audio" 
-                    onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId)}
+                    onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
                     title="Listen"
                     style={{ padding: '6px' }}
                   >
@@ -384,7 +415,7 @@ export default function Session() {
                   onClick={() => {
                     if (!feedback) {
                       setInputValue(opt);
-                      playAudio(opt, opt);
+                      playAudio(opt, opt, 'fi-FI', 1.0, currentSpeaker);
                     }
                   }}
                   disabled={!!feedback}
@@ -535,7 +566,7 @@ export default function Session() {
                   {currentQuestion.type !== 'word-bank-reverse' && (
                     <button 
                       className="btn-audio"
-                      onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId)}
+                      onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
                       title={language === 'en' ? 'Listen to correct answer' : '正解の発音を聞く'}
                       style={{ marginLeft: '12px', padding: '4px 8px', fontSize: '14px' }}
                     >

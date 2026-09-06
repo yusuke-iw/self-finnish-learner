@@ -84,4 +84,40 @@ describe('audio utility', () => {
     expect(global.fetch).not.toHaveBeenCalled();
     expect(playMock).not.toHaveBeenCalled();
   });
+
+  it('should forward speaker pitch and voiceName in request and separate cache by speaker', async () => {
+    global.fetch.mockResolvedValueOnce({
+      json: vi.fn().mockResolvedValue({ success: true, audioContent: 'matti-audio' })
+    });
+
+    const matti = { id: 'matti', pitch: -5.0, voiceName: 'fi-FI-Wavenet-A' };
+    await playAudio('Omena', '', 'fi-FI', 1.0, matti);
+
+    expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: 'Omena',
+        speed: 1.0,
+        pitch: -5.0,
+        voiceName: 'fi-FI-Wavenet-A'
+      })
+    });
+    expect(global.Audio).toHaveBeenCalledWith('data:audio/mp3;base64,matti-audio');
+
+    // Calling again with same text and same speaker should use cache
+    await playAudio('Omena', '', 'fi-FI', 1.0, matti);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+
+    // Calling with same text but different speaker should trigger a new fetch
+    global.fetch.mockResolvedValueOnce({
+      json: vi.fn().mockResolvedValue({ success: true, audioContent: 'aino-audio' })
+    });
+
+    const aino = { id: 'aino', pitch: 0.0, voiceName: 'fi-FI-Wavenet-A' };
+    await playAudio('Omena', '', 'fi-FI', 1.0, aino);
+
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(global.Audio).toHaveBeenCalledWith('data:audio/mp3;base64,aino-audio');
+  });
 });

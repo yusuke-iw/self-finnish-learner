@@ -46,4 +46,31 @@ describe('TTS Route', () => {
       })
     );
   });
+
+  it('should forward pitch and voiceName parameters to Google TTS API', async () => {
+    process.env.GOOGLE_TTS_API_KEY = 'test-key';
+    
+    global.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ audioContent: 'custom-voice-audio' })
+    });
+
+    const res = await request(app)
+      .post('/api/tts')
+      .send({ text: 'Moi', speed: 0.95, pitch: -5.0, voiceName: 'fi-FI-Wavenet-A' });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.audioContent).toBe('custom-voice-audio');
+    
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining('https://texttospeech.googleapis.com/v1/text:synthesize'),
+      expect.objectContaining({
+        body: JSON.stringify({
+          input: { text: 'Moi' },
+          voice: { languageCode: 'fi-FI', name: 'fi-FI-Wavenet-A' },
+          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.95, pitch: -5.0 }
+        })
+      })
+    );
+  });
 });

@@ -53,6 +53,34 @@ describe('TTS Controller', () => {
       expect(mockRes.json).toHaveBeenCalledWith({ success: true, audioContent: 'base64audio' });
     });
 
+    it('should forward pitch and voiceName to Google TTS API if provided', async () => {
+      process.env.GOOGLE_TTS_API_KEY = 'test-key';
+      mockReq.body = {
+        text: 'Hei',
+        speed: 1.1,
+        pitch: -4.5,
+        voiceName: 'fi-FI-Standard-A'
+      };
+
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: jest.fn().mockResolvedValue({ audioContent: 'base64audio' })
+      });
+
+      await ttsController.synthesize(mockReq, mockRes);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('https://texttospeech.googleapis.com/v1/text:synthesize'),
+        expect.objectContaining({
+          body: JSON.stringify({
+            input: { text: 'Hei' },
+            voice: { languageCode: 'fi-FI', name: 'fi-FI-Standard-A' },
+            audioConfig: { audioEncoding: 'MP3', speakingRate: 1.1, pitch: -4.5 }
+          })
+        })
+      );
+    });
+
     it('should return 500 if API responds with error', async () => {
       process.env.GOOGLE_TTS_API_KEY = 'test-key';
       mockReq.body.text = 'Hei';

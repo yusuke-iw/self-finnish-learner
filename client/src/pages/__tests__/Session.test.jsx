@@ -405,10 +405,58 @@ describe('Session Component', () => {
     });
 
     fireEvent.click(screen.getByTitle('Listen (Normal Speed)'));
-    expect(playAudio).toHaveBeenCalledWith('Kissa', 'lis1', 'fi-FI', 1.0);
+    expect(playAudio).toHaveBeenCalledWith('Kissa', 'lis1', 'fi-FI', 1.0, expect.any(Object));
 
     fireEvent.click(screen.getByTitle('Listen (Slow)'));
-    expect(playAudio).toHaveBeenCalledWith('Kissa', 'lis1', 'fi-FI', 0.6);
+    expect(playAudio).toHaveBeenCalledWith('Kissa', 'lis1', 'fi-FI', 0.6, expect.any(Object));
+  });
+
+  it('selects a speaker per question and preserves the speaker within the same question', async () => {
+    const multiQuestionSession = {
+      _id: 'session-multi',
+      questions: [
+        {
+          sentenceId: 'q1',
+          level: 1,
+          type: 'typing',
+          prompt: 'Kissa',
+          correctAnswer: 'Kissa',
+          isListening: true
+        },
+        {
+          sentenceId: 'q2',
+          level: 1,
+          type: 'typing',
+          prompt: 'Koira',
+          correctAnswer: 'Koira',
+          isListening: true
+        }
+      ]
+    };
+    renderComponent(multiQuestionSession);
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('speaker-badge')).toBeInTheDocument();
+    });
+
+    // Play normal audio first time
+    fireEvent.click(screen.getByTitle('Listen (Normal Speed)'));
+    expect(playAudio).toHaveBeenCalled();
+    const firstCallSpeaker = playAudio.mock.calls[playAudio.mock.calls.length - 1][4];
+    expect(firstCallSpeaker).toBeDefined();
+    expect(firstCallSpeaker).toHaveProperty('name');
+
+    // Play slow audio in the same question
+    fireEvent.click(screen.getByTitle('Listen (Slow)'));
+    const secondCallSpeaker = playAudio.mock.calls[playAudio.mock.calls.length - 1][4];
+    // Speaker must be unchanged in the same question
+    expect(secondCallSpeaker.id).toBe(firstCallSpeaker.id);
+
+    // Replay normal audio in the same question
+    fireEvent.click(screen.getByTitle('Listen (Normal Speed)'));
+    const thirdCallSpeaker = playAudio.mock.calls[playAudio.mock.calls.length - 1][4];
+    expect(thirdCallSpeaker.id).toBe(firstCallSpeaker.id);
   });
 
   it('deselects a word in word-bank question', async () => {

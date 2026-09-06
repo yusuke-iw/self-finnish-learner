@@ -8,11 +8,13 @@ const audioCache = new Map();
  * @param {string} seedString - (Ignored in GCP TTS, kept for API compatibility)
  * @param {string} lang - The language code (default 'fi-FI').
  * @param {number} speed - The speaking rate (e.g., 1.0 for normal, 0.6 for slow)
+ * @param {object} speaker - Optional speaker profile { id, pitch, voiceName }
  */
-export const playAudio = async (text, seedString = '', lang = 'fi-FI', speed = 1.0) => {
+export const playAudio = async (text, seedString = '', lang = 'fi-FI', speed = 1.0, speaker = null) => {
   if (!text) return;
 
-  const cacheKey = `${text}_${speed}`;
+  const speakerId = speaker?.id || 'default';
+  const cacheKey = `${text}_${speed}_${speakerId}`;
 
   // Use the cached audio if we've already fetched it
   if (audioCache.has(cacheKey)) {
@@ -21,12 +23,18 @@ export const playAudio = async (text, seedString = '', lang = 'fi-FI', speed = 1
   }
 
   try {
+    const payload = { text, speed };
+    if (speaker) {
+      if (speaker.pitch !== undefined) payload.pitch = speaker.pitch;
+      if (speaker.voiceName) payload.voiceName = speaker.voiceName;
+    }
+
     const response = await fetch('http://localhost:5000/api/tts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text, speed })
+      body: JSON.stringify(payload)
     });
 
     const data = await response.json();
