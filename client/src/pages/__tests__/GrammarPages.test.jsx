@@ -180,11 +180,15 @@ describe('GrammarDetail Component', () => {
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'tytössä' } });
 
+    // Question 5 (kirjakaupassa)
+    const option5 = screen.getByText('kirjakaupassa');
+    fireEvent.click(option5);
+
     const submitBtn = screen.getByText('回答を送信する');
     fireEvent.click(submitBtn);
 
     expect(screen.getAllByText(/正解！/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/結果: 4問中 4問正解！/i)).toBeInTheDocument();
+    expect(screen.getByText(/結果: 5問中 5問正解！/i)).toBeInTheDocument();
   });
 
   it('shows not found message for invalid topicId', () => {

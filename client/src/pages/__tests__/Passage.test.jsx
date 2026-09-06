@@ -308,7 +308,9 @@ describe('Passage Component', () => {
     });
 
     // Q1 should STILL be marked as correct (restored from localStorage)
-    const restoredABtn = screen.getByText('A');
-    expect(restoredABtn).toHaveClass('correct-choice');
+    await waitFor(() => {
+      const restoredABtn = screen.getByText('A');
+      expect(restoredABtn).toHaveClass('correct-choice');
+    });
   });
 });
