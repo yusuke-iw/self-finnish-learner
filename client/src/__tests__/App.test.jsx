@@ -10,4 +10,11 @@ describe('App Component', () => {
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Passages')).toBeInTheDocument();
   });
+
+  it('renders drill studio when navigating to /grammar/practice', () => {
+    window.history.pushState({}, 'Test page', '/grammar/practice');
+    render(<App />);
+    expect(screen.getByText(/🎯 文法演習スタジオ（Drill Studio）/i)).toBeInTheDocument();
+  });
 });
+
