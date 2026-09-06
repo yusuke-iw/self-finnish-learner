@@ -9,12 +9,13 @@ import { useLanguage } from '../context/LanguageContext';
 export default function Home() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
-  const { progress, resetProgress, loadProgress } = useProgressStore();
+  const { progress, resetProgress, loadProgress, syncWithServer } = useProgressStore();
   const [activeGuidebook, setActiveGuidebook] = useState(null);
 
   useEffect(() => {
     loadProgress();
-  }, [loadProgress]);
+    syncWithServer();
+  }, [loadProgress, syncWithServer]);
 
   const handleResetProgress = () => {
     if (window.confirm(t('home.resetConfirm'))) {

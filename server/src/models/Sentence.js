@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const sentenceSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: () => new mongoose.Types.ObjectId().toString()
+  },
   text: {
     type: String,
     required: [true, 'Finnish text is required'],

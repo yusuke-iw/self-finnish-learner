@@ -9,20 +9,29 @@ const seedData = async () => {
   try {
     await connectDB();
     
-    // Clear existing
-    await Sentence.deleteMany({});
-    await ReadingPassage.deleteMany({});
-    console.log('Cleared existing database entries.');
+    // Non-destructive upsert for Sentences preserving fixed _ids
+    for (const sentence of sentences) {
+      await Sentence.updateOne(
+        { _id: sentence._id },
+        { $set: sentence },
+        { upsert: true }
+      );
+    }
 
-    // Insert (strip _ids from seedData to let Mongo generate them)
-    const sentencesToInsert = sentences.map(({ _id, ...rest }) => rest);
-    const passagesToInsert = passages.map(({ _id, ...rest }) => rest);
+    // Non-destructive upsert for ReadingPassages preserving fixed _ids
+    for (const passage of passages) {
+      await ReadingPassage.updateOne(
+        { _id: passage._id },
+        { $set: passage },
+        { upsert: true }
+      );
+    }
 
-    await Sentence.insertMany(sentencesToInsert);
-    await ReadingPassage.insertMany(passagesToInsert);
-    console.log('Database successfully seeded with Finnish sentences and passages!');
+    console.log('Database successfully synced with Finnish sentences and passages via non-destructive upsert!');
 
-    mongoose.connection.close();
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      await mongoose.connection.close();
+    }
     process.exit(0);
   } catch (error) {
     console.error(`Seeding error: ${error.message}`);

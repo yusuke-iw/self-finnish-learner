@@ -9,6 +9,7 @@ import {
 } from '../data/grammarData';
 import { playAudio } from '../utils/audio';
 import { useLanguage } from '../context/LanguageContext';
+import { fetchProgress, saveProgress } from '../services/api';
 import '../assets/App.css';
 
 const LOCAL_STORAGE_MISTAKES_KEY = 'finnish_grammar_mistakes';
@@ -40,15 +41,37 @@ function GrammarPractice() {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  // Load saved mistakes on mount
+  // Load saved mistakes on mount and sync with server
   useEffect(() => {
+    let localBank = [];
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_MISTAKES_KEY);
       if (saved) {
-        setMistakeBank(JSON.parse(saved));
+        localBank = JSON.parse(saved);
+        setMistakeBank(localBank);
       }
     } catch (e) {
       console.error('Failed to load mistakes from localStorage', e);
+    }
+
+    if (typeof fetchProgress === 'function') {
+      try {
+        const p = fetchProgress();
+        if (p && typeof p.then === 'function') {
+          p.then(res => {
+            if (res?.data?.success && Array.isArray(res.data.data?.mistakes)) {
+              const serverMistakes = res.data.data.mistakes;
+              const map = new Map();
+              [...serverMistakes, ...localBank].forEach(m => {
+                if (m?.id || m?.question) map.set(m.id || m.question, m);
+              });
+              const merged = Array.from(map.values());
+              localStorage.setItem(LOCAL_STORAGE_MISTAKES_KEY, JSON.stringify(merged));
+              setMistakeBank(merged);
+            }
+          }).catch(() => {});
+        }
+      } catch (e) {}
     }
   }, []);
 
@@ -138,6 +161,10 @@ function GrammarPractice() {
         setMistakeBank(updatedBank);
         try {
           localStorage.setItem(LOCAL_STORAGE_MISTAKES_KEY, JSON.stringify(updatedBank));
+          if (typeof saveProgress === 'function') {
+            const p = saveProgress({ mistakes: updatedBank });
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          }
         } catch (e) {
           console.error(e);
         }
@@ -158,6 +185,10 @@ function GrammarPractice() {
         setMistakeBank(newBank);
         try {
           localStorage.setItem(LOCAL_STORAGE_MISTAKES_KEY, JSON.stringify(newBank));
+          if (typeof saveProgress === 'function') {
+            const p = saveProgress({ mistakes: newBank });
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          }
         } catch (e) {
           console.error(e);
         }

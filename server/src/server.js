@@ -10,6 +10,7 @@ const sentencesRouter = require('./routes/sentences');
 const passagesRouter = require('./routes/passages');
 const sessionsRouter = require('./routes/sessions');
 const ttsRouter = require('./routes/tts');
+const progressRouter = require('./routes/progress');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/sentences', sentencesRouter);
 app.use('/api/passages', passagesRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/tts', ttsRouter);
+app.use('/api/progress', progressRouter);
 
 // Centralized error handling middleware
 app.use(errorHandler);

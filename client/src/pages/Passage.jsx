@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchPassages, fetchPassageById } from '../services/api';
+import { fetchPassages, fetchPassageById, fetchProgress, saveProgress } from '../services/api';
 import { playAudio } from '../utils/audio';
 import { playCorrectSound, playIncorrectSound } from '../utils/feedbackSounds';
 import { useLanguage } from '../context/LanguageContext';
@@ -16,6 +16,20 @@ export default function Passage() {
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}');
     setCompletedPassages(saved);
+
+    // Sync with server on mount
+    if (typeof fetchProgress === 'function') {
+      const p = fetchProgress();
+      if (p && typeof p.then === 'function') {
+        p.then(res => {
+          if (res?.data?.success && res.data.data?.passagesProgress) {
+            const merged = { ...res.data.data.passagesProgress, ...saved };
+            localStorage.setItem('finnishLearnerPassagesProgress', JSON.stringify(merged));
+            setCompletedPassages(merged);
+          }
+        }).catch(() => {});
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -51,6 +65,12 @@ export default function Passage() {
         const updatedProgress = { ...completedPassages, [selectedPassage._id]: true };
         setCompletedPassages(updatedProgress);
         localStorage.setItem('finnishLearnerPassagesProgress', JSON.stringify(updatedProgress));
+        if (typeof saveProgress === 'function') {
+          try {
+            const p = saveProgress({ passagesProgress: updatedProgress });
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          } catch (e) {}
+        }
       }
     } else {
       playIncorrectSound();
@@ -239,6 +259,12 @@ export default function Passage() {
             if (window.confirm(confirmMsg)) {
               localStorage.removeItem('finnishLearnerPassagesProgress');
               setCompletedPassages({});
+              if (typeof saveProgress === 'function') {
+                try {
+                  const p = saveProgress({ passagesProgress: {} });
+                  if (p && typeof p.catch === 'function') p.catch(() => {});
+                } catch (e) {}
+              }
             }
           }}
         >

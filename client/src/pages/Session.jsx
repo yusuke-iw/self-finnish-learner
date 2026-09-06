@@ -6,6 +6,7 @@ import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '.
 import { replaceNumbersWithFinnishWords } from '../utils/numberToFinnish';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { useProgressStore } from '../store/useProgressStore';
 
 export default function Session() {
   const { language, t } = useLanguage();
@@ -73,8 +74,7 @@ export default function Session() {
       
       // If they just beat the level they were on, increment it (max 4, where 4 = fully complete)
       if (levelParam === currentProgressLevel && currentProgressLevel < 4) {
-        progress[categoryParam] = currentProgressLevel + 1;
-        localStorage.setItem('finnishLearnerProgress', JSON.stringify(progress));
+        useProgressStore.getState().updateLevelProgress(categoryParam, currentProgressLevel + 1);
       }
     }
     navigate('/');
