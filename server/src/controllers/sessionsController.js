@@ -4,26 +4,26 @@ const { sentences } = require('../config/seedData');
 const { compareAnswers } = require('../utils/typoTolerance');
 
 const vocabularyBank = [
-  { fi: 'Kissa', en: 'Cat' },
-  { fi: 'Koira', en: 'Dog' },
-  { fi: 'Talo', en: 'House' },
-  { fi: 'Auto', en: 'Car' },
-  { fi: 'Kirja', en: 'Book' },
-  { fi: 'Mies', en: 'Man' },
-  { fi: 'Nainen', en: 'Woman' },
-  { fi: 'Poika', en: 'Boy' },
-  { fi: 'Tyttö', en: 'Girl' },
-  { fi: 'Vesi', en: 'Water' },
-  { fi: 'Kahvi', en: 'Coffee' },
-  { fi: 'Leipä', en: 'Bread' },
-  { fi: 'Maito', en: 'Milk' },
-  { fi: 'Omena', en: 'Apple' },
-  { fi: 'Kyllä', en: 'Yes' },
-  { fi: 'Ei', en: 'No' },
-  { fi: 'Kiitos', en: 'Thank you' },
-  { fi: 'Yksi', en: 'One' },
-  { fi: 'Kaksi', en: 'Two' },
-  { fi: 'Kolme', en: 'Three' }
+  { fi: 'Kissa', en: 'Cat', ja: '猫' },
+  { fi: 'Koira', en: 'Dog', ja: '犬' },
+  { fi: 'Talo', en: 'House', ja: '家' },
+  { fi: 'Auto', en: 'Car', ja: '車' },
+  { fi: 'Kirja', en: 'Book', ja: '本' },
+  { fi: 'Mies', en: 'Man', ja: '男性' },
+  { fi: 'Nainen', en: 'Woman', ja: '女性' },
+  { fi: 'Poika', en: 'Boy', ja: '男の子' },
+  { fi: 'Tyttö', en: 'Girl', ja: '女の子' },
+  { fi: 'Vesi', en: 'Water', ja: '水' },
+  { fi: 'Kahvi', en: 'Coffee', ja: 'コーヒー' },
+  { fi: 'Leipä', en: 'Bread', ja: 'パン' },
+  { fi: 'Maito', en: 'Milk', ja: '牛乳' },
+  { fi: 'Omena', en: 'Apple', ja: 'リンゴ' },
+  { fi: 'Kyllä', en: 'Yes', ja: 'はい' },
+  { fi: 'Ei', en: 'No', ja: 'いいえ' },
+  { fi: 'Kiitos', en: 'Thank you', ja: 'ありがとう' },
+  { fi: 'Yksi', en: 'One', ja: '1' },
+  { fi: 'Kaksi', en: 'Two', ja: '2' },
+  { fi: 'Kolme', en: 'Three', ja: '3' }
 ];
 
 // Helper to shuffle an array
@@ -38,88 +38,88 @@ function shuffle(array) {
 
 const categoryVocab = {
   "Asiointi ja Matkustaminen": [
-    { fi: 'Juna', en: 'Train' },
-    { fi: 'Aika', en: 'Time' },
-    { fi: 'Huone', en: 'Room' },
-    { fi: 'Yö', en: 'Night' },
-    { fi: 'Asema', en: 'Station' },
-    { fi: 'Kuitti', en: 'Receipt' },
-    { fi: 'Euro', en: 'Euro' },
-    { fi: 'Matka', en: 'Journey' }
+    { fi: 'Juna', en: 'Train', ja: '電車' },
+    { fi: 'Aika', en: 'Time', ja: '時間' },
+    { fi: 'Huone', en: 'Room', ja: '部屋' },
+    { fi: 'Yö', en: 'Night', ja: '夜' },
+    { fi: 'Asema', en: 'Station', ja: '駅' },
+    { fi: 'Kuitti', en: 'Receipt', ja: 'レシート' },
+    { fi: 'Euro', en: 'Euro', ja: 'ユーロ' },
+    { fi: 'Matka', en: 'Journey', ja: '旅' }
   ],
   "Ruoka ja Juoma": [
-    { fi: 'Ruoka', en: 'Food' },
-    { fi: 'Juoma', en: 'Drink' },
-    { fi: 'Ravintola', en: 'Restaurant' },
-    { fi: 'Aamiainen', en: 'Breakfast' },
-    { fi: 'Lounas', en: 'Lunch' },
-    { fi: 'Illallinen', en: 'Dinner' },
-    { fi: 'Kahvi', en: 'Coffee' },
-    { fi: 'Vesi', en: 'Water' }
+    { fi: 'Ruoka', en: 'Food', ja: '食べ物' },
+    { fi: 'Juoma', en: 'Drink', ja: '飲み物' },
+    { fi: 'Ravintola', en: 'Restaurant', ja: 'レストラン' },
+    { fi: 'Aamiainen', en: 'Breakfast', ja: '朝食' },
+    { fi: 'Lounas', en: 'Lunch', ja: '昼食' },
+    { fi: 'Illallinen', en: 'Dinner', ja: '夕食' },
+    { fi: 'Kahvi', en: 'Coffee', ja: 'コーヒー' },
+    { fi: 'Vesi', en: 'Water', ja: '水' }
   ],
   "Perhe ja Ystävät": [
-    { fi: 'Perhe', en: 'Family' },
-    { fi: 'Ystävä', en: 'Friend' },
-    { fi: 'Äiti', en: 'Mother' },
-    { fi: 'Isä', en: 'Father' },
-    { fi: 'Veli', en: 'Brother' },
-    { fi: 'Sisko', en: 'Sister' },
-    { fi: 'Lapsi', en: 'Child' },
-    { fi: 'Nimi', en: 'Name' }
+    { fi: 'Perhe', en: 'Family', ja: '家族' },
+    { fi: 'Ystävä', en: 'Friend', ja: '友人' },
+    { fi: 'Äiti', en: 'Mother', ja: '母' },
+    { fi: 'Isä', en: 'Father', ja: '父' },
+    { fi: 'Veli', en: 'Brother', ja: '兄弟' },
+    { fi: 'Sisko', en: 'Sister', ja: '姉妹' },
+    { fi: 'Lapsi', en: 'Child', ja: '子ども' },
+    { fi: 'Nimi', en: 'Name', ja: '名前' }
   ],
   "Menneet ajat": [
-    { fi: 'Vuosi', en: 'Year' },
-    { fi: 'Eilen', en: 'Yesterday' },
-    { fi: 'Kirja', en: 'Book' },
-    { fi: 'Saapua', en: 'Arrive' },
-    { fi: 'Lähteä', en: 'Leave' },
-    { fi: 'Aika', en: 'Time' },
-    { fi: 'Nähdä', en: 'See' }
+    { fi: 'Vuosi', en: 'Year', ja: '年' },
+    { fi: 'Eilen', en: 'Yesterday', ja: '昨日' },
+    { fi: 'Kirja', en: 'Book', ja: '本' },
+    { fi: 'Saapua', en: 'Arrive', ja: '到着する' },
+    { fi: 'Lähteä', en: 'Leave', ja: '出発する' },
+    { fi: 'Aika', en: 'Time', ja: '時間' },
+    { fi: 'Nähdä', en: 'See', ja: '見る' }
   ],
   "Työelämä ja Opiskelu": [
-    { fi: 'Yritys', en: 'Company' },
-    { fi: 'Työntekijä', en: 'Employee' },
-    { fi: 'Asiakas', en: 'Customer' },
-    { fi: 'Kokous', en: 'Meeting' },
-    { fi: 'Työpaikka', en: 'Job position' },
-    { fi: 'Vahvuus', en: 'Strength' },
-    { fi: 'Heikkous', en: 'Weakness' }
+    { fi: 'Yritys', en: 'Company', ja: '会社' },
+    { fi: 'Työntekijä', en: 'Employee', ja: '従業員' },
+    { fi: 'Asiakas', en: 'Customer', ja: '顧客' },
+    { fi: 'Kokous', en: 'Meeting', ja: '会議' },
+    { fi: 'Työpaikka', en: 'Job position', ja: '職場' },
+    { fi: 'Vahvuus', en: 'Strength', ja: '長所' },
+    { fi: 'Heikkous', en: 'Weakness', ja: '短所' }
   ],
   "Konditionaali ja Potentiaali": [
-    { fi: 'Loma', en: 'Vacation' },
-    { fi: 'Aika', en: 'Time' },
-    { fi: 'Raportti', en: 'Report' },
-    { fi: 'Koti', en: 'Home' },
-    { fi: 'Kala', en: 'Fish' },
-    { fi: 'Liha', en: 'Meat' },
-    { fi: 'Mieluummin', en: 'Rather' }
+    { fi: 'Loma', en: 'Vacation', ja: '休暇' },
+    { fi: 'Aika', en: 'Time', ja: '時間' },
+    { fi: 'Raportti', en: 'Report', ja: 'レポート' },
+    { fi: 'Koti', en: 'Home', ja: '家' },
+    { fi: 'Kala', en: 'Fish', ja: '魚' },
+    { fi: 'Liha', en: 'Meat', ja: '肉' },
+    { fi: 'Mieluummin', en: 'Rather', ja: 'むしろ' }
   ],
   "Yhteiskunta ja Ympäristö": [
-    { fi: 'Ilmasto', en: 'Climate' },
-    { fi: 'Haaste', en: 'Challenge' },
-    { fi: 'Ympäristö', en: 'Environment' },
-    { fi: 'Hallitus', en: 'Government' },
-    { fi: 'Demokratia', en: 'Democracy' },
-    { fi: 'Energia', en: 'Energy' },
-    { fi: 'Vero', en: 'Tax' }
+    { fi: 'Ilmasto', en: 'Climate', ja: '気候' },
+    { fi: 'Haaste', en: 'Challenge', ja: '課題' },
+    { fi: 'Ympäristö', en: 'Environment', ja: '環境' },
+    { fi: 'Hallitus', en: 'Government', ja: '政府' },
+    { fi: 'Demokratia', en: 'Democracy', ja: '民主主義' },
+    { fi: 'Energia', en: 'Energy', ja: 'エネルギー' },
+    { fi: 'Vero', en: 'Tax', ja: '税金' }
   ],
   "Lauseenvastikkeet": [
-    { fi: 'Virhe', en: 'Mistake' },
-    { fi: 'Ulkomaat', en: 'Abroad' },
-    { fi: 'Tehtävä', en: 'Task' },
-    { fi: 'Sade', en: 'Rain' },
-    { fi: 'Matka', en: 'Journey' },
-    { fi: 'Heti', en: 'Immediately' },
-    { fi: 'Koti', en: 'Home' }
+    { fi: 'Virhe', en: 'Mistake', ja: '間違い' },
+    { fi: 'Ulkomaat', en: 'Abroad', ja: '海外' },
+    { fi: 'Tehtävä', en: 'Task', ja: '課題' },
+    { fi: 'Sade', en: 'Rain', ja: '雨' },
+    { fi: 'Matka', en: 'Journey', ja: '旅' },
+    { fi: 'Heti', en: 'Immediately', ja: 'すぐに' },
+    { fi: 'Koti', en: 'Home', ja: '家' }
   ],
   "Abstraktit keskustelut": [
-    { fi: 'Vastuu', en: 'Responsibility' },
-    { fi: 'Yksilö', en: 'Individual' },
-    { fi: 'Kieli', en: 'Language' },
-    { fi: 'Prosessi', en: 'Process' },
-    { fi: 'Taide', en: 'Art' },
-    { fi: 'Todellisuus', en: 'Reality' },
-    { fi: 'Totuus', en: 'Truth' }
+    { fi: 'Vastuu', en: 'Responsibility', ja: '責任' },
+    { fi: 'Yksilö', en: 'Individual', ja: '個人' },
+    { fi: 'Kieli', en: 'Language', ja: '言語' },
+    { fi: 'Prosessi', en: 'Process', ja: 'プロセス' },
+    { fi: 'Taide', en: 'Art', ja: '芸術' },
+    { fi: 'Todellisuus', en: 'Reality', ja: '現実' },
+    { fi: 'Totuus', en: 'Truth', ja: '真実' }
   ]
 };
 
@@ -138,10 +138,11 @@ function getMatchingVocab(category) {
 // POST /api/sessions/generate
 exports.generateSession = async (req, res, next) => {
   try {
-    const sentenceCount = req.body.sentenceCount || 3;
-    const category = req.body.category;
-    const requestedLevel = req.body.level ? Number(req.body.level) : null;
-    const exerciseType = req.body.exerciseType;
+    const sentenceCount = (req.body && req.body.sentenceCount) || 3;
+    const category = req.body && req.body.category;
+    const requestedLevel = req.body && req.body.level ? Number(req.body.level) : null;
+    const exerciseType = req.body && req.body.exerciseType;
+    const lang = (req.body && req.body.lang) || (req.query && req.query.lang) || 'ja';
 
     let availableSentences = [];
 
@@ -174,12 +175,16 @@ exports.generateSession = async (req, res, next) => {
     const level3Questions = [];
 
     selectedSentences.forEach((sentence) => {
+      const promptText = (lang === 'ja' && sentence.translationJa) ? sentence.translationJa : sentence.translation;
+
       if (exerciseType === 'speaking') {
         level3Questions.push({
           sentenceId: sentence._id.toString(),
           level: 3,
           type: 'speaking',
           prompt: sentence.text,
+          promptJa: sentence.translationJa || sentence.translation,
+          promptEn: sentence.translation,
           correctAnswer: sentence.text
         });
         return;
@@ -195,22 +200,24 @@ exports.generateSession = async (req, res, next) => {
           const pairs = selectedVocab.map(v => ({ id: Math.random().toString(36).substring(7), ...v }));
           
           let fiTokens = [];
-          let enTokens = [];
+          let targetTokens = [];
+          const targetLang = (lang === 'ja') ? 'ja' : 'en';
+
           pairs.forEach(p => {
             fiTokens.push({ id: p.id, text: p.fi, lang: 'fi' });
-            enTokens.push({ id: p.id, text: p.en, lang: 'en' });
+            targetTokens.push({ id: p.id, text: p[targetLang] || p.en || p.ja, lang: targetLang });
           });
           fiTokens = shuffle(fiTokens);
-          enTokens = shuffle(enTokens);
+          targetTokens = shuffle(targetTokens);
           
           const isFiLeft = Math.random() > 0.5;
           let tokens = [];
           for (let i = 0; i < 5; i++) {
             if (isFiLeft) {
               tokens.push(fiTokens[i]);
-              tokens.push(enTokens[i]);
+              tokens.push(targetTokens[i]);
             } else {
-              tokens.push(enTokens[i]);
+              tokens.push(targetTokens[i]);
               tokens.push(fiTokens[i]);
             }
           }
@@ -234,7 +241,9 @@ exports.generateSession = async (req, res, next) => {
             sentenceId: sentence._id.toString(),
             level: 1,
             type: 'choice',
-            prompt: sentence.translation,
+            prompt: promptText,
+            promptJa: sentence.translationJa || sentence.translation,
+            promptEn: sentence.translation,
             correctAnswer: sentence.text,
             options
           });
@@ -244,10 +253,11 @@ exports.generateSession = async (req, res, next) => {
       // Level 2: Word Bank Question
       if ((!exerciseType && (!requestedLevel || requestedLevel === 2)) || exerciseType === 'word-bank') {
         const wrongSentences = availableSentences.filter(s => s._id.toString() !== sentence._id.toString());
-        const isReverse = Math.random() > 0.5;
+        // For English users, allow reverse word bank. For Japanese users, standard Finnish word bank is most effective
+        const isReverse = lang === 'en' ? Math.random() > 0.5 : false;
 
         if (!isReverse) {
-          // Standard: Finnish word bank, English prompt
+          // Standard: Finnish word bank, native translation prompt
           const cleanWords = sentence.text
             .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '')
             .split(/\s+/)
@@ -268,7 +278,9 @@ exports.generateSession = async (req, res, next) => {
             sentenceId: sentence._id.toString(),
             level: 2,
             type: 'word-bank',
-            prompt: sentence.translation,
+            prompt: promptText,
+            promptJa: sentence.translationJa || sentence.translation,
+            promptEn: sentence.translation,
             correctAnswer: sentence.text,
             wordBank
           });
@@ -295,6 +307,8 @@ exports.generateSession = async (req, res, next) => {
             level: 2,
             type: 'word-bank-reverse',
             prompt: sentence.text,
+            promptJa: sentence.text,
+            promptEn: sentence.text,
             correctAnswer: sentence.translation,
             wordBank
           });
@@ -308,16 +322,12 @@ exports.generateSession = async (req, res, next) => {
         if (rand > 0.66) {
           // 33% chance: Fill in the blank
           const words = sentence.text.split(' ');
-          // Try to pick a word longer than 2 chars if possible
           const candidateWords = words.filter(w => w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '').length > 2);
           const targetWordRaw = candidateWords.length > 0 
             ? candidateWords[Math.floor(Math.random() * candidateWords.length)]
             : words[Math.floor(Math.random() * words.length)];
           
-          // Strip punctuation from target word for the missing piece
           const missingWord = targetWordRaw.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '');
-          
-          // Use regex to find the word to keep punctuation in prefix/suffix
           const matchIndex = sentence.text.indexOf(missingWord);
           const prefix = sentence.text.substring(0, matchIndex);
           const suffix = sentence.text.substring(matchIndex + missingWord.length);
@@ -326,11 +336,13 @@ exports.generateSession = async (req, res, next) => {
             sentenceId: sentence._id.toString(),
             level: 3,
             type: 'fill-in-the-blank',
-            prompt: sentence.translation,
+            prompt: promptText,
+            promptJa: sentence.translationJa || sentence.translation,
+            promptEn: sentence.translation,
             prefix,
             missingWord,
             suffix,
-            correctAnswer: sentence.text, // the full text just in case, but checked via missingWord
+            correctAnswer: sentence.text,
             isListening: Math.random() > 0.5
           });
         } else if (rand > 0.33) {
@@ -340,6 +352,8 @@ exports.generateSession = async (req, res, next) => {
             level: 3,
             type: 'speaking',
             prompt: sentence.text,
+            promptJa: sentence.translationJa || sentence.translation,
+            promptEn: sentence.translation,
             correctAnswer: sentence.text
           });
         } else {
@@ -348,7 +362,9 @@ exports.generateSession = async (req, res, next) => {
             sentenceId: sentence._id.toString(),
             level: 3,
             type: 'typing',
-            prompt: sentence.translation,
+            prompt: promptText,
+            promptJa: sentence.translationJa || sentence.translation,
+            promptEn: sentence.translation,
             correctAnswer: sentence.text,
             isListening: Math.random() > 0.5
           });
@@ -378,7 +394,7 @@ exports.generateSession = async (req, res, next) => {
 // POST /api/sessions/check
 exports.checkAnswer = async (req, res, next) => {
   try {
-    const { sentenceId, userInput, questionType, missingWord } = req.body;
+    const { sentenceId, userInput, questionType, missingWord, lang } = req.body;
 
     if (!sentenceId) {
       return res.status(400).json({
@@ -407,13 +423,16 @@ exports.checkAnswer = async (req, res, next) => {
     if (questionType === 'word-bank-reverse') {
       targetText = sentence.translation;
     } else if (questionType === 'fill-in-the-blank' && missingWord) {
-      // Security check: make sure the missingWord actually exists in the sentence
       if (sentence.text.includes(missingWord)) {
         targetText = missingWord;
       }
     }
 
     const result = compareAnswers(userInput, targetText);
+
+    const isJa = lang === 'ja';
+    const translationOut = (isJa && sentence.translationJa) ? sentence.translationJa : sentence.translation;
+    const notesOut = (isJa && sentence.grammarNotesJa) ? sentence.grammarNotesJa : sentence.grammarNotes;
 
     res.json({
       success: true,
@@ -429,4 +448,3 @@ exports.checkAnswer = async (req, res, next) => {
     next(error);
   }
 };
-

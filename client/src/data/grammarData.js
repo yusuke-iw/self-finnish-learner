@@ -1,10 +1,12 @@
+import { grammarEnByTopicId } from './grammarDataEn.js';
+
 export const GRAMMAR_CATEGORIES = [
-  { id: 'all', label: 'すべて' },
-  { id: 'basic_grammar', label: '基礎文法・音韻ルール' },
-  { id: 'cases', label: '格（Sijamuodot）' },
-  { id: 'verbs', label: '動詞・活用（Verbit）' },
-  { id: 'rection', label: '支配（Rektio）' },
-  { id: 'idioms', label: 'イディオム・口語（Idiomit & Puhekieli）' }
+  { id: 'all', label: 'すべて', labelEn: 'All' },
+  { id: 'basic_grammar', label: '基礎文法・音韻ルール', labelEn: 'Basic Grammar & Phonology' },
+  { id: 'cases', label: '格（Sijamuodot）', labelEn: 'Cases (Sijamuodot)' },
+  { id: 'verbs', label: '動詞・活用（Verbit）', labelEn: 'Verbs & Conjugations (Verbit)' },
+  { id: 'rection', label: '支配（Rektio）', labelEn: 'Rections (Rektio)' },
+  { id: 'idioms', label: 'イディオム・口語（Idiomit & Puhekieli）', labelEn: 'Idioms & Spoken Finnish' }
 ];
 
 export const grammarTopics = [
@@ -1617,6 +1619,31 @@ export const grammarTopics = [
   }
 ];
 
+// Enrich grammarTopics with English localization
+grammarTopics.forEach((topic) => {
+  const enData = grammarEnByTopicId[topic.id];
+  if (enData) {
+    if (enData.titleEn) topic.titleEn = enData.titleEn;
+    if (enData.summaryEn) topic.summaryEn = enData.summaryEn;
+    if (enData.overviewEn) topic.overviewEn = enData.overviewEn;
+    if (enData.rulesEn) topic.rulesEn = enData.rulesEn;
+    if (enData.tableEn) topic.tableEn = enData.tableEn;
+    if (enData.pitfallsEn) topic.pitfallsEn = enData.pitfallsEn;
+    if (enData.idiomsEn) topic.idiomsEn = enData.idiomsEn;
+
+    if (enData.practiceQuiz && Array.isArray(enData.practiceQuiz) && Array.isArray(topic.practiceQuiz)) {
+      topic.practiceQuiz.forEach((q, idx) => {
+        const qEn = enData.practiceQuiz[idx];
+        if (qEn) {
+          if (qEn.questionEn) q.questionEn = qEn.questionEn;
+          if (qEn.explanationEn) q.explanationEn = qEn.explanationEn;
+          if (qEn.hintEn) q.hintEn = qEn.hintEn;
+        }
+      });
+    }
+  }
+});
+
 // Helper functions for Practice / Drill Studio
 export function getAllPracticeQuestions() {
   const allQuestions = [];
@@ -1628,6 +1655,7 @@ export function getAllPracticeQuestions() {
           id: `${topic.id}_q${idx + 1}`,
           topicId: topic.id,
           topicTitle: topic.title,
+          topicTitleEn: topic.titleEn || topic.title,
           category: topic.category,
           level: topic.level
         });

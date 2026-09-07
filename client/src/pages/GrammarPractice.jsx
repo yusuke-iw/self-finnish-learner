@@ -108,7 +108,7 @@ function GrammarPractice() {
     }
 
     if (pool.length === 0) {
-      alert('条件に一致する問題がありません。カテゴリや問題形式を変更してください。');
+      alert(language === 'en' ? 'No questions matched your selected filters. Please adjust your choices.' : '条件に一致する問題がありません。カテゴリや問題形式を変更してください。');
       return;
     }
 
@@ -241,11 +241,11 @@ function GrammarPractice() {
           <div className="setup-stats-banner">
             <div className="stat-pill">
               <span className="stat-icon">📚</span>
-              <span>{t('drillStudio.totalAvailable')} <strong>{getAllPracticeQuestions().length}問</strong></span>
+              <span>{t('drillStudio.totalAvailable')} <strong>{getAllPracticeQuestions().length}{language === 'en' ? ' Qs' : '問'}</strong></span>
             </div>
             <div className="stat-pill">
               <span className="stat-icon">⚠️</span>
-              <span>{t('drillStudio.weaknessTitle')} <strong>{mistakeBank.length}問</strong></span>
+              <span>{t('drillStudio.weaknessTitle')} <strong>{mistakeBank.length}{language === 'en' ? ' Qs' : '問'}</strong></span>
             </div>
             {mistakeBank.length > 0 && (
               <button
@@ -376,12 +376,12 @@ function GrammarPractice() {
               type="button"
               className="exit-btn"
               onClick={() => {
-                if (window.confirm('演習を中断して設定に戻りますか？')) {
+                if (window.confirm(t('drillStudio.exitConfirm'))) {
                   setMode('setup');
                 }
               }}
             >
-              ✕ 中断
+              {t('drillStudio.exitBtn')}
             </button>
 
             <div className="session-progress-wrapper">
@@ -397,7 +397,7 @@ function GrammarPractice() {
               </span>
               {streak > 1 && (
                 <span className="streak-badge">
-                  🔥 {streak} 連続正解!
+                  {t('drillStudio.streakBadge', { count: streak })}
                 </span>
               )}
             </div>
@@ -408,11 +408,13 @@ function GrammarPractice() {
             <span className={`level-badge level-${(currentQ.level || 'a1').toLowerCase()}`}>
               {currentQ.level || 'A1'}
             </span>
-            <span className="drill-topic-name">{currentQ.topicTitle}</span>
+            <span className="drill-topic-name">
+              {language === 'en' && currentQ.topicTitleEn ? currentQ.topicTitleEn : currentQ.topicTitle}
+            </span>
             <button
               type="button"
               className="drill-audio-btn"
-              title="発音を再生"
+              title={language === 'en' ? t('common.listen') : '発音を再生'}
               onClick={() => playAudio(currentQ.answer || currentQ.question)}
             >
               🔊
@@ -421,7 +423,9 @@ function GrammarPractice() {
 
           {/* Question Body */}
           <div className="drill-question-box">
-            <h2 className="drill-question-text">{currentQ.question}</h2>
+            <h2 className="drill-question-text">
+              {(language === 'en' && currentQ.questionEn) ? currentQ.questionEn : currentQ.question}
+            </h2>
           </div>
 
           {/* Question Interactive Area */}
@@ -492,10 +496,10 @@ function GrammarPractice() {
             {/* 3. Typing / Fill-in format */}
             {currentQ.type === 'typing' && (
               <div className="drill-typing-area">
-                <input
-                  type="text"
+                <input 
+                  type="text" 
                   className="drill-typing-input"
-                  placeholder={currentQ.hint || t('drillStudio.inputPlaceholder')}
+                  placeholder={(language === 'en' && currentQ.hintEn) ? currentQ.hintEn : (currentQ.hint || t('drillStudio.inputPlaceholder'))}
                   value={currentAnswer}
                   disabled={isSubmitted}
                   autoFocus
@@ -504,7 +508,7 @@ function GrammarPractice() {
 
                 {!isSubmitted && (
                   <div className="drill-keyboard-helpers">
-                    <span className="helper-label">{language === 'en' ? 'Special Chars:' : '特殊文字:'}</span>
+                    <span className="helper-label">{t('drillStudio.specialChars')}</span>
                     {['ä', 'ö', 'Ä', 'Ö'].map((ch) => (
                       <button
                         key={ch}
@@ -533,7 +537,7 @@ function GrammarPractice() {
                 )}
               </div>
               <div className="feed-explanation">
-                <p>💡 <strong>{t('drillStudio.explanationLabel')}</strong> {currentQ.explanation}</p>
+                <p>💡 <strong>{t('drillStudio.explanationLabel')}</strong> {(language === 'en' && currentQ.explanationEn) ? currentQ.explanationEn : currentQ.explanation}</p>
               </div>
             </div>
           )}
@@ -547,7 +551,7 @@ function GrammarPractice() {
                 disabled={!currentAnswer || !currentAnswer.trim()}
                 onClick={handleSubmitAnswer}
               >
-                {language === 'en' ? 'Submit Answer (Enter)' : '回答を確認する (Enter)'}
+                {t('drillStudio.submitBtnEnter')}
               </button>
             ) : (
               <button
@@ -606,12 +610,12 @@ function GrammarPractice() {
                 {sessionMistakes.map((m, idx) => (
                   <div key={idx} className="mistake-item-card">
                     <div className="mistake-item-topic">
-                      <span className="topic-badge">{m.topicTitle}</span>
+                      <span className="topic-badge">{language === 'en' && m.topicTitleEn ? m.topicTitleEn : m.topicTitle}</span>
                     </div>
-                    <p className="mistake-q">{language === 'en' ? 'Question:' : '問:'} {m.question}</p>
-                    <p className="mistake-your-ans">{language === 'en' ? 'Your answer:' : 'あなたの回答:'} <span className="your-ans-text">{m.userAnswer || '未回答'}</span></p>
+                    <p className="mistake-q">{language === 'en' ? 'Question:' : '問:'} {(language === 'en' && m.questionEn) ? m.questionEn : m.question}</p>
+                    <p className="mistake-your-ans">{language === 'en' ? 'Your answer:' : 'あなたの回答:'} <span className="your-ans-text">{m.userAnswer || (language === 'en' ? 'Unanswered' : '未回答')}</span></p>
                     <p className="mistake-correct-ans">{language === 'en' ? 'Correct answer:' : '正解:'} <strong>{m.answer}</strong></p>
-                    <p className="mistake-exp">💡 {m.explanation}</p>
+                    <p className="mistake-exp">💡 {(language === 'en' && m.explanationEn) ? m.explanationEn : m.explanation}</p>
                   </div>
                 ))}
               </div>

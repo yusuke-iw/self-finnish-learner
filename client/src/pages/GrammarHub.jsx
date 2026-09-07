@@ -12,8 +12,12 @@ function GrammarHub() {
 
   const filteredTopics = grammarTopics.filter((topic) => {
     const matchesCategory = selectedCategory === 'all' || topic.category === selectedCategory;
-    const matchesSearch = topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          topic.summary.toLowerCase().includes(searchQuery.toLowerCase());
+    const q = searchQuery.toLowerCase();
+    const title = (language === 'en' && topic.titleEn ? topic.titleEn : topic.title).toLowerCase();
+    const summary = (language === 'en' && topic.summaryEn ? topic.summaryEn : topic.summary).toLowerCase();
+    const origTitle = (topic.title || '').toLowerCase();
+    const origSummary = (topic.summary || '').toLowerCase();
+    const matchesSearch = title.includes(q) || summary.includes(q) || origTitle.includes(q) || origSummary.includes(q);
     return matchesCategory && matchesSearch;
   });
 
@@ -94,8 +98,8 @@ function GrammarHub() {
                     : (GRAMMAR_CATEGORIES.find((c) => c.id === topic.category)?.label || topic.category)}
                 </span>
               </div>
-              <h3 className="topic-card-title">{topic.title}</h3>
-              <p className="topic-card-summary">{topic.summary}</p>
+              <h3 className="topic-card-title">{language === 'en' && topic.titleEn ? topic.titleEn : topic.title}</h3>
+              <p className="topic-card-summary">{language === 'en' && topic.summaryEn ? topic.summaryEn : topic.summary}</p>
 
               <div className="topic-card-footer">
                 <span className="quiz-count-badge">

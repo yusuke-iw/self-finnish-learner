@@ -50,7 +50,7 @@ export default function Session() {
   const startSession = async (count = sentenceCount, cat = categoryParam, lvl = levelParam, ext = exerciseTypeParam) => {
     setIsStarting(true);
     try {
-      const res = await generateSession(count, cat, lvl, ext);
+      const res = await generateSession(count, cat, lvl, ext, language);
       if (res.data.success) {
         setSession(res.data.data);
         setCurrentIndex(0);
@@ -250,27 +250,31 @@ export default function Session() {
       <div className="session-page">
         <div className="session-summary">
           <span className="summary-icon">🎉</span>
-          <h2>Session Complete!</h2>
+          <h2>{language === 'en' ? 'Session Complete!' : 'セッション完了！'}</h2>
           <div className="score-display">
             {Math.round(((score.correct + score.typo) / session.questions.length) * 100)}%
           </div>
           <div className="score-breakdown">
             <div className="stat">
               <span className="stat-value">{score.correct}</span>
-              <span>Perfect</span>
+              <span>{language === 'en' ? 'Perfect' : 'パーフェクト'}</span>
             </div>
             <div className="stat">
               <span className="stat-value">{score.typo}</span>
-              <span>Typos</span>
+              <span>{language === 'en' ? 'Typos' : 'タイポ'}</span>
             </div>
             <div className="stat">
               <span className="stat-value">{score.incorrect}</span>
-              <span>Incorrect</span>
+              <span>{language === 'en' ? 'Incorrect' : '不正解'}</span>
             </div>
           </div>
           <div className="summary-actions">
-            <button className="btn-primary" onClick={handleSessionComplete}>Back to Path</button>
-            <button className="btn-secondary" onClick={() => { setSession(null); setIsFinished(false); }}>Try Again</button>
+            <button className="btn-primary" onClick={handleSessionComplete}>
+              {language === 'en' ? 'Back to Path' : 'ホームへ戻る'}
+            </button>
+            <button className="btn-secondary" onClick={() => { setSession(null); setIsFinished(false); }}>
+              {language === 'en' ? 'Try Again' : 'もう一度挑戦'}
+            </button>
           </div>
         </div>
       </div>
@@ -281,21 +285,21 @@ export default function Session() {
     return (
       <div className="session-page">
         <div className="session-setup">
-          <h2>{categoryParam ? `Loading Level ${levelParam}...` : 'Start a Quiz Session'}</h2>
+          <h2>{categoryParam ? (language === 'en' ? `Loading Level ${levelParam}...` : `レベル ${levelParam} を読み込み中...`) : (language === 'en' ? 'Start a Quiz Session' : 'セッションを開始')}</h2>
           {!categoryParam && (
             <>
-              <p>Practice with scaffolded exercises that adapt to your level.</p>
+              <p>{language === 'en' ? 'Practice with scaffolded exercises that adapt to your level.' : 'レベルに合わせた段階的な演習で練習しましょう。'}</p>
               <div className="setup-options">
                 <label>
-                  Number of Sentences:
+                  {language === 'en' ? 'Number of Sentences:' : '問題数:'}
                   <select value={sentenceCount} onChange={e => setSentenceCount(Number(e.target.value))}>
-                    <option value={3}>3 (Short)</option>
-                    <option value={5}>5 (Medium)</option>
-                    <option value={10}>10 (Long)</option>
+                    <option value={3}>{language === 'en' ? '3 (Short)' : '3問 (ショート)'}</option>
+                    <option value={5}>{language === 'en' ? '5 (Medium)' : '5問 (標準)'}</option>
+                    <option value={10}>{language === 'en' ? '10 (Long)' : '10問 (じっくり)'}</option>
                   </select>
                 </label>
                 <button className="btn-primary" onClick={() => startSession()} disabled={isStarting}>
-                  {isStarting ? 'Starting...' : 'Start Session'}
+                  {isStarting ? (language === 'en' ? 'Starting...' : '開始中...') : (language === 'en' ? 'Start Session' : 'セッション開始')}
                 </button>
               </div>
             </>
@@ -311,7 +315,7 @@ export default function Session() {
     <div className="session-page">
       <div className="progress-container">
         <div className="progress-info">
-          <span>Question {currentIndex + 1} of {session.questions.length}</span>
+          <span>{t('session.questionOf', { current: currentIndex + 1, total: session.questions.length })}</span>
         </div>
         <div className="progress-bar">
           <div className="progress-fill" style={{ width: `${progress}%` }}></div>
@@ -321,7 +325,7 @@ export default function Session() {
       <div className={`question-card ${feedback?.isCorrect ? 'correct-flash' : ''} ${feedback && !feedback.isCorrect ? 'incorrect-flash' : ''}`}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div className={`level-badge level-${currentQuestion.level}`} style={{ margin: 0 }}>
-            Level {currentQuestion.level}
+            {t('session.levelLabel', { level: currentQuestion.level })}
           </div>
           {currentSpeaker && (
             <div 
@@ -350,16 +354,16 @@ export default function Session() {
         <div className="question-prompt">
           <span className="instruction">
             {currentQuestion.isListening 
-              ? (currentQuestion.type === 'typing' ? 'Type what you hear:' : 'Type the missing word:') 
+              ? (currentQuestion.type === 'typing' ? t('session.instructionListenTyping') : t('session.instructionListenFill')) 
               : currentQuestion.type === 'word-bank-reverse' 
-                ? 'Write this in English:' 
+                ? t('session.instructionReverse') 
                 : currentQuestion.type === 'fill-in-the-blank' 
-                  ? 'Type the missing word:' 
+                  ? t('session.instructionFill') 
                   : currentQuestion.type === 'matching'
-                    ? 'Tap the matching pairs:'
+                    ? t('session.instructionMatching')
                     : currentQuestion.type === 'speaking'
-                      ? 'Read this sentence out loud:'
-                      : 'Translate this sentence:'}
+                      ? t('session.instructionSpeaking')
+                      : t('session.instructionTranslate')}
           </span>
           <div className="prompt-text-container" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px', fontWeight: 'bold' }}>
             {currentQuestion.isListening ? (
@@ -367,7 +371,7 @@ export default function Session() {
                 <button 
                   className="btn-audio prompt-audio" 
                   onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
-                  title="Listen (Normal Speed)"
+                  title={t('session.listenNormal')}
                   style={{ padding: '12px', fontSize: '24px', background: 'var(--accent)' }}
                 >
                   🔊
@@ -375,7 +379,7 @@ export default function Session() {
                 <button 
                   className="btn-audio prompt-audio slow" 
                   onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 0.6, currentSpeaker)}
-                  title="Listen (Slow)"
+                  title={t('session.listenSlow')}
                   style={{ padding: '8px', fontSize: '20px', border: '1px solid var(--accent)' }}
                 >
                   🐢
@@ -387,13 +391,15 @@ export default function Session() {
                   <button 
                     className="btn-audio prompt-audio" 
                     onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
-                    title="Listen"
+                    title={t('common.listen')}
                     style={{ padding: '6px' }}
                   >
                     🔊
                   </button>
                 )}
-                {currentQuestion.type !== 'matching' && currentQuestion.prompt}
+                {currentQuestion.type !== 'matching' && (
+                  (language === 'ja' && currentQuestion.promptJa) ? currentQuestion.promptJa : currentQuestion.prompt
+                )}
               </>
             )}
           </div>
@@ -456,7 +462,7 @@ export default function Session() {
             <input 
               type="text" 
               className="typing-input"
-              placeholder="Type in Finnish..."
+              placeholder={t('session.typePrompt')}
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
               disabled={!!feedback}
@@ -547,7 +553,7 @@ export default function Session() {
               🎤
             </button>
             <div style={{ marginTop: '16px', minHeight: '30px', fontSize: '18px', color: 'var(--text-muted)' }}>
-              {isRecording ? "Listening..." : inputValue ? `"${inputValue}"` : "Tap microphone to speak"}
+              {isRecording ? (language === 'en' ? 'Listening...' : '聞き取り中...') : inputValue ? `"${inputValue}"` : (language === 'en' ? 'Tap microphone to speak' : 'マイクをタップして発音')}
             </div>
           </div>
         )}
@@ -556,18 +562,18 @@ export default function Session() {
           <div className={`feedback ${feedback.isPerfect ? 'correct' : feedback.hasTypo ? 'typo' : 'incorrect'}`}>
             <div>
               {feedback.isPerfect
-                ? (language === 'en' ? 'Correct!' : '正解！')
+                ? t('session.feedbackCorrect')
                 : feedback.hasTypo
-                ? (language === 'en' ? 'Correct, but you have a typo.' : '正解ですが、タイポ（誤字）があります。')
-                : (language === 'en' ? 'Incorrect.' : '不正解')}
+                ? t('session.feedbackTypo')
+                : t('session.feedbackWrong')}
               <div className="correct-answer-container">
                 <div>
-                  <span className="correct-text">{language === 'en' ? 'Answer:' : '正解:'} {feedback.correctText}</span>
+                  <span className="correct-text">{t('session.correctAnswerIs')} {feedback.correctText}</span>
                   {currentQuestion.type !== 'word-bank-reverse' && (
                     <button 
-                      className="btn-audio"
+                      className="btn-audio" 
                       onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
-                      title={language === 'en' ? 'Listen to correct answer' : '正解の発音を聞く'}
+                      title={t('common.listen')}
                       style={{ marginLeft: '12px', padding: '4px 8px', fontSize: '14px' }}
                     >
                       🔊
@@ -600,3 +606,4 @@ export default function Session() {
     </div>
   );
 }
+

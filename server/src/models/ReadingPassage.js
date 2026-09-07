@@ -10,6 +10,10 @@ const vocabularySchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+  translationJa: {
+    type: String,
+    trim: true
   }
 }, { _id: false });
 
@@ -18,15 +22,30 @@ const questionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  questionTextJa: {
+    type: String,
+    trim: true
+  },
   options: {
     type: [String],
     required: true,
     validate: [arr => arr.length >= 2, 'At least 2 options are required']
   },
+  optionsJa: {
+    type: [String]
+  },
   correctAnswerIndex: {
     type: Number,
     required: true,
     min: 0
+  },
+  explanation: {
+    type: String,
+    trim: true
+  },
+  explanationJa: {
+    type: String,
+    trim: true
   }
 }, { _id: false });
 
@@ -40,12 +59,20 @@ const readingPassageSchema = new mongoose.Schema({
     required: [true, 'Passage title is required'],
     trim: true
   },
+  titleJa: {
+    type: String,
+    trim: true
+  },
   text: {
     type: String,
     required: [true, 'Passage text is required'],
     trim: true
   },
   translation: {
+    type: String,
+    trim: true
+  },
+  translationJa: {
     type: String,
     trim: true
   },

@@ -15,6 +15,10 @@ const sentenceSchema = new mongoose.Schema({
     required: [true, 'Translation is required'],
     trim: true
   },
+  translationJa: {
+    type: String,
+    trim: true
+  },
   difficulty: {
     type: String,
     enum: ['easy', 'medium', 'hard'],
@@ -24,6 +28,9 @@ const sentenceSchema = new mongoose.Schema({
     type: String
   },
   grammarNotes: {
+    type: String
+  },
+  grammarNotesJa: {
     type: String
   },
   category: {

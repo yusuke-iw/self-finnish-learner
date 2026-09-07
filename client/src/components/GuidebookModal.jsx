@@ -34,42 +34,47 @@ export default function GuidebookModal({ unit, onClose }) {
       <div className="guidebook-modal" onClick={e => e.stopPropagation()}>
         <div className="guidebook-header" style={{ backgroundColor: unit.color }}>
           <div className="guidebook-header-content">
-            <h2>{unitTitle} {language === 'ja' ? 'ガイドブック' : 'Guidebook'}</h2>
-            <p>{language === 'ja' ? '重要フレーズ ＆ 文法ノート' : 'Key Phrases & Grammar Notes'}</p>
+            <h2>{unitTitle} {t('home.guidebook')}</h2>
+            <p>{t('guidebook.headerSubtitle')}</p>
           </div>
           <button className="guidebook-close-btn" onClick={onClose}>×</button>
         </div>
 
         <div className="guidebook-content">
           {isLoading ? (
-            <div className="guidebook-loading">{language === 'ja' ? '読み込み中...' : 'Loading notes...'}</div>
+            <div className="guidebook-loading">{t('guidebook.loadingNotes')}</div>
           ) : (
             <div className="guidebook-sentences">
               {sentences.length === 0 ? (
-                <p>{language === 'ja' ? 'このユニットの文法ノートはまだありません。' : 'No grammar notes available for this unit yet.'}</p>
+                <p>{t('guidebook.emptyNotes')}</p>
               ) : (
-                sentences.map(sentence => (
-                  <div key={sentence._id} className="grammar-note-card">
-                    <div className="grammar-phrase">
-                      <div className="phrase-fi-container">
-                        <span className="phrase-fi">{sentence.text}</span>
-                        <button 
-                          className="btn-audio" 
-                          onClick={() => playAudio(sentence.text, sentence._id)}
-                          title="Listen"
-                        >
-                          🔊
-                        </button>
+                sentences.map(sentence => {
+                  const sentenceTrans = (language === 'ja' && sentence.translationJa) ? sentence.translationJa : sentence.translation;
+                  const sentenceNotes = (language === 'ja' && sentence.grammarNotesJa) ? sentence.grammarNotesJa : sentence.grammarNotes;
+
+                  return (
+                    <div key={sentence._id} className="grammar-note-card">
+                      <div className="grammar-phrase">
+                        <div className="phrase-fi-container">
+                          <span className="phrase-fi">{sentence.text}</span>
+                          <button 
+                            className="btn-audio" 
+                            onClick={() => playAudio(sentence.text, sentence._id)}
+                            title={t('common.listen')}
+                          >
+                            🔊
+                          </button>
+                        </div>
+                        <span className="phrase-en">{sentenceTrans}</span>
                       </div>
-                      <span className="phrase-en">{sentence.translation}</span>
+                      {sentenceNotes && (
+                        <div className="grammar-explanation">
+                          <strong>{t('guidebook.noteLabel')}</strong> {sentenceNotes}
+                        </div>
+                      )}
                     </div>
-                    {sentence.grammarNotes && (
-                      <div className="grammar-explanation">
-                        <strong>Note:</strong> {sentence.grammarNotes}
-                      </div>
-                    )}
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           )}
