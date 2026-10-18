@@ -5,7 +5,7 @@ import { getRandomSpeaker } from '../utils/speakers';
 import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../utils/feedbackSounds';
 import { replaceNumbersWithFinnishWords } from '../utils/numberToFinnish';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 import { useProgressStore } from '../store/useProgressStore';
 import { findLessonById, findLessonByTitle } from '../data/curriculumData';
 import { PASS_THRESHOLD, isSessionPassed } from '../utils/sessionResult';
@@ -61,21 +61,15 @@ export default function Session() {
 
   const noReviewSentences = isReviewMode && !session && getSentenceMistakes().length === 0;
 
-  // Auto-start if review mode or category/level/exerciseType are provided
-  useEffect(() => {
-    if (startError) return;
-    if (isReviewMode && !session && !isStarting && !isFinished && !noReviewSentences) {
-      const mistakes = getSentenceMistakes();
-      const count = getSessionLength();
-      const sortedIds = [...mistakes]
-        .sort((a, b) => (Date.parse(b.lastMistakeAt) || 0) - (Date.parse(a.lastMistakeAt) || 0))
-        .slice(0, count)
-        .map(m => m.sentenceId);
-      startSession(count, resolvedCategory, levelParam, exerciseTypeParam, sortedIds);
-    } else if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
-      startSession(getSessionLength(), resolvedCategory, levelParam, exerciseTypeParam);
-    }
-  }, [isReviewMode, noReviewSentences, resolvedCategory, levelParam, exerciseTypeParam, session, isStarting, isFinished, startError]);
+  const resetInput = () => {
+    setFeedback(null);
+    setSelectedWords([]);
+    setInputValue('');
+    setSelectedMatchingTokens([]);
+    setMatchedPairIds([]);
+    setWrongMatch(false);
+    setIsChecking(false);
+  };
 
   const startSession = async (
     count = sentenceCount,
@@ -106,6 +100,27 @@ export default function Session() {
     setIsStarting(false);
   };
 
+  const startSessionRef = useRef(null);
+  useEffect(() => {
+    startSessionRef.current = startSession;
+  });
+
+  // Auto-start if review mode or category/level/exerciseType are provided
+  useEffect(() => {
+    if (startError) return;
+    if (isReviewMode && !session && !isStarting && !isFinished && !noReviewSentences) {
+      const mistakes = getSentenceMistakes();
+      const count = getSessionLength();
+      const sortedIds = [...mistakes]
+        .sort((a, b) => (Date.parse(b.lastMistakeAt) || 0) - (Date.parse(a.lastMistakeAt) || 0))
+        .slice(0, count)
+        .map(m => m.sentenceId);
+      startSessionRef.current?.(count, resolvedCategory, levelParam, exerciseTypeParam, sortedIds);
+    } else if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
+      startSessionRef.current?.(getSessionLength(), resolvedCategory, levelParam, exerciseTypeParam);
+    }
+  }, [isReviewMode, noReviewSentences, resolvedCategory, levelParam, exerciseTypeParam, session, isStarting, isFinished, startError]);
+
   // Runs when the last question is done, so "Try Again" after a pass keeps the unlock.
   // Returns true when this session unlocked the next level.
   const applyLevelProgress = (finalScore) => {
@@ -129,20 +144,6 @@ export default function Session() {
   const handleSessionComplete = () => {
     navigate('/');
   };
-
-  const resetInput = () => {
-    setFeedback(null);
-    setSelectedWords([]);
-    setInputValue('');
-    setSelectedMatchingTokens([]);
-    setMatchedPairIds([]);
-    setWrongMatch(false);
-    setIsChecking(false);
-  };
-
-  useEffect(() => {
-    setCurrentSpeaker(getRandomSpeaker());
-  }, [currentIndex, session?._id]);
 
   const currentQuestion = session?.questions[currentIndex];
 
@@ -305,6 +306,7 @@ export default function Session() {
   const handleNext = () => {
     if (currentIndex < session.questions.length - 1) {
       setCurrentIndex(c => c + 1);
+      setCurrentSpeaker(getRandomSpeaker());
       resetInput();
     } else {
       setUnlockedNext(applyLevelProgress(score));

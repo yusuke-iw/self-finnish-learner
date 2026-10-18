@@ -7,7 +7,8 @@ import GrammarHub from './pages/GrammarHub';
 import GrammarDetail from './pages/GrammarDetail';
 import GrammarPractice from './pages/GrammarPractice';
 import LanguageToggle from './components/LanguageToggle';
-import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { LanguageProvider } from './context/LanguageContext';
+import { useLanguage } from './context/useLanguage';
 import './assets/App.css';
 
 function NavigationBar() {

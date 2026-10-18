@@ -8,11 +8,23 @@ import {
   getQuestionsByTopic
 } from '../data/grammarData';
 import { playAudio } from '../utils/audio';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 import { fetchProgress, saveProgress } from '../services/api';
 import '../assets/App.css';
 
 const LOCAL_STORAGE_MISTAKES_KEY = 'finnish_grammar_mistakes';
+
+function loadLocalMistakes() {
+  try {
+    const saved = localStorage.getItem(LOCAL_STORAGE_MISTAKES_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Failed to load mistakes from localStorage', e);
+  }
+  return [];
+}
 
 function GrammarPractice() {
   const navigate = useNavigate();
@@ -22,11 +34,17 @@ function GrammarPractice() {
 
   // Setup state
   const [mode, setMode] = useState('setup'); // 'setup' | 'session' | 'summary'
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    if (initialTopic !== 'all') {
+      const found = grammarTopics.find((topic) => topic.id === initialTopic);
+      if (found) return found.category;
+    }
+    return 'all';
+  });
   const [selectedTopic, setSelectedTopic] = useState(initialTopic);
   const [selectedType, setSelectedType] = useState('all'); // 'all' | 'choice' | 'wordbank' | 'typing'
   const [questionCount, setQuestionCount] = useState(5);
-  const [mistakeBank, setMistakeBank] = useState([]);
+  const [mistakeBank, setMistakeBank] = useState(() => loadLocalMistakes());
 
   // Session state
   const [questions, setQuestions] = useState([]);
@@ -41,25 +59,15 @@ function GrammarPractice() {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  // Load saved mistakes on mount and sync with server
+  // Sync saved mistakes with server on mount
   useEffect(() => {
-    let localBank = [];
-    try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_MISTAKES_KEY);
-      if (saved) {
-        localBank = JSON.parse(saved);
-        setMistakeBank(localBank);
-      }
-    } catch (e) {
-      console.error('Failed to load mistakes from localStorage', e);
-    }
-
     if (typeof fetchProgress === 'function') {
       try {
         const p = fetchProgress();
         if (p && typeof p.then === 'function') {
           p.then(res => {
             if (res?.data?.success && Array.isArray(res.data.data?.mistakes)) {
+              const localBank = loadLocalMistakes();
               const serverMistakes = res.data.data.mistakes;
               const map = new Map();
               [...serverMistakes, ...localBank].forEach(m => {
@@ -71,20 +79,9 @@ function GrammarPractice() {
             }
           }).catch(() => {});
         }
-      } catch (e) {}
+      } catch {}
     }
   }, []);
-
-  // Sync initial topic param
-  useEffect(() => {
-    if (initialTopic !== 'all') {
-      const found = grammarTopics.find((t) => t.id === initialTopic);
-      if (found) {
-        setSelectedTopic(initialTopic);
-        setSelectedCategory(found.category);
-      }
-    }
-  }, [initialTopic]);
 
   // Start Practice Drill
   const handleStartDrill = (isReviewMode = false) => {

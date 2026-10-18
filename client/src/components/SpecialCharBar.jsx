@@ -1,5 +1,5 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 
 const SPECIAL_CHARS = ['ä', 'ö'];
 

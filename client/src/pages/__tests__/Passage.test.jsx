@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Passage from '../Passage';
 import { fetchPassages, fetchPassageById } from '../../services/api';
-import { playAudio } from '../../utils/audio';
 import { playCorrectSound, playIncorrectSound } from '../../utils/feedbackSounds';
 
 import { vi, expect, describe, it, beforeEach } from 'vitest';
