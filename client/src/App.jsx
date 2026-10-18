@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import Session from './pages/Session';
 import Review from './pages/Review';
+import WordBook from './pages/WordBook';
 import NumberPractice from './pages/NumberPractice';
 import Passage from './pages/Passage';
 import GrammarHub from './pages/GrammarHub';
@@ -22,6 +23,7 @@ function NavigationBar() {
       <ul className="nav-links">
         <li><Link to="/">{t('nav.home')}</Link></li>
         <li><Link to="/review">{t('nav.review')}</Link></li>
+        <li><Link to="/words">{t('nav.words')}</Link></li>
         <li><Link to="/numbers">{t('nav.numbers')}</Link></li>
         <li><Link to="/grammar">{t('nav.grammar')}</Link></li>
         <li><Link to="/grammar/practice">{t('nav.drillStudio')}</Link></li>
@@ -45,6 +47,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/sessions" element={<Session />} />
               <Route path="/review" element={<Review />} />
+              <Route path="/words" element={<WordBook />} />
               <Route path="/numbers" element={<NumberPractice />} />
               <Route path="/passages" element={<Passage />} />
               <Route path="/grammar" element={<GrammarHub />} />

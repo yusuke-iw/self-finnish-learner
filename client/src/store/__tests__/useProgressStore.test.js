@@ -53,6 +53,22 @@ describe('migrateProgressKeys', () => {
 });
 
 describe('useProgressStore', () => {
+  it('merges word books using the oldest entry and preserves word review schedules', async () => {
+    const older = { id: 'kissa', word: 'kissa', translation: 'cat', addedAt: '2026-10-01T00:00:00Z' };
+    localStorage.setItem('finnishLearnerWordBook', JSON.stringify([older, { word: 'koira' }]));
+    const entry = { box: 2, dueAt: '2026-10-20T00:00:00Z', lastReviewedAt: '2026-10-17T00:00:00Z', lapses: 0 };
+    api.fetchProgress.mockResolvedValue({ data: { success: true, data: {
+      wordBook: [{ ...older, translation: 'new cat', addedAt: '2026-10-02T00:00:00Z' }, { word: 'talo' }],
+      reviewSchedule: { 'word:kissa': entry }
+    } } });
+    api.saveProgress.mockResolvedValue({});
+    await useProgressStore.getState().syncWithServer();
+    const words = JSON.parse(localStorage.getItem('finnishLearnerWordBook'));
+    expect(words).toHaveLength(3);
+    expect(words.find(w => w.id === 'kissa')).toMatchObject(older);
+    expect(api.saveProgress).toHaveBeenCalledWith(expect.objectContaining({ wordBook: words, reviewSchedule: { 'word:kissa': entry } }));
+  });
+
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();

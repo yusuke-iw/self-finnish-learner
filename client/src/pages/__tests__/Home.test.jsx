@@ -4,6 +4,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Home from '../Home';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 
+vi.mock('../../services/api');
+
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
@@ -220,6 +222,7 @@ describe('Home Component', () => {
           lastReviewedAt: '2020-05-01T10:00:00.000Z',
           lapses: 1
         },
+        'word:kissa': { box: 1, dueAt: '2020-05-01T00:00:00Z', lapses: 0 },
         'grammar:g1': {
           box: 1,
           dueAt: '2020-05-02T10:00:00.000Z',
@@ -237,7 +240,7 @@ describe('Home Component', () => {
 
     expect(screen.getByText(/1-day streak/i)).toBeInTheDocument();
     expect(screen.getByText(/Today 15 \/ 20/i)).toBeInTheDocument();
-    expect(screen.getByText("Today's review: 2")).toBeInTheDocument();
+    expect(screen.getByText("Today's review: 3")).toBeInTheDocument();
 
     // Change daily goal to 10 -> reaches goal (15 >= 10)
     const goalSelect = screen.getByLabelText(/Goal:/i);
