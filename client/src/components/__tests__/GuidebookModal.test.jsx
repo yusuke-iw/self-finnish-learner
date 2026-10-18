@@ -4,6 +4,7 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 import GuidebookModal from '../GuidebookModal';
 import { fetchSentences } from '../../services/api';
 import { playAudio } from '../../utils/audio';
+import { LanguageProvider } from '../../context/LanguageContext';
 
 vi.mock('../../services/api');
 vi.mock('../../utils/audio');
@@ -41,6 +42,17 @@ describe('GuidebookModal Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     fetchSentences.mockResolvedValue({ data: { success: true, data: mockSentences } });
+  });
+
+  it.each(['en', 'ja'])('shows spoken text and localized notes only on annotated phrases (%s)', async (language) => {
+    const sentence = { ...mockSentences[0], spokenText: 'Mä oon täällä.',
+      spokenNotes: 'minä → mä', spokenNotesJa: 'minä → mä（私）' };
+    fetchSentences.mockResolvedValue({ data: { success: true, data: [sentence,
+      { _id: '3', category: 'Lesson B', text: 'Hei.', translation: 'Hi.' }] } });
+    render(<LanguageProvider defaultLanguage={language}><GuidebookModal {...defaultProps} /></LanguageProvider>);
+    expect(await screen.findByText(`${language === 'ja' ? '💬 話し言葉:' : '💬 Spoken:'} ${sentence.spokenText}`)).toBeInTheDocument();
+    expect(screen.getByText(language === 'ja' ? sentence.spokenNotesJa : sentence.spokenNotes)).toBeInTheDocument();
+    expect(document.querySelectorAll('.spoken-variant')).toHaveLength(1);
   });
 
   it('renders loading state initially and then the filtered sentences', async () => {

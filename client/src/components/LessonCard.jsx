@@ -66,6 +66,12 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
           >
             {t('home.listenBtn')}
           </button>
+          <button
+            className="level-btn"
+            onClick={() => onLevelClick(lesson.id, 2, 'spoken')}
+          >
+            {t('home.spokenBtn')}
+          </button>
         </div>
       </div>
     </div>
