@@ -4,6 +4,9 @@ const Progress = require('../models/Progress');
 // In-memory fallback storage if MongoDB is disconnected
 const inMemoryProgress = new Map();
 
+const USER_ID_REGEX = /^[A-Za-z0-9_-]{1,40}$/;
+const isValidUserId = (userId) => typeof userId === 'string' && USER_ID_REGEX.test(userId);
+
 const getDefaultProgress = (userId = 'default_user') => ({
   userId,
   learningPath: {},
@@ -18,7 +21,14 @@ const getDefaultProgress = (userId = 'default_user') => ({
 
 exports.getProgress = async (req, res, next) => {
   try {
-    const userId = req.query.userId || 'default_user';
+    const userId = req.query.userId === undefined ? 'default_user' : req.query.userId;
+
+    if (!isValidUserId(userId)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid userId'
+      });
+    }
 
     // If MongoDB is not connected, fallback to in-memory map
     if (mongoose.connection.readyState !== 1) {
@@ -67,6 +77,13 @@ exports.saveProgress = async (req, res, next) => {
       mistakes,
       settings
     } = req.body;
+
+    if (!isValidUserId(userId)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid userId'
+      });
+    }
 
     const update = {
       userId,

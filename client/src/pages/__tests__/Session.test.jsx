@@ -1,12 +1,15 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Session from '../Session';
 import { BrowserRouter } from 'react-router-dom';
+import { useProgressStore } from '../../store/useProgressStore';
 
 vi.mock('../../services/api', () => ({
   generateSession: vi.fn(),
-  checkAnswer: vi.fn()
+  checkAnswer: vi.fn(),
+  fetchProgress: vi.fn(),
+  saveProgress: vi.fn().mockResolvedValue({ data: { success: true } })
 }));
 vi.mock('../../utils/audio', () => ({
   playAudio: vi.fn()
@@ -31,13 +34,15 @@ describe('Session Component', () => {
 
   beforeEach(() => {
     vi.resetAllMocks();
-    // Mock the state returned by useLocation or just render it plainly
-    // Session uses useLocation to get state.session
+    localStorage.clear();
+    useProgressStore.setState({ progress: {} });
+    window.history.pushState({}, '', '/');
   });
 
   afterEach(() => {
     delete global.window.SpeechRecognition;
     delete global.window.webkitSpeechRecognition;
+    window.history.pushState({}, '', '/');
   });
 
   const renderComponent = (sessionData = mockSession) => {
@@ -698,5 +703,170 @@ describe('Session Component', () => {
       expect(screen.getByText('Session Complete!')).toBeInTheDocument();
     });
     expect(screen.getByText('100%')).toBeInTheDocument();
+  });
+
+  it('does not increment lesson level when score is below pass threshold', async () => {
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=1');
+    const singleQuestionSession = {
+      _id: 'session-fail',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        }
+      ]
+    };
+
+    renderComponent(singleQuestionSession);
+
+    await waitFor(() => {
+      expect(screen.getByText('Koira')).toBeInTheDocument();
+    });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: false, correctText: 'Koira' }, success: true } });
+    fireEvent.click(screen.getByText('Kissa'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Session Complete!')).toBeInTheDocument();
+      expect(screen.getByText('You need 80% to pass. Try again!')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Back to Path'));
+    expect(useProgressStore.getState().progress['l1']).toBeUndefined();
+  });
+
+  it('increments lesson level by lessonId when score meets pass threshold', async () => {
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=1');
+    const singleQuestionSession = {
+      _id: 'session-pass',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        }
+      ]
+    };
+
+    renderComponent(singleQuestionSession);
+
+    await waitFor(() => {
+      expect(screen.getByText('Koira')).toBeInTheDocument();
+    });
+    expect(generateSession).toHaveBeenCalledWith(5, 'Asiointi ja Matkustaminen', 1, null, expect.any(String));
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true, correctText: 'Koira' }, success: true } });
+    fireEvent.click(screen.getByText('Koira'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Session Complete!')).toBeInTheDocument();
+      expect(screen.getByText('Passed! The next level is unlocked.')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Back to Path'));
+    expect(useProgressStore.getState().progress['l1']).toBe(2);
+  });
+
+  it('keeps the unlocked level when the user chooses Try Again after passing', async () => {
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=1');
+    const singleQuestionSession = {
+      _id: 'session-pass-retry',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        }
+      ]
+    };
+
+    renderComponent(singleQuestionSession);
+
+    await waitFor(() => {
+      expect(screen.getByText('Koira')).toBeInTheDocument();
+    });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true, correctText: 'Koira' }, success: true } });
+    fireEvent.click(screen.getByText('Koira'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Passed! The next level is unlocked.')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Try Again'));
+    expect(useProgressStore.getState().progress['l1']).toBe(2);
+  });
+
+  it('shows Passed! without unlock text when re-challenging an already unlocked level, and resolves legacy category param to lessonId', async () => {
+    useProgressStore.setState({ progress: { l1: 3 } });
+    window.history.pushState({}, '', '/sessions?category=Asiointi%20ja%20Matkustaminen&level=1');
+    const singleQuestionSession = {
+      _id: 'session-legacy-pass',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        }
+      ]
+    };
+
+    renderComponent(singleQuestionSession);
+
+    await waitFor(() => {
+      expect(screen.getByText('Koira')).toBeInTheDocument();
+    });
+
+    checkAnswer.mockResolvedValueOnce({ data: { data: { isCorrect: true, isPerfect: true, correctText: 'Koira' }, success: true } });
+    fireEvent.click(screen.getByText('Koira'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Session Complete!')).toBeInTheDocument();
+      expect(screen.getByText('Passed!')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Back to Path'));
+    expect(useProgressStore.getState().progress['l1']).toBe(3);
   });
 });

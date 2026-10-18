@@ -1,11 +1,56 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useProgressStore } from '../useProgressStore';
+import { useProgressStore, migrateProgressKeys } from '../useProgressStore';
 import * as api from '../../services/api';
 
 vi.mock('../../services/api', () => ({
   fetchProgress: vi.fn(),
   saveProgress: vi.fn()
 }));
+
+describe('migrateProgressKeys', () => {
+  it('converts lesson title keys to lesson.id', () => {
+    const input = {
+      'Asiointi ja Matkustaminen': 3,
+      'Ruoka ja Juoma': 2
+    };
+    expect(migrateProgressKeys(input)).toEqual({
+      l1: 3,
+      l1b: 2
+    });
+  });
+
+  it('takes the higher level when both title key and lesson.id key exist', () => {
+    expect(
+      migrateProgressKeys({
+        'Asiointi ja Matkustaminen': 4,
+        l1: 2
+      })
+    ).toEqual({ l1: 4 });
+
+    expect(
+      migrateProgressKeys({
+        l1: 3,
+        'Asiointi ja Matkustaminen': 1
+      })
+    ).toEqual({ l1: 3 });
+  });
+
+  it('preserves unknown keys as-is', () => {
+    const input = {
+      l2: 2,
+      'Unknown Custom Key': 3
+    };
+    expect(migrateProgressKeys(input)).toEqual({
+      l2: 2,
+      'Unknown Custom Key': 3
+    });
+  });
+
+  it('returns an empty object for null or non-object inputs', () => {
+    expect(migrateProgressKeys(null)).toEqual({});
+    expect(migrateProgressKeys(undefined)).toEqual({});
+  });
+});
 
 describe('useProgressStore', () => {
   beforeEach(() => {
@@ -17,16 +62,16 @@ describe('useProgressStore', () => {
   it('updates level progress locally and syncs to server', async () => {
     api.saveProgress.mockResolvedValue({ data: { success: true } });
 
-    await useProgressStore.getState().updateLevelProgress('Ruoka ja Juoma', 2);
+    await useProgressStore.getState().updateLevelProgress('l1b', 2);
 
-    expect(useProgressStore.getState().progress['Ruoka ja Juoma']).toBe(2);
-    expect(JSON.parse(localStorage.getItem('finnishLearnerProgress'))['Ruoka ja Juoma']).toBe(2);
+    expect(useProgressStore.getState().progress['l1b']).toBe(2);
+    expect(JSON.parse(localStorage.getItem('finnishLearnerProgress'))['l1b']).toBe(2);
     expect(api.saveProgress).toHaveBeenCalledWith(expect.objectContaining({
-      learningPath: expect.objectContaining({ 'Ruoka ja Juoma': 2 })
+      learningPath: expect.objectContaining({ l1b: 2 })
     }));
   });
 
-  it('syncs with server on syncWithServer call', async () => {
+  it('syncs with server and migrates legacy lesson title keys on syncWithServer call', async () => {
     localStorage.setItem('finnishLearnerProgress', JSON.stringify({ 'Ruoka ja Juoma': 1 }));
     api.fetchProgress.mockResolvedValue({
       data: {
@@ -41,9 +86,12 @@ describe('useProgressStore', () => {
 
     await useProgressStore.getState().syncWithServer();
 
-    // Merged highest level
-    expect(useProgressStore.getState().progress['Ruoka ja Juoma']).toBe(3);
-    expect(useProgressStore.getState().progress['Perhe ja Ystävät']).toBe(2);
+    // Merged highest level under migrated lessonId keys
+    expect(useProgressStore.getState().progress['l1b']).toBe(3);
+    expect(useProgressStore.getState().progress['l1c']).toBe(2);
+    expect(api.saveProgress).toHaveBeenCalledWith(expect.objectContaining({
+      learningPath: { l1b: 3, l1c: 2 }
+    }));
     // Preserved passages in localStorage
     expect(JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress'))['p1']).toBe(true);
   });
@@ -54,7 +102,8 @@ describe('useProgressStore', () => {
 
     // Should not throw
     await expect(useProgressStore.getState().syncWithServer()).resolves.not.toThrow();
-    // Local progress remains intact
-    expect(useProgressStore.getState().progress['Ruoka ja Juoma']).toBe(2);
+    // Local progress remains intact and migrated to lessonId
+    expect(useProgressStore.getState().progress['l1b']).toBe(2);
   });
 });
+

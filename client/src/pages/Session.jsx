@@ -7,14 +7,25 @@ import { replaceNumbersWithFinnishWords } from '../utils/numberToFinnish';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useProgressStore } from '../store/useProgressStore';
+import { findLessonById, findLessonByTitle } from '../data/curriculumData';
+import { PASS_THRESHOLD, isSessionPassed } from '../utils/sessionResult';
 
 export default function Session() {
   const { language, t } = useLanguage();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const lessonIdParam = searchParams.get('lessonId');
   const categoryParam = searchParams.get('category');
   const levelParam = searchParams.get('level') ? Number(searchParams.get('level')) : null;
   const exerciseTypeParam = searchParams.get('exerciseType');
+
+  const matchedLesson = lessonIdParam
+    ? findLessonById(lessonIdParam)
+    : categoryParam
+      ? findLessonByTitle(categoryParam)
+      : null;
+  const resolvedLessonId = matchedLesson ? matchedLesson.id : lessonIdParam;
+  const resolvedCategory = matchedLesson ? matchedLesson.title : categoryParam;
 
   const [session, setSession] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,17 +48,18 @@ export default function Session() {
   
   const [score, setScore] = useState({ correct: 0, typo: 0, incorrect: 0 });
   const [isFinished, setIsFinished] = useState(false);
+  const [unlockedNext, setUnlockedNext] = useState(false);
 
   const [isStarting, setIsStarting] = useState(false);
 
   // Auto-start if category and level are provided
   useEffect(() => {
-    if ((categoryParam && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
-      startSession(5, categoryParam, levelParam, exerciseTypeParam);
+    if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
+      startSession(5, resolvedCategory, levelParam, exerciseTypeParam);
     }
-  }, [categoryParam, levelParam, exerciseTypeParam, session, isStarting, isFinished]);
+  }, [resolvedCategory, levelParam, exerciseTypeParam, session, isStarting, isFinished]);
 
-  const startSession = async (count = sentenceCount, cat = categoryParam, lvl = levelParam, ext = exerciseTypeParam) => {
+  const startSession = async (count = sentenceCount, cat = resolvedCategory, lvl = levelParam, ext = exerciseTypeParam) => {
     setIsStarting(true);
     try {
       const res = await generateSession(count, cat, lvl, ext, language);
@@ -56,6 +68,7 @@ export default function Session() {
         setCurrentIndex(0);
         setCurrentSpeaker(getRandomSpeaker());
         setIsFinished(false);
+        setUnlockedNext(false);
         setScore({ correct: 0, typo: 0, incorrect: 0 });
         resetInput();
       }
@@ -66,17 +79,24 @@ export default function Session() {
     setIsStarting(false);
   };
 
-  const handleSessionComplete = () => {
+  // Runs when the last question is done, so "Try Again" after a pass keeps the unlock.
+  // Returns true when this session unlocked the next level.
+  const applyLevelProgress = (finalScore) => {
     // Only increment progress if passed from module path
-    if (categoryParam && levelParam) {
-      let progress = JSON.parse(localStorage.getItem('finnishLearnerProgress') || '{}');
-      const currentProgressLevel = progress[categoryParam] || 1;
-      
-      // If they just beat the level they were on, increment it (max 4, where 4 = fully complete)
-      if (levelParam === currentProgressLevel && currentProgressLevel < 4) {
-        useProgressStore.getState().updateLevelProgress(categoryParam, currentProgressLevel + 1);
-      }
+    if (!resolvedLessonId || !levelParam || !isSessionPassed(finalScore, session?.questions?.length || 0)) {
+      return false;
     }
+    const currentProgressLevel = useProgressStore.getState().progress[resolvedLessonId] || 1;
+
+    // If they just beat the level they were on, increment it (max 4, where 4 = fully complete)
+    if (levelParam === currentProgressLevel && currentProgressLevel < 4) {
+      useProgressStore.getState().updateLevelProgress(resolvedLessonId, currentProgressLevel + 1);
+      return true;
+    }
+    return false;
+  };
+
+  const handleSessionComplete = () => {
     navigate('/');
   };
 
@@ -228,6 +248,7 @@ export default function Session() {
       setCurrentIndex(c => c + 1);
       resetInput();
     } else {
+      setUnlockedNext(applyLevelProgress(score));
       setIsFinished(true);
       playLessonCompleteSound();
     }
@@ -246,14 +267,24 @@ export default function Session() {
   };
 
   if (isFinished) {
+    const totalQuestions = session.questions.length;
+    const passed = isSessionPassed(score, totalQuestions);
+
     return (
       <div className="session-page">
         <div className="session-summary">
           <span className="summary-icon">🎉</span>
           <h2>{language === 'en' ? 'Session Complete!' : 'セッション完了！'}</h2>
           <div className="score-display">
-            {Math.round(((score.correct + score.typo) / session.questions.length) * 100)}%
+            {Math.round(((score.correct + score.typo) / totalQuestions) * 100)}%
           </div>
+          {resolvedLessonId && levelParam && (
+            <p className={`session-result-message ${passed ? 'passed' : 'failed'}`}>
+              {passed
+                ? (unlockedNext ? t('session.passedUnlockNext') : t('session.passed'))
+                : t('session.failedThreshold', { threshold: Math.round(PASS_THRESHOLD * 100) })}
+            </p>
+          )}
           <div className="score-breakdown">
             <div className="stat">
               <span className="stat-value">{score.correct}</span>
@@ -285,8 +316,8 @@ export default function Session() {
     return (
       <div className="session-page">
         <div className="session-setup">
-          <h2>{categoryParam ? (language === 'en' ? `Loading Level ${levelParam}...` : `レベル ${levelParam} を読み込み中...`) : (language === 'en' ? 'Start a Quiz Session' : 'セッションを開始')}</h2>
-          {!categoryParam && (
+          <h2>{resolvedCategory ? (language === 'en' ? `Loading Level ${levelParam}...` : `レベル ${levelParam} を読み込み中...`) : (language === 'en' ? 'Start a Quiz Session' : 'セッションを開始')}</h2>
+          {!resolvedCategory && (
             <>
               <p>{language === 'en' ? 'Practice with scaffolded exercises that adapt to your level.' : 'レベルに合わせた段階的な演習で練習しましょう。'}</p>
               <div className="setup-options">

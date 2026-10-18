@@ -59,16 +59,16 @@ describe('Home Component', () => {
     const l2Buttons = screen.getAllByText('L2 (Words)');
     fireEvent.click(l2Buttons[0]);
     
-    expect(mockNavigate).toHaveBeenCalledWith('/sessions?category=Asiointi%20ja%20Matkustaminen&level=2');
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l1&level=2');
 
     const speakButtons = screen.getAllByText('🎙️ Speak');
     fireEvent.click(speakButtons[0]);
-    expect(mockNavigate).toHaveBeenCalledWith('/sessions?category=Asiointi%20ja%20Matkustaminen&level=3&exerciseType=speaking');
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l1&level=3&exerciseType=speaking');
   });
 
-  it('renders "Mastered" badge for completed levels', () => {
+  it('renders "Mastered" badge for completed levels using lesson.id', () => {
     localStorage.setItem('finnishLearnerProgress', JSON.stringify({
-      'Asiointi ja Matkustaminen': 4
+      l1: 4
     }));
 
     render(
@@ -98,7 +98,7 @@ describe('Home Component', () => {
 
   it('handles resetting progress', () => {
     localStorage.setItem('finnishLearnerProgress', JSON.stringify({
-      'Asiointi ja Matkustaminen': 4
+      l1: 4
     }));
     window.confirm = vi.fn().mockReturnValue(true);
 
@@ -118,7 +118,7 @@ describe('Home Component', () => {
   
   it('does not reset progress if confirm is cancelled', () => {
     localStorage.setItem('finnishLearnerProgress', JSON.stringify({
-      'Asiointi ja Matkustaminen': 4
+      l1: 4
     }));
     window.confirm = vi.fn().mockReturnValue(false);
 
@@ -132,5 +132,29 @@ describe('Home Component', () => {
 
     expect(window.confirm).toHaveBeenCalled();
     expect(screen.getByText('🏆 Mastered')).toBeInTheDocument();
+  });
+
+  it('saves valid Sync ID and shows error for invalid Sync ID', () => {
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    const input = screen.getByLabelText('Sync ID');
+    expect(input.value).toBe('default_user');
+    expect(screen.getByText('Devices with the same ID share progress.')).toBeInTheDocument();
+
+    // Invalid ID shows error below input
+    fireEvent.change(input, { target: { value: 'invalid id!' } });
+    fireEvent.click(screen.getByText('Save'));
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(localStorage.getItem('finnishLearnerUserId')).toBeNull();
+
+    // Valid ID saves to localStorage and clears error
+    fireEvent.change(input, { target: { value: 'my_sync_123' } });
+    fireEvent.click(screen.getByText('Save'));
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(localStorage.getItem('finnishLearnerUserId')).toBe('my_sync_123');
   });
 });
