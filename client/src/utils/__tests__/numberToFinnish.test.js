@@ -1,4 +1,9 @@
-import { replaceNumbersWithFinnishWords } from '../numberToFinnish';
+import {
+  replaceNumbersWithFinnishWords,
+  numberToFinnishWord,
+  priceToFinnish,
+  timeToFinnish
+} from '../numberToFinnish';
 import { describe, it, expect } from 'vitest';
 
 describe('replaceNumbersWithFinnishWords', () => {
@@ -48,9 +53,56 @@ describe('replaceNumbersWithFinnishWords', () => {
   });
 });
 
-import { numberToFinnishWord } from '../numberToFinnish';
 describe('numberToFinnishWord', () => {
-  it('should fallback to string for numbers >= 1000', () => {
-    expect(numberToFinnishWord(1000)).toBe('1000');
+  it('should convert thousands and up to 999,999', () => {
+    expect(numberToFinnishWord(0)).toBe('nolla');
+    expect(numberToFinnishWord(1000)).toBe('tuhat');
+    expect(numberToFinnishWord(2000)).toBe('kaksituhatta');
+    expect(numberToFinnishWord(1984)).toBe('tuhatyhdeksänsataakahdeksankymmentäneljä');
+    expect(numberToFinnishWord(10000)).toBe('kymmenentuhatta');
+    expect(numberToFinnishWord(21000)).toBe('kaksikymmentäyksituhatta');
+    expect(numberToFinnishWord(100000)).toBe('satatuhatta');
+    expect(numberToFinnishWord(999999)).toBe(
+      'yhdeksänsataayhdeksänkymmentäyhdeksäntuhattayhdeksänsataayhdeksänkymmentäyhdeksän'
+    );
+  });
+
+  it('should fallback to string for out-of-range numbers', () => {
+    expect(numberToFinnishWord(-1)).toBe('-1');
+    expect(numberToFinnishWord(1000000)).toBe('1000000');
   });
 });
+
+describe('priceToFinnish', () => {
+  it('should convert euros and cents into Finnish price phrases', () => {
+    expect(priceToFinnish(12, 50)).toBe('kaksitoista euroa viisikymmentä senttiä');
+    expect(priceToFinnish(1, 0)).toBe('yksi euro');
+    expect(priceToFinnish(0, 99)).toBe('yhdeksänkymmentäyhdeksän senttiä');
+    expect(priceToFinnish(1, 1)).toBe('yksi euro yksi sentti');
+    expect(priceToFinnish(5, 0)).toBe('viisi euroa');
+    expect(priceToFinnish(0, 1)).toBe('yksi sentti');
+  });
+});
+
+describe('timeToFinnish', () => {
+  it('should convert official 24-hour time to Finnish', () => {
+    expect(timeToFinnish(14, 30, 'official')).toBe('kello neljätoista kolmekymmentä');
+    expect(timeToFinnish(9, 5, 'official')).toBe('kello yhdeksän nolla viisi');
+    expect(timeToFinnish(20, 0, 'official')).toBe('kello kaksikymmentä');
+    expect(timeToFinnish(0, 0, 'official')).toBe('kello nolla');
+  });
+
+  it('should convert everyday 12-hour time to Finnish', () => {
+    expect(timeToFinnish(3, 0, 'everyday')).toBe('kello kolme');
+    expect(timeToFinnish(15, 0, 'everyday')).toBe('kello kolme');
+    expect(timeToFinnish(3, 15, 'everyday')).toBe('varttia yli kolme');
+    expect(timeToFinnish(3, 30, 'everyday')).toBe('puoli neljä');
+    expect(timeToFinnish(3, 45, 'everyday')).toBe('varttia vaille neljä');
+    expect(timeToFinnish(3, 10, 'everyday')).toBe('kymmenen yli kolme');
+    expect(timeToFinnish(3, 50, 'everyday')).toBe('kymmenen vaille neljä');
+    expect(timeToFinnish(12, 30, 'everyday')).toBe('puoli yksi');
+    expect(timeToFinnish(12, 45, 'everyday')).toBe('varttia vaille yksi');
+    expect(timeToFinnish(12, 40, 'everyday')).toBe('kaksikymmentä vaille yksi');
+  });
+});
+

@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Session from '../Session';
 import { BrowserRouter } from 'react-router-dom';
 import { useProgressStore } from '../../store/useProgressStore';
+import { LanguageProvider } from '../../context/LanguageContext';
 
 vi.mock('../../services/api', () => ({
   generateSession: vi.fn(),
@@ -68,6 +69,54 @@ describe('Session Component', () => {
       </BrowserRouter>
     );
   };
+
+  it.each(['en', 'ja'])('shows localized spoken feedback and plays spoken audio in %s', async (language) => {
+    const question = { ...mockSession.questions[0], spokenText: 'Mä oon täällä.',
+      spokenNotes: 'minä → mä, olen → oon', spokenNotesJa: 'minä → mä（私）, olen → oon（〜です）' };
+    generateSession.mockResolvedValue({ data: { success: true, data: { questions: [question] } } });
+    render(<LanguageProvider defaultLanguage={language}><BrowserRouter><Session /></BrowserRouter></LanguageProvider>);
+    fireEvent.click(screen.getByText(language === 'ja' ? 'セッション開始' : 'Start Session'));
+    fireEvent.click(await screen.findByText('Koira'));
+    expect(screen.queryByText(/💬/)).not.toBeInTheDocument();
+    checkAnswer.mockResolvedValue({ data: { success: true,
+      data: { isCorrect: true, isPerfect: true, correctText: 'Koira' } } });
+    fireEvent.click(screen.getByText(language === 'ja' ? '回答を確認する' : 'Check Answer'));
+    const spoken = await screen.findByText(`${language === 'ja' ? '💬 話し言葉:' : '💬 Spoken:'} ${question.spokenText}`);
+    expect(screen.getByText(language === 'ja' ? question.spokenNotesJa : question.spokenNotes)).toBeInTheDocument();
+    fireEvent.click(spoken.parentElement.querySelector('button'));
+    expect(playAudio).toHaveBeenLastCalledWith(question.spokenText, expect.any(String), 'fi-FI', 1, expect.anything());
+  });
+
+  it.each([true, false])('handles spoken-choice feedback, records answers and preserves level progress (correct=%s)', async (isCorrect) => {
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=2&exerciseType=spoken');
+    useProgressStore.setState({ progress: { l1: 2 } });
+    const question = { sentenceId: 's1', type: 'spoken-choice', level: 2,
+      prompt: 'Mä oon täällä.', promptJa: 'ここにいます。', spokenText: 'Mä oon täällä.',
+      correctAnswer: 'Minä olen täällä.', options: ['Minä olen täällä.', 'Sinä olet siellä.'] };
+    renderComponent({ questions: [question] });
+    expect(await screen.findByText('Pick the standard written form of this spoken sentence')).toBeInTheDocument();
+    expect(screen.getByText(question.prompt)).toBeInTheDocument();
+    fireEvent.click(screen.getByTitle('Listen (Normal Speed)'));
+    expect(playAudio).toHaveBeenLastCalledWith(question.prompt, expect.any(String), 'fi-FI', 1, expect.anything());
+    fireEvent.click(screen.getByTitle('Listen (Slow)'));
+    expect(playAudio).toHaveBeenLastCalledWith(question.prompt, expect.any(String), 'fi-FI', 0.6, expect.anything());
+    const answer = isCorrect ? question.options[0] : question.options[1];
+    fireEvent.click(screen.getByText(answer));
+    checkAnswer.mockResolvedValue({ data: { success: true,
+      data: { isCorrect, isPerfect: isCorrect, hasTypo: false, correctText: question.correctAnswer } } });
+    fireEvent.click(screen.getByText('Check Answer'));
+    await screen.findByText('Continue');
+    expect(checkAnswer).toHaveBeenCalledWith({ sentenceId: 's1', userInput: answer, questionType: 'spoken-choice' });
+    expect(document.querySelector(isCorrect ? '.feedback.correct' : '.feedback.incorrect')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: question.correctAnswer })).toHaveClass('correct-choice');
+    expect(Object.values(JSON.parse(localStorage.getItem('finnishLearnerStudyStats')).days)[0]).toBe(1);
+    if (!isCorrect) {
+      expect(JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'))['sentence:s1'].box).toBe(1);
+    }
+    fireEvent.click(screen.getByText('Continue'));
+    expect(await screen.findByText(isCorrect ? '100%' : '0%')).toBeInTheDocument();
+    expect(useProgressStore.getState().progress.l1).toBe(2);
+  });
 
   it('handles speaking question recording events and typo feedback', async () => {
     const speakingSession = {
@@ -1030,7 +1079,7 @@ describe('Session Component', () => {
     });
   });
 
-  it('records sentence mistakes on incorrect answer and removes on perfect answer in review mode', async () => {
+  it('records sentence into reviewSchedule at box 1 on incorrect answer and records studyStats', async () => {
     renderComponent(mockSession);
     fireEvent.click(screen.getByText('Start Session'));
 
@@ -1048,24 +1097,44 @@ describe('Session Component', () => {
       expect(document.querySelector('.feedback.incorrect')).toBeInTheDocument();
     });
 
-    const storedMistakes = JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'));
-    expect(storedMistakes).toHaveLength(1);
-    expect(storedMistakes[0].sentenceId).toBe('s1');
-    expect(storedMistakes[0].count).toBe(1);
+    const storedSchedule = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'));
+    expect(storedSchedule['sentence:s1']).toBeDefined();
+    expect(storedSchedule['sentence:s1'].box).toBe(1);
+    expect(storedSchedule['sentence:s1'].lapses).toBe(1);
     expect(saveProgress).toHaveBeenCalledWith({
-      sentenceMistakes: expect.arrayContaining([
-        expect.objectContaining({ sentenceId: 's1', count: 1 })
-      ])
+      reviewSchedule: storedSchedule
+    });
+
+    const storedStats = JSON.parse(localStorage.getItem('finnishLearnerStudyStats'));
+    expect(Object.values(storedStats.days)[0]).toBe(1);
+    expect(saveProgress).toHaveBeenCalledWith({
+      studyStats: storedStats
     });
   });
 
-  it('starts review mode with recorded sentenceIds sorted by newest and removes perfected sentenceId', async () => {
+  it('starts review mode with due sentenceIds sorted by oldest dueAt and advances box on correct answer', async () => {
     localStorage.setItem(
-      'finnishLearnerSentenceMistakes',
-      JSON.stringify([
-        { sentenceId: 's1', count: 1, lastMistakeAt: '2026-05-01T10:00:00.000Z' },
-        { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
-      ])
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'sentence:s1': {
+          box: 1,
+          dueAt: '2020-05-02T10:00:00.000Z',
+          lastReviewedAt: '2020-05-02T10:00:00.000Z',
+          lapses: 1
+        },
+        'sentence:s2': {
+          box: 2,
+          dueAt: '2020-05-01T10:00:00.000Z',
+          lastReviewedAt: '2020-04-28T10:00:00.000Z',
+          lapses: 1
+        },
+        'sentence:s_future': {
+          box: 3,
+          dueAt: '2099-01-01T00:00:00.000Z',
+          lastReviewedAt: '2020-05-01T00:00:00.000Z',
+          lapses: 1
+        }
+      })
     );
     window.history.pushState({}, '', '/sessions?review=1');
 
@@ -1086,23 +1155,151 @@ describe('Session Component', () => {
       expect(screen.getByText('Continue')).toBeInTheDocument();
     });
 
-    const remainingMistakes = JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'));
-    expect(remainingMistakes).toEqual([
-      { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
-    ]);
+    const updatedSchedule = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'));
+    expect(updatedSchedule['sentence:s1'].box).toBe(2);
     expect(saveProgress).toHaveBeenCalledWith({
-      sentenceMistakes: remainingMistakes
+      reviewSchedule: updatedSchedule
     });
   });
 
-  it('shows empty review message when starting review mode with 0 mistakes', async () => {
+  it('moves a sentence up only one box when a review session asks about it twice', async () => {
+    localStorage.setItem(
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'sentence:s1': {
+          box: 1,
+          dueAt: '2020-05-02T10:00:00.000Z',
+          lastReviewedAt: '2020-05-02T10:00:00.000Z',
+          lapses: 1
+        }
+      })
+    );
+    window.history.pushState({}, '', '/sessions?review=1');
+    const choiceQuestion = {
+      sentenceId: 's1',
+      level: 1,
+      type: 'choice',
+      prompt: 'Dog',
+      correctAnswer: 'Koira',
+      options: ['Kissa', 'Koira']
+    };
+    renderComponent({ _id: 'review-twice', questions: [choiceQuestion, { ...choiceQuestion, level: 2 }] });
+
+    for (let i = 0; i < 2; i += 1) {
+      await waitFor(() => {
+        expect(screen.getByText('Koira')).toBeInTheDocument();
+      });
+      checkAnswer.mockResolvedValueOnce({
+        data: { success: true, data: { isCorrect: true, isPerfect: true, hasTypo: false, correctText: 'Koira' } }
+      });
+      fireEvent.click(screen.getByText('Koira'));
+      fireEvent.click(screen.getByText('Check Answer'));
+      await waitFor(() => {
+        expect(screen.getByText('Continue')).toBeInTheDocument();
+      });
+      if (i === 0) fireEvent.click(screen.getByText('Continue'));
+    }
+
+    const updatedSchedule = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'));
+    expect(updatedSchedule['sentence:s1'].box).toBe(2);
+  });
+
+  it('shows empty review message when starting review mode with 0 due sentences', async () => {
     window.history.pushState({}, '', '/sessions?review=1');
 
     renderComponent(mockSession);
 
     await waitFor(() => {
-      expect(screen.getByText('No sentences to review.')).toBeInTheDocument();
+      expect(screen.getByText('Nothing to review today.')).toBeInTheDocument();
     });
     expect(generateSession).not.toHaveBeenCalled();
+  });
+
+  it('auto-plays audio once per question in dictation mode without throwing on rejected autoplay and does not advance level progress', async () => {
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=1&exerciseType=dictation');
+    const dictationSession = {
+      sessionId: 'dict-1',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 3,
+          type: 'typing',
+          prompt: 'I speak Finnish.',
+          correctAnswer: 'Minä puhun suomea.',
+          isListening: true
+        },
+        {
+          sentenceId: 's2',
+          level: 3,
+          type: 'typing',
+          prompt: 'This is easy.',
+          correctAnswer: 'Tämä on helppoa.',
+          isListening: true
+        }
+      ]
+    };
+
+    playAudio.mockRejectedValueOnce(new Error('Autoplay blocked'));
+    renderComponent(dictationSession);
+
+    await waitFor(() => {
+      expect(screen.getByText('Type what you hear:')).toBeInTheDocument();
+    });
+
+    expect(playAudio).toHaveBeenCalledTimes(1);
+    expect(playAudio).toHaveBeenCalledWith(
+      'Minä puhun suomea.',
+      's1',
+      'fi-FI',
+      1.0,
+      expect.any(Object)
+    );
+
+    // Typing in the input should not re-trigger autoplay
+    const input = screen.getByPlaceholderText('Type in Finnish...');
+    fireEvent.change(input, { target: { value: 'Minä puhun suomea.' } });
+    expect(playAudio).toHaveBeenCalledTimes(1);
+
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: true, isPerfect: true, correctText: 'Minä puhun suomea.' } }
+    });
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+    expect(playAudio).toHaveBeenCalledTimes(1);
+
+    // Advancing to question 2 auto-plays question 2 once
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(playAudio).toHaveBeenCalledTimes(2);
+    });
+    expect(playAudio).toHaveBeenLastCalledWith(
+      'Tämä on helppoa.',
+      's2',
+      'fi-FI',
+      1.0,
+      expect.any(Object)
+    );
+
+    // Finish question 2 and verify level progress is unchanged
+    const input2 = screen.getByPlaceholderText('Type in Finnish...');
+    fireEvent.change(input2, { target: { value: 'Tämä on helppoa.' } });
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: true, isPerfect: true, correctText: 'Tämä on helppoa.' } }
+    });
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Session Complete!')).toBeInTheDocument();
+    });
+    expect(useProgressStore.getState().progress['l1']).toBeUndefined();
   });
 });

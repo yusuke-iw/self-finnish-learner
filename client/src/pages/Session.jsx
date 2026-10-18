@@ -5,12 +5,13 @@ import { getRandomSpeaker } from '../utils/speakers';
 import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../utils/feedbackSounds';
 import { replaceNumbersWithFinnishWords } from '../utils/numberToFinnish';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 import { useProgressStore } from '../store/useProgressStore';
 import { findLessonById, findLessonByTitle } from '../data/curriculumData';
 import { PASS_THRESHOLD, isSessionPassed } from '../utils/sessionResult';
 import { getSessionLength, setSessionLength } from '../utils/sessionPreferences';
-import { getSentenceMistakes, addSentenceMistake, removeSentenceMistake } from '../utils/sentenceMistakes';
+import { getDueKeys, recordReviewResult } from '../utils/reviewSchedule';
+import { recordAnswer } from '../utils/studyStats';
 import SpecialCharBar from '../components/SpecialCharBar';
 
 export default function Session() {
@@ -59,23 +60,17 @@ export default function Session() {
   // Set when generating a session fails; stops the auto-start from retrying in a loop.
   const [startError, setStartError] = useState(null);
 
-  const noReviewSentences = isReviewMode && !session && getSentenceMistakes().length === 0;
+  const noReviewSentences = isReviewMode && !session && getDueKeys('sentence').length === 0;
 
-  // Auto-start if review mode or category/level/exerciseType are provided
-  useEffect(() => {
-    if (startError) return;
-    if (isReviewMode && !session && !isStarting && !isFinished && !noReviewSentences) {
-      const mistakes = getSentenceMistakes();
-      const count = getSessionLength();
-      const sortedIds = [...mistakes]
-        .sort((a, b) => (Date.parse(b.lastMistakeAt) || 0) - (Date.parse(a.lastMistakeAt) || 0))
-        .slice(0, count)
-        .map(m => m.sentenceId);
-      startSession(count, resolvedCategory, levelParam, exerciseTypeParam, sortedIds);
-    } else if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
-      startSession(getSessionLength(), resolvedCategory, levelParam, exerciseTypeParam);
-    }
-  }, [isReviewMode, noReviewSentences, resolvedCategory, levelParam, exerciseTypeParam, session, isStarting, isFinished, startError]);
+  const resetInput = () => {
+    setFeedback(null);
+    setSelectedWords([]);
+    setInputValue('');
+    setSelectedMatchingTokens([]);
+    setMatchedPairIds([]);
+    setWrongMatch(false);
+    setIsChecking(false);
+  };
 
   const startSession = async (
     count = sentenceCount,
@@ -97,6 +92,7 @@ export default function Session() {
         setIsFinished(false);
         setUnlockedNext(false);
         setScore({ correct: 0, typo: 0, incorrect: 0 });
+        reviewedSentenceIdsRef.current = new Set();
         resetInput();
       }
     } catch (err) {
@@ -106,10 +102,30 @@ export default function Session() {
     setIsStarting(false);
   };
 
+  // Sentences whose review result was already recorded in this session
+  const reviewedSentenceIdsRef = useRef(new Set());
+
+  const startSessionRef = useRef(null);
+  useEffect(() => {
+    startSessionRef.current = startSession;
+  });
+
+  // Auto-start if review mode or category/level/exerciseType are provided
+  useEffect(() => {
+    if (startError) return;
+    if (isReviewMode && !session && !isStarting && !isFinished && !noReviewSentences) {
+      const count = getSessionLength();
+      const dueIds = getDueKeys('sentence').slice(0, count);
+      startSessionRef.current?.(count, resolvedCategory, levelParam, exerciseTypeParam, dueIds);
+    } else if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
+      startSessionRef.current?.(getSessionLength(), resolvedCategory, levelParam, exerciseTypeParam);
+    }
+  }, [isReviewMode, noReviewSentences, resolvedCategory, levelParam, exerciseTypeParam, session, isStarting, isFinished, startError]);
+
   // Runs when the last question is done, so "Try Again" after a pass keeps the unlock.
   // Returns true when this session unlocked the next level.
   const applyLevelProgress = (finalScore) => {
-    if (isReviewMode) {
+    if (isReviewMode || exerciseTypeParam === 'dictation' || exerciseTypeParam === 'spoken') {
       return false;
     }
     // Only increment progress if passed from module path
@@ -130,21 +146,37 @@ export default function Session() {
     navigate('/');
   };
 
-  const resetInput = () => {
-    setFeedback(null);
-    setSelectedWords([]);
-    setInputValue('');
-    setSelectedMatchingTokens([]);
-    setMatchedPairIds([]);
-    setWrongMatch(false);
-    setIsChecking(false);
-  };
-
-  useEffect(() => {
-    setCurrentSpeaker(getRandomSpeaker());
-  }, [currentIndex, session?._id]);
-
   const currentQuestion = session?.questions[currentIndex];
+
+  const autoPlayedKeyRef = useRef(null);
+  useEffect(() => {
+    if (!session) {
+      autoPlayedKeyRef.current = null;
+      return;
+    }
+    if (exerciseTypeParam !== 'dictation' || isFinished || !currentQuestion) {
+      return;
+    }
+    const questionKey = `${session.sessionId || session._id || 'session'}-${currentIndex}`;
+    if (autoPlayedKeyRef.current === questionKey) {
+      return;
+    }
+    autoPlayedKeyRef.current = questionKey;
+    try {
+      const p = playAudio(
+        currentQuestion.correctAnswer,
+        currentQuestion.sentenceId,
+        'fi-FI',
+        1.0,
+        currentSpeaker
+      );
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {});
+      }
+    } catch {
+      // ignore autoplay errors
+    }
+  }, [exerciseTypeParam, session, currentIndex, isFinished, currentQuestion, currentSpeaker]);
 
   const canCheckAnswer = () => {
     if (!currentQuestion || feedback || isChecking || currentQuestion.type === 'matching') {
@@ -156,11 +188,19 @@ export default function Session() {
     return Boolean(inputValue);
   };
 
-  const syncSentenceMistakes = async (sentenceMistakes) => {
+  const syncReviewSchedule = async (reviewSchedule) => {
     try {
-      await saveProgress({ sentenceMistakes });
+      await saveProgress({ reviewSchedule });
     } catch (err) {
-      console.warn('[INFO] Failed to save sentence mistakes to server:', err.message);
+      console.warn('[INFO] Failed to save review schedule to server:', err.message);
+    }
+  };
+
+  const syncStudyStats = async (studyStats) => {
+    try {
+      await saveProgress({ studyStats });
+    } catch (err) {
+      console.warn('[INFO] Failed to save study stats to server:', err.message);
     }
   };
 
@@ -197,6 +237,8 @@ export default function Session() {
             correctText: 'All pairs matched!'
           });
           setScore(s => ({ ...s, correct: s.correct + 1 }));
+          const updatedStats = recordAnswer();
+          syncStudyStats(updatedStats);
         }
       } else {
         // Wrong match
@@ -247,7 +289,7 @@ export default function Session() {
     if (!currentQuestion) return;
 
     let answer = '';
-    if (currentQuestion.type === 'choice') {
+    if (currentQuestion.type === 'choice' || currentQuestion.type === 'spoken-choice') {
       answer = inputValue;
     } else if (currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') {
       answer = selectedWords.map(idx => currentQuestion.wordBank[idx]).join(' ');
@@ -274,25 +316,33 @@ export default function Session() {
       if (res.data.success) {
         const result = res.data.data;
         setFeedback(result);
+        const updatedStats = recordAnswer();
+        syncStudyStats(updatedStats);
         const sid = currentQuestion.sentenceId ? String(currentQuestion.sentenceId) : '';
         const isMatchingWarmup = currentQuestion.type === 'matching' || sid.startsWith('matching-warmup-');
 
+        const isCorrect = Boolean(result.isPerfect || result.hasTypo);
         if (result.isPerfect) {
           setScore(s => ({ ...s, correct: s.correct + 1 }));
           playCorrectSound();
-          if (isReviewMode && sid && !isMatchingWarmup) {
-            const updated = removeSentenceMistake(sid);
-            syncSentenceMistakes(updated);
-          }
         } else if (result.hasTypo) {
           setScore(s => ({ ...s, typo: s.typo + 1 }));
           playCorrectSound();
         } else {
           setScore(s => ({ ...s, incorrect: s.incorrect + 1 }));
           playIncorrectSound();
-          if (sid && !isMatchingWarmup) {
-            const updated = addSentenceMistake(sid);
-            syncSentenceMistakes(updated);
+        }
+
+        if (sid && !isMatchingWarmup) {
+          // A session can ask up to three questions per sentence. Only the first answer
+          // in a review session moves the sentence up a box; a wrong answer always resets it.
+          const alreadyReviewed = reviewedSentenceIdsRef.current.has(sid);
+          if (!isCorrect || (isReviewMode && !alreadyReviewed)) {
+            reviewedSentenceIdsRef.current.add(sid);
+            const { status, schedule } = recordReviewResult(`sentence:${sid}`, isCorrect);
+            if (status !== 'unchanged') {
+              syncReviewSchedule(schedule);
+            }
           }
         }
       }
@@ -305,6 +355,7 @@ export default function Session() {
   const handleNext = () => {
     if (currentIndex < session.questions.length - 1) {
       setCurrentIndex(c => c + 1);
+      setCurrentSpeaker(getRandomSpeaker());
       resetInput();
     } else {
       setUnlockedNext(applyLevelProgress(score));
@@ -496,7 +547,9 @@ export default function Session() {
 
         <div className="question-prompt">
           <span className="instruction">
-            {currentQuestion.isListening
+            {currentQuestion.type === 'spoken-choice'
+              ? t('session.instructionSpoken')
+              : currentQuestion.isListening
               ? (currentQuestion.type === 'typing' ? t('session.instructionListenTyping') : t('session.instructionListenFill'))
               : currentQuestion.type === 'word-bank-reverse'
                 ? t('session.instructionReverse')
@@ -509,7 +562,25 @@ export default function Session() {
                       : t('session.instructionTranslate')}
           </span>
           <div className="prompt-text-container">
-            {currentQuestion.isListening ? (
+            {currentQuestion.type === 'spoken-choice' ? (
+              <>
+                <span>{currentQuestion.prompt}</span>
+                <button
+                  className="btn-audio prompt-audio"
+                  onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
+                  title={t('session.listenNormal')}
+                >
+                  🔊
+                </button>
+                <button
+                  className="btn-audio prompt-audio slow"
+                  onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId, 'fi-FI', 0.6, currentSpeaker)}
+                  title={t('session.listenSlow')}
+                >
+                  🐢
+                </button>
+              </>
+            ) : currentQuestion.isListening ? (
               <div className="listening-audio-controls">
                 <button
                   className="btn-audio prompt-audio"
@@ -545,7 +616,7 @@ export default function Session() {
           </div>
         </div>
 
-        {currentQuestion.type === 'choice' && (
+        {(currentQuestion.type === 'choice' || currentQuestion.type === 'spoken-choice') && (
           <div className="choice-options">
             {currentQuestion.options.map((opt, idx) => {
               let cls = 'choice-btn';
@@ -703,6 +774,23 @@ export default function Session() {
                   )}
                 </div>
               </div>
+              {currentQuestion.spokenText && (
+                <div className="spoken-variant">
+                  <div>
+                    <span>{t('session.spokenLabel')} {currentQuestion.spokenText}</span>
+                    <button
+                      className="btn-audio feedback-audio-btn"
+                      onClick={() => playAudio(currentQuestion.spokenText, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
+                      title={t('common.listen')}
+                    >
+                      🔊
+                    </button>
+                  </div>
+                  <p className="spoken-notes">{language === 'ja'
+                    ? (currentQuestion.spokenNotesJa || currentQuestion.spokenNotes)
+                    : currentQuestion.spokenNotes}</p>
+                </div>
+              )}
             </div>
           </div>
         )}

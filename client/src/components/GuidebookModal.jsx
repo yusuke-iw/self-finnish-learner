@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSentences } from "../services/api";
 import { playAudio } from '../utils/audio';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 
 export default function GuidebookModal({ unit, onClose }) {
   const { language, t } = useLanguage();
@@ -67,6 +67,14 @@ export default function GuidebookModal({ unit, onClose }) {
                         </div>
                         <span className="phrase-en">{sentenceTrans}</span>
                       </div>
+                      {sentence.spokenText && (
+                        <div className="spoken-variant">
+                          <span>{t('session.spokenLabel')} {sentence.spokenText}</span>
+                          <p className="spoken-notes">{language === 'ja'
+                            ? (sentence.spokenNotesJa || sentence.spokenNotes)
+                            : sentence.spokenNotes}</p>
+                        </div>
+                      )}
                       {sentenceNotes && (
                         <div className="grammar-explanation">
                           <strong>{t('guidebook.noteLabel')}</strong> {sentenceNotes}

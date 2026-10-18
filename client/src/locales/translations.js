@@ -3,6 +3,9 @@ export const translations = {
     // Navigation
     nav: {
       home: 'ホーム',
+      review: '復習',
+      words: '単語帳',
+      numbers: '数字',
       grammar: '文法・イディオム',
       drillStudio: '演習スタジオ',
       passages: '読解パッセージ',
@@ -31,6 +34,9 @@ export const translations = {
       guidebook: 'ガイドブック',
       practiceMatch: '🧩 単語マッチ特訓',
       practiceSpeaking: '🎙️ 発音・スピーキング特訓',
+      practiceDictation: '🎧 聞き取り練習',
+      practiceSpoken: '💬 話し言葉',
+      spokenBtn: '💬 口語',
       resetProgress: '学習履歴をリセット',
       resetConfirm: 'これまでの学習進捗をすべてリセットしてもよろしいですか？',
       mastered: '🏆 完全習得',
@@ -40,12 +46,20 @@ export const translations = {
       levelType: 'L3 (タイピング)',
       speakBtn: '🎙️ 発音',
       matchBtn: '🧩 ペア',
+      listenBtn: '🎧 聞き取り',
       syncIdLabel: '同期ID',
       syncIdSave: '保存',
       syncIdDesc: '同じIDを入れた端末どうしで進捗を共有します',
       syncIdError: '半角英数字・ハイフン・アンダースコア（1〜40文字）で入力してください',
       questionsPerSession: '1回の問題数:',
-      reviewMistakes: '間違えた例文を復習 ({count})'
+      reviewMistakes: '間違えた例文を復習 ({count})',
+      streakCount: '{count}日連続',
+      todayProgress: '今日 {count} / {goal} 問',
+      dailyGoalLabel: '目標:',
+      dailyGoalReached: '今日の目標達成！',
+      todayReviewCount: '今日の復習 {count}件',
+      noReviewToday: '今日の復習はありません',
+      startReviewBtn: '復習する'
     },
 
     // Guidebook Modal
@@ -206,6 +220,8 @@ export const translations = {
       instructionFill: '空欄に入る単語を入力してください:',
       instructionMatching: 'ペアになる単語をタップしてください:',
       instructionSpeaking: 'この文を声に出して読んでください:',
+      instructionSpoken: '話し言葉の文を聞いて（読んで）、書き言葉を選びましょう',
+      spokenLabel: '💬 話し言葉:',
       instructionTranslate: 'この文をフィンランド語に訳してください:',
       feedbackTypo: 'おしい！軽微なスペルミスがあります',
       feedbackCorrect: '正解！素晴らしい！',
@@ -216,9 +232,74 @@ export const translations = {
       passed: '合格！',
       failedThreshold: '合格ラインは{threshold}%です。もう一度挑戦しましょう',
       insertChar: '{char} を入力',
-      noReviewSentences: '復習する例文はありません',
+      noReviewSentences: '今日の復習はありません',
       startFailed: 'セッションを読み込めませんでした',
       retryStart: '再読み込み'
+    },
+
+    wordBook: {
+      title: '単語帳',
+      addToBook: '＋単語帳',
+      added: '✓ 追加済み',
+      manualSource: '手動追加',
+      reviewToday: '今日の単語を復習 ({count})',
+      practiceAll: '全部を練習',
+      search: '単語・意味を検索',
+      count: '{count}語',
+      empty: '読解の語彙リストで「＋単語帳」を押すか、下のフォームから単語を追加しましょう。',
+      noMatches: '一致する単語がありません。',
+      delete: '削除',
+      manualAdd: '単語を手動で追加',
+      word: 'フィンランド語',
+      translationJa: '意味（日本語）',
+      translation: '意味（英語、任意）',
+      note: 'メモ（任意）',
+      add: '追加する',
+      showAnswer: '答えを見る',
+      remembered: '覚えた',
+      again: 'まだ',
+      result: '覚えた {count} / {total}',
+      cardProgress: '{count} / {total}',
+      back: '一覧に戻る',
+      flipHint: 'Space キーでも答えを表示できます。',
+      answerHint: '覚えた: → / 1　まだ: ← / 2'
+    },
+
+    // Review Page
+    review: {
+      title: '今日の復習',
+      subtitle: '間隔反復（SRS）で忘れかけた頃に復習しましょう。',
+      sentencesTitle: '例文クイズ',
+      grammarTitle: '文法ドリル',
+      wordsTitle: '単語',
+      dueCount: '{count}件',
+      startBtn: '始める',
+      upcomingTitle: '明日以降の予定',
+      upcoming1d: '1日以内',
+      upcoming7d: '7日以内',
+      upcomingCount: '{count}件'
+    },
+
+    // Numbers Practice Page
+    numbers: {
+      title: '数字・値段・時刻の聞き取り練習',
+      modeNumber: '数字',
+      modePrice: '値段',
+      modeTimeOfficial: '時刻（公式・24時間）',
+      modeTimeEveryday: '時刻（日常・12時間）',
+      rangeLabel: '範囲:',
+      instruction: '聞こえた数字を入力してください:',
+      placeholderNumber: '例: 42',
+      placeholderPrice: '例: 12,50',
+      placeholderTimeOfficial: '例: 14:30',
+      placeholderTimeEveryday: '例: 3:15',
+      submitBtn: '回答',
+      nextBtn: '次へ',
+      retryBtn: 'もう一度',
+      correctAnswerLabel: '正解:',
+      finnishLabel: 'フィンランド語:',
+      completedTitle: '10問完了！',
+      scoreResult: '{total}問中 {score}問正解'
     }
   },
 
@@ -226,6 +307,9 @@ export const translations = {
     // Navigation
     nav: {
       home: 'Home',
+      review: 'Review',
+      words: 'Words',
+      numbers: 'Numbers',
       grammar: 'Grammar & Idioms',
       drillStudio: 'Drill Studio',
       passages: 'Passages',
@@ -254,6 +338,9 @@ export const translations = {
       guidebook: 'Guidebook',
       practiceMatch: '🧩 Practice Word Match',
       practiceSpeaking: '🎙️ Practice Speaking',
+      practiceDictation: '🎧 Dictation',
+      practiceSpoken: '💬 Spoken Finnish',
+      spokenBtn: '💬 Spoken',
       resetProgress: 'Reset Progress',
       resetConfirm: 'Are you sure you want to reset all your progress?',
       mastered: '🏆 Mastered',
@@ -263,12 +350,20 @@ export const translations = {
       levelType: 'L3 (Type)',
       speakBtn: '🎙️ Speak',
       matchBtn: '🧩 Match',
+      listenBtn: '🎧 Listen',
       syncIdLabel: 'Sync ID',
       syncIdSave: 'Save',
       syncIdDesc: 'Devices with the same ID share progress.',
       syncIdError: 'Use 1-40 characters: letters, numbers, hyphens, or underscores.',
       questionsPerSession: 'Questions per session:',
-      reviewMistakes: 'Review mistakes ({count})'
+      reviewMistakes: 'Review mistakes ({count})',
+      streakCount: '{count}-day streak',
+      todayProgress: 'Today {count} / {goal}',
+      dailyGoalLabel: 'Goal:',
+      dailyGoalReached: 'Daily goal reached!',
+      todayReviewCount: "Today's review: {count}",
+      noReviewToday: 'Nothing to review today.',
+      startReviewBtn: 'Review'
     },
 
     // Guidebook Modal
@@ -429,6 +524,8 @@ export const translations = {
       instructionFill: 'Type the missing word:',
       instructionMatching: 'Tap the matching pairs:',
       instructionSpeaking: 'Read this sentence out loud:',
+      instructionSpoken: 'Pick the standard written form of this spoken sentence',
+      spokenLabel: '💬 Spoken:',
       instructionTranslate: 'Translate this sentence:',
       feedbackTypo: 'Almost! Small typo detected',
       feedbackCorrect: 'Correct! Great job!',
@@ -439,9 +536,74 @@ export const translations = {
       passed: 'Passed!',
       failedThreshold: 'You need {threshold}% to pass. Try again!',
       insertChar: 'Insert {char}',
-      noReviewSentences: 'No sentences to review.',
+      noReviewSentences: 'Nothing to review today.',
       startFailed: 'Could not load the session',
       retryStart: 'Retry'
+    },
+
+    wordBook: {
+      title: 'Word Book',
+      addToBook: '+ Words',
+      added: '✓ Added',
+      manualSource: 'Manually added',
+      reviewToday: 'Review today’s words ({count})',
+      practiceAll: 'Practice all',
+      search: 'Search words and meanings',
+      count: '{count} words',
+      empty: 'Collect words from a passage’s vocabulary list using “+ Words”, or add your own below.',
+      noMatches: 'No matching words.',
+      delete: 'Delete',
+      manualAdd: 'Add a word manually',
+      word: 'Finnish',
+      translationJa: 'Meaning (Japanese)',
+      translation: 'Meaning (English, optional)',
+      note: 'Note (optional)',
+      add: 'Add word',
+      showAnswer: 'Show answer',
+      remembered: 'Remembered',
+      again: 'Not yet',
+      result: 'Remembered {count} / {total}',
+      cardProgress: '{count} / {total}',
+      back: 'Back to words',
+      flipHint: 'Press Space to show the answer.',
+      answerHint: 'Remembered: → / 1   Not yet: ← / 2'
+    },
+
+    // Review Page
+    review: {
+      title: "Today's Review",
+      subtitle: 'Practice due items scheduled by spaced repetition.',
+      sentencesTitle: 'Sentences',
+      grammarTitle: 'Grammar',
+      wordsTitle: 'Words',
+      dueCount: '{count} due',
+      startBtn: 'Start',
+      upcomingTitle: 'Upcoming Schedule',
+      upcoming1d: 'Within 1 day',
+      upcoming7d: 'Within 7 days',
+      upcomingCount: '{count} items'
+    },
+
+    // Numbers Practice Page
+    numbers: {
+      title: 'Numbers, Prices & Time Listening',
+      modeNumber: 'Numbers',
+      modePrice: 'Prices',
+      modeTimeOfficial: 'Time (24h Official)',
+      modeTimeEveryday: 'Time (12h Everyday)',
+      rangeLabel: 'Range:',
+      instruction: 'Type the number you hear:',
+      placeholderNumber: 'e.g. 42',
+      placeholderPrice: 'e.g. 12,50',
+      placeholderTimeOfficial: 'e.g. 14:30',
+      placeholderTimeEveryday: 'e.g. 3:15',
+      submitBtn: 'Check',
+      nextBtn: 'Next',
+      retryBtn: 'Try Again',
+      correctAnswerLabel: 'Answer:',
+      finnishLabel: 'Finnish:',
+      completedTitle: 'Set Complete!',
+      scoreResult: '{score} / {total} correct'
     }
   }
 };

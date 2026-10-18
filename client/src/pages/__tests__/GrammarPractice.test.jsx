@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import GrammarPractice from '../GrammarPractice';
 import { BrowserRouter, useNavigate, useSearchParams } from 'react-router-dom';
@@ -158,5 +158,98 @@ describe('GrammarPractice Component', () => {
     expect(screen.getByText('1. Select Category')).toBeInTheDocument();
     expect(screen.getByText('3. Exercise Format')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Start Drill Session/i })).toBeInTheDocument();
+  });
+
+  it('auto-starts review mode when opened with ?review=1 and due mistakes exist', () => {
+    const mockMistake = [{
+      id: 'vokaaliharmonia_q1',
+      question: '「talo」に「〜の中で」を付ける形は？',
+      answer: 'talossa',
+      type: 'choice',
+      options: ['talossa', 'talossä'],
+      explanation: 'taloは後母音語幹です。',
+      topicTitle: '母音調和'
+    }];
+    localStorage.setItem('finnish_grammar_mistakes', JSON.stringify(mockMistake));
+    localStorage.setItem(
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'grammar:vokaaliharmonia_q1': {
+          box: 1,
+          dueAt: '2020-01-01T00:00:00.000Z',
+          lastReviewedAt: '2020-01-01T00:00:00.000Z',
+          lapses: 1
+        }
+      })
+    );
+
+    mockSearchParams = new URLSearchParams('review=1');
+    useSearchParams.mockReturnValue([mockSearchParams]);
+
+    renderWithLang(<GrammarPractice />);
+
+    expect(screen.getByText('「talo」に「〜の中で」を付ける形は？')).toBeInTheDocument();
+  });
+
+  it('keeps question in mistakeBank when answered correctly in review mode before graduation, and removes it when graduated from box 5', () => {
+    const mockMistake = [{
+      id: 'vokaaliharmonia_q1',
+      question: '「talo」に「〜の中で」を付ける形は？',
+      answer: 'talossa',
+      type: 'choice',
+      options: ['talossa', 'talossä'],
+      explanation: 'taloは後母音語幹です。',
+      topicTitle: '母音調和'
+    }];
+    localStorage.setItem('finnish_grammar_mistakes', JSON.stringify(mockMistake));
+    localStorage.setItem(
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'grammar:vokaaliharmonia_q1': {
+          box: 1,
+          dueAt: '2020-01-01T00:00:00.000Z',
+          lastReviewedAt: '2020-01-01T00:00:00.000Z',
+          lapses: 1
+        }
+      })
+    );
+
+    mockSearchParams = new URLSearchParams('review=1');
+    useSearchParams.mockReturnValue([mockSearchParams]);
+
+    const { unmount } = renderWithLang(<GrammarPractice />);
+
+    fireEvent.click(screen.getByText('talossa'));
+    fireEvent.click(screen.getByRole('button', { name: /回答を確認する/i }));
+
+    // Box 1 -> Box 2: still in mistakeBank and scheduled in reviewSchedule
+    const bankAfterBox1 = JSON.parse(localStorage.getItem('finnish_grammar_mistakes') || '[]');
+    expect(bankAfterBox1).toHaveLength(1);
+    const scheduleAfterBox1 = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule') || '{}');
+    expect(scheduleAfterBox1['grammar:vokaaliharmonia_q1'].box).toBe(2);
+
+    unmount();
+
+    // Now set to box 5 and due, then answer correctly -> should graduate and be removed from mistakeBank
+    localStorage.setItem(
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'grammar:vokaaliharmonia_q1': {
+          box: 5,
+          dueAt: '2020-01-01T00:00:00.000Z',
+          lastReviewedAt: '2020-01-01T00:00:00.000Z',
+          lapses: 1
+        }
+      })
+    );
+
+    renderWithLang(<GrammarPractice />);
+    fireEvent.click(screen.getByText('talossa'));
+    fireEvent.click(screen.getByRole('button', { name: /回答を確認する/i }));
+
+    const bankAfterGrad = JSON.parse(localStorage.getItem('finnish_grammar_mistakes') || '[]');
+    expect(bankAfterGrad).toHaveLength(0);
+    const scheduleAfterGrad = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule') || '{}');
+    expect(scheduleAfterGrad['grammar:vokaaliharmonia_q1']).toBeUndefined();
   });
 });

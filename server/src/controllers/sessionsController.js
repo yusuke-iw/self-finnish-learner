@@ -178,11 +178,23 @@ exports.generateSession = async (req, res, next) => {
       }
     }
 
+    if (exerciseType === 'spoken') {
+      // Only sentences that change in speech make a real spoken-to-written question
+      availableSentences = availableSentences.filter(sentence => sentence.spokenText && sentence.spokenText !== sentence.text);
+    }
+
     if (availableSentences.length === 0) {
       return res.status(400).json({
         success: false,
         error: 'No sentences found'
       });
+    }
+
+    let extraDistractors = [];
+    if (exerciseType === 'spoken' && new Set(distractorPool.map(s => s.text)).size < 4) {
+      extraDistractors = mongoose.connection.readyState !== 1
+        ? sentences
+        : await Sentence.find({}).exec();
     }
 
     // Select random sentences up to sentenceCount
@@ -194,9 +206,34 @@ exports.generateSession = async (req, res, next) => {
 
     selectedSentences.forEach((sentence) => {
       const promptText = (lang === 'ja' && sentence.translationJa) ? sentence.translationJa : sentence.translation;
+      const spokenFields = sentence.spokenText ? {
+        spokenText: sentence.spokenText,
+        spokenNotes: sentence.spokenNotes,
+        spokenNotesJa: sentence.spokenNotesJa
+      } : {};
+
+      if (exerciseType === 'spoken') {
+        const wrongTexts = [...new Set(shuffle(distractorPool).map(s => s.text))]
+          .filter(text => text !== sentence.text).slice(0, 3);
+        for (const other of shuffle(extraDistractors)) {
+          if (wrongTexts.length === 3) break;
+          if (other.text !== sentence.text && !wrongTexts.includes(other.text)) wrongTexts.push(other.text);
+        }
+        level2Questions.push({
+          ...spokenFields,
+          sentenceId: sentence._id.toString(),
+          level: 2,
+          type: 'spoken-choice',
+          prompt: sentence.spokenText,
+          correctAnswer: sentence.text,
+          options: shuffle([sentence.text, ...wrongTexts])
+        });
+        return;
+      }
 
       if (exerciseType === 'speaking') {
         level3Questions.push({
+          ...spokenFields,
           sentenceId: sentence._id.toString(),
           level: 3,
           type: 'speaking',
@@ -204,6 +241,21 @@ exports.generateSession = async (req, res, next) => {
           promptJa: sentence.translationJa || sentence.translation,
           promptEn: sentence.translation,
           correctAnswer: sentence.text
+        });
+        return;
+      }
+
+      if (exerciseType === 'dictation') {
+        level3Questions.push({
+          ...spokenFields,
+          sentenceId: sentence._id.toString(),
+          level: 3,
+          type: 'typing',
+          prompt: promptText,
+          promptJa: sentence.translationJa || sentence.translation,
+          promptEn: sentence.translation,
+          correctAnswer: sentence.text,
+          isListening: true
         });
         return;
       }
@@ -241,6 +293,7 @@ exports.generateSession = async (req, res, next) => {
           }
 
           level1Questions.push({
+            ...spokenFields,
             sentenceId: 'matching-warmup-' + Math.random(),
             level: 1,
             type: 'matching',
@@ -256,6 +309,7 @@ exports.generateSession = async (req, res, next) => {
           const options = shuffle([sentence.text, ...wrongOptions]);
 
           level1Questions.push({
+            ...spokenFields,
             sentenceId: sentence._id.toString(),
             level: 1,
             type: 'choice',
@@ -293,6 +347,7 @@ exports.generateSession = async (req, res, next) => {
           const wordBank = shuffle([...cleanWords, ...distractors]);
 
           level2Questions.push({
+            ...spokenFields,
             sentenceId: sentence._id.toString(),
             level: 2,
             type: 'word-bank',
@@ -321,6 +376,7 @@ exports.generateSession = async (req, res, next) => {
           const wordBank = shuffle([...cleanWords, ...distractors]);
 
           level2Questions.push({
+            ...spokenFields,
             sentenceId: sentence._id.toString(),
             level: 2,
             type: 'word-bank-reverse',
@@ -351,6 +407,7 @@ exports.generateSession = async (req, res, next) => {
           const suffix = sentence.text.substring(matchIndex + missingWord.length);
 
           level3Questions.push({
+            ...spokenFields,
             sentenceId: sentence._id.toString(),
             level: 3,
             type: 'fill-in-the-blank',
@@ -366,6 +423,7 @@ exports.generateSession = async (req, res, next) => {
         } else if (rand > 0.33) {
           // 33% chance: Speaking Practice
           level3Questions.push({
+            ...spokenFields,
             sentenceId: sentence._id.toString(),
             level: 3,
             type: 'speaking',
@@ -377,6 +435,7 @@ exports.generateSession = async (req, res, next) => {
         } else {
           // 33% chance: Typing
           level3Questions.push({
+            ...spokenFields,
             sentenceId: sentence._id.toString(),
             level: 3,
             type: 'typing',
@@ -446,7 +505,10 @@ exports.checkAnswer = async (req, res, next) => {
       }
     }
 
-    const result = compareAnswers(userInput, targetText);
+    const isChoice = questionType === 'choice' || questionType === 'spoken-choice';
+    const result = isChoice
+      ? { isCorrect: userInput === targetText, isPerfect: userInput === targetText, hasTypo: false }
+      : compareAnswers(userInput, targetText);
 
     const isJa = lang === 'ja';
     const translationOut = (isJa && sentence.translationJa) ? sentence.translationJa : sentence.translation;

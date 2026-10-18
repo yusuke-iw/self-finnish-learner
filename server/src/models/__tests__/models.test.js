@@ -58,6 +58,9 @@ describe('Progress Model Validation', () => {
     const err = progress.validateSync();
     expect(err).toBeUndefined();
     expect(progress.userId).toBe('default_user');
+    expect(progress.reviewSchedule).toEqual({});
+    expect(progress.studyStats).toEqual({});
+    expect(progress.wordBook).toEqual([]);
   });
 
   test('should validate with custom data structure', () => {

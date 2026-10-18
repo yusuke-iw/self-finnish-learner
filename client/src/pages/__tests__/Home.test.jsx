@@ -4,6 +4,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Home from '../Home';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 
+vi.mock('../../services/api');
+
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
@@ -64,6 +66,19 @@ describe('Home Component', () => {
     const speakButtons = screen.getAllByText('🎙️ Speak');
     fireEvent.click(speakButtons[0]);
     expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l1&level=3&exerciseType=speaking');
+
+    const listenButtons = screen.getAllByText('🎧 Listen');
+    fireEvent.click(listenButtons[0]);
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l1&level=3&exerciseType=dictation');
+
+    const dictationPracticeBtn = screen.getByText('🎧 Dictation');
+    fireEvent.click(dictationPracticeBtn);
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?exerciseType=dictation');
+
+    fireEvent.click(screen.getByText('💬 Spoken Finnish'));
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?exerciseType=spoken');
+    fireEvent.click(screen.getAllByText('💬 Spoken')[0]);
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l1&level=2&exerciseType=spoken');
   });
 
   it('renders "Mastered" badge for completed levels using lesson.id', () => {
@@ -174,23 +189,52 @@ describe('Home Component', () => {
     expect(localStorage.getItem('finnishLearnerSessionLength')).toBe('3');
   });
 
-  it('disables Review mistakes button when count is 0 and enables/navigates when count > 0', () => {
+  it('renders study card with streak, today count, daily goal selector, and due review status', () => {
     const { unmount } = render(
       <BrowserRouter>
         <Home />
       </BrowserRouter>
     );
 
-    const zeroBtn = screen.getByRole('button', { name: 'Review mistakes (0)' });
+    expect(screen.getByText(/0-day streak/i)).toBeInTheDocument();
+    expect(screen.getByText(/Today 0 \/ 20/i)).toBeInTheDocument();
+    expect(screen.getByText('Nothing to review today.')).toBeInTheDocument();
+
+    const zeroBtn = screen.getByRole('button', { name: 'Review' });
     expect(zeroBtn).toBeDisabled();
+    expect(screen.queryByText(/Review mistakes/i)).not.toBeInTheDocument();
     unmount();
 
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const todayKey = `${year}-${month}-${day}`;
+
     localStorage.setItem(
-      'finnishLearnerSentenceMistakes',
-      JSON.stringify([
-        { sentenceId: 's1', count: 1, lastMistakeAt: '2026-05-01T10:00:00.000Z' },
-        { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
-      ])
+      'finnishLearnerStudyStats',
+      JSON.stringify({
+        days: { [todayKey]: 15 },
+        dailyGoal: 20
+      })
+    );
+    localStorage.setItem(
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'sentence:s1': {
+          box: 1,
+          dueAt: '2020-05-01T10:00:00.000Z',
+          lastReviewedAt: '2020-05-01T10:00:00.000Z',
+          lapses: 1
+        },
+        'word:kissa': { box: 1, dueAt: '2020-05-01T00:00:00Z', lapses: 0 },
+        'grammar:g1': {
+          box: 1,
+          dueAt: '2020-05-02T10:00:00.000Z',
+          lastReviewedAt: '2020-05-02T10:00:00.000Z',
+          lapses: 1
+        }
+      })
     );
 
     render(
@@ -199,9 +243,21 @@ describe('Home Component', () => {
       </BrowserRouter>
     );
 
-    const reviewBtn = screen.getByRole('button', { name: 'Review mistakes (2)' });
+    expect(screen.getByText(/1-day streak/i)).toBeInTheDocument();
+    expect(screen.getByText(/Today 15 \/ 20/i)).toBeInTheDocument();
+    expect(screen.getByText("Today's review: 3")).toBeInTheDocument();
+
+    // Change daily goal to 10 -> reaches goal (15 >= 10)
+    const goalSelect = screen.getByLabelText(/Goal:/i);
+    fireEvent.change(goalSelect, { target: { value: '10' } });
+    expect(goalSelect.value).toBe('10');
+    expect(screen.getByText(/Today 15 \/ 10/i)).toBeInTheDocument();
+    expect(screen.getByText('Daily goal reached!')).toBeInTheDocument();
+    expect(JSON.parse(localStorage.getItem('finnishLearnerStudyStats')).dailyGoal).toBe(10);
+
+    const reviewBtn = screen.getByRole('button', { name: 'Review' });
     expect(reviewBtn).not.toBeDisabled();
     fireEvent.click(reviewBtn);
-    expect(mockNavigate).toHaveBeenCalledWith('/sessions?review=1');
+    expect(mockNavigate).toHaveBeenCalledWith('/review');
   });
 });

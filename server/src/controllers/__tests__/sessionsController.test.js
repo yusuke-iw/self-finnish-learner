@@ -36,6 +36,88 @@ describe('Sessions Controller', () => {
   });
 
   describe('generateSession', () => {
+    const spokenSentence = {
+      ...mockSentences[0], spokenText: 'Mä puhun suomea.',
+      spokenNotes: 'minä → mä', spokenNotesJa: 'minä → mä（私）'
+    };
+
+    it.each([
+      ['speaking', null, 0.1, 'speaking'], ['dictation', null, 0.1, 'typing'],
+      ['matching', null, 0.1, 'matching'], ['word-bank', null, 0.1, 'word-bank'],
+      [undefined, 1, 0.1, 'choice'], [undefined, 1, 0.9, 'matching'],
+      [undefined, 2, 0.1, 'word-bank'], [undefined, 2, 0.9, 'word-bank-reverse'],
+      [undefined, 3, 0.1, 'typing'], [undefined, 3, 0.5, 'speaking'],
+      [undefined, 3, 0.9, 'fill-in-the-blank']
+    ])('includes spoken fields for exercise=%s level=%s random=%s type=%s', async (exerciseType, level, random, type) => {
+      mockReq.body = { exerciseType, level, lang: 'en' };
+      Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue([spokenSentence]) });
+      const randomSpy = jest.spyOn(Math, 'random').mockReturnValue(random);
+      try {
+        await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      } finally {
+        randomSpy.mockRestore();
+      }
+      const questions = mockRes.json.mock.calls[0][0].data.questions;
+      expect(questions).toHaveLength(1);
+      for (const question of questions) {
+        expect(question).toMatchObject({
+          type,
+          spokenText: spokenSentence.spokenText,
+          spokenNotes: spokenSentence.spokenNotes,
+          spokenNotesJa: spokenSentence.spokenNotesJa
+        });
+      }
+    });
+
+    it('generates only spoken sentences and supplements short database distractor pools', async () => {
+      mockReq.body = { exerciseType: 'spoken', category: 'basic', sentenceIds: ['s1'] };
+      const extras = [mockSentences[1], { _id: 's3', text: 'Kolmas.' }, { _id: 's4', text: 'Neljäs.' }];
+      Sentence.find.mockImplementation(query => ({ exec: jest.fn().mockResolvedValue(
+        query._id ? [spokenSentence] : query.category ? [spokenSentence, mockSentences[1]] : [spokenSentence, ...extras]
+      ) }));
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      const questions = mockRes.json.mock.calls[0][0].data.questions;
+      expect(questions).toHaveLength(1);
+      expect(questions[0]).toMatchObject({
+        type: 'spoken-choice', level: 2, sentenceId: 's1',
+        prompt: spokenSentence.spokenText, correctAnswer: spokenSentence.text
+      });
+      expect(new Set(questions[0].options)).toEqual(new Set([spokenSentence.text, ...extras.map(s => s.text)]));
+    });
+
+    it('uses only sentences whose spokenText differs from the written text', async () => {
+      mockReq.body = { exerciseType: 'spoken', sentenceCount: 5 };
+      const pool = [spokenSentence, ...mockSentences.slice(1),
+        { _id: 's3', text: 'Kolmas.', spokenText: 'Kolmas.' }, { _id: 's4', text: 'Neljäs.' }];
+      Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue(pool) });
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      const questions = mockRes.json.mock.calls[0][0].data.questions;
+      expect(questions.map(q => q.sentenceId)).toEqual(['s1']);
+      expect(questions.every(q => q.type === 'spoken-choice' && q.options.length === 4)).toBe(true);
+    });
+
+    it('returns 400 when no sentences have spokenText', async () => {
+      mockReq.body = { exerciseType: 'spoken' };
+      Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue(mockSentences) });
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({ success: false, error: 'No sentences found' });
+    });
+
+    it('uses memory fallback and respects sentenceIds for spoken practice', async () => {
+      mongoose.connection.readyState = 0;
+      mockReq.body = { exerciseType: 'spoken', category: 'Asiointi ja Matkustaminen', sentenceIds: ['m1_2'] };
+      try {
+        await sessionsController.generateSession(mockReq, mockRes, mockNext);
+        const questions = mockRes.json.mock.calls[0][0].data.questions;
+        expect(questions).toHaveLength(1);
+        expect(questions[0]).toMatchObject({ sentenceId: 'm1_2', type: 'spoken-choice' });
+        expect(questions[0].options).toHaveLength(4);
+      } finally {
+        mongoose.connection.readyState = 1;
+      }
+    });
+
     it('should return 400 if no sentences found', async () => {
       Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue([]) });
       await sessionsController.generateSession(mockReq, mockRes, mockNext);
@@ -79,6 +161,22 @@ describe('Sessions Controller', () => {
       
       const responseBody = mockRes.json.mock.calls[0][0];
       expect(responseBody.data.questions.every(q => q.type === 'speaking')).toBe(true);
+    });
+
+    it('should handle exerciseType dictation by generating one level 3 typing listening question per sentence', async () => {
+      mockReq.body.exerciseType = 'dictation';
+      Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue(mockSentences) });
+
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+
+      const responseBody = mockRes.json.mock.calls[0][0];
+      expect(responseBody.success).toBe(true);
+      expect(responseBody.data.questions).toHaveLength(mockSentences.length);
+      expect(
+        responseBody.data.questions.every(
+          q => q.level === 3 && q.type === 'typing' && q.isListening === true && Boolean(q.correctAnswer)
+        )
+      ).toBe(true);
     });
     
     it('should handle memory fallback', async () => {
@@ -149,6 +247,21 @@ describe('Sessions Controller', () => {
   });
 
   describe('checkAnswer', () => {
+    it.each(['choice', 'spoken-choice'])('checks %s with exact equality and no typo tolerance', async (questionType) => {
+      Sentence.findById.mockReturnValue({ exec: jest.fn().mockResolvedValue(mockSentences[0]) });
+      for (const userInput of [mockSentences[0].text, 'Minä puhun suome.', 'minä puhun suomea.', 'Mä puhun suomea.']) {
+        mockReq.body = { sentenceId: 's1', userInput, questionType };
+        await sessionsController.checkAnswer(mockReq, mockRes, mockNext);
+        const data = mockRes.json.mock.calls.at(-1)[0].data;
+        expect(data).toMatchObject({
+          isCorrect: userInput === mockSentences[0].text,
+          isPerfect: userInput === mockSentences[0].text,
+          hasTypo: false, correctText: mockSentences[0].text
+        });
+      }
+      expect(compareAnswers).not.toHaveBeenCalled();
+    });
+
     it('should return 400 if sentenceId is missing', async () => {
       await sessionsController.checkAnswer(mockReq, mockRes, mockNext);
       expect(mockRes.status).toHaveBeenCalledWith(400);

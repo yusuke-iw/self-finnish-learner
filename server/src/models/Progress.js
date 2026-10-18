@@ -31,6 +31,18 @@ const progressSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
+  wordBook: {
+    type: Array,
+    default: []
+  },
+  reviewSchedule: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
+  studyStats: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
   settings: {
     language: {
       type: String,

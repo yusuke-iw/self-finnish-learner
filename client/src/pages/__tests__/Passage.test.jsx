@@ -2,8 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Passage from '../Passage';
 import { fetchPassages, fetchPassageById } from '../../services/api';
-import { playAudio } from '../../utils/audio';
 import { playCorrectSound, playIncorrectSound } from '../../utils/feedbackSounds';
+import { getWords } from '../../utils/wordBook';
 
 import { vi, expect, describe, it, beforeEach } from 'vitest';
 
@@ -34,6 +34,17 @@ const mockPassageDetail = {
 };
 
 describe('Passage Component', () => {
+  it('adds vocabulary to the word book with its passage source and disables duplicate additions', async () => {
+    render(<Passage />);
+    fireEvent.click(await screen.findByText('Test Passage 1'));
+    fireEvent.click(await screen.findByRole('button', { name: '+ Words' }));
+    expect(screen.getByRole('button', { name: '✓ Added' })).toBeDisabled();
+    expect(getWords()[0]).toMatchObject({
+      id: 'testi', word: 'testi', translation: 'test',
+      source: { type: 'passage', passageId: 'p1', title: 'Test Passage 1' }
+    });
+  });
+
   beforeEach(() => {
     fetchPassages.mockResolvedValue({ data: { success: true, data: mockPassages } });
     fetchPassageById.mockResolvedValue({ data: { success: true, data: mockPassageDetail } });

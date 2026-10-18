@@ -19,6 +19,16 @@ const sentenceSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  spokenText: {
+    type: String,
+    trim: true
+  },
+  spokenNotes: {
+    type: String
+  },
+  spokenNotesJa: {
+    type: String
+  },
   difficulty: {
     type: String,
     enum: ['easy', 'medium', 'hard'],

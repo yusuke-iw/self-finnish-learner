@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { fetchPassages, fetchPassageById, fetchProgress, saveProgress } from '../services/api';
 import { playAudio } from '../utils/audio';
 import { playCorrectSound, playIncorrectSound } from '../utils/feedbackSounds';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
+import { addWord, getWords } from '../utils/wordBook';
 
 export default function Passage() {
   const { language, t } = useLanguage();
@@ -11,18 +12,19 @@ export default function Passage() {
   const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState({});
-  const [completedPassages, setCompletedPassages] = useState({});
+  const [bookWords, setBookWords] = useState(getWords);
+  const [completedPassages, setCompletedPassages] = useState(() =>
+    JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}')
+  );
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}');
-    setCompletedPassages(saved);
-
     // Sync with server on mount
     if (typeof fetchProgress === 'function') {
       const p = fetchProgress();
       if (p && typeof p.then === 'function') {
         p.then(res => {
           if (res?.data?.success && res.data.data?.passagesProgress) {
+            const saved = JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}');
             const merged = { ...res.data.data.passagesProgress, ...saved };
             localStorage.setItem('finnishLearnerPassagesProgress', JSON.stringify(merged));
             setCompletedPassages(merged);
@@ -31,13 +33,6 @@ export default function Passage() {
       }
     }
   }, []);
-
-  useEffect(() => {
-    if (selectedPassage) {
-      const savedAnswers = JSON.parse(localStorage.getItem(`finnishLearnerAnswers_${selectedPassage._id}`) || '{}');
-      setAnswers(savedAnswers);
-    }
-  }, [selectedPassage]);
 
   const handleAnswer = (qIndex, optionIndex, correctIndex) => {
     if (answers[qIndex] !== undefined) return;
@@ -69,7 +64,7 @@ export default function Passage() {
           try {
             const p = saveProgress({ passagesProgress: updatedProgress });
             if (p && typeof p.catch === 'function') p.catch(() => {});
-          } catch (e) {}
+          } catch {}
         }
       }
     } else {
@@ -158,6 +153,21 @@ export default function Passage() {
                         <span className="vocab-translation">
                           {language === 'ja' && v.translationJa ? v.translationJa : v.translation}
                         </span>
+                        <button
+                          type="button"
+                          className="btn-secondary wordbook-add-btn"
+                          disabled={bookWords.some(word => word.id === v.word.trim().toLowerCase())}
+                          onClick={() => {
+                            addWord({
+                              ...v,
+                              source: { type: 'passage', passageId: selectedPassage._id, title: selectedPassage.title }
+                            });
+                            setBookWords(getWords());
+                          }}
+                        >
+                          {bookWords.some(word => word.id === v.word.trim().toLowerCase())
+                            ? t('wordBook.added') : t('wordBook.addToBook')}
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -234,9 +244,11 @@ export default function Passage() {
             <div key={p._id} className="passage-card" onClick={() => {
               fetchPassageById(p._id).then(res => {
                 if (res.data.success) {
-                  setSelectedPassage(res.data.data);
+                  const passageData = res.data.data;
+                  const savedAnswers = JSON.parse(localStorage.getItem(`finnishLearnerAnswers_${passageData._id}`) || '{}');
+                  setSelectedPassage(passageData);
                   setShowTranslation(false);
-                  setAnswers({});
+                  setAnswers(savedAnswers);
                 }
               }).catch(err => {
                 console.error(err);
@@ -267,7 +279,7 @@ export default function Passage() {
                 try {
                   const p = saveProgress({ passagesProgress: {} });
                   if (p && typeof p.catch === 'function') p.catch(() => {});
-                } catch (e) {}
+                } catch {}
               }
             }
           }}

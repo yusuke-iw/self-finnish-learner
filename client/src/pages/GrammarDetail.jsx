@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { grammarTopics, GRAMMAR_CATEGORIES } from '../data/grammarData';
 import { playAudio } from '../utils/audio';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 import '../assets/App.css';
 
 function GrammarDetail() {

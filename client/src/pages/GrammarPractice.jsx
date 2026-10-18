@@ -8,28 +8,84 @@ import {
   getQuestionsByTopic
 } from '../data/grammarData';
 import { playAudio } from '../utils/audio';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 import { fetchProgress, saveProgress } from '../services/api';
+import { getReviewSchedule, getDueKeys, recordReviewResult } from '../utils/reviewSchedule';
+import { recordAnswer } from '../utils/studyStats';
 import '../assets/App.css';
 
 const LOCAL_STORAGE_MISTAKES_KEY = 'finnish_grammar_mistakes';
+
+function loadLocalMistakes() {
+  try {
+    const saved = localStorage.getItem(LOCAL_STORAGE_MISTAKES_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Failed to load mistakes from localStorage', e);
+  }
+  return [];
+}
+
+function getDueMistakes(bank) {
+  if (!Array.isArray(bank) || bank.length === 0) return [];
+  const schedule = getReviewSchedule();
+  const dueIdSet = new Set(getDueKeys('grammar'));
+  return bank.filter((m) => {
+    if (!m || !m.id) return false;
+    const key = `grammar:${m.id}`;
+    if (!schedule[key]) return true;
+    return dueIdSet.has(m.id);
+  });
+}
+
+function saveProgressSafe(payload) {
+  if (typeof saveProgress !== 'function') return;
+  try {
+    const p = saveProgress(payload);
+    if (p && typeof p.catch === 'function') {
+      p.catch((err) => {
+        console.warn('[INFO] Failed to save progress to server:', err?.message);
+      });
+    }
+  } catch (err) {
+    console.warn('[INFO] Failed to save progress to server:', err?.message);
+  }
+}
 
 function GrammarPractice() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const [searchParams] = useSearchParams();
   const initialTopic = searchParams.get('topic') || 'all';
+  const isReviewParam = searchParams.get('review') === '1';
+
+  const [mistakeBank, setMistakeBank] = useState(() => loadLocalMistakes());
+  const [initialDueQuestions] = useState(() => {
+    if (!isReviewParam) return [];
+    const duePool = getDueMistakes(loadLocalMistakes());
+    if (duePool.length === 0) return [];
+    return [...duePool].sort(() => Math.random() - 0.5).slice(0, 10);
+  });
 
   // Setup state
-  const [mode, setMode] = useState('setup'); // 'setup' | 'session' | 'summary'
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [mode, setMode] = useState(() => (initialDueQuestions.length > 0 ? 'session' : 'setup')); // 'setup' | 'session' | 'summary'
+  const [isReviewSession, setIsReviewSession] = useState(() => initialDueQuestions.length > 0);
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    if (initialDueQuestions.length > 0) return 'mistakes';
+    if (initialTopic !== 'all') {
+      const found = grammarTopics.find((topic) => topic.id === initialTopic);
+      if (found) return found.category;
+    }
+    return 'all';
+  });
   const [selectedTopic, setSelectedTopic] = useState(initialTopic);
   const [selectedType, setSelectedType] = useState('all'); // 'all' | 'choice' | 'wordbank' | 'typing'
   const [questionCount, setQuestionCount] = useState(5);
-  const [mistakeBank, setMistakeBank] = useState([]);
 
   // Session state
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState(() => initialDueQuestions);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -38,28 +94,18 @@ function GrammarPractice() {
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [sessionMistakes, setSessionMistakes] = useState([]);
-  const [startTime, setStartTime] = useState(null);
+  const [startTime, setStartTime] = useState(() => (initialDueQuestions.length > 0 ? Date.now() : null));
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  // Load saved mistakes on mount and sync with server
+  // Sync saved mistakes with server on mount
   useEffect(() => {
-    let localBank = [];
-    try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_MISTAKES_KEY);
-      if (saved) {
-        localBank = JSON.parse(saved);
-        setMistakeBank(localBank);
-      }
-    } catch (e) {
-      console.error('Failed to load mistakes from localStorage', e);
-    }
-
     if (typeof fetchProgress === 'function') {
       try {
         const p = fetchProgress();
         if (p && typeof p.then === 'function') {
           p.then(res => {
             if (res?.data?.success && Array.isArray(res.data.data?.mistakes)) {
+              const localBank = loadLocalMistakes();
               const serverMistakes = res.data.data.mistakes;
               const map = new Map();
               [...serverMistakes, ...localBank].forEach(m => {
@@ -71,28 +117,18 @@ function GrammarPractice() {
             }
           }).catch(() => {});
         }
-      } catch (e) {}
+      } catch {}
     }
   }, []);
-
-  // Sync initial topic param
-  useEffect(() => {
-    if (initialTopic !== 'all') {
-      const found = grammarTopics.find((t) => t.id === initialTopic);
-      if (found) {
-        setSelectedTopic(initialTopic);
-        setSelectedCategory(found.category);
-      }
-    }
-  }, [initialTopic]);
 
   // Start Practice Drill
   const handleStartDrill = (isReviewMode = false) => {
     let pool = [];
 
     if (isReviewMode) {
-      if (mistakeBank.length === 0) return;
-      pool = [...mistakeBank];
+      const duePool = getDueMistakes(mistakeBank);
+      if (duePool.length === 0) return;
+      pool = [...duePool];
     } else {
       if (selectedTopic !== 'all') {
         pool = getQuestionsByTopic(selectedTopic);
@@ -117,6 +153,7 @@ function GrammarPractice() {
     const targetCount = isReviewMode ? Math.min(shuffled.length, 10) : Math.min(shuffled.length, questionCount);
     const selectedList = shuffled.slice(0, targetCount);
 
+    setIsReviewSession(Boolean(isReviewMode));
     setQuestions(selectedList);
     setCurrentIndex(0);
     setCurrentAnswer('');
@@ -149,29 +186,38 @@ function GrammarPractice() {
     setIsCorrect(correct);
     setIsSubmitted(true);
 
+    const updatedStats = recordAnswer();
+    saveProgressSafe({ studyStats: updatedStats });
+
     if (correct) {
       setScore((prev) => prev + 1);
       const newStreak = streak + 1;
       setStreak(newStreak);
       if (newStreak > maxStreak) setMaxStreak(newStreak);
 
-      // If in review mode, remove from mistake bank if answered correctly
-      if (selectedCategory === 'mistakes' || mistakeBank.some((m) => m.id === currentQ.id)) {
-        const updatedBank = mistakeBank.filter((m) => m.id !== currentQ.id);
-        setMistakeBank(updatedBank);
-        try {
-          localStorage.setItem(LOCAL_STORAGE_MISTAKES_KEY, JSON.stringify(updatedBank));
-          if (typeof saveProgress === 'function') {
-            const p = saveProgress({ mistakes: updatedBank });
-            if (p && typeof p.catch === 'function') p.catch(() => {});
+      if (isReviewSession && currentQ?.id) {
+        const { status, schedule } = recordReviewResult(`grammar:${currentQ.id}`, true);
+        saveProgressSafe({ reviewSchedule: schedule });
+
+        if (status === 'graduated') {
+          const updatedBank = mistakeBank.filter((m) => m.id !== currentQ.id);
+          setMistakeBank(updatedBank);
+          try {
+            localStorage.setItem(LOCAL_STORAGE_MISTAKES_KEY, JSON.stringify(updatedBank));
+            saveProgressSafe({ mistakes: updatedBank });
+          } catch (e) {
+            console.error(e);
           }
-        } catch (e) {
-          console.error(e);
         }
       }
     } else {
       setStreak(0);
       setSessionMistakes((prev) => [...prev, currentQ]);
+
+      if (currentQ?.id) {
+        const { schedule } = recordReviewResult(`grammar:${currentQ.id}`, false);
+        saveProgressSafe({ reviewSchedule: schedule });
+      }
 
       // Add to mistake bank if not already present
       if (!mistakeBank.some((m) => m.id === currentQ.id)) {
@@ -185,10 +231,7 @@ function GrammarPractice() {
         setMistakeBank(newBank);
         try {
           localStorage.setItem(LOCAL_STORAGE_MISTAKES_KEY, JSON.stringify(newBank));
-          if (typeof saveProgress === 'function') {
-            const p = saveProgress({ mistakes: newBank });
-            if (p && typeof p.catch === 'function') p.catch(() => {});
-          }
+          saveProgressSafe({ mistakes: newBank });
         } catch (e) {
           console.error(e);
         }
@@ -222,6 +265,8 @@ function GrammarPractice() {
     }
   };
 
+  const dueMistakeCount = getDueMistakes(mistakeBank).length;
+
   return (
     <div className="grammar-practice-container">
       {/* ================= MODE: SETUP ================= */}
@@ -247,7 +292,7 @@ function GrammarPractice() {
               <span className="stat-icon">⚠️</span>
               <span>{t('drillStudio.weaknessTitle')} <strong>{mistakeBank.length}{language === 'en' ? ' Qs' : '問'}</strong></span>
             </div>
-            {mistakeBank.length > 0 && (
+            {dueMistakeCount > 0 && (
               <button
                 type="button"
                 className="review-mistakes-btn"
@@ -256,7 +301,7 @@ function GrammarPractice() {
                   handleStartDrill(true);
                 }}
               >
-                {t('drillStudio.weaknessBtn', { count: mistakeBank.length })}
+                {t('drillStudio.weaknessBtn', { count: dueMistakeCount })}
               </button>
             )}
           </div>

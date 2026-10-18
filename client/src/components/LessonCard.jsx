@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 
 export default function LessonCard({ lesson, unitColor, currentLevel, onLevelClick }) {
   const { language, t } = useLanguage();
@@ -59,6 +59,18 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
             onClick={() => onLevelClick(lesson.id, 1, 'matching')}
           >
             {t('home.matchBtn')}
+          </button>
+          <button 
+            className="level-btn level-btn-listen"
+            onClick={() => onLevelClick(lesson.id, 3, 'dictation')}
+          >
+            {t('home.listenBtn')}
+          </button>
+          <button
+            className="level-btn"
+            onClick={() => onLevelClick(lesson.id, 2, 'spoken')}
+          >
+            {t('home.spokenBtn')}
           </button>
         </div>
       </div>
