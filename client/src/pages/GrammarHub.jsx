@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GRAMMAR_CATEGORIES, grammarTopics } from '../data/grammarData';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 import '../assets/App.css';
 
 function GrammarHub() {

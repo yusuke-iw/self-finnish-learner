@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import {
-  GRAMMAR_CATEGORIES,
   grammarTopics,
   getAllPracticeQuestions,
   getQuestionsByCategory,

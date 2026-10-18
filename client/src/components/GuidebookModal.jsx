@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSentences } from "../services/api";
 import { playAudio } from '../utils/audio';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 
 export default function GuidebookModal({ unit, onClose }) {
   const { language, t } = useLanguage();

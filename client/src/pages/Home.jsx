@@ -4,7 +4,7 @@ import GuidebookModal from '../components/GuidebookModal';
 import LessonCard from '../components/LessonCard';
 import { units } from '../data/curriculumData';
 import { useProgressStore } from '../store/useProgressStore';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/useLanguage';
 import { getUserId, setUserId } from '../utils/userId';
 import { getSessionLength, setSessionLength, VALID_SESSION_LENGTHS } from '../utils/sessionPreferences';
 import { getSentenceMistakes } from '../utils/sentenceMistakes';

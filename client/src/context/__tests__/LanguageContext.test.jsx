@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { LanguageProvider, useLanguage } from '../LanguageContext';
+import { LanguageProvider } from '../LanguageContext';
+import { useLanguage } from '../useLanguage';
 
 function TestConsumer() {
   const { language, setLanguage, t, getTranslation } = useLanguage();
@@ -125,7 +126,7 @@ describe('LanguageContext', () => {
       );
     }
 
-    const { rerender } = render(
+    render(
       <LanguageProvider defaultLanguage="ja">
         <TranslationConsumer />
       </LanguageProvider>
