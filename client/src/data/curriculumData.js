@@ -47,6 +47,22 @@ export const units = [
     lessons: [
       { id: 'l7', title: 'Abstraktit keskustelut', titleJa: '抽象表現 (Abstraktit keskustelut)', description: 'Nuanced abstract topics, idioms', descriptionJa: 'ニュアンスに富んだ成句と抽象議論' }
     ]
+  },
+  {
+    id: 5,
+    title: 'Unit 5: Life in Finland',
+    titleJa: 'ユニット 5: フィンランドの暮らし',
+    description: 'Everyday errands and official matters',
+    descriptionJa: '買い物・病院・住まい・役所などの生活場面',
+    color: '#1cb0f6', // Blue
+    lessons: [
+      { id: 'l8', title: 'Kaupassa ja apteekissa', titleJa: '買い物・薬局 (Kaupassa & Apteekissa)', description: 'Shopping, prices, returns, and pharmacy visits', descriptionJa: 'スーパー、値段、返品、薬局での相談' },
+      { id: 'l9', title: 'Terveys ja lääkärissä', titleJa: '健康・病院 (Terveys & Lääkärissä)', description: 'Appointments, symptoms, and sick leave', descriptionJa: '診療予約、症状、診察、病欠の連絡' },
+      { id: 'l10', title: 'Asuminen', titleJa: '住まい (Asuminen)', description: 'Renting, maintenance, recycling, and sauna bookings', descriptionJa: '賃貸契約、家賃、故障の連絡、ゴミ分別、サウナの利用枠' },
+      { id: 'l11', title: 'Sää ja vuodenajat', titleJa: '天気・季節 (Sää & Vuodenajat)', description: 'Weather forecasts, temperatures, and seasonal celebrations', descriptionJa: '天気予報、気温、季節の行事' },
+      { id: 'l12', title: 'Virastoissa', titleJa: '役所・手続き (Virastoissa)', description: 'Kela, residence permits, taxes, address changes, and employment services', descriptionJa: 'Kela、在留許可、税金、住所変更、就労支援の手続き' },
+      { id: 'l13', title: 'Vapaa-aika ja harrastukset', titleJa: '余暇・趣味 (Vapaa-aika & Harrastukset)', description: 'Hobbies, sports, libraries, films, and invitations', descriptionJa: '趣味、スポーツ、図書館、映画、誘いと断り方' },
+    ]
   }
 ];
 
