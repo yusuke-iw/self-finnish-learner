@@ -104,10 +104,10 @@ export default function Passage() {
           </button>
           
           <div className="passage-header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="passage-header-title-row">
               <h2>{passageTitle}</h2>
               {completedPassages[selectedPassage._id] && (
-                <span className="status-badge" style={{ backgroundColor: '#ffd900', color: '#000', fontSize: '0.9rem', padding: '4px 8px' }}>
+                <span className="status-badge mastered passage-mastered-badge">
                   {t('passages.masteredBadge')}
                 </span>
               )}
@@ -115,11 +115,11 @@ export default function Passage() {
             <span className="category-tag">{selectedPassage.difficulty}</span>
           </div>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '64px', marginTop: '32px', alignItems: 'flex-start' }}>
-            <div className="passage-left-column" style={{ flex: '1 1 500px', maxHeight: 'calc(100vh - 200px)', overflowY: 'auto', paddingRight: '16px' }}>
+          <div className="passage-columns">
+            <div className="passage-left-column">
               <div className="passage-reading">
-                <div className="reading-header-audio" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                  <h3 style={{ margin: 0, fontSize: '24px' }}>{t('passages.readingHeader')}</h3>
+                <div className="reading-header-audio">
+                  <h3>{t('passages.readingHeader')}</h3>
                   <button 
                     className="btn-audio" 
                     onClick={() => playAudio(selectedPassage.text, selectedPassage._id)}
@@ -128,9 +128,9 @@ export default function Passage() {
                     🔊
                   </button>
                 </div>
-                <p className="passage-text" style={{ fontSize: '18px', lineHeight: '1.6' }}>{selectedPassage.text}</p>
+                <p className="passage-text">{selectedPassage.text}</p>
                 
-                <div className="passage-translation-toggle" style={{ marginTop: '24px' }}>
+                <div className="passage-translation-toggle">
                   <button 
                     className="toggle-btn"
                     onClick={() => setShowTranslation(!showTranslation)}
@@ -141,7 +141,7 @@ export default function Passage() {
                   </button>
                   
                   {showTranslation && (
-                    <div className="translation-text" style={{ fontSize: '16px', lineHeight: '1.6', marginTop: '16px', padding: '16px', backgroundColor: 'var(--bg-card)', borderRadius: '8px' }}>
+                    <div className="translation-text">
                       {language === 'ja' && selectedPassage.translationJa ? selectedPassage.translationJa : selectedPassage.translation}
                     </div>
                   )}
@@ -149,13 +149,13 @@ export default function Passage() {
               </div>
               
               {selectedPassage.vocabulary && selectedPassage.vocabulary.length > 0 && (
-                <div className="passage-vocabulary" style={{ marginTop: '48px' }}>
-                  <h3 style={{ marginBottom: '24px', fontSize: '24px' }}>{t('passages.vocabularyTitle')}</h3>
+                <div className="passage-vocabulary">
+                  <h3>{t('passages.vocabularyTitle')}</h3>
                   <div className="vocab-grid">
                     {selectedPassage.vocabulary.map((v, i) => (
-                      <div key={i} className="vocab-item" style={{ padding: '12px', background: 'var(--bg-card)', borderRadius: '8px', marginBottom: '8px' }}>
-                        <span className="vocab-word" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>{v.word}</span>
-                        <span className="vocab-translation" style={{ color: 'var(--text-secondary)' }}>
+                      <div key={i} className="vocab-item">
+                        <span className="vocab-word">{v.word}</span>
+                        <span className="vocab-translation">
                           {language === 'ja' && v.translationJa ? v.translationJa : v.translation}
                         </span>
                       </div>
@@ -165,10 +165,10 @@ export default function Passage() {
               )}
             </div>
 
-            <div className="passage-right-column" style={{ flex: '1 1 400px', maxHeight: 'calc(100vh - 200px)', overflowY: 'auto', padding: '24px', backgroundColor: 'var(--bg-card-hover)', borderRadius: '12px' }}>
+            <div className="passage-right-column">
               {selectedPassage.questions && selectedPassage.questions.length > 0 && (
                 <div className="passage-quiz">
-                  <h3 style={{ margin: 0, marginBottom: '24px', fontSize: '24px' }}>{t('passages.quizTitle')}</h3>
+                  <h3>{t('passages.quizTitle')}</h3>
                   <div className="quiz-questions">
                     {selectedPassage.questions.map((q, qIndex) => {
                       const answered = answers[qIndex] !== undefined;
@@ -177,9 +177,9 @@ export default function Passage() {
                       const qOptions = (language === 'ja' && q.optionsJa && q.optionsJa.length === q.options.length) ? q.optionsJa : q.options;
                       
                       return (
-                        <div key={qIndex} className="quiz-question" style={{ marginBottom: '24px', background: 'var(--bg-card)', padding: '16px', borderRadius: 'var(--radius-md)' }}>
-                          <p style={{ fontWeight: 'bold', marginBottom: '12px', fontSize: '1.1rem' }}>{qText}</p>
-                          <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div key={qIndex} className="quiz-question">
+                          <p className="quiz-question-text">{qText}</p>
+                          <div className="quiz-options">
                             {qOptions.map((opt, optIndex) => {
                               let btnClass = 'choice-btn';
                               
@@ -197,7 +197,6 @@ export default function Passage() {
                                   className={btnClass}
                                   disabled={answered}
                                   onClick={() => handleAnswer(qIndex, optIndex, q.correctAnswerIndex)}
-                                  style={{ textAlign: 'left', padding: '12px' }}
                                 >
                                   {opt}
                                 </button>
@@ -205,10 +204,10 @@ export default function Passage() {
                             })}
                           </div>
                           {answered && selectedOption === q.correctAnswerIndex && (
-                            <p style={{ color: 'var(--success)', marginTop: '8px', fontWeight: 'bold' }}>{t('common.correct')}</p>
+                            <p className="quiz-answer-feedback correct">{t('common.correct')}</p>
                           )}
                           {answered && selectedOption !== q.correctAnswerIndex && (
-                            <p style={{ color: 'var(--error)', marginTop: '8px', fontWeight: 'bold' }}>{t('common.incorrect')}</p>
+                            <p className="quiz-answer-feedback incorrect">{t('common.incorrect')}</p>
                           )}
                         </div>
                       );
@@ -244,7 +243,7 @@ export default function Passage() {
               });
             }}>
               <div className="passage-card-info">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="passage-card-title-row">
                   <h3>{itemTitle}</h3>
                   {completedPassages[p._id] && <span title="Mastered">✅</span>}
                 </div>
@@ -256,7 +255,7 @@ export default function Passage() {
         })}
       </div>
       
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px', marginBottom: '32px' }}>
+      <div className="passage-reset-actions">
         <button 
           className="btn-secondary reset-btn" 
           onClick={() => {

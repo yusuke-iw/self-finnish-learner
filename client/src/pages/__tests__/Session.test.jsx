@@ -14,7 +14,7 @@ vi.mock('../../services/api', () => ({
 vi.mock('../../utils/audio', () => ({
   playAudio: vi.fn()
 }));
-import { generateSession, checkAnswer } from '../../services/api';
+import { generateSession, checkAnswer, saveProgress } from '../../services/api';
 import { playAudio } from '../../utils/audio';
 
 describe('Session Component', () => {
@@ -348,20 +348,47 @@ describe('Session Component', () => {
   });
 
   it('handles generateSession error gracefully', async () => {
-    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     renderComponent();
     generateSession.mockRejectedValueOnce({ response: { data: { error: 'Failed' } } });
-    
+
     fireEvent.click(screen.getByText('Start Session'));
-    
+
     await waitFor(() => {
-      expect(alertSpy).toHaveBeenCalledWith('Failed');
+      expect(screen.getByRole('alert')).toHaveTextContent('Could not load the session (Failed)');
       expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
-    alertSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('does not retry auto-start in a loop when generating the session fails', async () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=1');
+
+    generateSession.mockReset();
+    generateSession.mockRejectedValue({ response: { data: { error: 'Failed' } } });
+    render(
+      <BrowserRouter>
+        <Session />
+      </BrowserRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Retry')).toBeInTheDocument();
+    });
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(generateSession).toHaveBeenCalledTimes(1);
+
+    generateSession.mockResolvedValue({ data: { success: true, data: mockSession } });
+    fireEvent.click(screen.getByText('Retry'));
+
+    await waitFor(() => {
+      expect(generateSession).toHaveBeenCalledTimes(2);
+      expect(screen.queryByText('Retry')).not.toBeInTheDocument();
+    });
+
     consoleErrorSpy.mockRestore();
   });
 
@@ -868,5 +895,214 @@ describe('Session Component', () => {
 
     fireEvent.click(screen.getByText('Back to Path'));
     expect(useProgressStore.getState().progress['l1']).toBe(3);
+  });
+
+  it('submits answer with Enter when check is enabled and advances to next question with Enter during feedback', async () => {
+    const twoQuestionSession = {
+      _id: 'session-enter',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 1,
+          type: 'choice',
+          prompt: 'Dog',
+          correctAnswer: 'Koira',
+          options: ['Kissa', 'Koira']
+        },
+        {
+          sentenceId: 's2',
+          level: 3,
+          type: 'typing',
+          prompt: 'Cat',
+          correctAnswer: 'Kissa'
+        }
+      ]
+    };
+
+    renderComponent(twoQuestionSession);
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Dog')).toBeInTheDocument();
+    });
+
+    // Pressing Enter before selecting an answer does nothing
+    fireEvent.keyDown(window, { key: 'Enter' });
+    expect(checkAnswer).not.toHaveBeenCalled();
+
+    // Select an answer and press Enter to check
+    fireEvent.click(screen.getByText('Koira'));
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: true, isPerfect: true, correctText: 'Koira' } }
+    });
+    fireEvent.keyDown(window, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(checkAnswer).toHaveBeenCalledTimes(1);
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    // Press Enter during feedback to advance to question 2
+    fireEvent.keyDown(window, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(screen.getByText('Cat')).toBeInTheDocument();
+    });
+  });
+
+  it('ignores Enter key during IME composition (isComposing or keyCode 229)', async () => {
+    const typingSession = {
+      _id: 'session-ime',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 3,
+          type: 'typing',
+          prompt: 'Cat',
+          correctAnswer: 'Kissa'
+        }
+      ]
+    };
+
+    renderComponent(typingSession);
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Type in Finnish...')).toBeInTheDocument();
+    });
+
+    const input = screen.getByPlaceholderText('Type in Finnish...');
+    fireEvent.change(input, { target: { value: 'Kissa' } });
+
+    fireEvent.keyDown(input, { key: 'Enter', isComposing: true });
+    fireEvent.keyDown(input, { key: 'Enter', keyCode: 229 });
+
+    expect(checkAnswer).not.toHaveBeenCalled();
+  });
+
+  it('renders SpecialCharBar for typing and fill-in-the-blank and hides it during feedback', async () => {
+    const typingSession = {
+      _id: 'session-charbar',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 3,
+          type: 'typing',
+          prompt: 'Weather',
+          correctAnswer: 'Sää'
+        }
+      ]
+    };
+
+    renderComponent(typingSession);
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Insert ä' })).toBeInTheDocument();
+    });
+
+    const input = screen.getByPlaceholderText('Type in Finnish...');
+    fireEvent.change(input, { target: { value: 'S' } });
+    input.setSelectionRange(1, 1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Insert ä' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Insert ä' }));
+    expect(input.value).toBe('Sää');
+
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: true, isPerfect: true, correctText: 'Sää' } }
+    });
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: 'Insert ä' })).not.toBeInTheDocument();
+    });
+  });
+
+  it('uses saved session length preference when auto-starting a session', async () => {
+    localStorage.setItem('finnishLearnerSessionLength', '10');
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=1');
+
+    renderComponent(mockSession);
+
+    await waitFor(() => {
+      expect(generateSession).toHaveBeenCalledWith(10, 'Asiointi ja Matkustaminen', 1, null, expect.any(String));
+    });
+  });
+
+  it('records sentence mistakes on incorrect answer and removes on perfect answer in review mode', async () => {
+    renderComponent(mockSession);
+    fireEvent.click(screen.getByText('Start Session'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Dog')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Kissa'));
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: false, isPerfect: false, hasTypo: false, correctText: 'Koira' } }
+    });
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(document.querySelector('.feedback.incorrect')).toBeInTheDocument();
+    });
+
+    const storedMistakes = JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'));
+    expect(storedMistakes).toHaveLength(1);
+    expect(storedMistakes[0].sentenceId).toBe('s1');
+    expect(storedMistakes[0].count).toBe(1);
+    expect(saveProgress).toHaveBeenCalledWith({
+      sentenceMistakes: expect.arrayContaining([
+        expect.objectContaining({ sentenceId: 's1', count: 1 })
+      ])
+    });
+  });
+
+  it('starts review mode with recorded sentenceIds sorted by newest and removes perfected sentenceId', async () => {
+    localStorage.setItem(
+      'finnishLearnerSentenceMistakes',
+      JSON.stringify([
+        { sentenceId: 's1', count: 1, lastMistakeAt: '2026-05-01T10:00:00.000Z' },
+        { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
+      ])
+    );
+    window.history.pushState({}, '', '/sessions?review=1');
+
+    renderComponent(mockSession);
+
+    await waitFor(() => {
+      expect(generateSession).toHaveBeenCalledWith(5, null, null, null, expect.any(String), ['s2', 's1']);
+      expect(screen.getByText('Koira')).toBeInTheDocument();
+    });
+
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: true, isPerfect: true, hasTypo: false, correctText: 'Koira' } }
+    });
+    fireEvent.click(screen.getByText('Koira'));
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+
+    const remainingMistakes = JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'));
+    expect(remainingMistakes).toEqual([
+      { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
+    ]);
+    expect(saveProgress).toHaveBeenCalledWith({
+      sentenceMistakes: remainingMistakes
+    });
+  });
+
+  it('shows empty review message when starting review mode with 0 mistakes', async () => {
+    window.history.pushState({}, '', '/sessions?review=1');
+
+    renderComponent(mockSession);
+
+    await waitFor(() => {
+      expect(screen.getByText('No sentences to review.')).toBeInTheDocument();
+    });
+    expect(generateSession).not.toHaveBeenCalled();
   });
 });

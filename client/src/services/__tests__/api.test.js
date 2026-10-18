@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
-import { fetchProgress, saveProgress } from '../api';
+import { fetchProgress, saveProgress, generateSession } from '../api';
 import { setUserId } from '../../utils/userId';
 
 vi.mock('axios', () => ({
@@ -45,6 +45,27 @@ describe('api service (progress)', () => {
     expect(axios.post).toHaveBeenCalledWith('/api/progress', {
       userId: 'explicit_user',
       learningPath: { l1: 3 }
+    });
+  });
+
+  it('generateSession sends optional sentenceIds when provided without breaking existing calls', () => {
+    generateSession(5, 'Ruoka ja Juoma', 1, null, 'ja');
+    expect(axios.post).toHaveBeenCalledWith('/api/sessions/generate', {
+      sentenceCount: 5,
+      category: 'Ruoka ja Juoma',
+      level: 1,
+      exerciseType: null,
+      lang: 'ja'
+    });
+
+    generateSession(5, null, null, null, 'en', ['s1', 's2']);
+    expect(axios.post).toHaveBeenCalledWith('/api/sessions/generate', {
+      sentenceCount: 5,
+      category: null,
+      level: null,
+      exerciseType: null,
+      lang: 'en',
+      sentenceIds: ['s1', 's2']
     });
   });
 });

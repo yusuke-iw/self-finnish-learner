@@ -143,21 +143,39 @@ exports.generateSession = async (req, res, next) => {
     const requestedLevel = req.body && req.body.level ? Number(req.body.level) : null;
     const exerciseType = req.body && req.body.exerciseType;
     const lang = (req.body && req.body.lang) || (req.query && req.query.lang) || 'ja';
+    const rawSentenceIds = req.body && req.body.sentenceIds;
+    const sentenceIds = Array.isArray(rawSentenceIds)
+      ? rawSentenceIds.filter(id => typeof id === 'string' && id.trim().length > 0)
+      : [];
 
     let availableSentences = [];
+    // Wrong options come from here. It ignores sentenceIds, so a review of a few
+    // sentences still gets enough distractors.
+    let distractorPool = [];
 
     // Fallback switch
     if (mongoose.connection.readyState !== 1) {
       availableSentences = sentences;
       if (category) {
-        availableSentences = sentences.filter(s => s.category === category);
+        availableSentences = availableSentences.filter(s => s.category === category);
+      }
+      distractorPool = availableSentences;
+      if (sentenceIds.length > 0) {
+        const idSet = new Set(sentenceIds);
+        availableSentences = availableSentences.filter(s => idSet.has(s._id.toString()));
       }
     } else {
       let query = {};
       if (category) {
         query.category = category;
       }
-      availableSentences = await Sentence.find(query).exec();
+      if (sentenceIds.length > 0) {
+        availableSentences = await Sentence.find({ ...query, _id: { $in: sentenceIds } }).exec();
+        distractorPool = await Sentence.find(query).exec();
+      } else {
+        availableSentences = await Sentence.find(query).exec();
+        distractorPool = availableSentences;
+      }
     }
 
     if (availableSentences.length === 0) {
@@ -231,7 +249,7 @@ exports.generateSession = async (req, res, next) => {
           });
         } else {
           // Choice Question
-          const wrongSentences = availableSentences.filter(s => s._id.toString() !== sentence._id.toString());
+          const wrongSentences = distractorPool.filter(s => s._id.toString() !== sentence._id.toString());
           const wrongOptions = shuffle(wrongSentences)
             .slice(0, 3)
             .map(s => s.text);
@@ -252,7 +270,7 @@ exports.generateSession = async (req, res, next) => {
 
       // Level 2: Word Bank Question
       if ((!exerciseType && (!requestedLevel || requestedLevel === 2)) || exerciseType === 'word-bank') {
-        const wrongSentences = availableSentences.filter(s => s._id.toString() !== sentence._id.toString());
+        const wrongSentences = distractorPool.filter(s => s._id.toString() !== sentence._id.toString());
         // For English users, allow reverse word bank. For Japanese users, standard Finnish word bank is most effective
         const isReverse = lang === 'en' ? Math.random() > 0.5 : false;
 

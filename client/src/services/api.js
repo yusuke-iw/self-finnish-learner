@@ -4,7 +4,15 @@ import { getUserId } from '../utils/userId';
 export const fetchSentences = () => axios.get('/api/sentences');
 export const fetchPassages = () => axios.get('/api/passages');
 export const fetchPassageById = (id) => axios.get(`/api/passages/${id}`);
-export const generateSession = (sentenceCount, category, level, exerciseType, lang) => axios.post('/api/sessions/generate', { sentenceCount, category, level, exerciseType, lang });
+export const generateSession = (sentenceCount, category, level, exerciseType, lang, sentenceIds) =>
+  axios.post('/api/sessions/generate', {
+    sentenceCount,
+    category,
+    level,
+    exerciseType,
+    lang,
+    ...(sentenceIds !== undefined ? { sentenceIds } : {})
+  });
 export const checkAnswer = (payload) => axios.post('/api/sessions/check', payload);
 export const fetchProgress = (userId = getUserId()) => axios.get(`/api/progress?userId=${encodeURIComponent(userId)}`);
 export const saveProgress = (payload = {}) => axios.post('/api/progress', { ...payload, userId: payload?.userId || getUserId() });

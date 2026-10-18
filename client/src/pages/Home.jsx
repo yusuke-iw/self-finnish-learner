@@ -6,6 +6,8 @@ import { units } from '../data/curriculumData';
 import { useProgressStore } from '../store/useProgressStore';
 import { useLanguage } from '../context/LanguageContext';
 import { getUserId, setUserId } from '../utils/userId';
+import { getSessionLength, setSessionLength, VALID_SESSION_LENGTHS } from '../utils/sessionPreferences';
+import { getSentenceMistakes } from '../utils/sentenceMistakes';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,11 +16,21 @@ export default function Home() {
   const [activeGuidebook, setActiveGuidebook] = useState(null);
   const [syncIdInput, setSyncIdInput] = useState(() => getUserId());
   const [syncIdError, setSyncIdError] = useState('');
+  const [sessionLength, setSessionLengthState] = useState(() => getSessionLength());
 
   useEffect(() => {
     loadProgress();
     syncWithServer();
   }, [loadProgress, syncWithServer]);
+
+  const mistakeCount = getSentenceMistakes().length;
+
+  const handleSessionLengthChange = (e) => {
+    const nextLength = Number(e.target.value);
+    if (setSessionLength(nextLength)) {
+      setSessionLengthState(nextLength);
+    }
+  };
 
   const handleResetProgress = () => {
     if (window.confirm(t('home.resetConfirm'))) {
@@ -44,6 +56,24 @@ export default function Home() {
 
   return (
     <div className="home-path-container">
+      <div className="session-length-bar">
+        <label htmlFor="home-session-length" className="session-length-label">
+          {t('home.questionsPerSession')}
+        </label>
+        <select
+          id="home-session-length"
+          className="session-length-select"
+          value={sessionLength}
+          onChange={handleSessionLengthChange}
+        >
+          {VALID_SESSION_LENGTHS.map((n) => (
+            <option key={n} value={n}>
+              {n}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {units.map((unit) => {
         const unitTitle = language === 'ja' && unit.titleJa ? unit.titleJa : unit.title;
         const unitDesc = language === 'ja' && unit.descriptionJa ? unit.descriptionJa : unit.description;
@@ -79,16 +109,22 @@ export default function Home() {
         );
       })}
 
-      <div className="progress-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
+      <div className="progress-actions">
         <button
-          className="btn-primary"
+          className="btn-primary practice-match-btn"
           onClick={() => navigate('/sessions?exerciseType=matching')}
-          style={{ backgroundColor: '#ce82ff', color: 'white' }}
         >
           {t('home.practiceMatch')}
         </button>
         <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=speaking')}>
           {t('home.practiceSpeaking')}
+        </button>
+        <button
+          className="btn-primary review-sentences-btn"
+          onClick={() => navigate('/sessions?review=1')}
+          disabled={mistakeCount === 0}
+        >
+          {t('home.reviewMistakes', { count: mistakeCount })}
         </button>
         <button className="btn-secondary reset-btn" onClick={handleResetProgress}>
           {t('home.resetProgress')}

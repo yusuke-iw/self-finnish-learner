@@ -15,7 +15,7 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
         <p className="lesson-desc">{description}</p>
         <div className="lesson-status">
           {isCompleted ? (
-            <span className="status-badge" style={{ backgroundColor: '#ffd900', color: '#000' }}>
+            <span className="status-badge mastered">
               {t('home.mastered')}
             </span>
           ) : (
@@ -26,8 +26,8 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
         </div>
       </div>
       
-      <div className="lesson-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+      <div className="lesson-actions">
+        <div className="lesson-actions-row">
           <button 
             className="level-btn"
             onClick={() => onLevelClick(lesson.id, 1)}
@@ -47,18 +47,16 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
             {t('home.levelType')}
           </button>
         </div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div className="lesson-actions-row">
           <button 
-            className="level-btn"
+            className="level-btn level-btn-speak"
             onClick={() => onLevelClick(lesson.id, 3, 'speaking')}
-            style={{ backgroundColor: 'var(--accent)', color: 'white', borderColor: 'var(--accent)' }}
           >
             {t('home.speakBtn')}
           </button>
           <button 
-            className="level-btn"
+            className="level-btn level-btn-match"
             onClick={() => onLevelClick(lesson.id, 1, 'matching')}
-            style={{ backgroundColor: '#ce82ff', color: 'white', borderColor: '#ce82ff' }}
           >
             {t('home.matchBtn')}
           </button>

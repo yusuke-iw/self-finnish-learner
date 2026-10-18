@@ -27,6 +27,10 @@ const progressSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
+  sentenceMistakes: {
+    type: Array,
+    default: []
+  },
   settings: {
     language: {
       type: String,

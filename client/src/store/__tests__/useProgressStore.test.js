@@ -105,5 +105,41 @@ describe('useProgressStore', () => {
     // Local progress remains intact and migrated to lessonId
     expect(useProgressStore.getState().progress['l1b']).toBe(2);
   });
+
+  it('merges server and local sentenceMistakes on syncWithServer and saves back to server', async () => {
+    localStorage.setItem(
+      'finnishLearnerSentenceMistakes',
+      JSON.stringify([
+        { sentenceId: 's1', count: 2, lastMistakeAt: '2026-05-01T10:00:00.000Z' },
+        { sentenceId: 's2', count: 1, lastMistakeAt: '2026-05-03T10:00:00.000Z' }
+      ])
+    );
+    api.fetchProgress.mockResolvedValue({
+      data: {
+        success: true,
+        data: {
+          learningPath: {},
+          sentenceMistakes: [
+            { sentenceId: 's1', count: 1, lastMistakeAt: '2026-05-02T10:00:00.000Z' },
+            { sentenceId: 's3', count: 4, lastMistakeAt: '2026-05-04T10:00:00.000Z' }
+          ]
+        }
+      }
+    });
+    api.saveProgress.mockResolvedValue({ data: { success: true } });
+
+    await useProgressStore.getState().syncWithServer();
+
+    const expectedMerged = [
+      { sentenceId: 's1', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' },
+      { sentenceId: 's3', count: 4, lastMistakeAt: '2026-05-04T10:00:00.000Z' },
+      { sentenceId: 's2', count: 1, lastMistakeAt: '2026-05-03T10:00:00.000Z' }
+    ];
+
+    expect(JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'))).toEqual(expectedMerged);
+    expect(api.saveProgress).toHaveBeenCalledWith(expect.objectContaining({
+      sentenceMistakes: expectedMerged
+    }));
+  });
 });
 
