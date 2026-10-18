@@ -1,9 +1,23 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import App from '../App';
 
+vi.mock('../services/api');
+
 describe('App Component', () => {
+  beforeEach(() => {
+    window.history.replaceState({}, '', '/');
+    localStorage.clear();
+  });
+
+  it('opens the word book from its navigation link', () => {
+    window.history.pushState({}, '', '/words');
+    render(<App />);
+    expect(screen.getByRole('link', { name: /Words|単語帳/ })).toHaveAttribute('href', '/words');
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
+  });
+
   it('renders without crashing and displays the navbar', () => {
     render(<App />);
     expect(screen.getByText('Finnish Learner')).toBeInTheDocument();

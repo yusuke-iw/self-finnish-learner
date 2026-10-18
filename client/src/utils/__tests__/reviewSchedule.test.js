@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   REVIEW_SCHEDULE_STORAGE_KEY,
   REVIEW_INTERVAL_DAYS,
+  ensureReviewEntry,
+  removeReviewEntry,
   getReviewSchedule,
   recordReviewResult,
   getDueKeys,
@@ -15,6 +17,21 @@ describe('reviewSchedule utility', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.restoreAllMocks();
+  });
+
+  it('adds word entries once, includes them in due and upcoming counts, and merges them', () => {
+    const now = new Date('2026-10-18T12:00:00Z');
+    const initial = ensureReviewEntry('word:kissa', now);
+    expect(initial['word:kissa'].lapses).toBe(0);
+    expect(ensureReviewEntry('word:kissa', new Date('2026-10-19T12:00:00Z'))).toEqual(initial);
+    expect(ensureReviewEntry('word: ', now)).toEqual(initial);
+    expect(getDueKeys('word', now)).toEqual(['kissa']);
+    expect(getDueCount(now)).toEqual({ total: 1, word: 1, sentence: 0, grammar: 0 });
+    const advanced = recordReviewResult('word:kissa', true, now).schedule;
+    expect(getDueKeys('word', now)).toEqual([]);
+    expect(getUpcomingCount(7, now)).toBe(1);
+    expect(mergeReviewSchedules({}, advanced)).toEqual(advanced);
+    expect(removeReviewEntry('word:kissa')).toEqual({});
   });
 
   it('exports expected interval constants', () => {
@@ -162,7 +179,7 @@ describe('reviewSchedule utility', () => {
 
       expect(getDueKeys('sentence', now)).toEqual(['s_older', 's_newer', 's_exact_now']);
       expect(getDueKeys('grammar', now)).toEqual(['g_due']);
-      expect(getDueCount(now)).toEqual({ total: 4, sentence: 3, grammar: 1 });
+      expect(getDueCount(now)).toEqual({ total: 4, sentence: 3, grammar: 1, word: 0 });
 
       expect(getUpcomingCount(1, now)).toBe(1); // s_future_1d
       expect(getUpcomingCount(7, now)).toBe(2); // s_future_1d + g_future_5d

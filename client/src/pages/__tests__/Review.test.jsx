@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 import Review from '../Review';
@@ -33,9 +33,22 @@ describe('Review Page', () => {
 
     expect(screen.getByText('今日の復習')).toBeInTheDocument();
     const startButtons = screen.getAllByRole('button', { name: '始める' });
-    expect(startButtons).toHaveLength(2);
+    expect(startButtons).toHaveLength(3);
     expect(startButtons[0]).toBeDisabled();
     expect(startButtons[1]).toBeDisabled();
+    expect(startButtons[2]).toBeDisabled();
+  });
+
+  it('shows due words and opens word review', () => {
+    localStorage.setItem('finnishLearnerReviewSchedule', JSON.stringify({
+      'word:kissa': { box: 1, dueAt: '2020-01-01T00:00:00Z', lapses: 0 }
+    }));
+    render(<LanguageProvider defaultLanguage="ja"><BrowserRouter><Review /></BrowserRouter></LanguageProvider>);
+    const card = screen.getByTestId('review-word-card');
+    expect(within(card).getByText('単語')).toBeInTheDocument();
+    expect(within(card).getByText('1件')).toBeInTheDocument();
+    fireEvent.click(within(card).getByRole('button', { name: '始める' }));
+    expect(mockNavigate).toHaveBeenCalledWith('/words?review=1');
   });
 
   it('displays due counts, upcoming counts, and navigates to sentence and grammar review', () => {

@@ -1,8 +1,13 @@
+const mongoose = require('mongoose');
 const ReadingPassage = require('../models/ReadingPassage');
 const { passages } = require('../config/seedData');
 
 exports.getPassages = async (req, res) => {
   try {
+    // Without a DB connection, Mongoose buffers the query for 10 s before failing, so skip it
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('Database not connected');
+    }
     const dbPassages = await ReadingPassage.find().select('title translation category difficulty').exec();
     if (Array.isArray(dbPassages) && dbPassages.length > 0) {
       return res.json({ success: true, data: dbPassages, source: 'database' });
@@ -19,6 +24,9 @@ exports.getPassages = async (req, res) => {
 
 exports.getPassageById = async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('Database not connected');
+    }
     const dbPassage = await ReadingPassage.findById(req.params.id).exec();
     if (dbPassage) {
       return res.json({ success: true, data: dbPassage, source: 'database' });

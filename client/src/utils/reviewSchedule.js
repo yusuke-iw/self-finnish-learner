@@ -21,8 +21,8 @@ function isValidKey(key) {
     const id = key.slice('sentence:'.length).trim();
     return id.length > 0 && !id.startsWith('matching-warmup-');
   }
-  if (key.startsWith('grammar:')) {
-    const id = key.slice('grammar:'.length).trim();
+  if (key.startsWith('grammar:') || key.startsWith('word:')) {
+    const id = key.slice(key.indexOf(':') + 1).trim();
     return id.length > 0;
   }
   return false;
@@ -77,6 +77,22 @@ export function saveReviewSchedule(schedule) {
     // ignore storage errors
   }
   return normalized;
+}
+
+export function ensureReviewEntry(key, now = new Date()) {
+  const schedule = getReviewSchedule();
+  if (isValidKey(key) && !schedule[key]) {
+    const nowIso = toDate(now).toISOString();
+    schedule[key] = { box: 1, dueAt: nowIso, lastReviewedAt: nowIso, lapses: 0 };
+    saveReviewSchedule(schedule);
+  }
+  return schedule;
+}
+
+export function removeReviewEntry(key) {
+  const schedule = getReviewSchedule();
+  delete schedule[key];
+  return saveReviewSchedule(schedule);
 }
 
 export function recordReviewResult(key, isCorrect, now = new Date()) {
@@ -134,7 +150,7 @@ export function recordReviewResult(key, isCorrect, now = new Date()) {
 }
 
 export function getDueKeys(kind, now = new Date()) {
-  if (kind !== 'sentence' && kind !== 'grammar') {
+  if (kind !== 'sentence' && kind !== 'grammar' && kind !== 'word') {
     return [];
   }
   const prefix = `${kind}:`;
@@ -159,10 +175,12 @@ export function getDueKeys(kind, now = new Date()) {
 export function getDueCount(now = new Date()) {
   const sentence = getDueKeys('sentence', now).length;
   const grammar = getDueKeys('grammar', now).length;
+  const word = getDueKeys('word', now).length;
   return {
-    total: sentence + grammar,
+    total: sentence + grammar + word,
     sentence,
-    grammar
+    grammar,
+    word
   };
 }
 

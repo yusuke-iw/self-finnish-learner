@@ -3,6 +3,7 @@ import { fetchPassages, fetchPassageById, fetchProgress, saveProgress } from '..
 import { playAudio } from '../utils/audio';
 import { playCorrectSound, playIncorrectSound } from '../utils/feedbackSounds';
 import { useLanguage } from '../context/useLanguage';
+import { addWord, getWords } from '../utils/wordBook';
 
 export default function Passage() {
   const { language, t } = useLanguage();
@@ -11,6 +12,7 @@ export default function Passage() {
   const [showTranslation, setShowTranslation] = useState(false);
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState({});
+  const [bookWords, setBookWords] = useState(getWords);
   const [completedPassages, setCompletedPassages] = useState(() =>
     JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}')
   );
@@ -151,6 +153,21 @@ export default function Passage() {
                         <span className="vocab-translation">
                           {language === 'ja' && v.translationJa ? v.translationJa : v.translation}
                         </span>
+                        <button
+                          type="button"
+                          className="btn-secondary wordbook-add-btn"
+                          disabled={bookWords.some(word => word.id === v.word.trim().toLowerCase())}
+                          onClick={() => {
+                            addWord({
+                              ...v,
+                              source: { type: 'passage', passageId: selectedPassage._id, title: selectedPassage.title }
+                            });
+                            setBookWords(getWords());
+                          }}
+                        >
+                          {bookWords.some(word => word.id === v.word.trim().toLowerCase())
+                            ? t('wordBook.added') : t('wordBook.addToBook')}
+                        </button>
                       </div>
                     ))}
                   </div>

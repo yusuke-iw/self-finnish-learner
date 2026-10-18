@@ -52,6 +52,20 @@ export default function Review() {
             {t('review.startBtn')}
           </button>
         </div>
+        <div className="review-category-card" data-testid="review-word-card">
+          <div className="review-category-info">
+            <h3 className="review-category-title">{t('review.wordsTitle')}</h3>
+            <span className="review-due-badge">{t('review.dueCount', { count: due.word })}</span>
+          </div>
+          <button
+            type="button"
+            className="btn-primary review-start-btn"
+            disabled={due.word === 0}
+            onClick={() => navigate('/words?review=1')}
+          >
+            {t('review.startBtn')}
+          </button>
+        </div>
       </div>
 
       <div className="review-upcoming-card">

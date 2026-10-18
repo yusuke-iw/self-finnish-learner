@@ -3,6 +3,13 @@ const ReadingPassage = require('../../models/ReadingPassage');
 const { passages: memoryPassages } = require('../../config/seedData');
 
 jest.mock('../../models/ReadingPassage');
+jest.mock('mongoose', () => {
+  const actual = jest.requireActual('mongoose');
+  return {
+    ...actual,
+    connection: { readyState: 1 }
+  };
+});
 
 describe('Passages Controller', () => {
   let mockReq;
@@ -118,6 +125,28 @@ describe('Passages Controller', () => {
         success: false,
         error: 'Reading passage not found'
       });
+    });
+  });
+
+  describe('without a database connection', () => {
+    const mongoose = require('mongoose');
+    afterEach(() => {
+      mongoose.connection.readyState = 1;
+    });
+
+    it('returns memory passages without querying the database', async () => {
+      mongoose.connection.readyState = 0;
+      await passagesController.getPassages(mockReq, mockRes);
+      expect(ReadingPassage.find).not.toHaveBeenCalled();
+      expect(mockRes.json.mock.calls[0][0].source).toBe('memory');
+    });
+
+    it('returns a memory passage by id without querying the database', async () => {
+      mongoose.connection.readyState = 0;
+      mockReq.params.id = memoryPassages[0]._id;
+      await passagesController.getPassageById(mockReq, mockRes);
+      expect(ReadingPassage.findById).not.toHaveBeenCalled();
+      expect(mockRes.json.mock.calls[0][0].data._id).toBe(memoryPassages[0]._id);
     });
   });
 });

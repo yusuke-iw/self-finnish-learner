@@ -142,6 +142,39 @@ describe('Progress Controller', () => {
   });
 
   describe('saveProgress', () => {
+    it('saves, reads, preserves omitted wordBook and accepts deletion in memory mode', async () => {
+      mongoose.connection.readyState = 0;
+      req.query = { userId: 'word_book_memory' };
+      await progressController.getProgress(req, res);
+      expect(res.json).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ wordBook: [] }) }));
+      const wordBook = [{ id: 'kissa', word: 'kissa', translationJa: '猫', source: { type: 'manual' }, addedAt: '2026-10-18T00:00:00Z' }];
+      req.body = { userId: 'word_book_memory', wordBook };
+      await progressController.saveProgress(req, res);
+      req.body = { userId: 'word_book_memory', studyStats: {} };
+      await progressController.saveProgress(req, res);
+      await progressController.getProgress(req, res);
+      expect(res.json).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ wordBook }) }));
+      req.body = { userId: 'word_book_memory', wordBook: [] };
+      await progressController.saveProgress(req, res);
+      await progressController.getProgress(req, res);
+      expect(res.json).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ wordBook: [] }) }));
+    });
+
+    it('passes wordBook through database writes and reads', async () => {
+      const wordBook = [{ id: 'kissa', word: 'kissa' }];
+      const record = { userId: 'word_book_db', wordBook };
+      req.body = record;
+      jest.spyOn(Progress, 'findOneAndUpdate').mockReturnValue({ lean: jest.fn().mockResolvedValue(record) });
+      await progressController.saveProgress(req, res);
+      expect(Progress.findOneAndUpdate).toHaveBeenCalledWith(
+        { userId: 'word_book_db' }, { $set: expect.objectContaining({ wordBook }) }, expect.any(Object)
+      );
+      jest.spyOn(Progress, 'findOne').mockReturnValue({ lean: jest.fn().mockResolvedValue(record) });
+      req.query = { userId: 'word_book_db' };
+      await progressController.getProgress(req, res);
+      expect(res.json).toHaveBeenLastCalledWith(expect.objectContaining({ data: expect.objectContaining({ wordBook }) }));
+    });
+
     it('should upsert and return updated progress in database mode', async () => {
       const payload = {
         userId: 'default_user',

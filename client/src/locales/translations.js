@@ -4,6 +4,7 @@ export const translations = {
     nav: {
       home: 'ホーム',
       review: '復習',
+      words: '単語帳',
       numbers: '数字',
       grammar: '文法・イディオム',
       drillStudio: '演習スタジオ',
@@ -232,12 +233,41 @@ export const translations = {
       retryStart: '再読み込み'
     },
 
+    wordBook: {
+      title: '単語帳',
+      addToBook: '＋単語帳',
+      added: '✓ 追加済み',
+      manualSource: '手動追加',
+      reviewToday: '今日の単語を復習 ({count})',
+      practiceAll: '全部を練習',
+      search: '単語・意味を検索',
+      count: '{count}語',
+      empty: '読解の語彙リストで「＋単語帳」を押すか、下のフォームから単語を追加しましょう。',
+      noMatches: '一致する単語がありません。',
+      delete: '削除',
+      manualAdd: '単語を手動で追加',
+      word: 'フィンランド語',
+      translationJa: '意味（日本語）',
+      translation: '意味（英語、任意）',
+      note: 'メモ（任意）',
+      add: '追加する',
+      showAnswer: '答えを見る',
+      remembered: '覚えた',
+      again: 'まだ',
+      result: '覚えた {count} / {total}',
+      cardProgress: '{count} / {total}',
+      back: '一覧に戻る',
+      flipHint: 'Space キーでも答えを表示できます。',
+      answerHint: '覚えた: → / 1　まだ: ← / 2'
+    },
+
     // Review Page
     review: {
       title: '今日の復習',
       subtitle: '間隔反復（SRS）で忘れかけた頃に復習しましょう。',
       sentencesTitle: '例文クイズ',
       grammarTitle: '文法ドリル',
+      wordsTitle: '単語',
       dueCount: '{count}件',
       startBtn: '始める',
       upcomingTitle: '明日以降の予定',
@@ -274,6 +304,7 @@ export const translations = {
     nav: {
       home: 'Home',
       review: 'Review',
+      words: 'Words',
       numbers: 'Numbers',
       grammar: 'Grammar & Idioms',
       drillStudio: 'Drill Studio',
@@ -502,12 +533,41 @@ export const translations = {
       retryStart: 'Retry'
     },
 
+    wordBook: {
+      title: 'Word Book',
+      addToBook: '+ Words',
+      added: '✓ Added',
+      manualSource: 'Manually added',
+      reviewToday: 'Review today’s words ({count})',
+      practiceAll: 'Practice all',
+      search: 'Search words and meanings',
+      count: '{count} words',
+      empty: 'Collect words from a passage’s vocabulary list using “+ Words”, or add your own below.',
+      noMatches: 'No matching words.',
+      delete: 'Delete',
+      manualAdd: 'Add a word manually',
+      word: 'Finnish',
+      translationJa: 'Meaning (Japanese)',
+      translation: 'Meaning (English, optional)',
+      note: 'Note (optional)',
+      add: 'Add word',
+      showAnswer: 'Show answer',
+      remembered: 'Remembered',
+      again: 'Not yet',
+      result: 'Remembered {count} / {total}',
+      cardProgress: '{count} / {total}',
+      back: 'Back to words',
+      flipHint: 'Press Space to show the answer.',
+      answerHint: 'Remembered: → / 1   Not yet: ← / 2'
+    },
+
     // Review Page
     review: {
       title: "Today's Review",
       subtitle: 'Practice due items scheduled by spaced repetition.',
       sentencesTitle: 'Sentences',
       grammarTitle: 'Grammar',
+      wordsTitle: 'Words',
       dueCount: '{count} due',
       startBtn: 'Start',
       upcomingTitle: 'Upcoming Schedule',
