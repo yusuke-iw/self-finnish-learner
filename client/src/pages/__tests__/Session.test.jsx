@@ -1165,4 +1165,92 @@ describe('Session Component', () => {
     });
     expect(generateSession).not.toHaveBeenCalled();
   });
+
+  it('auto-plays audio once per question in dictation mode without throwing on rejected autoplay and does not advance level progress', async () => {
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=1&exerciseType=dictation');
+    const dictationSession = {
+      sessionId: 'dict-1',
+      questions: [
+        {
+          sentenceId: 's1',
+          level: 3,
+          type: 'typing',
+          prompt: 'I speak Finnish.',
+          correctAnswer: 'Minä puhun suomea.',
+          isListening: true
+        },
+        {
+          sentenceId: 's2',
+          level: 3,
+          type: 'typing',
+          prompt: 'This is easy.',
+          correctAnswer: 'Tämä on helppoa.',
+          isListening: true
+        }
+      ]
+    };
+
+    playAudio.mockRejectedValueOnce(new Error('Autoplay blocked'));
+    renderComponent(dictationSession);
+
+    await waitFor(() => {
+      expect(screen.getByText('Type what you hear:')).toBeInTheDocument();
+    });
+
+    expect(playAudio).toHaveBeenCalledTimes(1);
+    expect(playAudio).toHaveBeenCalledWith(
+      'Minä puhun suomea.',
+      's1',
+      'fi-FI',
+      1.0,
+      expect.any(Object)
+    );
+
+    // Typing in the input should not re-trigger autoplay
+    const input = screen.getByPlaceholderText('Type in Finnish...');
+    fireEvent.change(input, { target: { value: 'Minä puhun suomea.' } });
+    expect(playAudio).toHaveBeenCalledTimes(1);
+
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: true, isPerfect: true, correctText: 'Minä puhun suomea.' } }
+    });
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+    expect(playAudio).toHaveBeenCalledTimes(1);
+
+    // Advancing to question 2 auto-plays question 2 once
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(playAudio).toHaveBeenCalledTimes(2);
+    });
+    expect(playAudio).toHaveBeenLastCalledWith(
+      'Tämä on helppoa.',
+      's2',
+      'fi-FI',
+      1.0,
+      expect.any(Object)
+    );
+
+    // Finish question 2 and verify level progress is unchanged
+    const input2 = screen.getByPlaceholderText('Type in Finnish...');
+    fireEvent.change(input2, { target: { value: 'Tämä on helppoa.' } });
+    checkAnswer.mockResolvedValueOnce({
+      data: { success: true, data: { isCorrect: true, isPerfect: true, correctText: 'Tämä on helppoa.' } }
+    });
+    fireEvent.click(screen.getByText('Check Answer'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Continue')).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByText('Continue'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Session Complete!')).toBeInTheDocument();
+    });
+    expect(useProgressStore.getState().progress['l1']).toBeUndefined();
+  });
 });

@@ -36,5 +36,12 @@ describe('App Component', () => {
     expect(screen.getByRole('link', { name: /Review|復習/i })).toBeInTheDocument();
     expect(screen.getByText(/Today's Review|今日の復習/i)).toBeInTheDocument();
   });
+
+  it('renders Numbers practice page when navigating to /numbers', () => {
+    window.history.pushState({}, 'Numbers page', '/numbers');
+    render(<App />);
+    expect(screen.getByRole('link', { name: /^Numbers$|^数字$/i })).toBeInTheDocument();
+    expect(screen.getByText(/Numbers, Prices & Time Listening|数字・値段・時刻の聞き取り練習/i)).toBeInTheDocument();
+  });
 });
 

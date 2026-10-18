@@ -60,6 +60,12 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
           >
             {t('home.matchBtn')}
           </button>
+          <button 
+            className="level-btn level-btn-listen"
+            onClick={() => onLevelClick(lesson.id, 3, 'dictation')}
+          >
+            {t('home.listenBtn')}
+          </button>
         </div>
       </div>
     </div>

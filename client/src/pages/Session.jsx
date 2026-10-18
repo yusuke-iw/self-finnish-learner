@@ -125,7 +125,7 @@ export default function Session() {
   // Runs when the last question is done, so "Try Again" after a pass keeps the unlock.
   // Returns true when this session unlocked the next level.
   const applyLevelProgress = (finalScore) => {
-    if (isReviewMode) {
+    if (isReviewMode || exerciseTypeParam === 'dictation') {
       return false;
     }
     // Only increment progress if passed from module path
@@ -147,6 +147,36 @@ export default function Session() {
   };
 
   const currentQuestion = session?.questions[currentIndex];
+
+  const autoPlayedKeyRef = useRef(null);
+  useEffect(() => {
+    if (!session) {
+      autoPlayedKeyRef.current = null;
+      return;
+    }
+    if (exerciseTypeParam !== 'dictation' || isFinished || !currentQuestion) {
+      return;
+    }
+    const questionKey = `${session.sessionId || session._id || 'session'}-${currentIndex}`;
+    if (autoPlayedKeyRef.current === questionKey) {
+      return;
+    }
+    autoPlayedKeyRef.current = questionKey;
+    try {
+      const p = playAudio(
+        currentQuestion.correctAnswer,
+        currentQuestion.sentenceId,
+        'fi-FI',
+        1.0,
+        currentSpeaker
+      );
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {});
+      }
+    } catch {
+      // ignore autoplay errors
+    }
+  }, [exerciseTypeParam, session, currentIndex, isFinished, currentQuestion, currentSpeaker]);
 
   const canCheckAnswer = () => {
     if (!currentQuestion || feedback || isChecking || currentQuestion.type === 'matching') {

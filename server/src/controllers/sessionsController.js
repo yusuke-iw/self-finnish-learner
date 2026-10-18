@@ -208,6 +208,20 @@ exports.generateSession = async (req, res, next) => {
         return;
       }
 
+      if (exerciseType === 'dictation') {
+        level3Questions.push({
+          sentenceId: sentence._id.toString(),
+          level: 3,
+          type: 'typing',
+          prompt: promptText,
+          promptJa: sentence.translationJa || sentence.translation,
+          promptEn: sentence.translation,
+          correctAnswer: sentence.text,
+          isListening: true
+        });
+        return;
+      }
+
       // Level 1: Choice Question or Matching Pairs
       if ((!exerciseType && (!requestedLevel || requestedLevel === 1)) || exerciseType === 'matching') {
         const isMatching = exerciseType === 'matching' ? true : Math.random() > 0.5;
