@@ -209,6 +209,9 @@ export default function Home() {
         <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=dictation')}>
           {t('home.practiceDictation')}
         </button>
+        <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=spoken')}>
+          {t('home.practiceSpoken')}
+        </button>
         <button className="btn-secondary reset-btn" onClick={handleResetProgress}>
           {t('home.resetProgress')}
         </button>

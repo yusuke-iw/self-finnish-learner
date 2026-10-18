@@ -29,6 +29,35 @@ const lifeLessons = [
 ];
 
 describe('Curriculum seed sentences', () => {
+  const excludedSpokenLessons = ['Yhteiskunta ja Ympäristö', 'Lauseenvastikkeet', 'Abstraktit keskustelut'];
+
+  test.each(lessonTitles.filter(title => !excludedSpokenLessons.includes(title)))('%s has spoken text and bilingual notes on every sentence', (title) => {
+    for (const sentence of sentences.filter(s => s.category === title)) {
+      for (const field of ['spokenText', 'spokenNotes', 'spokenNotesJa']) {
+        expect(typeof sentence[field]).toBe('string');
+        expect(sentence[field].trim()).not.toBe('');
+      }
+      if (sentence.spokenText === sentence.text) {
+        expect(sentence.spokenNotes).toBe('Same in speech');
+        expect(sentence.spokenNotesJa).toBe('会話でもこのまま使う');
+      }
+    }
+  });
+
+  test.each(excludedSpokenLessons)('%s remains without spoken annotations', (title) => {
+    expect(sentences.filter(s => s.category === title).every(s => s.spokenText === undefined)).toBe(true);
+  });
+
+  test('Sentence schema preserves optional spoken fields and trims spokenText', () => {
+    const Sentence = require('../Sentence');
+    const sentence = new Sentence({ text: 'Minä olen täällä.', translation: 'I am here.',
+      spokenText: '  Mä oon täällä.  ', spokenNotes: 'minä → mä', spokenNotesJa: 'minä → mä（私）' });
+    expect(sentence.spokenText).toBe('Mä oon täällä.');
+    expect(sentence.spokenNotes).toBe('minä → mä');
+    expect(sentence.spokenNotesJa).toBe('minä → mä（私）');
+    expect(new Sentence({ text: 'Hei.', translation: 'Hi.' }).validateSync()).toBeUndefined();
+  });
+
   test.each(lessonTitles)('%s has exactly 18 sentences', (title) => {
     expect(sentences.filter((sentence) => sentence.category === title)).toHaveLength(18);
   });

@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Session from '../Session';
 import { BrowserRouter } from 'react-router-dom';
 import { useProgressStore } from '../../store/useProgressStore';
+import { LanguageProvider } from '../../context/LanguageContext';
 
 vi.mock('../../services/api', () => ({
   generateSession: vi.fn(),
@@ -68,6 +69,54 @@ describe('Session Component', () => {
       </BrowserRouter>
     );
   };
+
+  it.each(['en', 'ja'])('shows localized spoken feedback and plays spoken audio in %s', async (language) => {
+    const question = { ...mockSession.questions[0], spokenText: 'Mä oon täällä.',
+      spokenNotes: 'minä → mä, olen → oon', spokenNotesJa: 'minä → mä（私）, olen → oon（〜です）' };
+    generateSession.mockResolvedValue({ data: { success: true, data: { questions: [question] } } });
+    render(<LanguageProvider defaultLanguage={language}><BrowserRouter><Session /></BrowserRouter></LanguageProvider>);
+    fireEvent.click(screen.getByText(language === 'ja' ? 'セッション開始' : 'Start Session'));
+    fireEvent.click(await screen.findByText('Koira'));
+    expect(screen.queryByText(/💬/)).not.toBeInTheDocument();
+    checkAnswer.mockResolvedValue({ data: { success: true,
+      data: { isCorrect: true, isPerfect: true, correctText: 'Koira' } } });
+    fireEvent.click(screen.getByText(language === 'ja' ? '回答を確認する' : 'Check Answer'));
+    const spoken = await screen.findByText(`${language === 'ja' ? '💬 話し言葉:' : '💬 Spoken:'} ${question.spokenText}`);
+    expect(screen.getByText(language === 'ja' ? question.spokenNotesJa : question.spokenNotes)).toBeInTheDocument();
+    fireEvent.click(spoken.parentElement.querySelector('button'));
+    expect(playAudio).toHaveBeenLastCalledWith(question.spokenText, expect.any(String), 'fi-FI', 1, expect.anything());
+  });
+
+  it.each([true, false])('handles spoken-choice feedback, records answers and preserves level progress (correct=%s)', async (isCorrect) => {
+    window.history.pushState({}, '', '/sessions?lessonId=l1&level=2&exerciseType=spoken');
+    useProgressStore.setState({ progress: { l1: 2 } });
+    const question = { sentenceId: 's1', type: 'spoken-choice', level: 2,
+      prompt: 'Mä oon täällä.', promptJa: 'ここにいます。', spokenText: 'Mä oon täällä.',
+      correctAnswer: 'Minä olen täällä.', options: ['Minä olen täällä.', 'Sinä olet siellä.'] };
+    renderComponent({ questions: [question] });
+    expect(await screen.findByText('Pick the standard written form of this spoken sentence')).toBeInTheDocument();
+    expect(screen.getByText(question.prompt)).toBeInTheDocument();
+    fireEvent.click(screen.getByTitle('Listen (Normal Speed)'));
+    expect(playAudio).toHaveBeenLastCalledWith(question.prompt, expect.any(String), 'fi-FI', 1, expect.anything());
+    fireEvent.click(screen.getByTitle('Listen (Slow)'));
+    expect(playAudio).toHaveBeenLastCalledWith(question.prompt, expect.any(String), 'fi-FI', 0.6, expect.anything());
+    const answer = isCorrect ? question.options[0] : question.options[1];
+    fireEvent.click(screen.getByText(answer));
+    checkAnswer.mockResolvedValue({ data: { success: true,
+      data: { isCorrect, isPerfect: isCorrect, hasTypo: false, correctText: question.correctAnswer } } });
+    fireEvent.click(screen.getByText('Check Answer'));
+    await screen.findByText('Continue');
+    expect(checkAnswer).toHaveBeenCalledWith({ sentenceId: 's1', userInput: answer, questionType: 'spoken-choice' });
+    expect(document.querySelector(isCorrect ? '.feedback.correct' : '.feedback.incorrect')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: question.correctAnswer })).toHaveClass('correct-choice');
+    expect(Object.values(JSON.parse(localStorage.getItem('finnishLearnerStudyStats')).days)[0]).toBe(1);
+    if (!isCorrect) {
+      expect(JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'))['sentence:s1'].box).toBe(1);
+    }
+    fireEvent.click(screen.getByText('Continue'));
+    expect(await screen.findByText(isCorrect ? '100%' : '0%')).toBeInTheDocument();
+    expect(useProgressStore.getState().progress.l1).toBe(2);
+  });
 
   it('handles speaking question recording events and typo feedback', async () => {
     const speakingSession = {

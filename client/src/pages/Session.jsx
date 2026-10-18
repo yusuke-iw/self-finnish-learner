@@ -125,7 +125,7 @@ export default function Session() {
   // Runs when the last question is done, so "Try Again" after a pass keeps the unlock.
   // Returns true when this session unlocked the next level.
   const applyLevelProgress = (finalScore) => {
-    if (isReviewMode || exerciseTypeParam === 'dictation') {
+    if (isReviewMode || exerciseTypeParam === 'dictation' || exerciseTypeParam === 'spoken') {
       return false;
     }
     // Only increment progress if passed from module path
@@ -289,7 +289,7 @@ export default function Session() {
     if (!currentQuestion) return;
 
     let answer = '';
-    if (currentQuestion.type === 'choice') {
+    if (currentQuestion.type === 'choice' || currentQuestion.type === 'spoken-choice') {
       answer = inputValue;
     } else if (currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') {
       answer = selectedWords.map(idx => currentQuestion.wordBank[idx]).join(' ');
@@ -547,7 +547,9 @@ export default function Session() {
 
         <div className="question-prompt">
           <span className="instruction">
-            {currentQuestion.isListening
+            {currentQuestion.type === 'spoken-choice'
+              ? t('session.instructionSpoken')
+              : currentQuestion.isListening
               ? (currentQuestion.type === 'typing' ? t('session.instructionListenTyping') : t('session.instructionListenFill'))
               : currentQuestion.type === 'word-bank-reverse'
                 ? t('session.instructionReverse')
@@ -560,7 +562,25 @@ export default function Session() {
                       : t('session.instructionTranslate')}
           </span>
           <div className="prompt-text-container">
-            {currentQuestion.isListening ? (
+            {currentQuestion.type === 'spoken-choice' ? (
+              <>
+                <span>{currentQuestion.prompt}</span>
+                <button
+                  className="btn-audio prompt-audio"
+                  onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
+                  title={t('session.listenNormal')}
+                >
+                  🔊
+                </button>
+                <button
+                  className="btn-audio prompt-audio slow"
+                  onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId, 'fi-FI', 0.6, currentSpeaker)}
+                  title={t('session.listenSlow')}
+                >
+                  🐢
+                </button>
+              </>
+            ) : currentQuestion.isListening ? (
               <div className="listening-audio-controls">
                 <button
                   className="btn-audio prompt-audio"
@@ -596,7 +616,7 @@ export default function Session() {
           </div>
         </div>
 
-        {currentQuestion.type === 'choice' && (
+        {(currentQuestion.type === 'choice' || currentQuestion.type === 'spoken-choice') && (
           <div className="choice-options">
             {currentQuestion.options.map((opt, idx) => {
               let cls = 'choice-btn';
@@ -754,6 +774,23 @@ export default function Session() {
                   )}
                 </div>
               </div>
+              {currentQuestion.spokenText && (
+                <div className="spoken-variant">
+                  <div>
+                    <span>{t('session.spokenLabel')} {currentQuestion.spokenText}</span>
+                    <button
+                      className="btn-audio feedback-audio-btn"
+                      onClick={() => playAudio(currentQuestion.spokenText, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
+                      title={t('common.listen')}
+                    >
+                      🔊
+                    </button>
+                  </div>
+                  <p className="spoken-notes">{language === 'ja'
+                    ? (currentQuestion.spokenNotesJa || currentQuestion.spokenNotes)
+                    : currentQuestion.spokenNotes}</p>
+                </div>
+              )}
             </div>
           </div>
         )}

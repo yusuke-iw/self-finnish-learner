@@ -1627,6 +1627,17 @@
   flex-wrap: wrap;
 }
 
+.spoken-variant {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.spoken-notes {
+  margin: 0.25rem 0 0;
+  font-size: 0.85em;
+}
+
 .level-btn {
   background: var(--bg-card-hover);
   border: 1px solid var(--border);
