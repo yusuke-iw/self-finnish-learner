@@ -157,4 +157,51 @@ describe('Home Component', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     expect(localStorage.getItem('finnishLearnerUserId')).toBe('my_sync_123');
   });
+
+  it('renders session length selector and saves changes to localStorage', () => {
+    localStorage.setItem('finnishLearnerSessionLength', '10');
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    const select = screen.getByLabelText(/Questions per session/i);
+    expect(select.value).toBe('10');
+
+    fireEvent.change(select, { target: { value: '3' } });
+    expect(select.value).toBe('3');
+    expect(localStorage.getItem('finnishLearnerSessionLength')).toBe('3');
+  });
+
+  it('disables Review mistakes button when count is 0 and enables/navigates when count > 0', () => {
+    const { unmount } = render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    const zeroBtn = screen.getByRole('button', { name: 'Review mistakes (0)' });
+    expect(zeroBtn).toBeDisabled();
+    unmount();
+
+    localStorage.setItem(
+      'finnishLearnerSentenceMistakes',
+      JSON.stringify([
+        { sentenceId: 's1', count: 1, lastMistakeAt: '2026-05-01T10:00:00.000Z' },
+        { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
+      ])
+    );
+
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    const reviewBtn = screen.getByRole('button', { name: 'Review mistakes (2)' });
+    expect(reviewBtn).not.toBeDisabled();
+    fireEvent.click(reviewBtn);
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?review=1');
+  });
 });

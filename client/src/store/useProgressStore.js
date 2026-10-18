@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 import { fetchProgress, saveProgress } from '../services/api';
 import { findLessonByTitle } from '../data/curriculumData';
+import {
+  SENTENCE_MISTAKES_STORAGE_KEY,
+  getSentenceMistakes,
+  mergeSentenceMistakes
+} from '../utils/sentenceMistakes';
 
 const PROGRESS_STORAGE_KEY = 'finnishLearnerProgress';
 const PASSAGES_STORAGE_KEY = 'finnishLearnerPassagesProgress';
@@ -81,15 +86,31 @@ export const useProgressStore = create((set, get) => ({
           }
         }
 
+        // Merge sentence mistakes between server and local
+        const localSentenceMistakes = getSentenceMistakes();
+        const serverSentenceMistakes = Array.isArray(serverData.sentenceMistakes)
+          ? serverData.sentenceMistakes
+          : [];
+        const mergedSentenceMistakes = mergeSentenceMistakes(serverSentenceMistakes, localSentenceMistakes);
+        try {
+          localStorage.setItem(SENTENCE_MISTAKES_STORAGE_KEY, JSON.stringify(mergedSentenceMistakes));
+        } catch (e) {
+          console.error('Failed to merge sentence mistakes', e);
+        }
+
         // Save merged learningPath back to localStorage & state
         localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(mergedPath));
         set({ progress: mergedPath });
 
         // Push merged state back to server to ensure server is also up-to-date
-        saveProgress({
+        const savePromise = saveProgress({
           learningPath: mergedPath,
-          passagesProgress: JSON.parse(localStorage.getItem(PASSAGES_STORAGE_KEY) || '{}')
-        }).catch(() => {});
+          passagesProgress: JSON.parse(localStorage.getItem(PASSAGES_STORAGE_KEY) || '{}'),
+          sentenceMistakes: mergedSentenceMistakes
+        });
+        if (savePromise && typeof savePromise.catch === 'function') {
+          savePromise.catch(() => {});
+        }
       }
     } catch (err) {
       console.warn('[INFO] Could not sync progress with backend (running offline / memory mode).', err.message);

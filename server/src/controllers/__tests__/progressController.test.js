@@ -236,6 +236,49 @@ describe('Progress Controller', () => {
 
       expect(next).toHaveBeenCalledWith(mockError);
     });
+
+    it('should save and return sentenceMistakes in database and memory modes', async () => {
+      const sentenceMistakes = [
+        { sentenceId: 'm1_1', count: 2, lastMistakeAt: '2026-05-01T10:00:00.000Z' }
+      ];
+      req.body = {
+        userId: 'mistake_user',
+        sentenceMistakes
+      };
+
+      jest.spyOn(Progress, 'findOneAndUpdate').mockReturnValue({
+        lean: jest.fn().mockResolvedValue({
+          userId: 'mistake_user',
+          sentenceMistakes
+        })
+      });
+
+      await progressController.saveProgress(req, res);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: true,
+        data: expect.objectContaining({
+          userId: 'mistake_user',
+          sentenceMistakes
+        }),
+        source: 'database'
+      }));
+
+      // Memory mode
+      mongoose.connection.readyState = 0;
+      req.body = {
+        userId: 'mistake_mem_user',
+        sentenceMistakes
+      };
+      await progressController.saveProgress(req, res);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: true,
+        data: expect.objectContaining({
+          userId: 'mistake_mem_user',
+          sentenceMistakes
+        }),
+        source: 'memory'
+      }));
+    });
   });
 });
 

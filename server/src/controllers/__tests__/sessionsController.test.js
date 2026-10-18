@@ -90,6 +90,62 @@ describe('Sessions Controller', () => {
       expect(responseBody.data.source).toBe('memory');
       mongoose.connection.readyState = 1; // reset
     });
+
+    it('should filter by sentenceIds in database mode and combine with category if provided', async () => {
+      mockReq.body = { sentenceIds: ['s1', 's2'] };
+      Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue(mockSentences) });
+
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      expect(Sentence.find).toHaveBeenCalledWith({ _id: { $in: ['s1', 's2'] } });
+
+      mockReq.body = { category: 'basic', sentenceIds: ['s1'] };
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      expect(Sentence.find).toHaveBeenCalledWith({ category: 'basic', _id: { $in: ['s1'] } });
+    });
+
+    it('should ignore sentenceIds if empty or not an array', async () => {
+      mockReq.body = { sentenceIds: [] };
+      Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue(mockSentences) });
+
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      expect(Sentence.find).toHaveBeenCalledWith({});
+
+      mockReq.body = { sentenceIds: 'not-an-array' };
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+      expect(Sentence.find).toHaveBeenCalledWith({});
+    });
+
+    it('should filter by sentenceIds in memory mode', async () => {
+      mongoose.connection.readyState = 0;
+      mockReq.body = { sentenceIds: ['m1_1'], level: 3, exerciseType: 'speaking' };
+
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+
+      const responseBody = mockRes.json.mock.calls[0][0];
+      expect(responseBody.success).toBe(true);
+      expect(responseBody.data.questions).toHaveLength(1);
+      expect(responseBody.data.questions[0].sentenceId).toBe('m1_1');
+      mongoose.connection.readyState = 1;
+    });
+
+    it('should draw choice distractors from outside sentenceIds when reviewing one sentence', async () => {
+      mongoose.connection.readyState = 0;
+      // Math.random() <= 0.5 makes the level 1 question a choice question, not matching
+      const randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0.1);
+      mockReq.body = { sentenceIds: ['m1_1'], level: 1 };
+
+      try {
+        await sessionsController.generateSession(mockReq, mockRes, mockNext);
+
+        const responseBody = mockRes.json.mock.calls[0][0];
+        const choice = responseBody.data.questions.find(q => q.type === 'choice');
+        expect(choice.sentenceId).toBe('m1_1');
+        expect(choice.options).toHaveLength(4);
+      } finally {
+        randomSpy.mockRestore();
+        mongoose.connection.readyState = 1;
+      }
+    });
   });
 
   describe('checkAnswer', () => {

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { generateSession, checkAnswer } from '../services/api';
+import React, { useState, useEffect, useRef } from 'react';
+import { generateSession, checkAnswer, saveProgress } from '../services/api';
 import { playAudio } from '../utils/audio';
 import { getRandomSpeaker } from '../utils/speakers';
 import { playCorrectSound, playIncorrectSound, playLessonCompleteSound } from '../utils/feedbackSounds';
@@ -9,6 +9,9 @@ import { useLanguage } from '../context/LanguageContext';
 import { useProgressStore } from '../store/useProgressStore';
 import { findLessonById, findLessonByTitle } from '../data/curriculumData';
 import { PASS_THRESHOLD, isSessionPassed } from '../utils/sessionResult';
+import { getSessionLength, setSessionLength } from '../utils/sessionPreferences';
+import { getSentenceMistakes, addSentenceMistake, removeSentenceMistake } from '../utils/sentenceMistakes';
+import SpecialCharBar from '../components/SpecialCharBar';
 
 export default function Session() {
   const { language, t } = useLanguage();
@@ -18,6 +21,7 @@ export default function Session() {
   const categoryParam = searchParams.get('category');
   const levelParam = searchParams.get('level') ? Number(searchParams.get('level')) : null;
   const exerciseTypeParam = searchParams.get('exerciseType');
+  const isReviewMode = searchParams.get('review') === '1';
 
   const matchedLesson = lessonIdParam
     ? findLessonById(lessonIdParam)
@@ -29,40 +33,63 @@ export default function Session() {
 
   const [session, setSession] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [sentenceCount, setSentenceCount] = useState(5);
+  const [sentenceCount, setSentenceCount] = useState(() => getSessionLength());
   const [currentSpeaker, setCurrentSpeaker] = useState(() => getRandomSpeaker());
-  
+
   const [selectedWords, setSelectedWords] = useState([]); // for word bank
   const [inputValue, setInputValue] = useState(''); // for typing, fill-in, and speaking
-  
+  const inputRef = useRef(null);
+
   // Matching Pairs state
   const [selectedMatchingTokens, setSelectedMatchingTokens] = useState([]);
   const [matchedPairIds, setMatchedPairIds] = useState([]);
   const [wrongMatch, setWrongMatch] = useState(false);
-  
+
   // Speaking state
   const [isRecording, setIsRecording] = useState(false);
-  
+
   const [feedback, setFeedback] = useState(null);
   const [isChecking, setIsChecking] = useState(false);
-  
+
   const [score, setScore] = useState({ correct: 0, typo: 0, incorrect: 0 });
   const [isFinished, setIsFinished] = useState(false);
   const [unlockedNext, setUnlockedNext] = useState(false);
 
   const [isStarting, setIsStarting] = useState(false);
+  // Set when generating a session fails; stops the auto-start from retrying in a loop.
+  const [startError, setStartError] = useState(null);
 
-  // Auto-start if category and level are provided
+  const noReviewSentences = isReviewMode && !session && getSentenceMistakes().length === 0;
+
+  // Auto-start if review mode or category/level/exerciseType are provided
   useEffect(() => {
-    if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
-      startSession(5, resolvedCategory, levelParam, exerciseTypeParam);
+    if (startError) return;
+    if (isReviewMode && !session && !isStarting && !isFinished && !noReviewSentences) {
+      const mistakes = getSentenceMistakes();
+      const count = getSessionLength();
+      const sortedIds = [...mistakes]
+        .sort((a, b) => (Date.parse(b.lastMistakeAt) || 0) - (Date.parse(a.lastMistakeAt) || 0))
+        .slice(0, count)
+        .map(m => m.sentenceId);
+      startSession(count, resolvedCategory, levelParam, exerciseTypeParam, sortedIds);
+    } else if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
+      startSession(getSessionLength(), resolvedCategory, levelParam, exerciseTypeParam);
     }
-  }, [resolvedCategory, levelParam, exerciseTypeParam, session, isStarting, isFinished]);
+  }, [isReviewMode, noReviewSentences, resolvedCategory, levelParam, exerciseTypeParam, session, isStarting, isFinished, startError]);
 
-  const startSession = async (count = sentenceCount, cat = resolvedCategory, lvl = levelParam, ext = exerciseTypeParam) => {
+  const startSession = async (
+    count = sentenceCount,
+    cat = resolvedCategory,
+    lvl = levelParam,
+    ext = exerciseTypeParam,
+    sentenceIds = undefined
+  ) => {
     setIsStarting(true);
+    setStartError(null);
     try {
-      const res = await generateSession(count, cat, lvl, ext, language);
+      const res = sentenceIds !== undefined
+        ? await generateSession(count, cat, lvl, ext, language, sentenceIds)
+        : await generateSession(count, cat, lvl, ext, language);
       if (res.data.success) {
         setSession(res.data.data);
         setCurrentIndex(0);
@@ -74,7 +101,7 @@ export default function Session() {
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.error || 'Failed to generate session');
+      setStartError(err.response?.data?.error || 'Failed to generate session');
     }
     setIsStarting(false);
   };
@@ -82,6 +109,9 @@ export default function Session() {
   // Runs when the last question is done, so "Try Again" after a pass keeps the unlock.
   // Returns true when this session unlocked the next level.
   const applyLevelProgress = (finalScore) => {
+    if (isReviewMode) {
+      return false;
+    }
     // Only increment progress if passed from module path
     if (!resolvedLessonId || !levelParam || !isSessionPassed(finalScore, session?.questions?.length || 0)) {
       return false;
@@ -116,6 +146,24 @@ export default function Session() {
 
   const currentQuestion = session?.questions[currentIndex];
 
+  const canCheckAnswer = () => {
+    if (!currentQuestion || feedback || isChecking || currentQuestion.type === 'matching') {
+      return false;
+    }
+    if (currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') {
+      return selectedWords.length > 0;
+    }
+    return Boolean(inputValue);
+  };
+
+  const syncSentenceMistakes = async (sentenceMistakes) => {
+    try {
+      await saveProgress({ sentenceMistakes });
+    } catch (err) {
+      console.warn('[INFO] Failed to save sentence mistakes to server:', err.message);
+    }
+  };
+
   const handleMatchingTokenClick = (token) => {
     if (matchedPairIds.includes(token.id) || wrongMatch || isChecking) return;
 
@@ -123,22 +171,22 @@ export default function Session() {
       setSelectedMatchingTokens([token]);
     } else if (selectedMatchingTokens.length === 1) {
       const prevToken = selectedMatchingTokens[0];
-      
+
       if (prevToken === token) {
         // Deselect
         setSelectedMatchingTokens([]);
         return;
       }
-      
+
       if (prevToken.id === token.id) {
         // Match!
         const newMatched = [...matchedPairIds, token.id];
         setMatchedPairIds(newMatched);
         setSelectedMatchingTokens([]);
-        
+
         const fiText = prevToken.lang === 'fi' ? prevToken.text : token.text;
         playAudio(fiText, null, 'fi-FI', 1.0, currentSpeaker);
-        
+
         // If all matched
         if (newMatched.length === currentQuestion.pairs.length) {
           setIsChecking(true);
@@ -197,7 +245,7 @@ export default function Session() {
 
   const handleCheck = async () => {
     if (!currentQuestion) return;
-    
+
     let answer = '';
     if (currentQuestion.type === 'choice') {
       answer = inputValue;
@@ -216,25 +264,36 @@ export default function Session() {
         userInput: answer,
         questionType: currentQuestion.type
       };
-      
+
       if (currentQuestion.type === 'fill-in-the-blank') {
         payload.missingWord = currentQuestion.missingWord;
       }
-      
+
       const res = await checkAnswer(payload);
 
       if (res.data.success) {
         const result = res.data.data;
         setFeedback(result);
+        const sid = currentQuestion.sentenceId ? String(currentQuestion.sentenceId) : '';
+        const isMatchingWarmup = currentQuestion.type === 'matching' || sid.startsWith('matching-warmup-');
+
         if (result.isPerfect) {
           setScore(s => ({ ...s, correct: s.correct + 1 }));
           playCorrectSound();
+          if (isReviewMode && sid && !isMatchingWarmup) {
+            const updated = removeSentenceMistake(sid);
+            syncSentenceMistakes(updated);
+          }
         } else if (result.hasTypo) {
           setScore(s => ({ ...s, typo: s.typo + 1 }));
           playCorrectSound();
         } else {
           setScore(s => ({ ...s, incorrect: s.incorrect + 1 }));
           playIncorrectSound();
+          if (sid && !isMatchingWarmup) {
+            const updated = addSentenceMistake(sid);
+            syncSentenceMistakes(updated);
+          }
         }
       }
     } catch (err) {
@@ -254,13 +313,38 @@ export default function Session() {
     }
   };
 
+  // Enter checks the answer, or moves on once feedback is shown.
+  // The listener is attached once and calls the latest handler through a ref.
+  const enterKeyHandlerRef = useRef(null);
+  useEffect(() => {
+    enterKeyHandlerRef.current = (e) => {
+      if (!session || isFinished || !currentQuestion) return;
+      if (e.key !== 'Enter') return;
+      if (e.isComposing || e.keyCode === 229) return;
+
+      if (feedback) {
+        e.preventDefault();
+        handleNext();
+      } else if (canCheckAnswer()) {
+        e.preventDefault();
+        handleCheck();
+      }
+    };
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (e) => enterKeyHandlerRef.current?.(e);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const toggleWord = (word, index) => {
     if (selectedWords.includes(index)) {
       setSelectedWords(selectedWords.filter(i => i !== index));
     } else {
       setSelectedWords([...selectedWords, index]);
     }
-    
+
     if (currentQuestion && currentQuestion.type !== 'word-bank-reverse') {
       playAudio(word, word, 'fi-FI', 1.0, currentSpeaker);
     }
@@ -278,7 +362,7 @@ export default function Session() {
           <div className="score-display">
             {Math.round(((score.correct + score.typo) / totalQuestions) * 100)}%
           </div>
-          {resolvedLessonId && levelParam && (
+          {!isReviewMode && resolvedLessonId && levelParam && (
             <p className={`session-result-message ${passed ? 'passed' : 'failed'}`}>
               {passed
                 ? (unlockedNext ? t('session.passedUnlockNext') : t('session.passed'))
@@ -312,18 +396,58 @@ export default function Session() {
     );
   }
 
+  if (isReviewMode && noReviewSentences) {
+    return (
+      <div className="session-page">
+        <div className="session-setup">
+          <p>{t('session.noReviewSentences')}</p>
+          <div className="setup-options">
+            <button className="btn-primary" onClick={handleSessionComplete}>
+              {t('session.returnHome')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session && startError) {
+    return (
+      <div className="session-page">
+        <div className="session-setup">
+          <p role="alert">{t('session.startFailed')} ({startError})</p>
+          <div className="setup-options">
+            <button className="btn-primary" onClick={() => setStartError(null)}>
+              {t('session.retryStart')}
+            </button>
+            <button className="btn-secondary" onClick={handleSessionComplete}>
+              {t('session.returnHome')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!session) {
     return (
       <div className="session-page">
         <div className="session-setup">
           <h2>{resolvedCategory ? (language === 'en' ? `Loading Level ${levelParam}...` : `レベル ${levelParam} を読み込み中...`) : (language === 'en' ? 'Start a Quiz Session' : 'セッションを開始')}</h2>
-          {!resolvedCategory && (
+          {!resolvedCategory && !isReviewMode && (
             <>
               <p>{language === 'en' ? 'Practice with scaffolded exercises that adapt to your level.' : 'レベルに合わせた段階的な演習で練習しましょう。'}</p>
               <div className="setup-options">
                 <label>
                   {language === 'en' ? 'Number of Sentences:' : '問題数:'}
-                  <select value={sentenceCount} onChange={e => setSentenceCount(Number(e.target.value))}>
+                  <select
+                    value={sentenceCount}
+                    onChange={e => {
+                      const count = Number(e.target.value);
+                      setSentenceCount(count);
+                      setSessionLength(count);
+                    }}
+                  >
                     <option value={3}>{language === 'en' ? '3 (Short)' : '3問 (ショート)'}</option>
                     <option value={5}>{language === 'en' ? '5 (Medium)' : '5問 (標準)'}</option>
                     <option value={10}>{language === 'en' ? '10 (Long)' : '10問 (じっくり)'}</option>
@@ -341,7 +465,7 @@ export default function Session() {
   }
 
   const progress = ((currentIndex) / session.questions.length) * 100;
-  
+
   return (
     <div className="session-page">
       <div className="progress-container">
@@ -354,64 +478,50 @@ export default function Session() {
       </div>
 
       <div className={`question-card ${feedback?.isCorrect ? 'correct-flash' : ''} ${feedback && !feedback.isCorrect ? 'incorrect-flash' : ''}`}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <div className={`level-badge level-${currentQuestion.level}`} style={{ margin: 0 }}>
+        <div className="question-card-header">
+          <div className={`level-badge level-${currentQuestion.level}`}>
             {t('session.levelLabel', { level: currentQuestion.level })}
           </div>
           {currentSpeaker && (
-            <div 
-              data-testid="speaker-badge" 
+            <div
+              data-testid="speaker-badge"
               className="speaker-badge"
               title={currentSpeaker.description}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '4px 10px',
-                borderRadius: '9999px',
-                fontSize: '0.85rem',
-                fontWeight: '500',
-                backgroundColor: 'var(--bg-card-hover, rgba(255,255,255,0.08))',
-                color: 'var(--text-secondary, #94a3b8)',
-                border: '1px solid var(--border-color, rgba(255,255,255,0.1))'
-              }}
             >
-              <span style={{ fontSize: '1rem' }}>{currentSpeaker.icon}</span>
+              <span className="speaker-badge-icon">{currentSpeaker.icon}</span>
               <span>{currentSpeaker.name}</span>
             </div>
           )}
         </div>
-        
+
         <div className="question-prompt">
           <span className="instruction">
-            {currentQuestion.isListening 
-              ? (currentQuestion.type === 'typing' ? t('session.instructionListenTyping') : t('session.instructionListenFill')) 
-              : currentQuestion.type === 'word-bank-reverse' 
-                ? t('session.instructionReverse') 
-                : currentQuestion.type === 'fill-in-the-blank' 
-                  ? t('session.instructionFill') 
+            {currentQuestion.isListening
+              ? (currentQuestion.type === 'typing' ? t('session.instructionListenTyping') : t('session.instructionListenFill'))
+              : currentQuestion.type === 'word-bank-reverse'
+                ? t('session.instructionReverse')
+                : currentQuestion.type === 'fill-in-the-blank'
+                  ? t('session.instructionFill')
                   : currentQuestion.type === 'matching'
                     ? t('session.instructionMatching')
                     : currentQuestion.type === 'speaking'
                       ? t('session.instructionSpeaking')
                       : t('session.instructionTranslate')}
           </span>
-          <div className="prompt-text-container" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px', fontWeight: 'bold' }}>
+          <div className="prompt-text-container">
             {currentQuestion.isListening ? (
-              <div className="listening-audio-controls" style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '16px', background: 'var(--bg-card-hover)', borderRadius: 'var(--radius-md)' }}>
-                <button 
-                  className="btn-audio prompt-audio" 
+              <div className="listening-audio-controls">
+                <button
+                  className="btn-audio prompt-audio"
                   onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
                   title={t('session.listenNormal')}
-                  style={{ padding: '12px', fontSize: '24px', background: 'var(--accent)' }}
                 >
                   🔊
                 </button>
-                <button 
-                  className="btn-audio prompt-audio slow" 
+                <button
+                  className="btn-audio prompt-audio slow"
                   onClick={() => playAudio(currentQuestion.correctAnswer, currentQuestion.sentenceId, 'fi-FI', 0.6, currentSpeaker)}
                   title={t('session.listenSlow')}
-                  style={{ padding: '8px', fontSize: '20px', border: '1px solid var(--accent)' }}
                 >
                   🐢
                 </button>
@@ -419,11 +529,10 @@ export default function Session() {
             ) : (
               <>
                 {(currentQuestion.type === 'word-bank-reverse' || currentQuestion.type === 'fill-in-the-blank' || currentQuestion.type === 'speaking') && (
-                  <button 
-                    className="btn-audio prompt-audio" 
+                  <button
+                    className="btn-audio prompt-audio"
                     onClick={() => playAudio(currentQuestion.prompt, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
                     title={t('common.listen')}
-                    style={{ padding: '6px' }}
                   >
                     🔊
                   </button>
@@ -446,8 +555,8 @@ export default function Session() {
                 else if (inputValue === opt && !feedback.isCorrect) cls += ' wrong-choice';
               }
               return (
-                <button 
-                  key={idx} 
+                <button
+                  key={idx}
                   className={cls}
                   onClick={() => {
                     if (!feedback) {
@@ -476,8 +585,8 @@ export default function Session() {
             </div>
             <div className="word-bank-pool">
               {currentQuestion.wordBank.map((word, idx) => (
-                <span 
-                  key={idx} 
+                <span
+                  key={idx}
                   className={`word-chip ${selectedWords.includes(idx) ? 'in-answer' : ''}`}
                   onClick={() => !feedback && toggleWord(word, idx)}
                 >
@@ -490,8 +599,9 @@ export default function Session() {
 
         {currentQuestion.type === 'typing' && (
           <div className="typing-area">
-            <input 
-              type="text" 
+            <input
+              ref={inputRef}
+              type="text"
               className="typing-input"
               placeholder={t('session.typePrompt')}
               value={inputValue}
@@ -499,26 +609,25 @@ export default function Session() {
               disabled={!!feedback}
               autoFocus
             />
+            {!feedback && (
+              <SpecialCharBar
+                inputRef={inputRef}
+                value={inputValue}
+                onChange={setInputValue}
+              />
+            )}
           </div>
         )}
 
         {currentQuestion.type === 'fill-in-the-blank' && (
-          <div className="fill-in-the-blank-area" style={{ marginTop: '20px', fontSize: '1.2rem', lineHeight: '2' }}>
+          <div className="fill-in-the-blank-area">
             <span className="prefix">{currentQuestion.prefix}</span>
-            <input 
-              type="text" 
+            <input
+              ref={inputRef}
+              type="text"
               className="blank-input"
               style={{
-                width: `${Math.max(3, inputValue.length || currentQuestion.missingWord.length)}ch`,
-                minWidth: '60px',
-                border: 'none',
-                borderBottom: '2px solid var(--border)',
-                background: 'transparent',
-                color: '#fff',
-                fontSize: '1.2rem',
-                textAlign: 'center',
-                margin: '0 8px',
-                outline: 'none'
+                width: `${Math.max(3, inputValue.length || currentQuestion.missingWord.length)}ch`
               }}
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
@@ -526,16 +635,18 @@ export default function Session() {
               autoFocus
             />
             <span className="suffix">{currentQuestion.suffix}</span>
+            {!feedback && (
+              <SpecialCharBar
+                inputRef={inputRef}
+                value={inputValue}
+                onChange={setInputValue}
+              />
+            )}
           </div>
         )}
 
         {currentQuestion.type === 'matching' && (
-          <div className="matching-grid" style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr 1fr', 
-            gap: '12px', 
-            marginTop: '20px' 
-          }}>
+          <div className="matching-grid">
             {currentQuestion.tokens.map((token, idx) => {
               const isMatched = matchedPairIds.includes(token.id);
               const isSelected = selectedMatchingTokens.includes(token);
@@ -544,16 +655,9 @@ export default function Session() {
               return (
                 <button
                   key={`${token.id}-${token.lang}-${idx}`}
-                  className={`choice-btn ${isSelected ? 'selected' : ''} ${isMatched ? 'correct-choice' : ''} ${isWrong ? 'wrong-choice' : ''}`}
+                  className={`choice-btn matching-token-btn ${isSelected ? 'selected' : ''} ${isMatched ? 'correct-choice matched' : ''} ${isWrong ? 'wrong-choice' : ''}`}
                   onClick={() => handleMatchingTokenClick(token)}
                   disabled={isMatched || isChecking}
-                  style={{ 
-                    padding: '16px', 
-                    fontSize: '18px', 
-                    opacity: isMatched ? 0 : 1, 
-                    pointerEvents: isMatched ? 'none' : 'auto',
-                    transition: 'opacity 0.3s'
-                  }}
                 >
                   {token.text}
                 </button>
@@ -563,27 +667,15 @@ export default function Session() {
         )}
 
         {currentQuestion.type === 'speaking' && (
-          <div className="speaking-area" style={{ textAlign: 'center', marginTop: '20px' }}>
-            <button 
-              className="btn-mic" 
+          <div className="speaking-area">
+            <button
+              className={`btn-mic ${isRecording ? 'recording' : ''}`}
               onClick={handleMicClick}
               disabled={isRecording || !!feedback}
-              style={{
-                background: isRecording ? '#ff4b4b' : 'var(--accent)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '50%',
-                width: '80px',
-                height: '80px',
-                fontSize: '32px',
-                cursor: 'pointer',
-                boxShadow: isRecording ? '0 0 15px #ff4b4b' : 'none',
-                transition: 'all 0.3s'
-              }}
             >
               🎤
             </button>
-            <div style={{ marginTop: '16px', minHeight: '30px', fontSize: '18px', color: 'var(--text-muted)' }}>
+            <div className="speaking-status">
               {isRecording ? (language === 'en' ? 'Listening...' : '聞き取り中...') : inputValue ? `"${inputValue}"` : (language === 'en' ? 'Tap microphone to speak' : 'マイクをタップして発音')}
             </div>
           </div>
@@ -601,11 +693,10 @@ export default function Session() {
                 <div>
                   <span className="correct-text">{t('session.correctAnswerIs')} {feedback.correctText}</span>
                   {currentQuestion.type !== 'word-bank-reverse' && (
-                    <button 
-                      className="btn-audio" 
+                    <button
+                      className="btn-audio feedback-audio-btn"
                       onClick={() => playAudio(feedback.correctText, currentQuestion.sentenceId, 'fi-FI', 1.0, currentSpeaker)}
                       title={t('common.listen')}
-                      style={{ marginLeft: '12px', padding: '4px 8px', fontSize: '14px' }}
                     >
                       🔊
                     </button>
@@ -619,10 +710,10 @@ export default function Session() {
         <div className="question-actions">
           {!feedback ? (
             currentQuestion.type !== 'matching' && (
-              <button 
-                className="btn-check" 
+              <button
+                className="btn-check"
                 onClick={handleCheck}
-                disabled={isChecking || ((currentQuestion.type === 'word-bank' || currentQuestion.type === 'word-bank-reverse') && selectedWords.length === 0) || (currentQuestion.type !== 'word-bank' && currentQuestion.type !== 'word-bank-reverse' && !inputValue)}
+                disabled={!canCheckAnswer()}
               >
                 {language === 'en' ? 'Check Answer' : '回答を確認する'}
               </button>
@@ -637,4 +728,3 @@ export default function Session() {
     </div>
   );
 }
-

@@ -13,6 +13,7 @@ const getDefaultProgress = (userId = 'default_user') => ({
   passagesProgress: {},
   passageAnswers: {},
   mistakes: [],
+  sentenceMistakes: [],
   settings: {
     language: 'ja'
   },
@@ -75,6 +76,7 @@ exports.saveProgress = async (req, res, next) => {
       passagesProgress,
       passageAnswers,
       mistakes,
+      sentenceMistakes,
       settings
     } = req.body;
 
@@ -91,6 +93,7 @@ exports.saveProgress = async (req, res, next) => {
       ...(passagesProgress !== undefined && { passagesProgress }),
       ...(passageAnswers !== undefined && { passageAnswers }),
       ...(mistakes !== undefined && { mistakes }),
+      ...(sentenceMistakes !== undefined && { sentenceMistakes }),
       ...(settings !== undefined && { settings }),
       updatedAt: new Date()
     };

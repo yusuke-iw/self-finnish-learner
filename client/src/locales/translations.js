@@ -43,7 +43,9 @@ export const translations = {
       syncIdLabel: '同期ID',
       syncIdSave: '保存',
       syncIdDesc: '同じIDを入れた端末どうしで進捗を共有します',
-      syncIdError: '半角英数字・ハイフン・アンダースコア（1〜40文字）で入力してください'
+      syncIdError: '半角英数字・ハイフン・アンダースコア（1〜40文字）で入力してください',
+      questionsPerSession: '1回の問題数:',
+      reviewMistakes: '間違えた例文を復習 ({count})'
     },
 
     // Guidebook Modal
@@ -212,7 +214,11 @@ export const translations = {
       grammarNoteLabel: '💡 解説ノート:',
       passedUnlockNext: '合格！次のレベルが解放されます',
       passed: '合格！',
-      failedThreshold: '合格ラインは{threshold}%です。もう一度挑戦しましょう'
+      failedThreshold: '合格ラインは{threshold}%です。もう一度挑戦しましょう',
+      insertChar: '{char} を入力',
+      noReviewSentences: '復習する例文はありません',
+      startFailed: 'セッションを読み込めませんでした',
+      retryStart: '再読み込み'
     }
   },
 
@@ -260,7 +266,9 @@ export const translations = {
       syncIdLabel: 'Sync ID',
       syncIdSave: 'Save',
       syncIdDesc: 'Devices with the same ID share progress.',
-      syncIdError: 'Use 1-40 characters: letters, numbers, hyphens, or underscores.'
+      syncIdError: 'Use 1-40 characters: letters, numbers, hyphens, or underscores.',
+      questionsPerSession: 'Questions per session:',
+      reviewMistakes: 'Review mistakes ({count})'
     },
 
     // Guidebook Modal
@@ -429,7 +437,11 @@ export const translations = {
       grammarNoteLabel: '💡 Grammar Note:',
       passedUnlockNext: 'Passed! The next level is unlocked.',
       passed: 'Passed!',
-      failedThreshold: 'You need {threshold}% to pass. Try again!'
+      failedThreshold: 'You need {threshold}% to pass. Try again!',
+      insertChar: 'Insert {char}',
+      noReviewSentences: 'No sentences to review.',
+      startFailed: 'Could not load the session',
+      retryStart: 'Retry'
     }
   }
 };
