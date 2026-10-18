@@ -10,7 +10,8 @@ import { useProgressStore } from '../store/useProgressStore';
 import { findLessonById, findLessonByTitle } from '../data/curriculumData';
 import { PASS_THRESHOLD, isSessionPassed } from '../utils/sessionResult';
 import { getSessionLength, setSessionLength } from '../utils/sessionPreferences';
-import { getSentenceMistakes, addSentenceMistake, removeSentenceMistake } from '../utils/sentenceMistakes';
+import { getDueKeys, recordReviewResult } from '../utils/reviewSchedule';
+import { recordAnswer } from '../utils/studyStats';
 import SpecialCharBar from '../components/SpecialCharBar';
 
 export default function Session() {
@@ -59,7 +60,7 @@ export default function Session() {
   // Set when generating a session fails; stops the auto-start from retrying in a loop.
   const [startError, setStartError] = useState(null);
 
-  const noReviewSentences = isReviewMode && !session && getSentenceMistakes().length === 0;
+  const noReviewSentences = isReviewMode && !session && getDueKeys('sentence').length === 0;
 
   const resetInput = () => {
     setFeedback(null);
@@ -91,6 +92,7 @@ export default function Session() {
         setIsFinished(false);
         setUnlockedNext(false);
         setScore({ correct: 0, typo: 0, incorrect: 0 });
+        reviewedSentenceIdsRef.current = new Set();
         resetInput();
       }
     } catch (err) {
@@ -99,6 +101,9 @@ export default function Session() {
     }
     setIsStarting(false);
   };
+
+  // Sentences whose review result was already recorded in this session
+  const reviewedSentenceIdsRef = useRef(new Set());
 
   const startSessionRef = useRef(null);
   useEffect(() => {
@@ -109,13 +114,9 @@ export default function Session() {
   useEffect(() => {
     if (startError) return;
     if (isReviewMode && !session && !isStarting && !isFinished && !noReviewSentences) {
-      const mistakes = getSentenceMistakes();
       const count = getSessionLength();
-      const sortedIds = [...mistakes]
-        .sort((a, b) => (Date.parse(b.lastMistakeAt) || 0) - (Date.parse(a.lastMistakeAt) || 0))
-        .slice(0, count)
-        .map(m => m.sentenceId);
-      startSessionRef.current?.(count, resolvedCategory, levelParam, exerciseTypeParam, sortedIds);
+      const dueIds = getDueKeys('sentence').slice(0, count);
+      startSessionRef.current?.(count, resolvedCategory, levelParam, exerciseTypeParam, dueIds);
     } else if ((resolvedCategory && levelParam || exerciseTypeParam) && !session && !isStarting && !isFinished) {
       startSessionRef.current?.(getSessionLength(), resolvedCategory, levelParam, exerciseTypeParam);
     }
@@ -157,11 +158,19 @@ export default function Session() {
     return Boolean(inputValue);
   };
 
-  const syncSentenceMistakes = async (sentenceMistakes) => {
+  const syncReviewSchedule = async (reviewSchedule) => {
     try {
-      await saveProgress({ sentenceMistakes });
+      await saveProgress({ reviewSchedule });
     } catch (err) {
-      console.warn('[INFO] Failed to save sentence mistakes to server:', err.message);
+      console.warn('[INFO] Failed to save review schedule to server:', err.message);
+    }
+  };
+
+  const syncStudyStats = async (studyStats) => {
+    try {
+      await saveProgress({ studyStats });
+    } catch (err) {
+      console.warn('[INFO] Failed to save study stats to server:', err.message);
     }
   };
 
@@ -198,6 +207,8 @@ export default function Session() {
             correctText: 'All pairs matched!'
           });
           setScore(s => ({ ...s, correct: s.correct + 1 }));
+          const updatedStats = recordAnswer();
+          syncStudyStats(updatedStats);
         }
       } else {
         // Wrong match
@@ -275,25 +286,33 @@ export default function Session() {
       if (res.data.success) {
         const result = res.data.data;
         setFeedback(result);
+        const updatedStats = recordAnswer();
+        syncStudyStats(updatedStats);
         const sid = currentQuestion.sentenceId ? String(currentQuestion.sentenceId) : '';
         const isMatchingWarmup = currentQuestion.type === 'matching' || sid.startsWith('matching-warmup-');
 
+        const isCorrect = Boolean(result.isPerfect || result.hasTypo);
         if (result.isPerfect) {
           setScore(s => ({ ...s, correct: s.correct + 1 }));
           playCorrectSound();
-          if (isReviewMode && sid && !isMatchingWarmup) {
-            const updated = removeSentenceMistake(sid);
-            syncSentenceMistakes(updated);
-          }
         } else if (result.hasTypo) {
           setScore(s => ({ ...s, typo: s.typo + 1 }));
           playCorrectSound();
         } else {
           setScore(s => ({ ...s, incorrect: s.incorrect + 1 }));
           playIncorrectSound();
-          if (sid && !isMatchingWarmup) {
-            const updated = addSentenceMistake(sid);
-            syncSentenceMistakes(updated);
+        }
+
+        if (sid && !isMatchingWarmup) {
+          // A session can ask up to three questions per sentence. Only the first answer
+          // in a review session moves the sentence up a box; a wrong answer always resets it.
+          const alreadyReviewed = reviewedSentenceIdsRef.current.has(sid);
+          if (!isCorrect || (isReviewMode && !alreadyReviewed)) {
+            reviewedSentenceIdsRef.current.add(sid);
+            const { status, schedule } = recordReviewResult(`sentence:${sid}`, isCorrect);
+            if (status !== 'unchanged') {
+              syncReviewSchedule(schedule);
+            }
           }
         }
       }

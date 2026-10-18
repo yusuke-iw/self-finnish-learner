@@ -3,6 +3,7 @@ export const translations = {
     // Navigation
     nav: {
       home: 'ホーム',
+      review: '復習',
       grammar: '文法・イディオム',
       drillStudio: '演習スタジオ',
       passages: '読解パッセージ',
@@ -45,7 +46,14 @@ export const translations = {
       syncIdDesc: '同じIDを入れた端末どうしで進捗を共有します',
       syncIdError: '半角英数字・ハイフン・アンダースコア（1〜40文字）で入力してください',
       questionsPerSession: '1回の問題数:',
-      reviewMistakes: '間違えた例文を復習 ({count})'
+      reviewMistakes: '間違えた例文を復習 ({count})',
+      streakCount: '{count}日連続',
+      todayProgress: '今日 {count} / {goal} 問',
+      dailyGoalLabel: '目標:',
+      dailyGoalReached: '今日の目標達成！',
+      todayReviewCount: '今日の復習 {count}件',
+      noReviewToday: '今日の復習はありません',
+      startReviewBtn: '復習する'
     },
 
     // Guidebook Modal
@@ -216,9 +224,23 @@ export const translations = {
       passed: '合格！',
       failedThreshold: '合格ラインは{threshold}%です。もう一度挑戦しましょう',
       insertChar: '{char} を入力',
-      noReviewSentences: '復習する例文はありません',
+      noReviewSentences: '今日の復習はありません',
       startFailed: 'セッションを読み込めませんでした',
       retryStart: '再読み込み'
+    },
+
+    // Review Page
+    review: {
+      title: '今日の復習',
+      subtitle: '間隔反復（SRS）で忘れかけた頃に復習しましょう。',
+      sentencesTitle: '例文クイズ',
+      grammarTitle: '文法ドリル',
+      dueCount: '{count}件',
+      startBtn: '始める',
+      upcomingTitle: '明日以降の予定',
+      upcoming1d: '1日以内',
+      upcoming7d: '7日以内',
+      upcomingCount: '{count}件'
     }
   },
 
@@ -226,6 +248,7 @@ export const translations = {
     // Navigation
     nav: {
       home: 'Home',
+      review: 'Review',
       grammar: 'Grammar & Idioms',
       drillStudio: 'Drill Studio',
       passages: 'Passages',
@@ -268,7 +291,14 @@ export const translations = {
       syncIdDesc: 'Devices with the same ID share progress.',
       syncIdError: 'Use 1-40 characters: letters, numbers, hyphens, or underscores.',
       questionsPerSession: 'Questions per session:',
-      reviewMistakes: 'Review mistakes ({count})'
+      reviewMistakes: 'Review mistakes ({count})',
+      streakCount: '{count}-day streak',
+      todayProgress: 'Today {count} / {goal}',
+      dailyGoalLabel: 'Goal:',
+      dailyGoalReached: 'Daily goal reached!',
+      todayReviewCount: "Today's review: {count}",
+      noReviewToday: 'Nothing to review today.',
+      startReviewBtn: 'Review'
     },
 
     // Guidebook Modal
@@ -439,9 +469,23 @@ export const translations = {
       passed: 'Passed!',
       failedThreshold: 'You need {threshold}% to pass. Try again!',
       insertChar: 'Insert {char}',
-      noReviewSentences: 'No sentences to review.',
+      noReviewSentences: 'Nothing to review today.',
       startFailed: 'Could not load the session',
       retryStart: 'Retry'
+    },
+
+    // Review Page
+    review: {
+      title: "Today's Review",
+      subtitle: 'Practice due items scheduled by spaced repetition.',
+      sentencesTitle: 'Sentences',
+      grammarTitle: 'Grammar',
+      dueCount: '{count} due',
+      startBtn: 'Start',
+      upcomingTitle: 'Upcoming Schedule',
+      upcoming1d: 'Within 1 day',
+      upcoming7d: 'Within 7 days',
+      upcomingCount: '{count} items'
     }
   }
 };

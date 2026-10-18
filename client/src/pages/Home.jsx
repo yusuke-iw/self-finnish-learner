@@ -7,7 +7,15 @@ import { useProgressStore } from '../store/useProgressStore';
 import { useLanguage } from '../context/useLanguage';
 import { getUserId, setUserId } from '../utils/userId';
 import { getSessionLength, setSessionLength, VALID_SESSION_LENGTHS } from '../utils/sessionPreferences';
-import { getSentenceMistakes } from '../utils/sentenceMistakes';
+import { saveProgress } from '../services/api';
+import { getDueCount } from '../utils/reviewSchedule';
+import {
+  getStreak,
+  getTodayCount,
+  getDailyGoal,
+  setDailyGoal,
+  VALID_DAILY_GOALS
+} from '../utils/studyStats';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,13 +25,36 @@ export default function Home() {
   const [syncIdInput, setSyncIdInput] = useState(() => getUserId());
   const [syncIdError, setSyncIdError] = useState('');
   const [sessionLength, setSessionLengthState] = useState(() => getSessionLength());
+  const [, setStatsVersion] = useState(0);
 
   useEffect(() => {
     loadProgress();
     syncWithServer();
   }, [loadProgress, syncWithServer]);
 
-  const mistakeCount = getSentenceMistakes().length;
+  const streak = getStreak();
+  const todayCount = getTodayCount();
+  const dailyGoal = getDailyGoal();
+  const dueCount = getDueCount().total;
+  const goalProgressPercent = Math.min(100, Math.round((todayCount / dailyGoal) * 100));
+
+  const handleDailyGoalChange = (e) => {
+    const nextGoal = Number(e.target.value);
+    if (VALID_DAILY_GOALS.includes(nextGoal)) {
+      const updatedStats = setDailyGoal(nextGoal);
+      setStatsVersion((v) => v + 1);
+      try {
+        const p = saveProgress({ studyStats: updatedStats });
+        if (p && typeof p.catch === 'function') {
+          p.catch((err) => {
+            console.warn('[INFO] Failed to save study stats to server:', err?.message);
+          });
+        }
+      } catch (err) {
+        console.warn('[INFO] Failed to save study stats to server:', err?.message);
+      }
+    }
+  };
 
   const handleSessionLengthChange = (e) => {
     const nextLength = Number(e.target.value);
@@ -56,6 +87,62 @@ export default function Home() {
 
   return (
     <div className="home-path-container">
+      <div className="study-card" data-testid="study-card">
+        <div className="study-card-top">
+          <span className="study-streak-badge">
+            🔥 {t('home.streakCount', { count: streak })}
+          </span>
+          <div className="study-goal-controls">
+            <label htmlFor="home-daily-goal" className="study-goal-label">
+              {t('home.dailyGoalLabel')}
+            </label>
+            <select
+              id="home-daily-goal"
+              className="study-goal-select"
+              value={dailyGoal}
+              onChange={handleDailyGoalChange}
+            >
+              {VALID_DAILY_GOALS.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="study-goal-progress-section">
+          <div className="study-goal-info">
+            <span>{t('home.todayProgress', { count: todayCount, goal: dailyGoal })}</span>
+            {todayCount >= dailyGoal && (
+              <span className="study-goal-reached">{t('home.dailyGoalReached')}</span>
+            )}
+          </div>
+          <div className="study-goal-bar">
+            <div
+              className="study-goal-fill"
+              style={{ width: `${goalProgressPercent}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="study-review-row">
+          <span className="study-review-status">
+            {dueCount > 0
+              ? t('home.todayReviewCount', { count: dueCount })
+              : t('home.noReviewToday')}
+          </span>
+          <button
+            type="button"
+            className="btn-primary study-review-btn"
+            onClick={() => navigate('/review')}
+            disabled={dueCount === 0}
+          >
+            {t('home.startReviewBtn')}
+          </button>
+        </div>
+      </div>
+
       <div className="session-length-bar">
         <label htmlFor="home-session-length" className="session-length-label">
           {t('home.questionsPerSession')}
@@ -118,13 +205,6 @@ export default function Home() {
         </button>
         <button className="btn-primary" onClick={() => navigate('/sessions?exerciseType=speaking')}>
           {t('home.practiceSpeaking')}
-        </button>
-        <button
-          className="btn-primary review-sentences-btn"
-          onClick={() => navigate('/sessions?review=1')}
-          disabled={mistakeCount === 0}
-        >
-          {t('home.reviewMistakes', { count: mistakeCount })}
         </button>
         <button className="btn-secondary reset-btn" onClick={handleResetProgress}>
           {t('home.resetProgress')}

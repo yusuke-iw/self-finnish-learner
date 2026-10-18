@@ -29,5 +29,12 @@ describe('App Component', () => {
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Drill Studio')).toBeInTheDocument();
   });
+
+  it('renders Review page when navigating to /review', () => {
+    window.history.pushState({}, 'Review page', '/review');
+    render(<App />);
+    expect(screen.getByRole('link', { name: /Review|復習/i })).toBeInTheDocument();
+    expect(screen.getByText(/Today's Review|今日の復習/i)).toBeInTheDocument();
+  });
 });
 

@@ -1030,7 +1030,7 @@ describe('Session Component', () => {
     });
   });
 
-  it('records sentence mistakes on incorrect answer and removes on perfect answer in review mode', async () => {
+  it('records sentence into reviewSchedule at box 1 on incorrect answer and records studyStats', async () => {
     renderComponent(mockSession);
     fireEvent.click(screen.getByText('Start Session'));
 
@@ -1048,24 +1048,44 @@ describe('Session Component', () => {
       expect(document.querySelector('.feedback.incorrect')).toBeInTheDocument();
     });
 
-    const storedMistakes = JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'));
-    expect(storedMistakes).toHaveLength(1);
-    expect(storedMistakes[0].sentenceId).toBe('s1');
-    expect(storedMistakes[0].count).toBe(1);
+    const storedSchedule = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'));
+    expect(storedSchedule['sentence:s1']).toBeDefined();
+    expect(storedSchedule['sentence:s1'].box).toBe(1);
+    expect(storedSchedule['sentence:s1'].lapses).toBe(1);
     expect(saveProgress).toHaveBeenCalledWith({
-      sentenceMistakes: expect.arrayContaining([
-        expect.objectContaining({ sentenceId: 's1', count: 1 })
-      ])
+      reviewSchedule: storedSchedule
+    });
+
+    const storedStats = JSON.parse(localStorage.getItem('finnishLearnerStudyStats'));
+    expect(Object.values(storedStats.days)[0]).toBe(1);
+    expect(saveProgress).toHaveBeenCalledWith({
+      studyStats: storedStats
     });
   });
 
-  it('starts review mode with recorded sentenceIds sorted by newest and removes perfected sentenceId', async () => {
+  it('starts review mode with due sentenceIds sorted by oldest dueAt and advances box on correct answer', async () => {
     localStorage.setItem(
-      'finnishLearnerSentenceMistakes',
-      JSON.stringify([
-        { sentenceId: 's1', count: 1, lastMistakeAt: '2026-05-01T10:00:00.000Z' },
-        { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
-      ])
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'sentence:s1': {
+          box: 1,
+          dueAt: '2020-05-02T10:00:00.000Z',
+          lastReviewedAt: '2020-05-02T10:00:00.000Z',
+          lapses: 1
+        },
+        'sentence:s2': {
+          box: 2,
+          dueAt: '2020-05-01T10:00:00.000Z',
+          lastReviewedAt: '2020-04-28T10:00:00.000Z',
+          lapses: 1
+        },
+        'sentence:s_future': {
+          box: 3,
+          dueAt: '2099-01-01T00:00:00.000Z',
+          lastReviewedAt: '2020-05-01T00:00:00.000Z',
+          lapses: 1
+        }
+      })
     );
     window.history.pushState({}, '', '/sessions?review=1');
 
@@ -1086,22 +1106,62 @@ describe('Session Component', () => {
       expect(screen.getByText('Continue')).toBeInTheDocument();
     });
 
-    const remainingMistakes = JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'));
-    expect(remainingMistakes).toEqual([
-      { sentenceId: 's2', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' }
-    ]);
+    const updatedSchedule = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'));
+    expect(updatedSchedule['sentence:s1'].box).toBe(2);
     expect(saveProgress).toHaveBeenCalledWith({
-      sentenceMistakes: remainingMistakes
+      reviewSchedule: updatedSchedule
     });
   });
 
-  it('shows empty review message when starting review mode with 0 mistakes', async () => {
+  it('moves a sentence up only one box when a review session asks about it twice', async () => {
+    localStorage.setItem(
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'sentence:s1': {
+          box: 1,
+          dueAt: '2020-05-02T10:00:00.000Z',
+          lastReviewedAt: '2020-05-02T10:00:00.000Z',
+          lapses: 1
+        }
+      })
+    );
+    window.history.pushState({}, '', '/sessions?review=1');
+    const choiceQuestion = {
+      sentenceId: 's1',
+      level: 1,
+      type: 'choice',
+      prompt: 'Dog',
+      correctAnswer: 'Koira',
+      options: ['Kissa', 'Koira']
+    };
+    renderComponent({ _id: 'review-twice', questions: [choiceQuestion, { ...choiceQuestion, level: 2 }] });
+
+    for (let i = 0; i < 2; i += 1) {
+      await waitFor(() => {
+        expect(screen.getByText('Koira')).toBeInTheDocument();
+      });
+      checkAnswer.mockResolvedValueOnce({
+        data: { success: true, data: { isCorrect: true, isPerfect: true, hasTypo: false, correctText: 'Koira' } }
+      });
+      fireEvent.click(screen.getByText('Koira'));
+      fireEvent.click(screen.getByText('Check Answer'));
+      await waitFor(() => {
+        expect(screen.getByText('Continue')).toBeInTheDocument();
+      });
+      if (i === 0) fireEvent.click(screen.getByText('Continue'));
+    }
+
+    const updatedSchedule = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'));
+    expect(updatedSchedule['sentence:s1'].box).toBe(2);
+  });
+
+  it('shows empty review message when starting review mode with 0 due sentences', async () => {
     window.history.pushState({}, '', '/sessions?review=1');
 
     renderComponent(mockSession);
 
     await waitFor(() => {
-      expect(screen.getByText('No sentences to review.')).toBeInTheDocument();
+      expect(screen.getByText('Nothing to review today.')).toBeInTheDocument();
     });
     expect(generateSession).not.toHaveBeenCalled();
   });

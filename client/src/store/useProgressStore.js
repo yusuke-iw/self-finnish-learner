@@ -6,6 +6,17 @@ import {
   getSentenceMistakes,
   mergeSentenceMistakes
 } from '../utils/sentenceMistakes';
+import {
+  getReviewSchedule,
+  saveReviewSchedule,
+  mergeReviewSchedules,
+  migrateLegacyReviewItems
+} from '../utils/reviewSchedule';
+import {
+  getStudyStats,
+  saveStudyStats,
+  mergeStudyStats
+} from '../utils/studyStats';
 
 const PROGRESS_STORAGE_KEY = 'finnishLearnerProgress';
 const PASSAGES_STORAGE_KEY = 'finnishLearnerPassagesProgress';
@@ -43,12 +54,14 @@ export const useProgressStore = create((set, get) => ({
   isSyncing: false,
 
   loadProgress: () => {
+    migrateLegacyReviewItems();
     set({ progress: getInitialProgress() });
   },
 
   syncWithServer: async () => {
     try {
       set({ isSyncing: true });
+      migrateLegacyReviewItems();
       const localProgress = getInitialProgress();
       const res = await fetchProgress();
       if (res?.data?.success && res.data.data) {
@@ -98,6 +111,24 @@ export const useProgressStore = create((set, get) => ({
           console.error('Failed to merge sentence mistakes', e);
         }
 
+        // Merge review schedule between server and local
+        const localReviewSchedule = getReviewSchedule();
+        const serverReviewSchedule =
+          serverData.reviewSchedule && typeof serverData.reviewSchedule === 'object'
+            ? serverData.reviewSchedule
+            : {};
+        const mergedReviewSchedule = mergeReviewSchedules(serverReviewSchedule, localReviewSchedule);
+        saveReviewSchedule(mergedReviewSchedule);
+
+        // Merge study stats between server and local
+        const localStudyStats = getStudyStats();
+        const serverStudyStats =
+          serverData.studyStats && typeof serverData.studyStats === 'object'
+            ? serverData.studyStats
+            : {};
+        const mergedStudyStats = mergeStudyStats(serverStudyStats, localStudyStats);
+        saveStudyStats(mergedStudyStats);
+
         // Save merged learningPath back to localStorage & state
         localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(mergedPath));
         set({ progress: mergedPath });
@@ -106,7 +137,9 @@ export const useProgressStore = create((set, get) => ({
         const savePromise = saveProgress({
           learningPath: mergedPath,
           passagesProgress: JSON.parse(localStorage.getItem(PASSAGES_STORAGE_KEY) || '{}'),
-          sentenceMistakes: mergedSentenceMistakes
+          sentenceMistakes: mergedSentenceMistakes,
+          reviewSchedule: mergedReviewSchedule,
+          studyStats: mergedStudyStats
         });
         if (savePromise && typeof savePromise.catch === 'function') {
           savePromise.catch(() => {});
