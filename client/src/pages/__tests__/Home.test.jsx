@@ -64,6 +64,14 @@ describe('Home Component', () => {
     const speakButtons = screen.getAllByText('🎙️ Speak');
     fireEvent.click(speakButtons[0]);
     expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l1&level=3&exerciseType=speaking');
+
+    const listenButtons = screen.getAllByText('🎧 Listen');
+    fireEvent.click(listenButtons[0]);
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l1&level=3&exerciseType=dictation');
+
+    const dictationPracticeBtn = screen.getByText('🎧 Dictation');
+    fireEvent.click(dictationPracticeBtn);
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?exerciseType=dictation');
   });
 
   it('renders "Mastered" badge for completed levels using lesson.id', () => {

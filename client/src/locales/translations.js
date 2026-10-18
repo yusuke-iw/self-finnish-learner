@@ -4,6 +4,7 @@ export const translations = {
     nav: {
       home: 'ホーム',
       review: '復習',
+      numbers: '数字',
       grammar: '文法・イディオム',
       drillStudio: '演習スタジオ',
       passages: '読解パッセージ',
@@ -32,6 +33,7 @@ export const translations = {
       guidebook: 'ガイドブック',
       practiceMatch: '🧩 単語マッチ特訓',
       practiceSpeaking: '🎙️ 発音・スピーキング特訓',
+      practiceDictation: '🎧 聞き取り練習',
       resetProgress: '学習履歴をリセット',
       resetConfirm: 'これまでの学習進捗をすべてリセットしてもよろしいですか？',
       mastered: '🏆 完全習得',
@@ -41,6 +43,7 @@ export const translations = {
       levelType: 'L3 (タイピング)',
       speakBtn: '🎙️ 発音',
       matchBtn: '🧩 ペア',
+      listenBtn: '🎧 聞き取り',
       syncIdLabel: '同期ID',
       syncIdSave: '保存',
       syncIdDesc: '同じIDを入れた端末どうしで進捗を共有します',
@@ -241,6 +244,28 @@ export const translations = {
       upcoming1d: '1日以内',
       upcoming7d: '7日以内',
       upcomingCount: '{count}件'
+    },
+
+    // Numbers Practice Page
+    numbers: {
+      title: '数字・値段・時刻の聞き取り練習',
+      modeNumber: '数字',
+      modePrice: '値段',
+      modeTimeOfficial: '時刻（公式・24時間）',
+      modeTimeEveryday: '時刻（日常・12時間）',
+      rangeLabel: '範囲:',
+      instruction: '聞こえた数字を入力してください:',
+      placeholderNumber: '例: 42',
+      placeholderPrice: '例: 12,50',
+      placeholderTimeOfficial: '例: 14:30',
+      placeholderTimeEveryday: '例: 3:15',
+      submitBtn: '回答',
+      nextBtn: '次へ',
+      retryBtn: 'もう一度',
+      correctAnswerLabel: '正解:',
+      finnishLabel: 'フィンランド語:',
+      completedTitle: '10問完了！',
+      scoreResult: '{total}問中 {score}問正解'
     }
   },
 
@@ -249,6 +274,7 @@ export const translations = {
     nav: {
       home: 'Home',
       review: 'Review',
+      numbers: 'Numbers',
       grammar: 'Grammar & Idioms',
       drillStudio: 'Drill Studio',
       passages: 'Passages',
@@ -277,6 +303,7 @@ export const translations = {
       guidebook: 'Guidebook',
       practiceMatch: '🧩 Practice Word Match',
       practiceSpeaking: '🎙️ Practice Speaking',
+      practiceDictation: '🎧 Dictation',
       resetProgress: 'Reset Progress',
       resetConfirm: 'Are you sure you want to reset all your progress?',
       mastered: '🏆 Mastered',
@@ -286,6 +313,7 @@ export const translations = {
       levelType: 'L3 (Type)',
       speakBtn: '🎙️ Speak',
       matchBtn: '🧩 Match',
+      listenBtn: '🎧 Listen',
       syncIdLabel: 'Sync ID',
       syncIdSave: 'Save',
       syncIdDesc: 'Devices with the same ID share progress.',
@@ -486,6 +514,28 @@ export const translations = {
       upcoming1d: 'Within 1 day',
       upcoming7d: 'Within 7 days',
       upcomingCount: '{count} items'
+    },
+
+    // Numbers Practice Page
+    numbers: {
+      title: 'Numbers, Prices & Time Listening',
+      modeNumber: 'Numbers',
+      modePrice: 'Prices',
+      modeTimeOfficial: 'Time (24h Official)',
+      modeTimeEveryday: 'Time (12h Everyday)',
+      rangeLabel: 'Range:',
+      instruction: 'Type the number you hear:',
+      placeholderNumber: 'e.g. 42',
+      placeholderPrice: 'e.g. 12,50',
+      placeholderTimeOfficial: 'e.g. 14:30',
+      placeholderTimeEveryday: 'e.g. 3:15',
+      submitBtn: 'Check',
+      nextBtn: 'Next',
+      retryBtn: 'Try Again',
+      correctAnswerLabel: 'Answer:',
+      finnishLabel: 'Finnish:',
+      completedTitle: 'Set Complete!',
+      scoreResult: '{score} / {total} correct'
     }
   }
 };

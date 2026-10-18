@@ -50,6 +50,7 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--text-secondary);
+  white-space: nowrap;
   transition: all 0.25s var(--ease);
 }
 .nav-links a:hover {
@@ -3585,3 +3586,89 @@
   color: var(--text-primary);
   font-size: 15px;
 }
+
+/* ================================================================
+   NUMBER PRACTICE PAGE
+   ================================================================ */
+
+.number-practice-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.number-practice-title {
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.number-mode-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.number-mode-tab {
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.number-mode-tab:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-border);
+}
+
+.number-mode-tab.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+}
+
+.number-range-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.number-range-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.number-range-btn {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-card-hover);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.number-range-btn.active {
+  background: var(--accent2-dim);
+  color: var(--accent2);
+  border-color: var(--accent2);
+}
+
+.level-btn-listen {
+  background-color: var(--bg-card-hover);
+  color: var(--accent);
+  border-color: var(--accent-border);
+}
+

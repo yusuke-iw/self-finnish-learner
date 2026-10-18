@@ -80,6 +80,22 @@ describe('Sessions Controller', () => {
       const responseBody = mockRes.json.mock.calls[0][0];
       expect(responseBody.data.questions.every(q => q.type === 'speaking')).toBe(true);
     });
+
+    it('should handle exerciseType dictation by generating one level 3 typing listening question per sentence', async () => {
+      mockReq.body.exerciseType = 'dictation';
+      Sentence.find.mockReturnValue({ exec: jest.fn().mockResolvedValue(mockSentences) });
+
+      await sessionsController.generateSession(mockReq, mockRes, mockNext);
+
+      const responseBody = mockRes.json.mock.calls[0][0];
+      expect(responseBody.success).toBe(true);
+      expect(responseBody.data.questions).toHaveLength(mockSentences.length);
+      expect(
+        responseBody.data.questions.every(
+          q => q.level === 3 && q.type === 'typing' && q.isListening === true && Boolean(q.correctAnswer)
+        )
+      ).toBe(true);
+    });
     
     it('should handle memory fallback', async () => {
       mongoose.connection.readyState = 0;
