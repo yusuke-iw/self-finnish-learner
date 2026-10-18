@@ -141,5 +141,80 @@ describe('useProgressStore', () => {
       sentenceMistakes: expectedMerged
     }));
   });
+
+  it('migrates legacy review items and merges reviewSchedule and studyStats on syncWithServer', async () => {
+    localStorage.setItem(
+      'finnishLearnerSentenceMistakes',
+      JSON.stringify([
+        { sentenceId: 's_legacy', count: 1, lastMistakeAt: '2026-05-01T00:00:00.000Z' }
+      ])
+    );
+    localStorage.setItem(
+      'finnishLearnerReviewSchedule',
+      JSON.stringify({
+        'sentence:s1': {
+          box: 2,
+          dueAt: '2026-05-10T00:00:00.000Z',
+          lastReviewedAt: '2026-05-07T00:00:00.000Z',
+          lapses: 1
+        }
+      })
+    );
+    localStorage.setItem(
+      'finnishLearnerStudyStats',
+      JSON.stringify({
+        days: { '2026-05-07': 5 },
+        dailyGoal: 10
+      })
+    );
+
+    api.fetchProgress.mockResolvedValue({
+      data: {
+        success: true,
+        data: {
+          learningPath: {},
+          reviewSchedule: {
+            'sentence:s1': {
+              box: 1,
+              dueAt: '2026-05-05T00:00:00.000Z',
+              lastReviewedAt: '2026-05-05T00:00:00.000Z',
+              lapses: 1
+            },
+            'grammar:g1': {
+              box: 3,
+              dueAt: '2026-05-12T00:00:00.000Z',
+              lastReviewedAt: '2026-05-05T00:00:00.000Z',
+              lapses: 1
+            }
+          },
+          studyStats: {
+            days: { '2026-05-06': 12, '2026-05-07': 3 },
+            dailyGoal: 30
+          }
+        }
+      }
+    });
+    api.saveProgress.mockResolvedValue({ data: { success: true } });
+
+    await useProgressStore.getState().syncWithServer();
+
+    const storedSchedule = JSON.parse(localStorage.getItem('finnishLearnerReviewSchedule'));
+    expect(storedSchedule['sentence:s1'].box).toBe(2);
+    expect(storedSchedule['grammar:g1'].box).toBe(3);
+    expect(storedSchedule['sentence:s_legacy'].box).toBe(1);
+
+    const storedStats = JSON.parse(localStorage.getItem('finnishLearnerStudyStats'));
+    expect(storedStats).toEqual({
+      days: { '2026-05-06': 12, '2026-05-07': 5 },
+      dailyGoal: 10
+    });
+
+    expect(api.saveProgress).toHaveBeenCalledWith(
+      expect.objectContaining({
+        reviewSchedule: storedSchedule,
+        studyStats: storedStats
+      })
+    );
+  });
 });
 

@@ -3361,4 +3361,227 @@
   border-color: var(--accent);
 }
 
+/* ================================================================
+   HOME STUDY CARD & REVIEW HUB
+   ================================================================ */
 
+.study-card {
+  width: 100%;
+  max-width: 600px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.study-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.study-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--warning-dim);
+  color: var(--warning);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.study-goal-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.study-goal-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.study-goal-select {
+  padding: 6px 12px;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: var(--font-sans);
+}
+
+.study-goal-select:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.study-goal-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.study-goal-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.study-goal-reached {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.study-goal-bar {
+  height: 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.study-goal-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: var(--radius-pill);
+  transition: width 0.3s var(--ease);
+}
+
+.study-review-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.study-review-status {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.study-review-btn {
+  padding: 10px 22px;
+  font-size: 14px;
+}
+
+.review-page {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.review-header {
+  text-align: center;
+}
+
+.review-title {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.review-subtitle {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.review-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.review-category-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.review-category-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.review-category-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.review-due-badge {
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.review-start-btn {
+  justify-content: center;
+  width: 100%;
+}
+
+.review-upcoming-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.review-upcoming-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.review-upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-upcoming-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-sm);
+}
+
+.review-upcoming-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.review-upcoming-value {
+  color: var(--text-primary);
+  font-size: 15px;
+}

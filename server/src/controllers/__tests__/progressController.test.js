@@ -279,6 +279,77 @@ describe('Progress Controller', () => {
         source: 'memory'
       }));
     });
+
+    it('should save and return reviewSchedule and studyStats in database and memory modes', async () => {
+      const reviewSchedule = {
+        'sentence:s1': {
+          box: 2,
+          dueAt: '2026-05-05T00:00:00.000Z',
+          lastReviewedAt: '2026-05-02T00:00:00.000Z',
+          lapses: 1
+        }
+      };
+      const studyStats = {
+        days: { '2026-05-02': 12 },
+        dailyGoal: 30
+      };
+
+      req.body = {
+        userId: 'srs_user',
+        reviewSchedule,
+        studyStats
+      };
+
+      jest.spyOn(Progress, 'findOneAndUpdate').mockReturnValue({
+        lean: jest.fn().mockResolvedValue({
+          userId: 'srs_user',
+          reviewSchedule,
+          studyStats
+        })
+      });
+
+      await progressController.saveProgress(req, res);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: true,
+        data: expect.objectContaining({
+          userId: 'srs_user',
+          reviewSchedule,
+          studyStats
+        }),
+        source: 'database'
+      }));
+
+      // Memory mode save and subsequent getProgress
+      mongoose.connection.readyState = 0;
+      req.body = {
+        userId: 'srs_mem_user',
+        reviewSchedule,
+        studyStats
+      };
+      await progressController.saveProgress(req, res);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: true,
+        data: expect.objectContaining({
+          userId: 'srs_mem_user',
+          reviewSchedule,
+          studyStats
+        }),
+        source: 'memory'
+      }));
+
+      res.json.mockClear();
+      req.query = { userId: 'srs_mem_user' };
+      await progressController.getProgress(req, res);
+      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+        success: true,
+        data: expect.objectContaining({
+          userId: 'srs_mem_user',
+          reviewSchedule,
+          studyStats
+        }),
+        source: 'memory'
+      }));
+    });
   });
 });
 
