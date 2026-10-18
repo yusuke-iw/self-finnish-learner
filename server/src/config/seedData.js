@@ -462,6 +462,350 @@ const passages = [
         correctAnswerIndex: 0
       }
     ]
+  },
+  {
+    _id: "p5",
+    title: "Viikonlopun ostokset ja ruoanlaitto",
+    titleJa: "週末の買い物と料理",
+    text: "Lauantaiaamuna Sara menee supermarkettiin. Hänellä on ostoslista, koska hän tekee illalla kasviskeittoa ystävilleen. Kaupassa hän vertaa tomaattien hintoja. Hän ostaa myös porkkanoita ja perunoita, sillä ne ovat halvempia kuin paprikat. Kotona hän lukee reseptin ja pesee kasvikset. Sitten hän pilkkoo ne ja keittää keiton suuressa kattilassa. Ystävät tuovat leipää, ja kaikki syövät yhdessä. Sara laittaa loput keitosta jääkaappiin sunnuntaita varten.",
+    translation: "On Saturday morning, Sara goes to the supermarket. She has a shopping list because she is making vegetable soup for her friends in the evening. At the shop, she compares the prices of tomatoes. She also buys carrots and potatoes because they are cheaper than peppers. At home, she reads the recipe and washes the vegetables. Then she chops them and cooks the soup in a large pot. Her friends bring bread, and everyone eats together. Sara puts the rest of the soup in the fridge for Sunday.",
+    translationJa: "土曜日の朝、サラはスーパーへ行きます。夜に友人たちに野菜スープを作るので、買い物リストを持っています。店ではトマトの値段を比べます。パプリカより安いので、ニンジンとジャガイモも買います。家ではレシピを読み、野菜を洗います。それから野菜を切り、大きな鍋でスープを煮ます。友人たちはパンを持ってきて、みんなで一緒に食べます。サラは日曜日のために、残りのスープを冷蔵庫に入れます。",
+    category: "Daily Life",
+    difficulty: "A2",
+    vocabulary: [
+      { word: "supermarkettiin", translation: "to the supermarket (illative)", translationJa: "スーパーへ（入格）" },
+      { word: "ostoslista", translation: "shopping list", translationJa: "買い物リスト" },
+      { word: "hintoja", translation: "prices (partitive plural)", translationJa: "値段（分格複数）" },
+      { word: "halvempia", translation: "cheaper (comparative, partitive plural)", translationJa: "より安い（比較級・分格複数）" },
+      { word: "reseptin", translation: "recipe (genitive form, total object)", translationJa: "レシピ（属格形の全体目的語）" },
+      { word: "pilkkoo", translation: "chops", translationJa: "細かく切る" },
+      { word: "keittää", translation: "cooks by boiling", translationJa: "煮る" },
+      { word: "jääkaappiin", translation: "into the fridge (illative)", translationJa: "冷蔵庫に（入格）" }
+    ],
+    questions: [
+      {
+        questionText: "Why does Sara buy carrots and potatoes?",
+        questionTextJa: "サラがニンジンとジャガイモを買うのはなぜですか？",
+        options: ["They are cheaper than peppers", "Her friends do not like tomatoes", "There are no peppers in the shop"],
+        optionsJa: ["パプリカより安いから", "友人たちがトマトを好きではないから", "店にパプリカがないから"],
+        correctAnswerIndex: 0
+      },
+      {
+        questionText: "What does Sara do with the remaining soup?",
+        questionTextJa: "サラは残ったスープをどうしますか？",
+        options: ["She gives it all to her friends", "She puts it in the fridge for Sunday", "She takes it back to the shop"],
+        optionsJa: ["すべて友人たちにあげる", "日曜日のために冷蔵庫に入れる", "店に持ち帰る"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "What does 'pilkkoo' mean in the text?",
+        questionTextJa: "本文の「pilkkoo」はどういう意味ですか？",
+        options: ["Washes", "Buys", "Chops"],
+        optionsJa: ["洗う", "買う", "細かく切る"],
+        correctAnswerIndex: 2
+      }
+    ]
+  },
+  {
+    _id: "p6",
+    title: "Syksystä talveen",
+    titleJa: "秋から冬へ",
+    text: "Syksyllä päivät lyhenevät ja illat ovat viileitä. Emma katsoo aamulla säätiedotuksen, koska hän kävelee kouluun. Tänään on luvassa sadetta, joten hän ottaa sateenvarjon ja laittaa kumisaappaat jalkaan. Märät lehdet peittävät puiston polut. Eräänä aamuna ensilumi sataa maahan, ja puisto näyttää valkoiselta. Lumi sulaa kuitenkin pian pois. Talvella on pitkään pimeää, joten Emma käy ulkona keskellä päivää ja nauttii päivänvalosta. Hän odottaa jo kevättä, kun valoa on taas enemmän.",
+    translation: "In autumn, the days get shorter and the evenings are cool. Emma checks the weather forecast in the morning because she walks to school. Rain is forecast today, so she takes an umbrella and puts on rubber boots. Wet leaves cover the paths in the park. One morning, the first snow falls, and the park looks white. However, the snow soon melts away. In winter, it is dark for long periods, so Emma goes outside in the middle of the day and enjoys the daylight. She is already looking forward to spring, when there will be more light again.",
+    translationJa: "秋には日が短くなり、夕方は肌寒くなります。エンマは歩いて学校へ行くので、朝に天気予報を見ます。今日は雨の予報なので、傘を持って長靴を履きます。公園の小道は濡れた葉に覆われています。ある朝、初雪が降って、公園が白く見えます。しかし、雪はすぐに解けてしまいます。冬は暗い時間が長いので、エンマは日中に外へ出て日の光を楽しみます。光がまた増える春を、もう心待ちにしています。",
+    category: "Weather & Seasons",
+    difficulty: "A2",
+    vocabulary: [
+      { word: "lyhenevät", translation: "get shorter (3rd person plural)", translationJa: "短くなる（3人称複数）" },
+      { word: "sadetta", translation: "rain (partitive)", translationJa: "雨（分格）" },
+      { word: "kumisaappaat", translation: "rubber boots (nominative plural)", translationJa: "長靴（主格複数）" },
+      { word: "ensilumi", translation: "first snow", translationJa: "初雪" },
+      { word: "sulaa", translation: "melts", translationJa: "解ける" },
+      { word: "pimeää", translation: "dark (partitive)", translationJa: "暗い（分格）" },
+      { word: "päivänvalosta", translation: "daylight (elative, with nauttia)", translationJa: "日の光を（出格・nauttia が要求する格）" },
+      { word: "kevättä", translation: "spring (partitive)", translationJa: "春（分格）" }
+    ],
+    questions: [
+      {
+        questionText: "Why does Emma take an umbrella today?",
+        questionTextJa: "エンマが今日は傘を持っていくのはなぜですか？",
+        options: ["The sun is very bright", "Rain is forecast", "She is going to buy new boots"],
+        optionsJa: ["日差しがとても強いから", "雨の予報だから", "新しい長靴を買いに行くから"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "When does Emma go outside to enjoy the daylight in winter?",
+        questionTextJa: "冬、エンマは日の光を楽しむためにいつ外に出ますか？",
+        options: ["Late at night", "Only after sunset", "In the middle of the day"],
+        optionsJa: ["夜遅く", "日没後だけ", "日中"],
+        correctAnswerIndex: 2
+      },
+      {
+        questionText: "What does 'ensilumi' mean?",
+        questionTextJa: "「ensilumi」はどういう意味ですか？",
+        options: ["First snow", "Heavy rain", "Spring sunshine"],
+        optionsJa: ["初雪", "大雨", "春の日差し"],
+        correctAnswerIndex: 0
+      }
+    ]
+  },
+  {
+    _id: "p7",
+    title: "Ajanvaraus terveysasemalle",
+    titleJa: "保健センターの予約",
+    text: "Liisalle nousi eilen kuume, ja tänä aamuna hänen kurkkunsa on edelleen kipeä. Hän soittaa terveysasemalle, koska haluaisi varata ajan. Puhelimeen vastaava hoitaja kysyy oireista ja siitä, milloin ne alkoivat. Keskustelun jälkeen hoitaja varaa hänelle ajan samalle päivälle. Liisa ilmoittaa esihenkilölleen, ettei pääse tänään töihin. Hänen työpaikallaan sairauspoissaoloista ilmoitetaan puhelimitse, joten pelkkä viesti ei riitä. Vastaanotolla Liisa kertoo lääkärille, että hänen työssään täytyy puhua paljon. Hän kysyy myös, voisiko hän saada todistuksen poissaoloa varten. Kotona hän toivoo, että voisi levätä rauhassa.",
+    translation: "Liisa developed a fever yesterday, and her throat is still sore this morning. She calls the health centre because she would like to make an appointment. The nurse who answers the phone asks about her symptoms and when they started. After the conversation, the nurse books her an appointment for the same day. Liisa tells her supervisor that she cannot come to work today. At her workplace, sickness absences are reported by phone, so a message alone is not enough. During the appointment, Liisa tells the doctor that her job requires a lot of speaking. She also asks whether she could get a certificate for her absence. At home, she hopes she can rest in peace.",
+    translationJa: "リーサは昨日熱が出て、今朝もまだ喉が痛みます。予約を取りたいので、保健センターに電話します。電話に出た看護師は、症状と、いつから症状があるのかを尋ねます。話をした後、看護師はその日の予約を取ってくれます。リーサは上司に、今日は出勤できないと伝えます。彼女の職場では病欠の連絡は電話ですることになっているため、メッセージだけでは不十分です。診察では、仕事でたくさん話す必要があると医師に伝えます。また、欠勤のための証明書をもらえるかどうかも尋ねます。家では、落ち着いて休めるといいなと思います。",
+    category: "Health",
+    difficulty: "B1",
+    vocabulary: [
+      { word: "kuume", translation: "fever", translationJa: "熱・発熱" },
+      { word: "terveysasemalle", translation: "to the health centre (allative)", translationJa: "保健センターへ（向格）" },
+      { word: "oireista", translation: "about symptoms (elative plural)", translationJa: "症状について（出格複数）" },
+      { word: "esihenkilölleen", translation: "to her supervisor (allative + possessive suffix)", translationJa: "自分の上司に（向格＋所有接尾辞）" },
+      { word: "sairauspoissaoloista", translation: "sickness absences (elative plural, with ilmoittaa)", translationJa: "病欠について（出格複数・ilmoittaa が要求する格）" },
+      { word: "voisiko", translation: "could (conditional + question particle)", translationJa: "できるだろうか（条件法＋疑問接辞）" },
+      { word: "todistuksen", translation: "certificate (genitive form, total object)", translationJa: "証明書（属格形の全体目的語）" },
+      { word: "levätä", translation: "to rest (1st infinitive)", translationJa: "休む（第1不定詞）" }
+    ],
+    questions: [
+      {
+        questionText: "Why does Liisa call the health centre?",
+        questionTextJa: "リーサが保健センターに電話するのはなぜですか？",
+        options: ["To ask about a job", "To cancel her supervisor's appointment", "To make an appointment because she is ill"],
+        optionsJa: ["仕事について尋ねるため", "上司の予約を取り消すため", "体調が悪く、予約を取るため"],
+        correctAnswerIndex: 2
+      },
+      {
+        questionText: "How must Liisa report a sickness absence at her workplace?",
+        questionTextJa: "リーサの職場では、病欠をどのように連絡する必要がありますか？",
+        options: ["By phone", "Only with a text message", "By visiting the office in person"],
+        optionsJa: ["電話で", "メッセージだけで", "直接職場を訪れて"],
+        correctAnswerIndex: 0
+      },
+      {
+        questionText: "What does the conditional form 'voisiko' express in Liisa's question?",
+        questionTextJa: "リーサの質問にある条件法「voisiko」は何を表していますか？",
+        options: ["A command to her supervisor", "A polite question about whether something is possible", "An event that definitely happened yesterday"],
+        optionsJa: ["上司への命令", "可能かどうかを丁寧に尋ねる表現", "昨日確実に起こった出来事"],
+        correctAnswerIndex: 1
+      }
+    ]
+  },
+  {
+    _id: "p8",
+    title: "Uusi koti ja talon tavat",
+    titleJa: "新しい住まいと建物のルール",
+    text: "Omar on löytänyt vuokra-asunnon läheltä työpaikkaansa. Ennen muuttoa hän lukee vuokrasopimuksen huolellisesti ja kysyy vuokranantajalta, mitä vuokraan sisältyy. Kun hän saa avaimet, hän tarkistaa asunnon kunnon ja ottaa kuvia vioista, jotka hän huomaa. Hän lähettää kuvat vuokranantajalle, jotta vanhat vauriot eivät myöhemmin aiheuttaisi epäselvyyksiä. Muuton jälkeen hän huomaa, ettei hänen nimeään ole ulko-oven nimitaulussa. Hän ottaa yhteyttä isännöintiyhtiöön ja kysyy, miten nimi saadaan tauluun. Talon ilmoitustaululla kerrotaan myös, miten yhteisiä tiloja käytetään. Jätekatoksessa on erilliset astiat biojätteelle, paperille ja muille jätteille. Omar lukee lajitteluohjeet, koska hän haluaa laittaa jätteet oikeisiin astioihin.",
+    translation: "Omar has found a rental flat near his workplace. Before moving, he reads the rental agreement carefully and asks the landlord what is included in the rent. When he gets the keys, he checks the condition of the flat and takes photos of the defects he notices. He sends the photos to the landlord so that existing damage will not cause confusion later. After moving in, he notices that his name is missing from the name board by the entrance. He contacts the property management company and asks how to get his name added to the board. The building's notice board also explains how the shared spaces are used. In the waste shelter, there are separate bins for food and other organic waste, paper, and other types of waste. Omar reads the sorting instructions because he wants to put the waste in the correct bins.",
+    translationJa: "オマルは職場の近くに賃貸住宅を見つけました。引っ越す前に賃貸契約書をよく読み、家賃に何が含まれるかを大家に尋ねます。鍵を受け取ると、住まいの状態を確認し、気づいた不具合の写真を撮ります。以前からある損傷について後で行き違いが生じないよう、写真を大家に送ります。入居後、玄関の入居者名の表示板に自分の名前がないことに気づきます。管理会社に連絡し、どうすれば名前を載せてもらえるか尋ねます。建物の掲示板には、共用スペースの利用方法も書かれています。ゴミ置き場には、生ゴミ、紙類、その他のゴミを分けて入れる容器があります。オマルはゴミを正しい容器に入れたいので、分別の案内を読みます。",
+    category: "Housing",
+    difficulty: "B1",
+    vocabulary: [
+      { word: "vuokra-asunnon", translation: "rental flat (genitive form, total object)", translationJa: "賃貸住宅（属格形の全体目的語）" },
+      { word: "vuokrasopimuksen", translation: "rental agreement (genitive form, total object)", translationJa: "賃貸契約書（属格形の全体目的語）" },
+      { word: "vuokranantajalta", translation: "from the landlord (ablative)", translationJa: "大家から・大家に尋ねて（奪格）" },
+      { word: "vauriot", translation: "damage, damaged areas (nominative plural)", translationJa: "損傷・傷んだ箇所（主格複数）" },
+      { word: "isännöintiyhtiöön", translation: "the property management company (illative, with ottaa yhteyttä)", translationJa: "管理会社に（入格・ottaa yhteyttä が要求する格）" },
+      { word: "yhteisiä", translation: "shared (partitive plural)", translationJa: "共用の（分格複数）" },
+      { word: "biojätteelle", translation: "for organic waste (allative)", translationJa: "生ゴミ用に（向格）" },
+      { word: "lajitteluohjeet", translation: "sorting instructions (nominative plural)", translationJa: "分別の案内（主格複数）" }
+    ],
+    questions: [
+      {
+        questionText: "Why does Omar send photos to the landlord?",
+        questionTextJa: "オマルが大家に写真を送るのはなぜですか？",
+        options: ["To avoid later confusion about existing damage", "To advertise the flat for rent", "To show where the waste bins are"],
+        optionsJa: ["以前からある損傷について後で行き違いが生じないようにするため", "住宅の入居者を募集するため", "ゴミ容器の場所を示すため"],
+        correctAnswerIndex: 0
+      },
+      {
+        questionText: "What does Omar ask the property management company?",
+        questionTextJa: "オマルは管理会社に何を尋ねますか？",
+        options: ["Whether his workplace is nearby", "Whether the landlord wants to move", "How to get his name added to the name board"],
+        optionsJa: ["職場が近くにあるかどうか", "大家が引っ越したいかどうか", "入居者名の表示板に自分の名前を載せてもらう方法"],
+        correctAnswerIndex: 2
+      },
+      {
+        questionText: "What does 'lajitteluohjeet' refer to in the text?",
+        questionTextJa: "本文の「lajitteluohjeet」は何を指していますか？",
+        options: ["Instructions for paying rent", "Instructions for sorting waste", "Instructions for collecting keys"],
+        optionsJa: ["家賃の支払い案内", "ゴミの分別案内", "鍵の受け取り案内"],
+        correctAnswerIndex: 1
+      }
+    ]
+  },
+  {
+    _id: "p9",
+    title: "Juhannus mökillä",
+    titleJa: "コテージで過ごす夏至祭",
+    text: "Niemisen perhe viettää tänä vuonna juhannusta mökillä järven rannalla. He lähtevät matkaan jo torstaina, jotta välttäisivät pahimmat ruuhkat. Mökillä piha koristellaan koivunoksilla ja pöydälle tuodaan kukkia. Päivällä valmistetaan ruokaa yhdessä, ja illalla saunotaan. Saunan jälkeen jokainen saa päättää, uskaltaako mennä uimaan viileään järveen. Perheen nuorin haluaisi lähteä soutamaan, mutta ensin etsitään kaikille pelastusliivit. Jos lauantaina olisi poutaa, he voisivat tehdä retken läheiseen saareen. Valoisa yö houkuttelee istumaan rannalla vielä myöhään. Perhe nauttii kiireettömästä yhdessäolosta eikä kaipaa tarkkaa ohjelmaa.",
+    translation: "This year, the Nieminen family is spending Midsummer at a cottage by a lake. They set off as early as Thursday to avoid the worst traffic. At the cottage, the yard is decorated with birch branches, and flowers are brought to the table. During the day, they prepare food together, and in the evening, they have a sauna. After the sauna, everyone can decide whether they dare to swim in the cool lake. The youngest member of the family would like to go rowing, but first they find life jackets for everyone. If the weather were dry on Saturday, they could take a trip to a nearby island. The light summer night tempts them to sit by the shore until late. The family enjoys spending unhurried time together and does not feel the need for a detailed programme.",
+    translationJa: "ニエミネン家は今年、湖畔のコテージで夏至祭を過ごします。ひどい渋滞を避けるため、早くも木曜日に出発します。コテージでは庭を白樺の枝で飾り、テーブルに花を持ってきます。昼間は一緒に料理を作り、夜はサウナに入ります。サウナの後は、冷たい湖で泳ぐ勇気があるか、それぞれが決めます。家族の末っ子は手こぎボートに乗りたがっていますが、まず全員分のライフジャケットを探します。土曜日に雨が降らなければ、近くの島に出かけられるでしょう。明るい夏の夜には、つい遅くまで湖畔に座っていたくなります。家族は急がず一緒に過ごす時間を楽しみ、細かな予定がなくても満足しています。",
+    category: "Culture & Traditions",
+    difficulty: "B1",
+    vocabulary: [
+      { word: "mökillä", translation: "at a cottage (adessive)", translationJa: "コテージで（接格）" },
+      { word: "ruuhkat", translation: "traffic jams (nominative plural)", translationJa: "渋滞（主格複数）" },
+      { word: "koristellaan", translation: "is decorated (passive)", translationJa: "飾られる（受動態）" },
+      { word: "saunotaan", translation: "people have a sauna (passive)", translationJa: "サウナに入る（受動態）" },
+      { word: "uskaltaako", translation: "whether one dares (3rd person singular + question particle)", translationJa: "勇気があるかどうか（3人称単数＋疑問接辞）" },
+      { word: "soutamaan", translation: "to go rowing (illative of 3rd infinitive)", translationJa: "ボートをこぎに（第3不定詞入格）" },
+      { word: "poutaa", translation: "dry weather (partitive)", translationJa: "雨の降らない天気（分格）" },
+      { word: "kiireettömästä", translation: "unhurried (elative)", translationJa: "慌ただしくない（出格）" }
+    ],
+    questions: [
+      {
+        questionText: "Why does the family set off on Thursday?",
+        questionTextJa: "家族が木曜日に出発するのはなぜですか？",
+        options: ["The cottage is closed on Friday", "They want to avoid the worst traffic", "They have to return home on Friday"],
+        optionsJa: ["金曜日はコテージが閉まっているから", "ひどい渋滞を避けたいから", "金曜日に帰宅しなければならないから"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "What do they find before going rowing?",
+        questionTextJa: "ボートをこぎに行く前に何を探しますか？",
+        options: ["Life jackets for everyone", "Flowers for the table", "A detailed programme"],
+        optionsJa: ["全員分のライフジャケット", "テーブルに飾る花", "細かな予定表"],
+        correctAnswerIndex: 0
+      },
+      {
+        questionText: "What does 'saunotaan' express in this text?",
+        questionTextJa: "本文の「saunotaan」は何を表していますか？",
+        options: ["A command to heat the sauna", "Something that happened only yesterday", "An activity expressed with the passive, without naming the people"],
+        optionsJa: ["サウナを温めるようにという命令", "昨日だけ起こったこと", "行う人を明示せず、受動態で表した行為"],
+        correctAnswerIndex: 2
+      }
+    ]
+  },
+  {
+    _id: "p10",
+    title: "Kirjasto yhteisenä tilana",
+    titleJa: "みんなの空間としての図書館",
+    text: "Kirjasto yhdistetään usein kirjoihin, mutta sen merkitys ulottuu lainaamista laajemmalle. Kirjojen maksuton lainaaminen antaa mahdollisuuden lukemiseen myös silloin, kun omiin kirjoihin ei ole varaa. Digitaalisten aineistojen käyttö puolestaan edellyttää taitoja, joiden oppimisessa kirjaston henkilökunta voi auttaa. Palvelujen saavutettavuutta parantaa se, että neuvoa voi pyytää kasvokkain. Helsingin keskustakirjasto Oodissa käyvä Aino arvostaa erityisesti mahdollisuutta viettää aikaa yhteisessä tilassa. Hän käyttää kirjastoa sekä opiskeluun että itsenäiseen työskentelyyn. Tapahtumiin osallistuvat kävijät voivat kohdata ihmisiä, joihin he eivät muuten tutustuisi. Ilman ostovelvoitetta käytettävä tila tarjoaa vaihtoehdon kaupallisille kohtaamispaikoille. Hiljaisuutta tarvitseville lukijoille ja keskustelua kaipaaville ryhmille on silti löydettävä sopivat paikat. Tämä edellyttää yhteisiä sääntöjä ja muiden käyttäjien huomioon ottamista. Kirjaston arvoa voikin tarkastella lainamäärien lisäksi sen perusteella, miten se tukee osallisuutta ja yhdenvertaisuutta.",
+    translation: "Libraries are often associated with books, but their significance extends beyond lending. Free book borrowing makes reading possible even when people cannot afford books of their own. Using digital materials, in turn, requires skills that library staff can help people learn. Being able to ask for advice face to face makes services more accessible. Aino, who visits Helsinki Central Library Oodi, particularly appreciates the opportunity to spend time in a shared space. She uses the library both for studying and for working independently. Visitors taking part in events can meet people they would not otherwise get to know. A space available without any obligation to buy offers an alternative to commercial meeting places. Suitable places must still be found for readers who need quiet and groups who want to talk. This requires shared rules and consideration for other users. The value of a library can therefore be assessed not only through lending figures but also through how it supports participation and equality.",
+    translationJa: "図書館と聞くと本を思い浮かべがちですが、その意義は貸出にとどまりません。本を無料で借りられることで、自分で本を買う余裕がなくても読書ができます。一方、デジタル資料の利用には技能が必要で、図書館の職員はその習得を手助けできます。対面で相談できることは、サービスの利用しやすさにつながります。ヘルシンキ中央図書館オーディを利用するアイノは、共有の空間で時間を過ごせることを特に気に入っています。図書館を勉強にも、一人で作業するためにも使っています。催しに参加する利用者は、普段なら知り合うことのない人と出会えるかもしれません。何も買わずに利用できる空間は、商業施設以外にも人が集まれる場を提供します。ただし、静けさを必要とする読者にも、会話をしたいグループにも、適した場所を用意する必要があります。そのためには共通のルールと、ほかの利用者への配慮が欠かせません。したがって図書館の価値は、貸出数に加え、人々の参加や平等をどのように支えているかという観点からも考えられます。",
+    category: "Society",
+    difficulty: "B2",
+    vocabulary: [
+      { word: "maksuton", translation: "free of charge", translationJa: "無料の" },
+      { word: "aineistojen", translation: "materials (genitive plural)", translationJa: "資料の（属格複数）" },
+      { word: "saavutettavuutta", translation: "accessibility (partitive)", translationJa: "利用しやすさ・アクセシビリティ（分格）" },
+      { word: "työskentelyyn", translation: "for working (illative of a noun)", translationJa: "作業のために（名詞の入格）" },
+      { word: "osallistuvat", translation: "participating (active present participle, nominative plural)", translationJa: "参加している（能動現在分詞・主格複数）" },
+      { word: "ostovelvoitetta", translation: "obligation to buy (partitive, after ilman)", translationJa: "購入義務（ilman に続く分格）" },
+      { word: "tarvitseville", translation: "for those needing (active present participle, allative plural)", translationJa: "必要とする人たちに（能動現在分詞・向格複数）" },
+      { word: "yhdenvertaisuutta", translation: "equality (partitive)", translationJa: "平等（分格）" }
+    ],
+    questions: [
+      {
+        questionText: "What does Aino particularly appreciate about Oodi?",
+        questionTextJa: "アイノがオーディを特に気に入っているのはどんな点ですか？",
+        options: ["Having to buy something before entering", "Being able to avoid all other visitors", "Being able to spend time in a shared space"],
+        optionsJa: ["入る前に何かを買う必要がある点", "ほかの利用者全員を避けられる点", "共有の空間で時間を過ごせる点"],
+        correctAnswerIndex: 2
+      },
+      {
+        questionText: "Why are shared rules and consideration needed in a library?",
+        questionTextJa: "図書館に共通のルールや配慮が必要なのはなぜですか？",
+        options: ["To make all visitors take part in events", "To accommodate both quiet reading and group conversation", "To replace borrowing with shopping"],
+        optionsJa: ["全員を催しに参加させるため", "静かな読書とグループでの会話の両方に対応するため", "貸出を買い物に置き換えるため"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "What does 'Tapahtumiin osallistuvat kävijät' mean?",
+        questionTextJa: "「Tapahtumiin osallistuvat kävijät」はどういう意味ですか？",
+        options: ["Visitors who take part in events", "Events arranged by visitors", "Visitors who have cancelled events"],
+        optionsJa: ["催しに参加する利用者", "利用者が企画する催し", "催しを取り消した利用者"],
+        correctAnswerIndex: 0
+      }
+    ]
+  },
+  {
+    _id: "p11",
+    title: "Suomen kieli työyhteisössä",
+    titleJa: "職場で使うフィンランド語",
+    text: "Kun Suomeen muuttanut Elena aloitti uudessa työpaikassaan, hän osasi jo lukea oman alansa tekstejä suomeksi. Kahvitaukojen keskustelut tuntuivat silti vaikeammilta kuin kirjalliset työohjeet. Työkaverit käyttivät puhekieltä, jossa sanojen muodot ja lauseiden rakenteet poikkesivat tutusta kirjakielestä. Esimerkiksi minä saattoi muuttua muotoon mä, eikä lauseessa aina lausuttu kaikkia sanoja yhtä selvästi. Elena alkoi merkitä muistiin ilmauksia, joiden merkitys jäi hänelle epäselväksi. Hän sopi työparinsa kanssa, että tärkeät ohjeet kerrattaisiin tarvittaessa rauhallisesti. Perehdytyksessä käytetty kirjallinen materiaali auttoi yhdistämään kuullut ilmaukset tuttuihin käsitteisiin. Vähitellen Elena huomasi ymmärtävänsä keskusteluja paremmin, vaikka hän itse puhui edelleen melko muodollisesti. Mahdollisuus kysyä ilman kiirettä vahvisti hänen tunnettaan siitä, että hän kuului työyhteisöön. Kielen oppiminen ei kuitenkaan ollut vain hänen omalla vastuullaan, sillä myös kollegat opettelivat ilmaisemaan asioita selkeämmin. Näin työpaikan vuorovaikutuksesta tuli vastavuoroista oppimista, jossa ammatillinen osaaminen pääsi paremmin esiin.",
+    translation: "When Elena, who had moved to Finland, started at her new workplace, she could already read texts in her field in Finnish. Conversations during coffee breaks still felt more difficult than written work instructions. Her colleagues used spoken language in which word forms and sentence structures differed from the standard written Finnish she knew. For example, minä could become mä, and not every word in a sentence was always pronounced equally clearly. Elena began writing down expressions whose meaning remained unclear to her. She agreed with her work partner that important instructions would be repeated at a calm pace when needed. The written material used during her induction helped her connect the expressions she heard with familiar concepts. Gradually, Elena noticed that she understood conversations better, even though she herself still spoke rather formally. Being able to ask questions without being rushed strengthened her sense of belonging to the workplace community. However, learning the language was not solely her responsibility, as her colleagues also practised expressing things more clearly. In this way, communication at work became a process of mutual learning that allowed professional expertise to come through more clearly.",
+    translationJa: "フィンランドに移住したエレナは、新しい職場で働き始めたとき、すでに自分の専門分野の文章をフィンランド語で読めました。それでも、コーヒー休憩中の会話は、書かれた業務指示より難しく感じられました。同僚は話し言葉を使い、その語形や文の構造は、慣れ親しんだ書き言葉と異なっていました。たとえば minä が mä という形になることがあり、文中のすべての単語がいつも同じようにはっきり発音されるわけでもありませんでした。エレナは、意味がよく分からなかった表現をメモし始めました。必要に応じて大切な指示を落ち着いて繰り返してもらうことを、仕事のペアを組む同僚と取り決めました。導入研修で使われた文書は、耳にした表現と知っている概念を結び付ける助けになりました。自分ではまだかなり改まった話し方をしていましたが、徐々に会話を以前より理解できるようになったと気づきました。急かされずに質問できることは、職場の一員だという実感を強めました。ただし、言語の習得は彼女一人の責任ではなく、同僚たちも、より分かりやすく伝える練習をしました。こうして職場のやり取りは互いに学び合う場となり、専門的な能力もより発揮されるようになりました。",
+    category: "Work & Language",
+    difficulty: "B2",
+    vocabulary: [
+      { word: "muuttanut", translation: "having moved (active past participle)", translationJa: "移住した（能動過去分詞）" },
+      { word: "puhekieltä", translation: "spoken language (partitive)", translationJa: "話し言葉（分格）" },
+      { word: "kirjakielestä", translation: "from standard written language (elative)", translationJa: "標準的な書き言葉から（出格）" },
+      { word: "epäselväksi", translation: "unclear (translative, with jäädä)", translationJa: "不明なままに（変格・jäädä と使用）" },
+      { word: "Perehdytyksessä", translation: "during induction (inessive)", translationJa: "導入研修で（内格）" },
+      { word: "kirjallinen", translation: "written", translationJa: "書かれた・文書による" },
+      { word: "ymmärtävänsä", translation: "that she understood (participial construction + possessive suffix)", translationJa: "自分が理解していると（分詞構文＋所有接尾辞）" },
+      { word: "vastavuoroista", translation: "mutual, reciprocal (partitive)", translationJa: "相互の（分格）" }
+    ],
+    questions: [
+      {
+        questionText: "Why did Elena find coffee-break conversations difficult at first?",
+        questionTextJa: "エレナが最初、休憩中の会話を難しく感じたのはなぜですか？",
+        options: ["The spoken forms differed from the written language she knew", "She had never read Finnish texts in her field", "Her colleagues only communicated in writing"],
+        optionsJa: ["話し言葉の形が、知っている書き言葉と違ったから", "専門分野のフィンランド語の文章を一度も読んだことがなかったから", "同僚が文書だけでやり取りしていたから"],
+        correctAnswerIndex: 0
+      },
+      {
+        questionText: "How did Elena's colleagues contribute to learning at work?",
+        questionTextJa: "エレナの同僚は職場での学びにどう協力しましたか？",
+        options: ["They required her to stop asking questions", "They practised expressing things more clearly", "They removed all written instructions"],
+        optionsJa: ["質問をやめるよう求めた", "より分かりやすく伝える練習をした", "書かれた指示をすべてなくした"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "What does 'huomasi ymmärtävänsä keskusteluja paremmin' mean?",
+        questionTextJa: "「huomasi ymmärtävänsä keskusteluja paremmin」はどういう意味ですか？",
+        options: ["She asked others to understand her better", "She had stopped listening to conversations", "She noticed that she understood conversations better"],
+        optionsJa: ["周りの人に自分をもっと理解してほしいと頼んだ", "会話を聞くのをやめていた", "会話を以前より理解できるようになったと気づいた"],
+        correctAnswerIndex: 2
+      }
+    ]
+  },
+  {
+    _id: "p12",
+    title: "Luottamus hyvinvointivaltion perustana",
+    titleJa: "福祉国家の基盤としての信頼",
+    text: "Luottamusta pidetään usein yhtenä hyvinvointivaltion keskeisistä edellytyksistä. Kansalaisten on voitava luottaa siihen, että yhteisiä varoja käytetään oikeudenmukaisesti ja päätöksiä perustellaan avoimesti. Samalla järjestelmä nojaa oletukseen, että ihmiset osallistuvat sen ylläpitämiseen mahdollisuuksiensa mukaan. Luottamus ei kuitenkaan merkitse sitä, että viranomaisten toimintaa pitäisi arvioida kritiikittömästi. Päinvastoin epäkohtien esiin tuominen voi vahvistaa järjestelmän uskottavuutta, jos havaittuihin ongelmiin puututaan. Hyvinvointivaltiosta käytävässä keskustelussa korostuvat usein kustannukset, vaikka myös palvelujen vaikutuksia olisi tarkasteltava pitkällä aikavälillä. Ennaltaehkäisevään työhön käytettyjen varojen hyödyt eivät välttämättä näy heti, mikä vaikeuttaa niiden arviointia. Toisaalta pelkkä vetoaminen tuleviin hyötyihin ei vapauta päättäjiä velvollisuudesta perustella valintojaan. Osa keskustelijoista painottaa yksilön vastuuta, kun taas toiset muistuttavat toimintamahdollisuuksien epätasaisesta jakautumisesta. Näiden näkökulmien yhteensovittaminen edellyttää sekä tutkimustietoa että erilaisten kokemusten kuuntelemista. Jos palveluja käyttävät ihmiset kokevat tulevansa kohdatuiksi arvokkaasti, heidän luottamuksensa instituutioihin voi vahvistua. Vastaavasti toistuvat kokemukset mielivaltaisesta kohtelusta saattavat heikentää halua sitoutua yhteisiin ratkaisuihin. Siksi luottamus on nähtävä sekä hyvinvointivaltion toiminnan edellytyksenä että sen tuloksena, ja sitä on rakennettava jatkuvasti uudelleen.",
+    translation: "Trust is often regarded as one of the key conditions for a welfare state. Citizens must be able to trust that shared funds are used fairly and that decisions are justified openly. At the same time, the system rests on the assumption that people contribute to maintaining it according to their means. Trust does not, however, mean that the actions of public authorities should be assessed uncritically. On the contrary, drawing attention to shortcomings can strengthen the credibility of the system if the problems identified are addressed. Discussions about the welfare state often focus on costs, although the effects of services should also be examined over the long term. The benefits of funds spent on preventive work may not be immediately apparent, which makes them difficult to assess. On the other hand, simply appealing to future benefits does not release decision-makers from their duty to justify their choices. Some participants in the debate emphasise individual responsibility, while others point to the unequal distribution of opportunities to act. Reconciling these perspectives requires both research evidence and listening to different experiences. If people using services feel that they are treated with dignity, their trust in institutions may grow. Conversely, repeated experiences of arbitrary treatment may weaken their willingness to commit to shared solutions. Trust must therefore be seen both as a condition for the functioning of the welfare state and as one of its outcomes, and it must continually be rebuilt.",
+    translationJa: "信頼は、福祉国家が成り立つための重要な条件の一つとよく考えられています。市民は、共同の財源が公正に使われ、決定の理由が開かれた形で説明されると信じられなければなりません。同時に、この制度は、人々がそれぞれの可能な範囲でその維持に参加するという前提に立っています。しかし、信頼することは、行政の働きを無批判に評価すべきだという意味ではありません。むしろ、見つかった問題に対処するのであれば、不備を指摘することは制度への信頼性を高める可能性があります。福祉国家をめぐる議論では費用が強調されがちですが、サービスの効果も長期的に検討する必要があります。予防的な取り組みに使われた財源の効果は、必ずしもすぐに現れるとは限らず、評価を難しくします。一方で、将来の利益を持ち出すだけでは、政策決定者が選択の理由を説明する義務を免れることはできません。議論に参加する人の中には個人の責任を重視する人もいれば、行動の機会が不平等に配分されていると指摘する人もいます。これらの見方をすり合わせるには、研究に基づく知見と、さまざまな経験に耳を傾けることの両方が必要です。サービスを使う人々が尊厳をもって接してもらえたと感じれば、制度への信頼が深まる可能性があります。反対に、恣意的な扱いを繰り返し受けた経験は、社会で共有する解決策を支えようという意欲を弱めるかもしれません。だからこそ信頼は、福祉国家が機能するための条件であると同時に、その成果でもあると捉え、絶えず築き直していく必要があります。",
+    category: "Society",
+    difficulty: "C1",
+    vocabulary: [
+      { word: "edellytyksistä", translation: "conditions, prerequisites (elative plural)", translationJa: "条件・前提のうちから（出格複数）" },
+      { word: "oikeudenmukaisesti", translation: "fairly, justly (adverb)", translationJa: "公正に（副詞）" },
+      { word: "kritiikittömästi", translation: "uncritically (adverb)", translationJa: "無批判に（副詞）" },
+      { word: "uskottavuutta", translation: "credibility (partitive)", translationJa: "信頼性・説得力（分格）" },
+      { word: "Ennaltaehkäisevään", translation: "preventive (active present participle, illative)", translationJa: "予防的な（能動現在分詞・入格）" },
+      { word: "yhteensovittaminen", translation: "reconciling, coordination (verbal noun)", translationJa: "調整・すり合わせ（動作名詞）" },
+      { word: "kohdatuiksi", translation: "treated, encountered (passive past participle, translative plural)", translationJa: "接してもらった状態に（受動過去分詞・変格複数）" },
+      { word: "mielivaltaisesta", translation: "arbitrary (elative)", translationJa: "恣意的な（出格）" }
+    ],
+    questions: [
+      {
+        questionText: "According to the text, how can exposing shortcomings strengthen trust?",
+        questionTextJa: "本文によると、不備の指摘はどのような場合に信頼を強めますか？",
+        options: ["When all criticism of authorities is prohibited", "When the problems identified are addressed", "When decisions no longer need to be justified"],
+        optionsJa: ["行政への批判がすべて禁じられる場合", "見つかった問題に対処する場合", "決定の理由を説明する必要がなくなる場合"],
+        correctAnswerIndex: 1
+      },
+      {
+        questionText: "Why does the text present trust as both a condition and an outcome of the welfare state?",
+        questionTextJa: "本文が信頼を福祉国家の条件であると同時に成果でもあると述べるのはなぜですか？",
+        options: ["Because trust makes evaluating services unnecessary", "Because trust depends only on individual responsibility", "Because the system relies on trust, while people's experiences of its services can shape that trust"],
+        optionsJa: ["信頼があればサービスを評価する必要がなくなるから", "信頼は個人の責任だけで決まるから", "制度は信頼を土台とし、サービスを利用した経験がその信頼を左右するから"],
+        correctAnswerIndex: 2
+      },
+      {
+        questionText: "In 'kokevat tulevansa kohdatuiksi arvokkaasti', what do the service users feel?",
+        questionTextJa: "「kokevat tulevansa kohdatuiksi arvokkaasti」で、サービスの利用者はどう感じていますか？",
+        options: ["That they are being treated with dignity", "That they must treat others arbitrarily", "That they will stop using all services"],
+        optionsJa: ["尊厳をもって接してもらっている", "ほかの人を恣意的に扱わなければならない", "すべてのサービスの利用をやめることになる"],
+        correctAnswerIndex: 0
+      }
+    ]
   }
 ];
 
