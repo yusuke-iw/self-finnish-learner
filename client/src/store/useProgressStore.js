@@ -1,14 +1,32 @@
 import { create } from 'zustand';
 import { fetchProgress, saveProgress } from '../services/api';
+import { findLessonByTitle } from '../data/curriculumData';
 
 const PROGRESS_STORAGE_KEY = 'finnishLearnerProgress';
 const PASSAGES_STORAGE_KEY = 'finnishLearnerPassagesProgress';
 const MISTAKES_STORAGE_KEY = 'finnish_grammar_mistakes';
 
+export const migrateProgressKeys = (progress) => {
+  if (!progress || typeof progress !== 'object') {
+    return {};
+  }
+  const migrated = {};
+  for (const [key, level] of Object.entries(progress)) {
+    const lesson = findLessonByTitle(key);
+    const targetKey = lesson ? lesson.id : key;
+    if (migrated[targetKey] !== undefined) {
+      migrated[targetKey] = Math.max(migrated[targetKey], level);
+    } else {
+      migrated[targetKey] = level;
+    }
+  }
+  return migrated;
+};
+
 const getInitialProgress = () => {
   try {
     const saved = localStorage.getItem(PROGRESS_STORAGE_KEY);
-    return saved ? JSON.parse(saved) : {};
+    return saved ? migrateProgressKeys(JSON.parse(saved)) : {};
   } catch (err) {
     console.error('Failed to parse saved progress:', err);
     return {};
@@ -30,7 +48,7 @@ export const useProgressStore = create((set, get) => ({
       const res = await fetchProgress();
       if (res?.data?.success && res.data.data) {
         const serverData = res.data.data;
-        const serverPath = serverData.learningPath || {};
+        const serverPath = migrateProgressKeys(serverData.learningPath || {});
 
         // Merge: take highest level per category
         const mergedPath = { ...localProgress };

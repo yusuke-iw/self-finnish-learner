@@ -5,12 +5,15 @@ import LessonCard from '../components/LessonCard';
 import { units } from '../data/curriculumData';
 import { useProgressStore } from '../store/useProgressStore';
 import { useLanguage } from '../context/LanguageContext';
+import { getUserId, setUserId } from '../utils/userId';
 
 export default function Home() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { progress, resetProgress, loadProgress, syncWithServer } = useProgressStore();
   const [activeGuidebook, setActiveGuidebook] = useState(null);
+  const [syncIdInput, setSyncIdInput] = useState(() => getUserId());
+  const [syncIdError, setSyncIdError] = useState('');
 
   useEffect(() => {
     loadProgress();
@@ -23,8 +26,18 @@ export default function Home() {
     }
   };
 
-  const handleLevelClick = (lessonTitle, level, ext) => {
-    let url = `/sessions?category=${encodeURIComponent(lessonTitle)}&level=${level}`;
+  const handleSaveSyncId = () => {
+    if (setUserId(syncIdInput)) {
+      setSyncIdError('');
+      setSyncIdInput(getUserId());
+      syncWithServer();
+    } else {
+      setSyncIdError(t('home.syncIdError'));
+    }
+  };
+
+  const handleLevelClick = (lessonId, level, ext) => {
+    let url = `/sessions?lessonId=${encodeURIComponent(lessonId)}&level=${level}`;
     if (ext) url += `&exerciseType=${ext}`;
     navigate(url);
   };
@@ -57,7 +70,7 @@ export default function Home() {
                   key={lesson.id}
                   lesson={lesson}
                   unitColor={unit.color}
-                  currentLevel={progress[lesson.title] || 1}
+                  currentLevel={progress[lesson.id] || 1}
                   onLevelClick={handleLevelClick}
                 />
               ))}
@@ -82,10 +95,35 @@ export default function Home() {
         </button>
       </div>
 
+      <div className="sync-id-section">
+        <div className="sync-id-controls">
+          <label htmlFor="sync-id-input" className="sync-id-label">
+            {t('home.syncIdLabel')}
+          </label>
+          <input
+            id="sync-id-input"
+            type="text"
+            className="sync-id-input"
+            value={syncIdInput}
+            onChange={(e) => setSyncIdInput(e.target.value)}
+          />
+          <button type="button" className="btn-secondary sync-id-save-btn" onClick={handleSaveSyncId}>
+            {t('home.syncIdSave')}
+          </button>
+        </div>
+        {syncIdError && (
+          <p className="sync-id-error" role="alert">
+            {syncIdError}
+          </p>
+        )}
+        <p className="sync-id-desc">{t('home.syncIdDesc')}</p>
+      </div>
+
       {activeGuidebook && (
         <GuidebookModal unit={activeGuidebook} onClose={() => setActiveGuidebook(null)} />
       )}
     </div>
   );
 }
+
 

@@ -30,19 +30,19 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button 
             className="level-btn"
-            onClick={() => onLevelClick(lesson.title, 1)}
+            onClick={() => onLevelClick(lesson.id, 1)}
           >
             {t('home.levelChoice')}
           </button>
           <button 
             className="level-btn"
-            onClick={() => onLevelClick(lesson.title, 2)}
+            onClick={() => onLevelClick(lesson.id, 2)}
           >
             {t('home.levelWords')}
           </button>
           <button 
             className="level-btn"
-            onClick={() => onLevelClick(lesson.title, 3)}
+            onClick={() => onLevelClick(lesson.id, 3)}
           >
             {t('home.levelType')}
           </button>
@@ -50,14 +50,14 @@ export default function LessonCard({ lesson, unitColor, currentLevel, onLevelCli
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button 
             className="level-btn"
-            onClick={() => onLevelClick(lesson.title, 3, 'speaking')}
+            onClick={() => onLevelClick(lesson.id, 3, 'speaking')}
             style={{ backgroundColor: 'var(--accent)', color: 'white', borderColor: 'var(--accent)' }}
           >
             {t('home.speakBtn')}
           </button>
           <button 
             className="level-btn"
-            onClick={() => onLevelClick(lesson.title, 1, 'matching')}
+            onClick={() => onLevelClick(lesson.id, 1, 'matching')}
             style={{ backgroundColor: '#ce82ff', color: 'white', borderColor: '#ce82ff' }}
           >
             {t('home.matchBtn')}

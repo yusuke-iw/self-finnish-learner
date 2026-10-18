@@ -55,4 +55,21 @@ describe('Progress Routes', () => {
     expect(res.body.success).toBe(true);
     expect(res.body.data.learningPath['Ruoka ja Juoma']).toBe(3);
   });
+
+  it('GET /api/progress should return 400 for invalid userId', async () => {
+    const res = await request(app).get('/api/progress?userId=invalid!id');
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+    expect(res.body.error).toBeDefined();
+  });
+
+  it('POST /api/progress should return 400 for invalid userId', async () => {
+    const res = await request(app)
+      .post('/api/progress')
+      .send({ userId: 'bad user!', learningPath: { l1: 2 } });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+    expect(res.body.error).toBeDefined();
+  });
 });

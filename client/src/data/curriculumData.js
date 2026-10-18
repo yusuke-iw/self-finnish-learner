@@ -49,3 +49,22 @@ export const units = [
     ]
   }
 ];
+
+export function findLessonById(id) {
+  if (!id) return undefined;
+  for (const unit of units) {
+    const lesson = unit.lessons.find((l) => l.id === id);
+    if (lesson) return lesson;
+  }
+  return undefined;
+}
+
+export function findLessonByTitle(title) {
+  if (!title) return undefined;
+  for (const unit of units) {
+    const lesson = unit.lessons.find((l) => l.title === title);
+    if (lesson) return lesson;
+  }
+  return undefined;
+}
+

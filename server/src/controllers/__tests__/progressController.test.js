@@ -117,6 +117,17 @@ describe('Progress Controller', () => {
       }));
     });
 
+    it('should return 400 when userId is invalid in getProgress', async () => {
+      req.query.userId = 'invalid user!';
+      await progressController.getProgress(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        error: expect.any(String)
+      });
+    });
+
     it('should handle errors and call next middleware', async () => {
       const mockError = new Error('Database connection failed');
       jest.spyOn(Progress, 'findOne').mockImplementation(() => {
@@ -198,6 +209,20 @@ describe('Progress Controller', () => {
         }),
         source: 'memory'
       }));
+    });
+
+    it('should return 400 when userId is invalid in saveProgress', async () => {
+      req.body = {
+        userId: 'invalid@user!',
+        learningPath: { l1: 2 }
+      };
+      await progressController.saveProgress(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        error: expect.any(String)
+      });
     });
 
     it('should handle errors and call next middleware', async () => {

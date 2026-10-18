@@ -39,7 +39,11 @@ export const translations = {
       levelWords: 'L2 (単語バンク)',
       levelType: 'L3 (タイピング)',
       speakBtn: '🎙️ 発音',
-      matchBtn: '🧩 ペア'
+      matchBtn: '🧩 ペア',
+      syncIdLabel: '同期ID',
+      syncIdSave: '保存',
+      syncIdDesc: '同じIDを入れた端末どうしで進捗を共有します',
+      syncIdError: '半角英数字・ハイフン・アンダースコア（1〜40文字）で入力してください'
     },
 
     // Guidebook Modal
@@ -205,7 +209,10 @@ export const translations = {
       feedbackCorrect: '正解！素晴らしい！',
       feedbackWrong: '不正解',
       correctAnswerIs: '正解:',
-      grammarNoteLabel: '💡 解説ノート:'
+      grammarNoteLabel: '💡 解説ノート:',
+      passedUnlockNext: '合格！次のレベルが解放されます',
+      passed: '合格！',
+      failedThreshold: '合格ラインは{threshold}%です。もう一度挑戦しましょう'
     }
   },
 
@@ -249,7 +256,11 @@ export const translations = {
       levelWords: 'L2 (Words)',
       levelType: 'L3 (Type)',
       speakBtn: '🎙️ Speak',
-      matchBtn: '🧩 Match'
+      matchBtn: '🧩 Match',
+      syncIdLabel: 'Sync ID',
+      syncIdSave: 'Save',
+      syncIdDesc: 'Devices with the same ID share progress.',
+      syncIdError: 'Use 1-40 characters: letters, numbers, hyphens, or underscores.'
     },
 
     // Guidebook Modal
@@ -415,7 +426,10 @@ export const translations = {
       feedbackCorrect: 'Correct! Great job!',
       feedbackWrong: 'Incorrect',
       correctAnswerIs: 'Correct answer:',
-      grammarNoteLabel: '💡 Grammar Note:'
+      grammarNoteLabel: '💡 Grammar Note:',
+      passedUnlockNext: 'Passed! The next level is unlocked.',
+      passed: 'Passed!',
+      failedThreshold: 'You need {threshold}% to pass. Try again!'
     }
   }
 };
