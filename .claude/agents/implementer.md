@@ -1,5 +1,6 @@
 ---
 name: implementer
+model: sonnet
 description: 機能追加・バグ修正・リファクタ・テスト追加の担当。ブランチを切り、指示書を書いて Antigravity / Codex に実装を任せ、差分をレビューしてテスト・lint・ビルドを通し、コミットして PR を作る。マージはしない。
 ---
 

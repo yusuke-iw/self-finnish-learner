@@ -56,7 +56,7 @@ MongoDB を使う環境では、利用者が `npm run seed --prefix server`（�
 ## 進め方
 
 1. 量が多い作成（10 文以上、読解文、話し言葉の付与）は `.claude/skills/delegate-implementation/SKILL.md` の手順で Antigravity / Codex に任せる。指示書には上の「データの形」と「品質ルール」を貼り、作るもの（レッスン・テーマ・レベル・本数）を表で指定する。数文の修正は自分で直す。
-2. **できたものは全部、自分で読む**。例文・話し言葉は「書き言葉 → 話し言葉 | 日本語訳」を一覧にして 1 行ずつ確かめる（`node -e` で seedData.js を読み込んで出力すると速い）。読解文は本文・語彙の注記・設問と正解を確かめる。
+2. **できたものは全部、自分で読む**。例文・話し言葉は「書き言葉 → 話し言葉 | 日本語訳」を 1 件 1 行で一覧にして確かめる。出すのは**新しく足した文と変えた文だけ**（`node -e` で seedData.js を読み込み、`_id` で絞って出力する。ファイル全体や既存の文は出さない）。読解文は本文・語彙の注記・設問と正解を確かめる。
 3. 直したものは、PR の説明に「何を・なぜ」直したかを書く（例 `m4_16 Me ei ois onnistuttu → Me ei oltais onnistuttu（受動形）`）。
 4. テスト: `cd server && npx jest --runInBand`。カリキュラムを変えたら `cd client && npx vitest run && npx oxlint src --deny-warnings && npx vite build` も。
 5. 必要ならブラウザで確かめる（ガイドブック、セッション、読解ページ）。preview の起動は `delegate-implementation` の「4. 確認」を参照。
