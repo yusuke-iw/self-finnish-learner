@@ -14,3 +14,4 @@ yarn-error.log*
 .claude/settings.local.json
 *.log
 *.tgz
+.claude/worktrees/
