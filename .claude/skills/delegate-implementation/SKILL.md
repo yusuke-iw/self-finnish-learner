@@ -69,7 +69,11 @@ cd client && npx oxlint src --deny-warnings && npx vitest run && npx vite build
 cd ../server && npx jest --runInBand
 ```
 
-- 差分は問題のありそうな所（ロジック、データの移行、同期、エラー処理）を開いて読む。全行を読む必要はない。
+- 出力は要約の行だけを見る（トークンを節約するため）。例: `npx vitest run 2>&1 | grep -E "Test Files|Tests |FAIL|×"`。失敗したときだけ、その部分を読む。
+- 作業中は関係するテストファイルだけを動かす（`npx vitest run <ファイル>`、`npx jest --runInBand <ファイル>`）。全体は、コミットの前に 1 回だけ。
+- ドキュメントだけの変更（`.md`、`.claude/`、`.agents/`）はローカルのチェックを省き、CI に任せる。
+- 差分はまず `git diff --stat` で見て、問題のありそうな所（ロジック、データの移行、同期、エラー処理）のファイルだけを開いて読む。全行を読む必要はない。
+- 大きいファイル（`Session.jsx`・`GrammarPractice.jsx`・`seedData.js`・`grammarData*.js`）は丸ごと読まず、`grep -n` で場所を探して行の範囲（offset / limit）だけ読む。
 - lint 警告が増えていたら直す（effect 内の同期的な setState、未使用変数、hook の依存配列が多い）。
 - 直すのが数行なら自分で直し、テストを足す。大きければ追加の指示書を書いて再委譲する。
 - 画面に関わる変更は、`.claude/launch.json` の `api`（port 5000）と `client`（port 5173）を preview で起動して確かめる。1 つの設定で `npm run dev` を動かすと両方が `PORT=5173` になるので、必ず 2 つに分けて起動する。ウィンドウが描画されずクリックできないときは、JavaScript でイベントを送って確かめる。
