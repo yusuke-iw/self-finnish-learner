@@ -162,8 +162,9 @@ describe('useGrammarPractice', () => {
     expect(result.current.isCorrect).toBe(false);
     expect(result.current.streak).toBe(0);
     expect(result.current.maxStreak).toBe(2);
-    expect(result.current.sessionMistakes).toEqual([wrongQuestion]);
+    expect(result.current.sessionMistakes).toEqual([{ ...wrongQuestion, userAnswer: '__wrong__' }]);
     expect(result.current.mistakeBank.map((m) => m.id)).toContain(wrongQuestion.id);
+    expect(result.current.mistakeBank.find((m) => m.id === wrongQuestion.id)).not.toHaveProperty('userAnswer');
     expect(JSON.parse(localStorage.getItem(MISTAKES_KEY))[0].savedAt).toEqual(expect.any(Number));
     expect(saveProgress).toHaveBeenCalledWith(expect.objectContaining({ mistakes: expect.any(Array) }));
     act(() => result.current.handleNextQuestion());
