@@ -177,7 +177,7 @@ export function useGrammarPractice() {
       }
     } else {
       setStreak(0);
-      setSessionMistakes((prev) => [...prev, currentQ]);
+      setSessionMistakes((prev) => [...prev, { ...currentQ, userAnswer: currentAnswer.trim() }]);
 
       if (currentQ?.id) {
         const { schedule } = recordReviewResult(`grammar:${currentQ.id}`, false);
