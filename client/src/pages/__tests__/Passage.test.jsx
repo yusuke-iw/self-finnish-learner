@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Passage from '../Passage';
-import { fetchPassages, fetchPassageById } from '../../services/api';
+import { fetchPassages, fetchPassageById, fetchProgress } from '../../services/api';
 import { playCorrectSound, playIncorrectSound } from '../../utils/feedbackSounds';
 import { getWords } from '../../utils/wordBook';
 
@@ -322,6 +322,37 @@ describe('Passage Component', () => {
     await waitFor(() => {
       const restoredABtn = screen.getByText('A');
       expect(restoredABtn).toHaveClass('correct-choice');
+    });
+  });
+
+  it('starts with empty progress when the saved passage progress is broken JSON', async () => {
+    localStorage.setItem('finnishLearnerPassagesProgress', '{not json');
+    render(<Passage />);
+    expect(await screen.findByText('Test Passage 1')).toBeInTheDocument();
+    expect(screen.queryByTitle('Mastered')).not.toBeInTheDocument();
+  });
+
+  it('ignores saved passage progress that is not an object', async () => {
+    localStorage.setItem('finnishLearnerPassagesProgress', '[1,2]');
+    render(<Passage />);
+    expect(await screen.findByText('Test Passage 1')).toBeInTheDocument();
+    expect(screen.queryByTitle('Mastered')).not.toBeInTheDocument();
+  });
+
+  it('ignores broken saved answers when opening a passage', async () => {
+    localStorage.setItem('finnishLearnerAnswers_p1', 'oops');
+    render(<Passage />);
+    fireEvent.click(await screen.findByText('Test Passage 1'));
+    expect(await screen.findByText('Knowledge Check')).toBeInTheDocument();
+    expect(screen.queryByText('🏆 Mastered')).not.toBeInTheDocument();
+  });
+
+  it('ignores broken local progress when merging server progress', async () => {
+    localStorage.setItem('finnishLearnerPassagesProgress', 'oops');
+    fetchProgress.mockResolvedValue({ data: { success: true, data: { passagesProgress: { p2: true } } } });
+    render(<Passage />);
+    await waitFor(() => {
+      expect(JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress'))).toEqual({ p2: true });
     });
   });
 });

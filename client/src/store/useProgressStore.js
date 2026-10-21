@@ -3,11 +3,6 @@ import { fetchProgress, saveProgress } from '../services/api';
 import { findLessonByTitle } from '../data/curriculumData';
 import { getWords, mergeWordBooks, saveWords } from '../utils/wordBook';
 import {
-  SENTENCE_MISTAKES_STORAGE_KEY,
-  getSentenceMistakes,
-  mergeSentenceMistakes
-} from '../utils/sentenceMistakes';
-import {
   getReviewSchedule,
   saveReviewSchedule,
   mergeReviewSchedules,
@@ -100,18 +95,6 @@ export const useProgressStore = create((set, get) => ({
           }
         }
 
-        // Merge sentence mistakes between server and local
-        const localSentenceMistakes = getSentenceMistakes();
-        const serverSentenceMistakes = Array.isArray(serverData.sentenceMistakes)
-          ? serverData.sentenceMistakes
-          : [];
-        const mergedSentenceMistakes = mergeSentenceMistakes(serverSentenceMistakes, localSentenceMistakes);
-        try {
-          localStorage.setItem(SENTENCE_MISTAKES_STORAGE_KEY, JSON.stringify(mergedSentenceMistakes));
-        } catch (e) {
-          console.error('Failed to merge sentence mistakes', e);
-        }
-
         const mergedWordBook = mergeWordBooks(serverData.wordBook, getWords());
         saveWords(mergedWordBook);
 
@@ -141,7 +124,6 @@ export const useProgressStore = create((set, get) => ({
         const savePromise = saveProgress({
           learningPath: mergedPath,
           passagesProgress: JSON.parse(localStorage.getItem(PASSAGES_STORAGE_KEY) || '{}'),
-          sentenceMistakes: mergedSentenceMistakes,
           wordBook: mergedWordBook,
           reviewSchedule: mergedReviewSchedule,
           studyStats: mergedStudyStats

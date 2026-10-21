@@ -18,7 +18,16 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
     coverage: {
-      exclude: ['src/main.jsx', 'src/services/api.js', 'vite.config.js']
+      provider: 'v8',
+      include: ['src/**/*.{js,jsx}'],
+      thresholds: { statements: 90, branches: 80, functions: 80, lines: 90 },
+      exclude: [
+        'src/main.jsx',
+        'src/setupTests.js',
+        'src/**/__tests__/**',
+        'src/**/*.test.{js,jsx}',
+        'src/assets/**'
+      ]
     }
   },
 })
