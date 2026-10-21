@@ -3,6 +3,14 @@ const Sentence = require('../../models/Sentence');
 const { sentences: memorySentences } = require('../../config/seedData');
 
 jest.mock('../../models/Sentence');
+jest.mock('mongoose', () => {
+  const actual = jest.requireActual('mongoose');
+  return {
+    ...actual,
+    connection: { readyState: 1 }
+  };
+});
+const mongoose = require('mongoose');
 
 describe('Sentences Controller', () => {
   let mockReq;
@@ -15,6 +23,7 @@ describe('Sentences Controller', () => {
       status: jest.fn().mockReturnThis()
     };
     jest.clearAllMocks();
+    mongoose.connection.readyState = 1;
   });
 
   describe('getSentences', () => {
@@ -35,6 +44,15 @@ describe('Sentences Controller', () => {
       expect(mockRes.json).toHaveBeenCalledWith(
         expect.objectContaining({ success: true, source: 'memory' })
       );
+    });
+
+    it('should return memory data without querying when the DB is not connected', async () => {
+      mongoose.connection.readyState = 0;
+
+      await sentencesController.getSentences(mockReq, mockRes);
+
+      expect(Sentence.find).not.toHaveBeenCalled();
+      expect(mockRes.json).toHaveBeenCalledWith({ success: true, data: memorySentences, source: 'memory' });
     });
 
     it('should fallback to memory on DB error', async () => {

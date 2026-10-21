@@ -122,23 +122,15 @@ describe('useProgressStore', () => {
     expect(useProgressStore.getState().progress['l1b']).toBe(2);
   });
 
-  it('merges server and local sentenceMistakes on syncWithServer and saves back to server', async () => {
-    localStorage.setItem(
-      'finnishLearnerSentenceMistakes',
-      JSON.stringify([
-        { sentenceId: 's1', count: 2, lastMistakeAt: '2026-05-01T10:00:00.000Z' },
-        { sentenceId: 's2', count: 1, lastMistakeAt: '2026-05-03T10:00:00.000Z' }
-      ])
-    );
+  it('does not send or merge the old sentenceMistakes data on syncWithServer', async () => {
+    const localMistakes = [{ sentenceId: 's2', count: 1, lastMistakeAt: '2026-05-03T10:00:00.000Z' }];
+    localStorage.setItem('finnishLearnerSentenceMistakes', JSON.stringify(localMistakes));
     api.fetchProgress.mockResolvedValue({
       data: {
         success: true,
         data: {
           learningPath: {},
-          sentenceMistakes: [
-            { sentenceId: 's1', count: 1, lastMistakeAt: '2026-05-02T10:00:00.000Z' },
-            { sentenceId: 's3', count: 4, lastMistakeAt: '2026-05-04T10:00:00.000Z' }
-          ]
+          sentenceMistakes: [{ sentenceId: 's3', count: 4, lastMistakeAt: '2026-05-04T10:00:00.000Z' }]
         }
       }
     });
@@ -146,16 +138,9 @@ describe('useProgressStore', () => {
 
     await useProgressStore.getState().syncWithServer();
 
-    const expectedMerged = [
-      { sentenceId: 's1', count: 2, lastMistakeAt: '2026-05-02T10:00:00.000Z' },
-      { sentenceId: 's3', count: 4, lastMistakeAt: '2026-05-04T10:00:00.000Z' },
-      { sentenceId: 's2', count: 1, lastMistakeAt: '2026-05-03T10:00:00.000Z' }
-    ];
-
-    expect(JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'))).toEqual(expectedMerged);
-    expect(api.saveProgress).toHaveBeenCalledWith(expect.objectContaining({
-      sentenceMistakes: expectedMerged
-    }));
+    expect(api.saveProgress).toHaveBeenCalled();
+    expect(api.saveProgress.mock.calls[0][0]).not.toHaveProperty('sentenceMistakes');
+    expect(JSON.parse(localStorage.getItem('finnishLearnerSentenceMistakes'))).toEqual(localMistakes);
   });
 
   it('migrates legacy review items and merges reviewSchedule and studyStats on syncWithServer', async () => {

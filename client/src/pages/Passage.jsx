@@ -5,6 +5,16 @@ import { playCorrectSound, playIncorrectSound } from '../utils/feedbackSounds';
 import { useLanguage } from '../context/useLanguage';
 import { addWord, getWords } from '../utils/wordBook';
 
+// Read a plain object from localStorage; broken or unexpected data is ignored
+function readStoredObject(key) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key) || '{}');
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
 export default function Passage() {
   const { language, t } = useLanguage();
   const [passages, setPassages] = useState([]);
@@ -14,7 +24,7 @@ export default function Passage() {
   const [answers, setAnswers] = useState({});
   const [bookWords, setBookWords] = useState(getWords);
   const [completedPassages, setCompletedPassages] = useState(() =>
-    JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}')
+    readStoredObject('finnishLearnerPassagesProgress')
   );
 
   useEffect(() => {
@@ -24,7 +34,7 @@ export default function Passage() {
       if (p && typeof p.then === 'function') {
         p.then(res => {
           if (res?.data?.success && res.data.data?.passagesProgress) {
-            const saved = JSON.parse(localStorage.getItem('finnishLearnerPassagesProgress') || '{}');
+            const saved = readStoredObject('finnishLearnerPassagesProgress');
             const merged = { ...res.data.data.passagesProgress, ...saved };
             localStorage.setItem('finnishLearnerPassagesProgress', JSON.stringify(merged));
             setCompletedPassages(merged);
@@ -245,7 +255,7 @@ export default function Passage() {
               fetchPassageById(p._id).then(res => {
                 if (res.data.success) {
                   const passageData = res.data.data;
-                  const savedAnswers = JSON.parse(localStorage.getItem(`finnishLearnerAnswers_${passageData._id}`) || '{}');
+                  const savedAnswers = readStoredObject(`finnishLearnerAnswers_${passageData._id}`);
                   setSelectedPassage(passageData);
                   setShowTranslation(false);
                   setAnswers(savedAnswers);
