@@ -155,7 +155,7 @@ export default function OutfitGame({ game, mode, onFinish }) {
                 {isCorrect && <span className="scene-slot-status-icon">✔</span>}
               </div>
 
-              <div className="scene-slot-options" role="radiogroup" aria-label={slot.id}>
+              <div className="scene-slot-options" role="group" aria-label={slot.label.fi}>
                 {slot.options.map((option) => {
                   const isSelected = selectedOptionId === option.id;
                   return (
@@ -212,7 +212,7 @@ export default function OutfitGame({ game, mode, onFinish }) {
             disabled={!isAllSelected}
             onClick={handleCheck}
           >
-            Lähden ulos!
+            {t('scenes.check')}
           </button>
         ) : (
           <button

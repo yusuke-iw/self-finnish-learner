@@ -331,7 +331,12 @@ export const translations = {
       listen: '発音を聞く',
       slowListen: 'ゆっくり聞く',
       next: '次へ',
-      check: 'Lähden ulos!'
+      // Finnish on purpose in both languages: the OutfitGame action button
+      check: 'Lähden ulos!',
+      sort: {
+        prompt: 'どの箱に入れる？',
+        binsLabel: 'ごみの箱'
+      }
     }
   },
 
@@ -667,7 +672,12 @@ export const translations = {
       listen: 'Listen',
       slowListen: 'Listen slowly',
       next: 'Next',
-      check: 'Lähden ulos!'
+      // Finnish on purpose in both languages: the OutfitGame action button
+      check: 'Lähden ulos!',
+      sort: {
+        prompt: 'Which bin does it go in?',
+        binsLabel: 'Bins'
+      }
     }
   }
 };

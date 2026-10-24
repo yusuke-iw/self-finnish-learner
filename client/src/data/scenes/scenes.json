@@ -21,7 +21,9 @@
       "en": "Neighbourhood",
       "ja": "団地・近所"
     },
-    "gameIds": []
+    "gameIds": [
+      "jatekatos"
+    ]
   },
   {
     "id": "kaupunki",

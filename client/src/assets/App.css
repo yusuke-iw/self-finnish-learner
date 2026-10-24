@@ -4021,7 +4021,7 @@
 .scene-card-played {
   font-size: 18px;
   font-weight: 800;
-  color: #22c55e;
+  color: var(--success);
   flex-shrink: 0;
 }
 
@@ -4175,12 +4175,12 @@
 }
 
 .scene-slot-wrong {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.05);
+  border-color: var(--error);
+  background: var(--error-dim);
 }
 
 .scene-slot-correct {
-  border-color: #22c55e;
+  border-color: var(--success);
 }
 
 .scene-slot-header {
@@ -4200,11 +4200,11 @@
 }
 
 .scene-slot-wrong .scene-slot-status-icon {
-  color: #ef4444;
+  color: var(--error);
 }
 
 .scene-slot-correct .scene-slot-status-icon {
-  color: #22c55e;
+  color: var(--success);
 }
 
 .scene-slot-options {
@@ -4246,9 +4246,9 @@
 
 .scene-slot-hint {
   font-size: 13px;
-  color: #ef4444;
+  color: var(--error);
   padding: 8px 12px;
-  background: rgba(239, 68, 68, 0.08);
+  background: var(--error-dim);
   border-radius: var(--radius-sm);
 }
 
@@ -4281,6 +4281,104 @@
   min-width: 200px;
   font-size: 16px;
   font-weight: 700;
+}
+
+/* ---- Sort Game ---- */
+.sort-game {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sort-item-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.sort-item-icon {
+  font-size: 40px;
+}
+
+.sort-item-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.sort-item-label .scene-text-main {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sort-prompt {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.sort-bins {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sort-bin-btn {
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-top: 5px solid var(--bin-color, var(--border));
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  text-align: left;
+  transition: all 0.2s var(--ease);
+}
+
+.sort-bin-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  border-top-color: var(--bin-color, var(--accent));
+}
+
+.sort-bin-btn.wrong-choice {
+  border-color: var(--error);
+  background: var(--error-dim);
+  opacity: 0.8;
+}
+
+.sort-bin-btn.correct-choice {
+  border-color: var(--success);
+  background: var(--success-dim);
+}
+
+.sort-bin-mark {
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.sort-bin-btn.wrong-choice .sort-bin-mark {
+  color: var(--error);
+}
+
+.sort-bin-btn.correct-choice .sort-bin-mark {
+  color: var(--success);
+}
+
+@media (min-width: 640px) {
+  .sort-bins {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
 }
 
 /* ---- Scene Result ---- */

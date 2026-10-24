@@ -1,11 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import scenes from '../scenes/scenes.json';
 import vaatteet from '../scenes/vaatteet.json';
+import jatekatos from '../scenes/jatekatos.json';
+import upcoming from '../scenes/upcoming.json';
 import { findLessonById } from '../curriculumData';
 import { hasJapanese } from '../../utils/sceneText';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet];
+  const games = [vaatteet, jatekatos];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -194,8 +196,51 @@ describe('Scene Data Schema & Integrity', () => {
     expect(ids.length).toBeGreaterThan(vaatteet.playLength);
   });
 
+  it('sort games have valid bins and items, and every item points to an existing bin', () => {
+    const sortGames = games.filter((g) => g.type === 'sort');
+    expect(sortGames.length).toBeGreaterThan(0);
+
+    for (const game of sortGames) {
+      const binIds = game.bins.map((b) => b.id);
+      expect(new Set(binIds).size).toBe(binIds.length);
+      for (const bin of game.bins) {
+        expect(bin.id).toMatch(/^[a-z0-9-]+$/);
+        expect(bin.label?.fi).toBeTruthy();
+        expect(bin.label?.en).toBeTruthy();
+        expect(bin.color).toMatch(/^#[0-9a-fA-F]{6}$/);
+      }
+
+      const itemIds = game.items.map((i) => i.id);
+      expect(new Set(itemIds).size).toBe(itemIds.length);
+      expect(game.items.length).toBeGreaterThanOrEqual(game.playLength);
+
+      for (const item of game.items) {
+        expect(item.id).toMatch(/^[a-z0-9-]+$/);
+        expect(item.icon).toBeTruthy();
+        expect(binIds).toContain(item.binId);
+        expect(item.label?.fi).toBeTruthy();
+        expect(item.label?.en).toBeTruthy();
+        expect(item.sentence?.fi).toBeTruthy();
+        expect(item.sentence?.en).toBeTruthy();
+        expect(item.hint?.fi).toBeTruthy();
+        expect(item.hint?.en).toBeTruthy();
+        expect(item.hint?.selko).toBeTruthy();
+      }
+    }
+  });
+
+  it('upcoming games point to a scene and are not yet real games', () => {
+    const sceneIds = scenes.map((s) => s.id);
+    for (const u of upcoming) {
+      expect(sceneIds).toContain(u.sceneId);
+      expect(u.title?.fi).toBeTruthy();
+      expect(u.title?.en).toBeTruthy();
+    }
+  });
+
   it('hasJapanese correctly identifies whether vaatteet.json has full Japanese text', () => {
     // vaatteet.json is written with full Japanese support
     expect(hasJapanese(vaatteet)).toBe(true);
+    expect(hasJapanese(jatekatos)).toBe(true);
   });
 });

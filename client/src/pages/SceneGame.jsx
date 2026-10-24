@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { findGameById, getNextRecommended } from '../data/scenes/index';
 import OutfitGame from '../components/scenes/OutfitGame';
+import SortGame from '../components/scenes/SortGame';
 import SceneResult from '../components/scenes/SceneResult';
 import SceneText from '../components/scenes/SceneText';
 import SceneTextToggle from '../components/scenes/SceneTextToggle';
@@ -81,7 +82,7 @@ export default function SceneGame() {
         </h2>
         <div className="scene-game-toggle">
           <SceneTextToggle
-            mode={mode}
+            mode={displayMode}
             onChange={handleModeChange}
             showJapanese={gameHasJa}
           />
@@ -92,6 +93,13 @@ export default function SceneGame() {
         {!isFinished ? (
           game.type === 'outfit' ? (
             <OutfitGame
+              key={replayKey}
+              game={game}
+              mode={displayMode}
+              onFinish={handleFinish}
+            />
+          ) : game.type === 'sort' ? (
+            <SortGame
               key={replayKey}
               game={game}
               mode={displayMode}

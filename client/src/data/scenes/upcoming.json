@@ -1,0 +1,13 @@
+[
+  {
+    "id": "rappukaytava",
+    "sceneId": "lahio",
+    "icon": "🗣️",
+    "number": 3,
+    "title": {
+      "fi": "Rappukäytävässä",
+      "en": "In the stairwell",
+      "ja": "階段で"
+    }
+  }
+]

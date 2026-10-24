@@ -1,0 +1,265 @@
+{
+  "id": "jatekatos",
+  "sceneId": "lahio",
+  "type": "sort",
+  "schemaVersion": 1,
+  "icon": "♻️",
+  "title": {
+    "fi": "Jätekatoksessa",
+    "en": "At the waste shelter",
+    "ja": "ごみ置き場で"
+  },
+  "place": {
+    "fi": "jätekatos",
+    "en": "waste shelter",
+    "ja": "ごみ置き場"
+  },
+  "instruction": {
+    "fi": "Vie roskat jätekatokseen ja lajittele ne oikeisiin astioihin.",
+    "selko": "Laita jokainen roska oikeaan astiaan.",
+    "en": "Take the rubbish to the waste shelter and sort it into the right bins.",
+    "ja": "ごみ置き場で、ごみを正しい箱に分けよう。"
+  },
+  "playLength": 5,
+  "relatedLessonId": "l10",
+  "bins": [
+    {
+      "id": "biojate",
+      "label": {
+        "fi": "Biojäte",
+        "en": "Biowaste",
+        "ja": "生ごみ"
+      },
+      "color": "#7a5c3e"
+    },
+    {
+      "id": "kartonki",
+      "label": {
+        "fi": "Kartonki",
+        "en": "Cardboard",
+        "ja": "紙容器"
+      },
+      "color": "#c9a66b"
+    },
+    {
+      "id": "paperi",
+      "label": {
+        "fi": "Paperi",
+        "en": "Paper",
+        "ja": "紙（新聞・チラシ）"
+      },
+      "color": "#4a7bd0"
+    },
+    {
+      "id": "lasi",
+      "label": {
+        "fi": "Lasi",
+        "en": "Glass",
+        "ja": "ガラス"
+      },
+      "color": "#3fa37a"
+    },
+    {
+      "id": "metalli",
+      "label": {
+        "fi": "Metalli",
+        "en": "Metal",
+        "ja": "金属"
+      },
+      "color": "#8a8f98"
+    },
+    {
+      "id": "muovi",
+      "label": {
+        "fi": "Muovi",
+        "en": "Plastic packaging",
+        "ja": "プラスチック容器"
+      },
+      "color": "#e0a800"
+    },
+    {
+      "id": "sekajate",
+      "label": {
+        "fi": "Sekajäte",
+        "en": "Mixed waste",
+        "ja": "混合ごみ"
+      },
+      "color": "#444444"
+    }
+  ],
+  "items": [
+    {
+      "id": "banaaninkuori",
+      "icon": "🍌",
+      "binId": "biojate",
+      "label": {
+        "fi": "banaaninkuori",
+        "en": "banana peel",
+        "ja": "バナナの皮"
+      },
+      "sentence": {
+        "fi": "Banaaninkuori kuuluu biojätteeseen.",
+        "selko": "Banaanin kuori on biojätettä.",
+        "en": "A banana peel goes in the biowaste.",
+        "ja": "バナナの皮は生ごみに入れます。"
+      },
+      "hint": {
+        "fi": "Ruoantähteet ja hedelmien kuoret ovat biojätettä.",
+        "selko": "Ruoka ja kuoret ovat biojätettä.",
+        "en": "Food scraps and fruit peels are biowaste.",
+        "ja": "食べ残しや果物の皮は生ごみです。"
+      }
+    },
+    {
+      "id": "maitotolkki",
+      "icon": "🥛",
+      "binId": "kartonki",
+      "label": {
+        "fi": "maitotölkki",
+        "en": "milk carton",
+        "ja": "牛乳パック"
+      },
+      "sentence": {
+        "fi": "Tyhjä maitotölkki kuuluu kartonginkeräykseen.",
+        "selko": "Tyhjä maitotölkki on kartonkia.",
+        "en": "An empty milk carton goes in the cardboard recycling.",
+        "ja": "空の牛乳パックは紙容器の回収に出します。"
+      },
+      "hint": {
+        "fi": "Maitotölkki on kartonkia, ei paperia.",
+        "selko": "Maitotölkki on kartonkia.",
+        "en": "A milk carton is cardboard, not paper.",
+        "ja": "牛乳パックは紙（新聞など）ではなく紙容器です。"
+      }
+    },
+    {
+      "id": "lasipurkki",
+      "icon": "🫙",
+      "binId": "lasi",
+      "label": {
+        "fi": "lasipurkki",
+        "en": "glass jar",
+        "ja": "ガラス瓶"
+      },
+      "sentence": {
+        "fi": "Tyhjä lasipurkki kuuluu lasinkeräykseen.",
+        "selko": "Tyhjä lasipurkki on lasia.",
+        "en": "An empty glass jar goes in the glass recycling.",
+        "ja": "空のガラス瓶はガラスの回収に出します。"
+      },
+      "hint": {
+        "fi": "Lasipakkauksille on oma astia.",
+        "selko": "Lasille on oma astia.",
+        "en": "Glass packaging has its own bin.",
+        "ja": "ガラスの容器には専用の箱があります。"
+      }
+    },
+    {
+      "id": "sailyketolkki",
+      "icon": "🥫",
+      "binId": "metalli",
+      "label": {
+        "fi": "säilyketölkki",
+        "en": "tin can",
+        "ja": "缶詰の缶"
+      },
+      "sentence": {
+        "fi": "Säilyketölkki kuuluu metallinkeräykseen.",
+        "selko": "Säilyketölkki on metallia.",
+        "en": "A tin can goes in the metal recycling.",
+        "ja": "缶詰の缶は金属の回収に出します。"
+      },
+      "hint": {
+        "fi": "Tölkki on tehty metallista.",
+        "selko": "Tölkki on metallia.",
+        "en": "The can is made of metal.",
+        "ja": "缶は金属でできています。"
+      }
+    },
+    {
+      "id": "hammasharja",
+      "icon": "🪥",
+      "binId": "sekajate",
+      "label": {
+        "fi": "vanha hammasharja",
+        "en": "old toothbrush",
+        "ja": "古い歯ブラシ"
+      },
+      "sentence": {
+        "fi": "Vanha hammasharja kuuluu sekajätteeseen.",
+        "selko": "Vanha hammasharja on sekajätettä.",
+        "en": "An old toothbrush goes in the mixed waste.",
+        "ja": "古い歯ブラシは混合ごみに入れます。"
+      },
+      "hint": {
+        "fi": "Muovinkeräykseen laitetaan vain muovipakkauksia. Hammasharja ei ole pakkaus.",
+        "selko": "Muoviastiaan saa laittaa vain pakkauksia. Hammasharja ei ole pakkaus.",
+        "en": "Only plastic packaging goes in the plastic recycling. A toothbrush is not packaging.",
+        "ja": "プラスチックの回収に出せるのは容器や包装だけ。歯ブラシは容器ではありません。"
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "biojäte",
+      "translation": "biowaste",
+      "translationJa": "生ごみ"
+    },
+    {
+      "word": "kartonki",
+      "translation": "cardboard (packaging)",
+      "translationJa": "紙容器・板紙"
+    },
+    {
+      "word": "sekajäte",
+      "translation": "mixed waste",
+      "translationJa": "混合ごみ"
+    },
+    {
+      "word": "jätekatos",
+      "translation": "waste shelter",
+      "translationJa": "ごみ置き場（屋根つき）"
+    },
+    {
+      "word": "lajitella",
+      "translation": "to sort",
+      "translationJa": "分別する"
+    },
+    {
+      "word": "pakkaus",
+      "translation": "package, packaging",
+      "translationJa": "容器・包装"
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "jatekatos-1",
+      "title": {
+        "fi": "Jätekatos",
+        "selko": "Jätekatos",
+        "en": "The waste shelter",
+        "ja": "ごみ置き場"
+      },
+      "body": [
+        {
+          "fi": "Kerrostalon pihalla on usein jätekatos. Siellä on eri astiat eri jätteille.",
+          "selko": "Talon pihalla on jätekatos. Siellä on monta astiaa.",
+          "en": "An apartment building often has a waste shelter in the yard, with separate bins for different kinds of waste.",
+          "ja": "集合住宅の庭にはたいていごみ置き場があり、ごみの種類ごとに箱が分かれています。"
+        },
+        {
+          "fi": "Lajitteluohjeet voivat vaihdella kunnittain. Katso ohjeet jätekatoksen seinästä.",
+          "selko": "Ohjeet ovat jätekatoksen seinässä.",
+          "en": "Sorting rules can vary by municipality. Check the instructions on the wall of the waste shelter.",
+          "ja": "分け方は自治体によって少し違います。ごみ置き場の壁の案内を見ましょう。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "kuulua + mihin? → biojätteeseen, lasinkeräykseen",
+        "selko": "kuulua + mihin?",
+        "en": "kuulua + illative: \"belongs in\"",
+        "ja": "「kuulua＋入格」で「〜に入れるものだ」。"
+      }
+    }
+  ]
+}

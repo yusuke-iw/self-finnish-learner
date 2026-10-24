@@ -5,7 +5,8 @@ import {
   findGameById,
   getGamesByScene,
   getRecommendedGames,
-  getNextRecommended
+  getNextRecommended,
+  getUpcomingGames
 } from '../scenes/index';
 
 describe('Scene Index Module', () => {
@@ -37,7 +38,7 @@ describe('Scene Index Module', () => {
     expect(kotiGames.map((g) => g.id)).toEqual(['vaatteet']);
 
     const lahioGames = getGamesByScene('lahio');
-    expect(lahioGames).toEqual([]);
+    expect(lahioGames.map((g) => g.id)).toEqual(['jatekatos']);
 
     const unknownGames = getGamesByScene('unknown');
     expect(unknownGames).toEqual([]);
@@ -56,6 +57,11 @@ describe('Scene Index Module', () => {
     });
   });
 
+  it('getUpcomingGames lists only games that are not built yet', () => {
+    expect(getUpcomingGames('lahio').map((u) => u.id)).toEqual(['rappukaytava']);
+    expect(getUpcomingGames('koti')).toEqual([]);
+  });
+
   it('getNextRecommended returns the next game or null if last/unknown', () => {
     const recs = getRecommendedGames();
     if (recs.length === 1) {
@@ -66,6 +72,8 @@ describe('Scene Index Module', () => {
       expect(next).toEqual(recs[1]);
     }
 
+    expect(getNextRecommended('vaatteet').game.id).toBe('jatekatos');
+    expect(getNextRecommended('jatekatos')).toBeNull();
     expect(getNextRecommended('non-existent')).toBeNull();
     expect(getNextRecommended(null)).toBeNull();
   });

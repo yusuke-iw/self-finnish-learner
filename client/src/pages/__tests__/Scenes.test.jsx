@@ -5,7 +5,8 @@ import { MemoryRouter } from 'react-router-dom';
 import Scenes from '../Scenes';
 import { LanguageProvider } from '../../context/LanguageContext';
 import { markGamePlayed } from '../../utils/sceneProgress';
-import { getSceneTextMode } from '../../utils/sceneText';
+import vaatteet from '../../data/scenes/vaatteet.json';
+import { getSceneTextMode, setSceneTextMode } from '../../utils/sceneText';
 
 describe('Scenes Page', () => {
   beforeEach(() => {
@@ -32,9 +33,11 @@ describe('Scenes Page', () => {
     // Outfit game card
     expect(screen.getByText(/Sää ja vaatteet/i)).toBeInTheDocument();
 
-    // Upcoming games cards (jatekatos and rappukaytava)
-    expect(screen.getByText(/Jätekatoksessa/i)).toBeInTheDocument();
+    // Sort game is a real card; only the stairwell game is still upcoming
+    expect(screen.getByRole('link', { name: /Jätekatoksessa/i })).toHaveAttribute('href', '/scenes/jatekatos');
     expect(screen.getByText(/Rappukäytävässä/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/準備中|Coming soon/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.queryByRole('link', { name: /Rappukäytävässä/i })).toBeNull();
   });
 
   it('displays played checkmark when game has been completed in localStorage', () => {
@@ -50,6 +53,27 @@ describe('Scenes Page', () => {
 
     const playedBadge = screen.getByLabelText(/プレイ済み|Played/i);
     expect(playedBadge).toBeInTheDocument();
+  });
+
+  it('shows no JA button and falls back to English when the saved mode is ja but some game lacks Japanese', () => {
+    setSceneTextMode('ja');
+    const original = vaatteet.title.ja;
+    delete vaatteet.title.ja;
+    try {
+      render(
+        <MemoryRouter>
+          <LanguageProvider>
+            <Scenes />
+          </LanguageProvider>
+        </MemoryRouter>
+      );
+      expect(screen.queryByRole('button', { name: /^JA$/ })).toBeNull();
+      expect(screen.getByRole('button', { name: /^EN$/ })).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.queryByText('天気と服')).toBeNull();
+      expect(screen.getByText('Weather and clothes')).toBeInTheDocument();
+    } finally {
+      vaatteet.title.ja = original;
+    }
   });
 
   it('allows switching text mode and persists it to localStorage', () => {
