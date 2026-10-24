@@ -232,6 +232,26 @@ describe('Scene Data Schema & Integrity', () => {
     }
   });
 
+  it('jatekatos has 12-16 items, more than playLength, and at least one item per bin', () => {
+    const ids = jatekatos.items.map((i) => i.id);
+    expect(ids.length).toBeGreaterThanOrEqual(12);
+    expect(ids.length).toBeLessThanOrEqual(16);
+    expect(ids.length).toBeGreaterThan(jatekatos.playLength);
+    for (const bin of jatekatos.bins) {
+      expect(jatekatos.items.some((i) => i.binId === bin.id)).toBe(true);
+    }
+  });
+
+  it('rappukaytava dialogues have 4-6 lines, each with a good reply and at least one other kind', () => {
+    for (const dlg of rappukaytava.dialogues) {
+      expect(dlg.nodes.length).toBeGreaterThanOrEqual(4);
+      expect(dlg.nodes.length).toBeLessThanOrEqual(6);
+      for (const node of dlg.nodes) {
+        expect(node.choices.some((c) => c.quality !== 'good')).toBe(true);
+      }
+    }
+  });
+
   it('dialogue games have valid dialogues, nodes, speakers, choices, and reachability', () => {
     const dialogueGames = games.filter((g) => g.type === 'dialogue');
     expect(dialogueGames.length).toBeGreaterThan(0);
