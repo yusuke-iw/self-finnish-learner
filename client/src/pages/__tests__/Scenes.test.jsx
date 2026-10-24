@@ -33,11 +33,10 @@ describe('Scenes Page', () => {
     // Outfit game card
     expect(screen.getByText(/Sää ja vaatteet/i)).toBeInTheDocument();
 
-    // Sort game is a real card; only the stairwell game is still upcoming
+    // Sort and dialogue games are real cards
     expect(screen.getByRole('link', { name: /Jätekatoksessa/i })).toHaveAttribute('href', '/scenes/jatekatos');
-    expect(screen.getByText(/Rappukäytävässä/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Rappukäytävässä/i })).toHaveAttribute('href', '/scenes/rappukaytava');
     expect(screen.getAllByText(/準備中|Coming soon/i).length).toBeGreaterThanOrEqual(1);
-    expect(screen.queryByRole('link', { name: /Rappukäytävässä/i })).toBeNull();
   });
 
   it('displays played checkmark when game has been completed in localStorage', () => {

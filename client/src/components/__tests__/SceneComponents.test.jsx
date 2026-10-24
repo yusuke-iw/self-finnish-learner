@@ -8,6 +8,7 @@ import InfoCard from '../scenes/InfoCard';
 import SceneResult from '../scenes/SceneResult';
 import OutfitGame from '../scenes/OutfitGame';
 import SortGame from '../scenes/SortGame';
+import DialogueScene from '../scenes/DialogueScene';
 import * as audioModule from '../../utils/audio';
 import * as soundModule from '../../utils/feedbackSounds';
 import * as statsModule from '../../utils/studyStats';
@@ -522,6 +523,377 @@ describe('Scene UI Components', () => {
       const buttons = screen.getAllByRole('button', { name: /発音を聞く|Listen$/ });
       fireEvent.click(buttons[buttons.length - 1]);
       expect(audioModule.playAudio.mock.calls[2][0]).toMatch(/kuuluu/);
+    });
+  });
+
+  describe('DialogueScene', () => {
+    const miniDialogueGame = {
+      id: 'test-dialogue',
+      characters: [
+        {
+          id: 'naapuri',
+          name: 'Matti',
+          icon: '👨',
+          speakerId: 'matti',
+          role: { fi: 'naapuri', en: 'neighbour', ja: '近所の人' }
+        }
+      ],
+      dialogues: [
+        {
+          id: 'd1',
+          startNodeId: 'n1',
+          nodes: [
+            {
+              id: 'n1',
+              speaker: 'naapuri',
+              line: {
+                fi: 'Hei, oletko uusi naapuri?',
+                spoken: 'Moi, ootko uus naapuri?',
+                en: 'Hi, are you the new neighbour?',
+                ja: 'こんにちは、新しい近所の人？',
+                spokenNotes: {
+                  en: 'hei -> moi, oletko -> ootko, uusi -> uus',
+                  ja: 'hei -> moi、oletko -> ootko、uusi -> uus'
+                }
+              },
+              choices: [
+                {
+                  id: 'c1-good',
+                  quality: 'good',
+                  next: 'n2',
+                  text: {
+                    fi: 'Kyllä, muutin tänne eilen.',
+                    spoken: 'Joo, muutin tänne eilen.',
+                    en: 'Yes, I moved here yesterday.',
+                    ja: 'はい、昨日ここに越してきました。'
+                  },
+                  feedback: {
+                    fi: 'Hyvä vastaus!',
+                    selko: 'Selko: Hyvä vastaus!',
+                    en: 'Good answer!',
+                    ja: '良い返事です！'
+                  }
+                },
+                {
+                  id: 'c1-bad',
+                  quality: 'bad',
+                  text: {
+                    fi: 'Ei kiitos.',
+                    spoken: 'Ei kiitti.',
+                    en: 'No, thank you.',
+                    ja: 'いいえ、結構です。'
+                  },
+                  feedback: {
+                    fi: 'Ei kiitos ei sovi tähän.',
+                    selko: 'Selko: Ei sovi.',
+                    en: 'Ei kiitos does not fit here.',
+                    ja: '「Ei kiitos」は合いません。'
+                  }
+                },
+                {
+                  id: 'c1-repeat',
+                  quality: 'repeat',
+                  text: {
+                    fi: 'Anteeksi, mitä?',
+                    spoken: 'Sori, mitä?',
+                    en: 'Sorry, what?',
+                    ja: 'すみません、何ですか？'
+                  },
+                  feedback: {
+                    fi: 'Naapuri toistaa hitaammin.',
+                    selko: 'Selko: Toistetaan.',
+                    en: 'The neighbour repeats more slowly.',
+                    ja: 'もう一度ゆっくり言ってくれます。'
+                  }
+                }
+              ]
+            },
+            {
+              id: 'n2',
+              speaker: 'naapuri',
+              line: {
+                fi: 'Tervetuloa taloon!',
+                spoken: 'Tervetuloa taloon!',
+                en: 'Welcome to the building!',
+                ja: 'ようこそ！',
+                spokenNotes: { en: 'Same in speech', ja: '会話でも同じ' }
+              },
+              choices: [
+                {
+                  id: 'c2-good',
+                  quality: 'good',
+                  next: 'n3',
+                  text: {
+                    fi: 'Kiitos paljon!',
+                    spoken: 'Kiitti paljon!',
+                    en: 'Thanks a lot!',
+                    ja: 'どうもありがとう！'
+                  },
+                  feedback: {
+                    fi: 'Loistavaa!',
+                    selko: 'Selko: Loistavaa!',
+                    en: 'Great!',
+                    ja: '素晴らしい！'
+                  }
+                },
+                {
+                  id: 'c2-ok',
+                  quality: 'ok',
+                  next: 'n3',
+                  text: {
+                    fi: 'Joo.',
+                    spoken: 'Joo.',
+                    en: 'Yeah.',
+                    ja: 'うん。'
+                  },
+                  feedback: {
+                    fi: 'Käy, mutta vähän lyhyt.',
+                    selko: 'Selko: Vähän lyhyt.',
+                    en: 'Works, but a bit brief.',
+                    ja: '通じますが少し短いです。'
+                  }
+                },
+                {
+                  id: 'c2-bad',
+                  quality: 'bad',
+                  text: {
+                    fi: 'Näkemiin!',
+                    spoken: 'Moi moi!',
+                    en: 'Goodbye!',
+                    ja: 'さようなら！'
+                  },
+                  feedback: {
+                    fi: 'Keskustelu jatkuu vielä.',
+                    selko: 'Selko: Ei lopu vielä.',
+                    en: 'The conversation continues.',
+                    ja: '会話はまだ続きます。'
+                  }
+                }
+              ]
+            },
+            {
+              id: 'n3',
+              speaker: 'naapuri',
+              line: {
+                fi: 'Nähdään taas!',
+                spoken: 'Nähdään taas!',
+                en: 'See you again!',
+                ja: 'また会いましょう！'
+              },
+              choices: [
+                {
+                  id: 'c3-good',
+                  quality: 'good',
+                  next: null,
+                  text: {
+                    fi: 'Näkemiin!',
+                    spoken: 'Moi moi!',
+                    en: 'Bye bye!',
+                    ja: 'またね！'
+                  },
+                  feedback: {
+                    fi: 'Hyvää päivänjatkoa!',
+                    selko: 'Selko: Hyvää päivää!',
+                    en: 'Have a nice day!',
+                    ja: '良い一日を！'
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const renderDialogue = (onFinish = vi.fn(), mode = 'en') =>
+      render(
+        <LanguageProvider>
+          <DialogueScene game={miniDialogueGame} mode={mode} onFinish={onFinish} />
+        </LanguageProvider>
+      );
+
+    it('renders nothing when game has no dialogues', () => {
+      const { container } = render(
+        <LanguageProvider>
+          <DialogueScene game={{ id: 'empty' }} mode="en" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+      expect(container.firstChild).toBeNull();
+    });
+
+    it('defaults to puhekieli, switches to kirjakieli, and preserves visited progress', () => {
+      renderDialogue();
+
+      // Initially puhekieli form is rendered
+      expect(screen.getByText('Moi, ootko uus naapuri?')).toBeInTheDocument();
+      expect(screen.getByText('Joo, muutin tänne eilen.')).toBeInTheDocument();
+      expect(screen.getByText('1 / 3')).toBeInTheDocument();
+
+      const spokenToggle = screen.getByRole('button', { name: /^puhekieli$/i });
+      const writtenToggle = screen.getByRole('button', { name: /^kirjakieli$/i });
+      expect(spokenToggle).toHaveAttribute('aria-pressed', 'true');
+      expect(writtenToggle).toHaveAttribute('aria-pressed', 'false');
+
+      // Switch to kirjakieli
+      fireEvent.click(writtenToggle);
+      expect(screen.getByText('Hei, oletko uusi naapuri?')).toBeInTheDocument();
+      expect(screen.getByText('Kyllä, muutin tänne eilen.')).toBeInTheDocument();
+      expect(writtenToggle).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.getByText('1 / 3')).toBeInTheDocument();
+    });
+
+    it('auto-plays speaker audio on node entry once, does not re-play on speech toggle, plays again on next node', () => {
+      renderDialogue();
+
+      // Auto-played once on entry with Matti's voice
+      expect(audioModule.playAudio).toHaveBeenCalledTimes(1);
+      expect(audioModule.playAudio.mock.calls[0][0]).toBe('Moi, ootko uus naapuri?');
+      expect(audioModule.playAudio.mock.calls[0][3]).toBe(1.0);
+      expect(audioModule.playAudio.mock.calls[0][4].id).toBe('matti');
+
+      // Toggling to kirjakieli does not re-trigger playback
+      const writtenToggle = screen.getByRole('button', { name: /^kirjakieli$/i });
+      fireEvent.click(writtenToggle);
+      expect(audioModule.playAudio).toHaveBeenCalledTimes(1);
+
+      // Advance to next node
+      const goodChoice = screen.getByRole('button', { name: /Kyllä, muutin tänne eilen/i });
+      fireEvent.click(goodChoice);
+      const nextBtn = screen.getByRole('button', { name: /次へ|Next/i });
+      fireEvent.click(nextBtn);
+
+      // Second auto-play occurs for node 2
+      expect(audioModule.playAudio).toHaveBeenCalledTimes(2);
+      expect(audioModule.playAudio.mock.calls[1][0]).toBe('Tervetuloa taloon!');
+      expect(audioModule.playAudio.mock.calls[1][4].id).toBe('matti');
+    });
+
+    it('repeat choice plays audio at speed 0.6, stays on same node, and does not record answer', () => {
+      renderDialogue();
+
+      const repeatBtn = screen.getByRole('button', { name: /Sori, mitä\?/i });
+      fireEvent.click(repeatBtn);
+
+      // Audio played for repeat at speed 0.6
+      expect(audioModule.playAudio).toHaveBeenCalledTimes(2);
+      expect(audioModule.playAudio.mock.calls[1][3]).toBe(0.6);
+      expect(statsModule.recordAnswer).not.toHaveBeenCalled();
+
+      // Still on node 1
+      expect(screen.getByText('1 / 3')).toBeInTheDocument();
+      expect(screen.getByText('Naapuri toistaa hitaammin.')).toBeInTheDocument();
+      expect(repeatBtn).not.toBeDisabled();
+    });
+
+    it('bad choice disables only that button with wrong-choice, calls recordAnswer once; subsequent good does not call recordAnswer again', () => {
+      renderDialogue();
+
+      const badBtn = screen.getByRole('button', { name: /Ei kiitti/i });
+      const goodBtn = screen.getByRole('button', { name: /Joo, muutin tänne eilen/i });
+
+      fireEvent.click(badBtn);
+      expect(badBtn).toHaveClass('wrong-choice');
+      expect(badBtn).toBeDisabled();
+      expect(goodBtn).not.toBeDisabled();
+      expect(soundModule.playIncorrectSound).toHaveBeenCalledTimes(1);
+      expect(statsModule.recordAnswer).toHaveBeenCalledTimes(1);
+
+      // Now click good
+      fireEvent.click(goodBtn);
+      expect(goodBtn).toHaveClass('correct-choice');
+      expect(soundModule.playCorrectSound).toHaveBeenCalledTimes(1);
+      // recordAnswer should still be called only once
+      expect(statsModule.recordAnswer).toHaveBeenCalledTimes(1);
+    });
+
+    it('good choice shows correct-choice, other variant, spokenNotes, and next button; ok choice shows better reply', () => {
+      renderDialogue();
+
+      const goodBtn = screen.getByRole('button', { name: /Joo, muutin tänne eilen/i });
+      fireEvent.click(goodBtn);
+
+      expect(goodBtn).toHaveClass('correct-choice');
+      // All choices disabled after good answer
+      screen.getAllByRole('button', { name: /Joo, muutin|Ei kiitti|Sori, mitä/i }).forEach((btn) => {
+        expect(btn).toBeDisabled();
+      });
+
+      // Written variant and spoken notes are displayed
+      expect(screen.getByText(/📖 Written:|📖 書き言葉:/)).toBeInTheDocument();
+      expect(screen.getByText(/Kyllä, muutin tänne eilen/)).toBeInTheDocument();
+      expect(screen.getByText(/hei -> moi, oletko -> ootko/)).toBeInTheDocument();
+
+      // Click next to node 2
+      fireEvent.click(screen.getByRole('button', { name: /次へ|Next/i }));
+      expect(screen.getByText('2 / 3')).toBeInTheDocument();
+
+      // Select ok choice on node 2
+      const okBtn = screen.getByRole('button', { name: /^Joo\./i });
+      fireEvent.click(okBtn);
+
+      expect(okBtn).toHaveClass('correct-choice');
+      expect(soundModule.playCorrectSound).toHaveBeenCalled();
+      // "A more natural reply" should display the good choice text
+      expect(screen.getByText(/A more natural reply|もっと自然な返事/)).toBeInTheDocument();
+      expect(screen.getAllByText(/Kiitti paljon!/).length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('last node shows Valmis! and calls onFinish with playLessonCompleteSound', () => {
+      const onFinish = vi.fn();
+      renderDialogue(onFinish);
+
+      // Node 1
+      fireEvent.click(screen.getByRole('button', { name: /Joo, muutin tänne eilen/i }));
+      fireEvent.click(screen.getByRole('button', { name: /次へ|Next/i }));
+
+      // Node 2
+      fireEvent.click(screen.getByRole('button', { name: /Kiitti paljon!/i }));
+      fireEvent.click(screen.getByRole('button', { name: /次へ|Next/i }));
+
+      // Node 3 (final)
+      expect(screen.getByText('3 / 3')).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: /Moi moi!/i }));
+
+      const doneBtn = screen.getByRole('button', { name: /Valmis!/i });
+      expect(doneBtn).toBeInTheDocument();
+
+      fireEvent.click(doneBtn);
+      expect(soundModule.playLessonCompleteSound).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledTimes(1);
+    });
+
+    it('supports ja mode with Japanese translations and selko mode with selko feedback', () => {
+      const { unmount } = renderDialogue(vi.fn(), 'ja');
+      expect(screen.getByText('こんにちは、新しい近所の人？')).toBeInTheDocument();
+      expect(screen.getByText('はい、昨日ここに越してきました。')).toBeInTheDocument();
+      unmount();
+
+      renderDialogue(vi.fn(), 'selko');
+      fireEvent.click(screen.getByRole('button', { name: /Joo, muutin tänne eilen/i }));
+      expect(screen.getByText('Selko: Hyvä vastaus!')).toBeInTheDocument();
+    });
+
+    it('provides audio button for each choice and plays with player voice (DEFAULT_SPEAKER)', () => {
+      renderDialogue();
+
+      const choiceAudioBtns = screen.getAllByRole('button', { name: /発音を聞く|Listen$/i });
+      // Line audio button + 3 choices audio buttons = at least 4
+      expect(choiceAudioBtns.length).toBeGreaterThanOrEqual(4);
+
+      // Click the audio button for the first choice
+      fireEvent.click(choiceAudioBtns[1]);
+      expect(audioModule.playAudio).toHaveBeenCalled();
+      const lastCall = audioModule.playAudio.mock.calls[audioModule.playAudio.mock.calls.length - 1];
+      expect(lastCall[0]).toBe('Joo, muutin tänne eilen.');
+      expect(lastCall[4].id).toBe('aino');
+    });
+
+    it('does not crash if playAudio throws or rejects', () => {
+      audioModule.playAudio.mockRejectedValueOnce(new Error('TTS failure'));
+      renderDialogue();
+
+      const audioBtns = screen.getAllByRole('button', { name: /発音を聞く|Listen$/i });
+      expect(() => fireEvent.click(audioBtns[0])).not.toThrow();
     });
   });
 });

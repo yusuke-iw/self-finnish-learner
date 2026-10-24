@@ -1,11 +1,12 @@
 import rawScenes from './scenes.json';
 import vaatteet from './vaatteet.json';
 import jatekatos from './jatekatos.json';
+import rappukaytava from './rappukaytava.json';
 import upcoming from './upcoming.json';
 
 export const scenes = [...rawScenes].sort((a, b) => a.order - b.order);
 
-export const games = [vaatteet, jatekatos];
+export const games = [vaatteet, jatekatos, rappukaytava];
 
 const gamesMap = new Map(games.map((g) => [g.id, g]));
 

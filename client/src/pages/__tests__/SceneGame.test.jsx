@@ -1,13 +1,14 @@
 import React from 'react';
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { MemoryRouter, Routes, Route, Link } from 'react-router-dom';
 import SceneGame from '../SceneGame';
 import { LanguageProvider } from '../../context/LanguageContext';
 import * as apiModule from '../../services/api';
 import { hasPlayed } from '../../utils/sceneProgress';
 import vaatteet from '../../data/scenes/vaatteet.json';
 import jatekatos from '../../data/scenes/jatekatos.json';
+import rappukaytava from '../../data/scenes/rappukaytava.json';
 import { setSceneTextMode } from '../../utils/sceneText';
 import { hasJapanese } from '../../utils/sceneText';
 
@@ -142,6 +143,69 @@ describe('SceneGame Page', () => {
 
     expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
     expect(hasPlayed('jatekatos')).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: /次のおすすめ|Next recommended/ }));
+    expect(mockNavigate).toHaveBeenCalledWith('/scenes/rappukaytava');
+    fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l10&level=1');
+  });
+
+  it('starts the next game fresh when the route changes after a finished game', () => {
+    render(
+      <MemoryRouter initialEntries={['/scenes/jatekatos']}>
+        <LanguageProvider>
+          <Link to="/scenes/rappukaytava">go-dialogue</Link>
+          <Routes>
+            <Route path="/scenes/:gameId" element={<SceneGame />} />
+          </Routes>
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    for (let i = 0; i < jatekatos.playLength; i++) {
+      const item = jatekatos.items.find((it) => screen.queryByText(it.label.fi));
+      const rightBin = jatekatos.bins.find((b) => b.id === item.binId);
+      const binsGroup = screen.getByRole('group', { name: /ごみの箱|Bins/ });
+      fireEvent.click(
+        within(binsGroup).getAllByRole('button').find((btn) => btn.textContent.includes(rightBin.label.fi))
+      );
+      fireEvent.click(screen.getByRole('button', { name: /次へ|完了|Next|Valmis!/i }));
+    }
+    expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('go-dialogue'));
+    expect(screen.getByRole('heading', { level: 2, name: /Rappukäytävässä/ })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /Reply choices|返事の選択肢/ })).toBeInTheDocument();
+    expect(screen.queryByText(/Valmis!/)).toBeNull();
+  });
+
+  it('plays the dialogue scene for /scenes/rappukaytava through to the end, then marks it played and offers no next game', () => {
+    renderGame('rappukaytava');
+    expect(screen.getByRole('heading', { level: 2, name: /Rappukäytävässä/ })).toBeInTheDocument();
+
+    const dialogue = rappukaytava.dialogues[0];
+    let currNodeId = dialogue.startNodeId;
+
+    while (currNodeId) {
+      const node = dialogue.nodes.find((n) => n.id === currNodeId);
+      expect(node).toBeDefined();
+
+      const goodChoice = node.choices.find((c) => c.quality === 'good');
+      expect(goodChoice).toBeDefined();
+
+      const choiceBtn = screen.getByRole('button', {
+        name: new RegExp(goodChoice.text.spoken.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+      });
+      fireEvent.click(choiceBtn);
+
+      const isLast = !goodChoice.next;
+      const nextBtn = screen.getByRole('button', { name: isLast ? /Valmis!/ : /次へ|Next/i });
+      fireEvent.click(nextBtn);
+
+      currNodeId = goodChoice.next;
+    }
+
+    expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+    expect(hasPlayed('rappukaytava')).toBe(true);
     expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l10&level=1');

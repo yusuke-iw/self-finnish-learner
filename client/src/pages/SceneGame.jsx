@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { findGameById, getNextRecommended } from '../data/scenes/index';
 import OutfitGame from '../components/scenes/OutfitGame';
 import SortGame from '../components/scenes/SortGame';
+import DialogueScene from '../components/scenes/DialogueScene';
 import SceneResult from '../components/scenes/SceneResult';
 import SceneText from '../components/scenes/SceneText';
 import SceneTextToggle from '../components/scenes/SceneTextToggle';
@@ -17,8 +18,14 @@ import { getStudyStats } from '../utils/studyStats';
 import { saveProgress } from '../services/api';
 import { useLanguage } from '../context/useLanguage';
 
+// Keyed by gameId so that moving to the next recommended game (same route, new id)
+// starts fresh instead of keeping the previous game's finished state.
 export default function SceneGame() {
   const { gameId } = useParams();
+  return <SceneGameBody key={gameId} gameId={gameId} />;
+}
+
+function SceneGameBody({ gameId }) {
   const { t } = useLanguage();
 
   const [mode, setMode] = useState(() => getSceneTextMode());
@@ -106,9 +113,12 @@ export default function SceneGame() {
               onFinish={handleFinish}
             />
           ) : (
-            <div className="scene-game-placeholder">
-              <p>{t('scenes.comingSoon')}</p>
-            </div>
+            <DialogueScene
+              key={replayKey}
+              game={game}
+              mode={displayMode}
+              onFinish={handleFinish}
+            />
           )
         ) : (
           <SceneResult

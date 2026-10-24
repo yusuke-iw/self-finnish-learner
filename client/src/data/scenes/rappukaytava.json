@@ -1,0 +1,438 @@
+{
+  "id": "rappukaytava",
+  "sceneId": "lahio",
+  "type": "dialogue",
+  "schemaVersion": 1,
+  "icon": "🗣️",
+  "title": {
+    "fi": "Rappukäytävässä",
+    "en": "In the stairwell",
+    "ja": "階段で"
+  },
+  "place": {
+    "fi": "rappukäytävä",
+    "en": "stairwell",
+    "ja": "階段（共用部）"
+  },
+  "instruction": {
+    "fi": "Tapaat naapurin rappukäytävässä. Valitse sopiva vastaus.",
+    "selko": "Naapuri puhuu sinulle. Valitse hyvä vastaus.",
+    "en": "You meet a neighbour in the stairwell. Choose a suitable reply.",
+    "ja": "階段で近所の人に会った。合う返事を選ぼう。"
+  },
+  "playLength": 1,
+  "relatedLessonId": "l10",
+  "characters": [
+    {
+      "id": "naapuri",
+      "name": "Matti",
+      "icon": "👨",
+      "speakerId": "matti",
+      "role": {
+        "fi": "naapuri",
+        "en": "neighbour",
+        "ja": "近所の人"
+      }
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "uusi-naapuri",
+      "startNodeId": "n1",
+      "nodes": [
+        {
+          "id": "n1",
+          "speaker": "naapuri",
+          "line": {
+            "fi": "Hei! Olet varmaan uusi naapuri?",
+            "spoken": "Moi! Sä oot varmaan se uus naapuri?",
+            "en": "Hi! You must be the new neighbour?",
+            "ja": "こんにちは！新しく越してきた方ですよね？",
+            "spokenNotes": {
+              "en": "hei → moi, sinä olet → sä oot, uusi → uus",
+              "ja": "hei → moi, sinä olet → sä oot, uusi → uus"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n2",
+              "text": {
+                "fi": "Kyllä, muutin tänne viime viikolla.",
+                "spoken": "Joo, mä muutin tänne viime viikolla.",
+                "en": "Yes, I moved here last week.",
+                "ja": "はい、先週ここに引っ越してきました。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Vastasit kysymykseen.",
+                "selko": "Hyvä vastaus!",
+                "en": "Good! You answered the question.",
+                "ja": "質問にちゃんと答えています。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Ei kiitos.",
+                "spoken": "Ei kiitos.",
+                "en": "No, thank you.",
+                "ja": "いいえ、結構です。"
+              },
+              "feedback": {
+                "fi": "\"Ei kiitos\" sanotaan, kun ei halua jotakin, mitä tarjotaan.",
+                "selko": "\"Ei kiitos\" tarkoittaa: en halua.",
+                "en": "You say \"Ei kiitos\" when you turn down something you are offered.",
+                "ja": "「Ei kiitos」は勧められたものを断るときの言葉です。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, mitä?",
+                "spoken": "Sori, mitä?",
+                "en": "Sorry, what?",
+                "ja": "すみません、何ですか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut. Naapuri sanoo sen uudestaan hitaasti.",
+                "selko": "Naapuri sanoo sen uudestaan.",
+                "en": "A good way to ask if you didn't hear. The neighbour says it again slowly.",
+                "ja": "聞き取れなかったときに使えます。もう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n2",
+          "speaker": "naapuri",
+          "line": {
+            "fi": "Tervetuloa! Olen Matti, asun tuolla kolmannessa kerroksessa.",
+            "spoken": "Tervetuloa! Mä oon Matti, asun tossa kolmannessa kerroksessa.",
+            "en": "Welcome! I'm Matti, I live up there on the third floor.",
+            "ja": "ようこそ！マッティです。3階に住んでいます。",
+            "spokenNotes": {
+              "en": "olen → mä oon, tuolla → tossa",
+              "ja": "olen → mä oon, tuolla → tossa"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n3",
+              "text": {
+                "fi": "Hauska tutustua! Minä asun toisessa kerroksessa.",
+                "spoken": "Hauska tutustua! Mä asun tokassa kerroksessa.",
+                "en": "Nice to meet you! I live on the second floor.",
+                "ja": "はじめまして！私は2階に住んでいます。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kerroit, missä asut.",
+                "selko": "Hyvä vastaus!",
+                "en": "Good! You told them where you live.",
+                "ja": "どこに住んでいるかも伝えられました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Kiitos, samoin!",
+                "spoken": "Kiitti, samoin!",
+                "en": "Thanks, you too!",
+                "ja": "ありがとう、あなたも！"
+              },
+              "feedback": {
+                "fi": "\"Samoin\" vastataan toivotukseen, esimerkiksi \"Hyvää viikonloppua!\".",
+                "selko": "\"Samoin\" sopii, kun joku toivoo sinulle hyvää.",
+                "en": "\"Samoin\" is a reply to a wish, such as \"Have a nice weekend!\".",
+                "ja": "「Samoin」は「よい週末を」などの願いの言葉に返すときに使います。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "bad",
+              "text": {
+                "fi": "Näkemiin!",
+                "spoken": "Moi moi!",
+                "en": "Goodbye!",
+                "ja": "さようなら！"
+              },
+              "feedback": {
+                "fi": "Näin sanotaan, kun lähdetään. Keskustelu jatkuu vielä.",
+                "selko": "Nyt et vielä lähde.",
+                "en": "You say this when you leave. The conversation isn't over yet.",
+                "ja": "別れるときの言葉です。会話はまだ続いています。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n3",
+          "speaker": "naapuri",
+          "line": {
+            "fi": "Saunavuorot varataan muuten ilmoitustaulun listasta.",
+            "spoken": "Muuten, saunavuorot varataan tosta ilmotustaulun listasta.",
+            "en": "By the way, sauna slots are booked on the list on the noticeboard.",
+            "ja": "そういえば、サウナの利用枠は掲示板のリストで予約しますよ。",
+            "spokenNotes": {
+              "en": "ilmoitustaulu → ilmotustaulu; adds tosta (\"that one there\")",
+              "ja": "ilmoitustaulu → ilmotustaulu、tosta（そこの）を足す"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n4",
+              "text": {
+                "fi": "Kiitos, hyvä tietää!",
+                "spoken": "Kiitti, hyvä tietää!",
+                "en": "Thanks, good to know!",
+                "ja": "ありがとう、知れてよかった！"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kiitit tiedosta.",
+                "selko": "Hyvä vastaus!",
+                "en": "Good! You thanked them for the information.",
+                "ja": "教えてもらったことにお礼を言えました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Mihin aikaan juna lähtee?",
+                "spoken": "Mihin aikaan juna lähtee?",
+                "en": "What time does the train leave?",
+                "ja": "電車は何時に出ますか？"
+              },
+              "feedback": {
+                "fi": "Kysymys ei liity saunavuoroihin.",
+                "selko": "Naapuri puhuu saunasta, ei junasta.",
+                "en": "The question has nothing to do with sauna slots.",
+                "ja": "サウナの話と関係がありません。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, mitä?",
+                "spoken": "Sori, mitä?",
+                "en": "Sorry, what?",
+                "ja": "すみません、何ですか？"
+              },
+              "feedback": {
+                "fi": "Naapuri sanoo sen uudestaan hitaasti.",
+                "selko": "Naapuri sanoo sen uudestaan.",
+                "en": "The neighbour says it again slowly.",
+                "ja": "もう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n4",
+          "speaker": "naapuri",
+          "line": {
+            "fi": "No, mukavaa päivänjatkoa!",
+            "spoken": "No, mukavaa päivänjatkoo!",
+            "en": "Well, have a nice rest of the day!",
+            "ja": "じゃあ、よい一日を！",
+            "spokenNotes": {
+              "en": "päivänjatkoa → päivänjatkoo",
+              "ja": "päivänjatkoa → päivänjatkoo"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": null,
+              "text": {
+                "fi": "Kiitos, samoin!",
+                "spoken": "Kiitti, samoin!",
+                "en": "Thanks, you too!",
+                "ja": "ありがとう、あなたも！"
+              },
+              "feedback": {
+                "fi": "Hyvä! Toivotukseen vastataan \"Kiitos, samoin!\".",
+                "selko": "Hyvä vastaus!",
+                "en": "Good! You reply to a wish with \"Kiitos, samoin!\".",
+                "ja": "願いの言葉には「Kiitos, samoin!」と返します。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "ok",
+              "next": null,
+              "text": {
+                "fi": "Hauska tutustua!",
+                "spoken": "Hauska tutustua!",
+                "en": "Nice to meet you!",
+                "ja": "はじめまして！"
+              },
+              "feedback": {
+                "fi": "Käy, mutta tähän vastataan yleensä \"Kiitos, samoin!\".",
+                "selko": "Parempi vastaus on \"Kiitos, samoin!\".",
+                "en": "That works, but the usual reply is \"Kiitos, samoin!\".",
+                "ja": "通じますが、ふつうは「Kiitos, samoin!」と返します。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "bad",
+              "text": {
+                "fi": "Ei kestä.",
+                "spoken": "Ei kestä.",
+                "en": "You're welcome.",
+                "ja": "どういたしまして。"
+              },
+              "feedback": {
+                "fi": "\"Ei kestä\" vastataan kiitokseen.",
+                "selko": "\"Ei kestä\" sopii, kun joku sanoo kiitos.",
+                "en": "\"Ei kestä\" is a reply to a thank-you.",
+                "ja": "「Ei kestä」はお礼を言われたときに返す言葉です。"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "Hauska tutustua",
+      "translation": "Nice to meet you",
+      "translationJa": "はじめまして"
+    },
+    {
+      "word": "Tervetuloa",
+      "translation": "Welcome",
+      "translationJa": "ようこそ"
+    },
+    {
+      "word": "Kiitos, samoin",
+      "translation": "Thanks, you too",
+      "translationJa": "ありがとう、あなたも"
+    },
+    {
+      "word": "Mukavaa päivänjatkoa",
+      "translation": "Have a nice rest of the day",
+      "translationJa": "よい一日を"
+    },
+    {
+      "word": "Anteeksi, mitä?",
+      "translation": "Sorry, what?",
+      "translationJa": "すみません、何ですか？"
+    },
+    {
+      "word": "naapuri",
+      "translation": "neighbour",
+      "translationJa": "近所の人・隣人"
+    },
+    {
+      "word": "kerros",
+      "translation": "floor, storey",
+      "translationJa": "階"
+    },
+    {
+      "word": "saunavuoro",
+      "translation": "sauna slot, sauna turn",
+      "translationJa": "サウナの利用枠"
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "rappukaytava-1",
+      "title": {
+        "fi": "Kohteliaat vastaukset",
+        "selko": "Hyvät vastaukset",
+        "en": "Polite replies",
+        "ja": "返事の使い分け"
+      },
+      "body": [
+        {
+          "fi": "\"Kiitos, samoin!\" vastataan toivotukseen, kuten \"Mukavaa päivää!\".",
+          "selko": "Kun joku toivoo hyvää, sano \"Kiitos, samoin!\".",
+          "en": "Reply with \"Kiitos, samoin!\" (Thanks, you too!) to a wish like \"Have a nice day!\".",
+          "ja": "「Kiitos, samoin!（ありがとう、あなたも）」は「よい一日を」などの願いの言葉に返します。"
+        },
+        {
+          "fi": "\"Ei kestä\" vastataan kiitokseen, ja \"Ei kiitos\" kieltäytyy kohteliaasti tarjouksesta.",
+          "selko": "\"Ei kestä\" sopii kiitokseen. \"Ei kiitos\" kieltäytyy.",
+          "en": "\"Ei kestä\" (You're welcome) is a reply to thank you. \"Ei kiitos\" (No thank you) politely turns down an offer.",
+          "ja": "「Ei kestä（どういたしまして）」はお礼に、「Ei kiitos（いいえ、結構です）」は勧めを断るときに使います。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "samoin = samalla tavalla, myös sinulle",
+        "selko": "samoin = myös sinulle",
+        "en": "samoin = likewise, to you too",
+        "ja": "samoin = 同様に、あなたにも"
+      }
+    },
+    {
+      "id": "rappukaytava-2",
+      "title": {
+        "fi": "Puhekieli ja kirjakieli",
+        "selko": "Puhekieli",
+        "en": "Spoken and written Finnish",
+        "ja": "話し言葉と書き言葉"
+      },
+      "body": [
+        {
+          "fi": "Keskusteluissa käytetään usein puhekielen muotoja: \"minä olen\" lyhenee muotoon \"mä oon\", ja \"sinä olet\" on \"sä oot\".",
+          "selko": "Puheessa \"minä olen\" on usein \"mä oon\" ja \"sinä olet\" on \"sä oot\".",
+          "en": "In spoken Finnish, forms are often shortened: \"minä olen\" becomes \"mä oon\", and \"sinä olet\" becomes \"sä oot\".",
+          "ja": "日常会話では話し言葉が多く使われます。「minä olen」は「mä oon」に、「sinä olet」は「sä oot」に短縮されます。"
+        },
+        {
+          "fi": "Myös monet sanat lyhenevät puheessa: esimerkiksi \"uusi\" on usein \"uus\" ja \"toinen\" on \"toka\".",
+          "selko": "Puheessa sanotaan usein \"uus\" ja \"toka\".",
+          "en": "Many words also shorten in speech: for example, \"uusi\" is often \"uus\" and \"toinen\" is \"toka\".",
+          "ja": "多くの単語も口語で短縮されます。例えば「uusi」は「uus」、「toinen」は「toka」とよく言われます。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "minä → mä, sinä → sä; olen → oon, olet → oot",
+        "selko": "minä → mä, sinä → sä",
+        "en": "Pronouns and 'olla' in spoken Finnish",
+        "ja": "話し言葉の代名詞と動詞 olla の形"
+      }
+    },
+    {
+      "id": "rappukaytava-3",
+      "title": {
+        "fi": "Kerroksessa asuminen",
+        "selko": "Missä kerroksessa?",
+        "en": "Living on a floor",
+        "ja": "階を表す内格"
+      },
+      "body": [
+        {
+          "fi": "Kun kerrotaan asuinkerroksesta, käytetään järjestysluvun ja sanan \"kerros\" sisäpaikallissijaa eli inessiiviä (-ssa/-ssä).",
+          "selko": "Sanotaan: asun kolmannessa kerroksessa.",
+          "en": "To say which floor you live on, use the inessive case (-ssa/-ssä) for the ordinal number and \"kerros\".",
+          "ja": "住んでいる階を言うときは、序数と「kerros（階）」の両方に内格（-ssa/-ssä）をつけます。"
+        },
+        {
+          "fi": "Esimerkiksi \"kolmannessa kerroksessa\" (3. kerros) tai puhekielessä \"tokassa kerroksessa\" (2. kerros).",
+          "selko": "Esimerkki: asun kolmannessa kerroksessa tai tokassa kerroksessa.",
+          "en": "For example, \"kolmannessa kerroksessa\" (on the third floor) or in speech \"tokassa kerroksessa\" (on the second floor).",
+          "ja": "例: 「kolmannessa kerroksessa（3階に）」、話し言葉では「tokassa kerroksessa（2階に）」。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "kolmas → kolmannessa + kerros → kerroksessa",
+        "selko": "kolmas → kolmannessa kerroksessa",
+        "en": "inessive case: kolmannessa kerroksessa",
+        "ja": "内格: kolmannessa kerroksessa（3階に）"
+      }
+    }
+  ]
+}
