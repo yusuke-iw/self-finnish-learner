@@ -260,4 +260,16 @@ describe('Home Component', () => {
     fireEvent.click(reviewBtn);
     expect(mockNavigate).toHaveBeenCalledWith('/review');
   });
+
+  it('renders Daily-life scenes card linking to /scenes', () => {
+    render(
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText(/🏘️ Daily-life scenes|🏘️ 暮らしの場面/i)).toBeInTheDocument();
+    const scenesLink = screen.getByRole('link', { name: /Daily-Life Scenes|暮らしの場面/i });
+    expect(scenesLink).toHaveAttribute('href', '/scenes');
+  });
 });
