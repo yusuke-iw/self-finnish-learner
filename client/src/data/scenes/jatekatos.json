@@ -17,10 +17,10 @@
   "instruction": {
     "fi": "Vie roskat jätekatokseen ja lajittele ne oikeisiin astioihin.",
     "selko": "Laita jokainen roska oikeaan astiaan.",
-    "en": "Take the rubbish to the waste shelter and sort it into the right bins.",
+    "en": "Take the trash to the waste shelter and sort it into the right bins.",
     "ja": "ごみ置き場で、ごみを正しい箱に分けよう。"
   },
-  "playLength": 5,
+  "playLength": 8,
   "relatedLessonId": "l10",
   "bins": [
     {
@@ -99,7 +99,7 @@
       },
       "sentence": {
         "fi": "Banaaninkuori kuuluu biojätteeseen.",
-        "selko": "Banaanin kuori on biojätettä.",
+        "selko": "Banaaninkuori on biojätettä.",
         "en": "A banana peel goes in the biowaste.",
         "ja": "バナナの皮は生ごみに入れます。"
       },
@@ -108,6 +108,50 @@
         "selko": "Ruoka ja kuoret ovat biojätettä.",
         "en": "Food scraps and fruit peels are biowaste.",
         "ja": "食べ残しや果物の皮は生ごみです。"
+      }
+    },
+    {
+      "id": "kahvinporot",
+      "icon": "☕",
+      "binId": "biojate",
+      "label": {
+        "fi": "kahvinporot",
+        "en": "coffee grounds",
+        "ja": "コーヒーのかす"
+      },
+      "sentence": {
+        "fi": "Kahvinporot ja suodatinpussi kuuluvat biojätteeseen.",
+        "selko": "Kahvinporot ovat biojätettä. Suodatinpussi on myös biojätettä.",
+        "en": "Coffee grounds and the paper filter go in the biowaste.",
+        "ja": "コーヒーのかすと紙のフィルターは生ごみに入れます。"
+      },
+      "hint": {
+        "fi": "Kahvinporot ovat biojätettä, samoin paperinen suodatinpussi.",
+        "selko": "Kahvinporot ovat biojätettä. Paperinen pussi on myös biojätettä.",
+        "en": "Coffee grounds are biowaste, and so is the paper filter.",
+        "ja": "コーヒーのかすは生ごみです。紙のフィルターも同じです。"
+      }
+    },
+    {
+      "id": "talouspaperi",
+      "icon": "🧻",
+      "binId": "biojate",
+      "label": {
+        "fi": "käytetty talouspaperi",
+        "en": "used paper towel",
+        "ja": "使ったキッチンペーパー"
+      },
+      "sentence": {
+        "fi": "Käytetty talouspaperi kuuluu biojätteeseen.",
+        "selko": "Käytetty talouspaperi on biojätettä.",
+        "en": "A used paper towel goes in the biowaste.",
+        "ja": "使ったキッチンペーパーは生ごみに入れます。"
+      },
+      "hint": {
+        "fi": "Paperinkeräykseen kuuluu vain puhdas paperi. Käytetty talouspaperi on biojätettä.",
+        "selko": "Käytetty talouspaperi on likainen. Se on biojätettä.",
+        "en": "Only clean paper goes in the paper recycling. A used paper towel is biowaste.",
+        "ja": "紙の回収に出せるのはきれいな紙だけです。使ったキッチンペーパーは生ごみです。"
       }
     },
     {
@@ -126,10 +170,76 @@
         "ja": "空の牛乳パックは紙容器の回収に出します。"
       },
       "hint": {
-        "fi": "Maitotölkki on kartonkia, ei paperia.",
-        "selko": "Maitotölkki on kartonkia.",
-        "en": "A milk carton is cardboard, not paper.",
-        "ja": "牛乳パックは紙（新聞など）ではなく紙容器です。"
+        "fi": "Maitotölkki on kartonkia, ei paperia. Kartonkipakkauksille on oma astia.",
+        "selko": "Maitotölkki on kartonkia. Se ei ole paperia.",
+        "en": "A milk carton is cardboard, not paper. Cardboard packaging has its own bin.",
+        "ja": "牛乳パックは紙（新聞など）ではなく紙容器です。紙容器には専用の箱があります。"
+      }
+    },
+    {
+      "id": "muropaketti",
+      "icon": "📦",
+      "binId": "kartonki",
+      "label": {
+        "fi": "tyhjä muropaketti",
+        "en": "empty cereal box",
+        "ja": "空のシリアルの箱"
+      },
+      "sentence": {
+        "fi": "Tyhjä muropaketti kuuluu kartonginkeräykseen.",
+        "selko": "Tyhjä muropaketti on kartonkia.",
+        "en": "An empty cereal box goes in the cardboard recycling.",
+        "ja": "空のシリアルの箱は紙容器の回収に出します。"
+      },
+      "hint": {
+        "fi": "Paperinkeräykseen kuuluvat lehdet ja mainokset, eivät pakkaukset. Muropaketti on kartonkipakkaus.",
+        "selko": "Muropaketti on pakkaus. Pakkaus on kartonkia, ei paperia.",
+        "en": "Paper recycling is for newspapers and flyers, not packaging. A cereal box is cardboard packaging.",
+        "ja": "紙の回収は新聞やチラシ用で、容器や包装は入れません。シリアルの箱は紙容器です。"
+      }
+    },
+    {
+      "id": "sanomalehti",
+      "icon": "📰",
+      "binId": "paperi",
+      "label": {
+        "fi": "sanomalehti",
+        "en": "newspaper",
+        "ja": "新聞"
+      },
+      "sentence": {
+        "fi": "Sanomalehti kuuluu paperinkeräykseen.",
+        "selko": "Sanomalehti on paperia.",
+        "en": "A newspaper goes in the paper recycling.",
+        "ja": "新聞は紙の回収に出します。"
+      },
+      "hint": {
+        "fi": "Sanomalehti on paperia, ei kartonkia. Kartonginkeräykseen kuuluvat vain pakkaukset.",
+        "selko": "Sanomalehti on paperia. Se ei ole pakkaus.",
+        "en": "A newspaper is paper, not cardboard. The cardboard bin is only for packaging.",
+        "ja": "新聞は紙容器ではなく紙です。紙容器の箱には容器や包装だけを入れます。"
+      }
+    },
+    {
+      "id": "mainoslehti",
+      "icon": "📄",
+      "binId": "paperi",
+      "label": {
+        "fi": "mainoslehti",
+        "en": "advertising flyer",
+        "ja": "チラシ"
+      },
+      "sentence": {
+        "fi": "Mainoslehti kuuluu paperinkeräykseen.",
+        "selko": "Mainoslehti on paperia.",
+        "en": "An advertising flyer goes in the paper recycling.",
+        "ja": "チラシは紙の回収に出します。"
+      },
+      "hint": {
+        "fi": "Mainokset ovat paperia samoin kuin sanomalehdet. Paperille on oma astia.",
+        "selko": "Mainoslehti on paperia. Paperille on oma astia.",
+        "en": "Flyers are paper, just like newspapers. Paper has its own bin.",
+        "ja": "チラシも新聞と同じく紙です。紙には専用の箱があります。"
       }
     },
     {
@@ -148,10 +258,32 @@
         "ja": "空のガラス瓶はガラスの回収に出します。"
       },
       "hint": {
-        "fi": "Lasipakkauksille on oma astia.",
-        "selko": "Lasille on oma astia.",
-        "en": "Glass packaging has its own bin.",
-        "ja": "ガラスの容器には専用の箱があります。"
+        "fi": "Lasipurkit ja -pullot ovat lasipakkauksia. Niille on oma astia.",
+        "selko": "Lasipurkki on lasia. Lasille on oma astia.",
+        "en": "Glass jars and bottles are glass packaging. They have their own bin.",
+        "ja": "ガラスの瓶やボトルはガラスの容器です。専用の箱があります。"
+      }
+    },
+    {
+      "id": "juomalasi",
+      "icon": "🥃",
+      "binId": "sekajate",
+      "label": {
+        "fi": "rikkinäinen juomalasi",
+        "en": "broken drinking glass",
+        "ja": "割れたコップ"
+      },
+      "sentence": {
+        "fi": "Rikkinäinen juomalasi kuuluu sekajätteeseen.",
+        "selko": "Rikkinäinen juomalasi on sekajätettä.",
+        "en": "A broken drinking glass goes in the mixed waste.",
+        "ja": "割れたコップは混合ごみに入れます。"
+      },
+      "hint": {
+        "fi": "Lasinkeräykseen kuuluvat vain lasipakkaukset, kuten purkit ja pullot. Juomalasi ei ole pakkaus.",
+        "selko": "Laita lasiastiaan vain purkit ja pullot. Juomalasi ei ole pakkaus.",
+        "en": "Only glass packaging, like jars and bottles, goes in the glass recycling. A drinking glass is not packaging.",
+        "ja": "ガラスの回収に出せるのは瓶やボトルなどの容器だけです。コップは容器ではありません。"
       }
     },
     {
@@ -160,20 +292,86 @@
       "binId": "metalli",
       "label": {
         "fi": "säilyketölkki",
-        "en": "tin can",
+        "en": "food can",
         "ja": "缶詰の缶"
       },
       "sentence": {
-        "fi": "Säilyketölkki kuuluu metallinkeräykseen.",
-        "selko": "Säilyketölkki on metallia.",
-        "en": "A tin can goes in the metal recycling.",
-        "ja": "缶詰の缶は金属の回収に出します。"
+        "fi": "Tyhjä säilyketölkki kuuluu metallinkeräykseen.",
+        "selko": "Tyhjä säilyketölkki on metallia.",
+        "en": "An empty food can goes in the metal recycling.",
+        "ja": "空の缶詰の缶は金属の回収に出します。"
       },
       "hint": {
-        "fi": "Tölkki on tehty metallista.",
-        "selko": "Tölkki on metallia.",
-        "en": "The can is made of metal.",
-        "ja": "缶は金属でできています。"
+        "fi": "Säilyketölkki on tehty metallista. Metallille on oma astia.",
+        "selko": "Tölkki on metallia. Metallille on oma astia.",
+        "en": "A food can is made of metal. Metal has its own bin.",
+        "ja": "缶詰の缶は金属でできています。金属には専用の箱があります。"
+      }
+    },
+    {
+      "id": "alumiinivuoka",
+      "icon": "🥧",
+      "binId": "metalli",
+      "label": {
+        "fi": "alumiinivuoka",
+        "en": "aluminum foil tray",
+        "ja": "アルミの容器"
+      },
+      "sentence": {
+        "fi": "Tyhjä alumiinivuoka kuuluu metallinkeräykseen.",
+        "selko": "Tyhjä alumiinivuoka on metallia.",
+        "en": "An empty aluminum foil tray goes in the metal recycling.",
+        "ja": "空のアルミの容器は金属の回収に出します。"
+      },
+      "hint": {
+        "fi": "Alumiini on metallia, vaikka vuoka on kevyt.",
+        "selko": "Vuoka on kevyt. Se on silti metallia.",
+        "en": "Aluminum is metal, even though the tray is light.",
+        "ja": "アルミの容器は軽くても金属です。"
+      }
+    },
+    {
+      "id": "voirasia",
+      "icon": "🧈",
+      "binId": "muovi",
+      "label": {
+        "fi": "tyhjä voirasia",
+        "en": "empty butter tub",
+        "ja": "空のバターの容器"
+      },
+      "sentence": {
+        "fi": "Tyhjä voirasia kuuluu muovinkeräykseen.",
+        "selko": "Tyhjä voirasia on muovia.",
+        "en": "An empty butter tub goes in the plastic recycling.",
+        "ja": "空のバターの容器はプラスチックの回収に出します。"
+      },
+      "hint": {
+        "fi": "Voirasia on muovipakkaus. Tyhjät muovipakkaukset kuuluvat muovinkeräykseen.",
+        "selko": "Voirasia on muovia. Se on pakkaus.",
+        "en": "A butter tub is plastic packaging. Empty plastic packaging goes in the plastic recycling.",
+        "ja": "バターの容器はプラスチックの容器です。空のプラスチック容器はプラスチックの回収に出します。"
+      }
+    },
+    {
+      "id": "shampoopullo",
+      "icon": "🧴",
+      "binId": "muovi",
+      "label": {
+        "fi": "tyhjä shampoopullo",
+        "en": "empty shampoo bottle",
+        "ja": "空のシャンプーのボトル"
+      },
+      "sentence": {
+        "fi": "Tyhjä shampoopullo kuuluu muovinkeräykseen.",
+        "selko": "Tyhjä shampoopullo on muovia.",
+        "en": "An empty shampoo bottle goes in the plastic recycling.",
+        "ja": "空のシャンプーのボトルはプラスチックの回収に出します。"
+      },
+      "hint": {
+        "fi": "Shampoopullo on muovipakkaus, vaikka siinä ei ollut ruokaa.",
+        "selko": "Pullo on muovia. Se on pakkaus.",
+        "en": "A shampoo bottle is plastic packaging, even though it didn't hold food.",
+        "ja": "シャンプーのボトルは食品の容器ではありませんが、プラスチックの容器です。"
       }
     },
     {
@@ -192,17 +390,49 @@
         "ja": "古い歯ブラシは混合ごみに入れます。"
       },
       "hint": {
-        "fi": "Muovinkeräykseen laitetaan vain muovipakkauksia. Hammasharja ei ole pakkaus.",
-        "selko": "Muoviastiaan saa laittaa vain pakkauksia. Hammasharja ei ole pakkaus.",
+        "fi": "Muovinkeräykseen kuuluvat vain muovipakkaukset. Hammasharja ei ole pakkaus.",
+        "selko": "Laita muoviastiaan vain pakkauksia. Hammasharja ei ole pakkaus.",
         "en": "Only plastic packaging goes in the plastic recycling. A toothbrush is not packaging.",
-        "ja": "プラスチックの回収に出せるのは容器や包装だけ。歯ブラシは容器ではありません。"
+        "ja": "プラスチックの回収に出せるのは容器や包装だけです。歯ブラシは容器ではありません。"
+      }
+    },
+    {
+      "id": "polypussi",
+      "icon": "🧹",
+      "binId": "sekajate",
+      "label": {
+        "fi": "imurin pölypussi",
+        "en": "vacuum cleaner bag",
+        "ja": "掃除機の紙パック"
+      },
+      "sentence": {
+        "fi": "Imurin pölypussi kuuluu sekajätteeseen.",
+        "selko": "Imurin pölypussi on sekajätettä.",
+        "en": "A vacuum cleaner bag goes in the mixed waste.",
+        "ja": "掃除機の紙パックは混合ごみに入れます。"
+      },
+      "hint": {
+        "fi": "Pölypussissa on pölyä ja roskia. Se kuuluu sekajätteeseen, vaikka pussi on paperia.",
+        "selko": "Pussissa on pölyä. Se on sekajätettä.",
+        "en": "The bag is full of dust and dirt. It goes in the mixed waste, even though the bag is paper.",
+        "ja": "紙パックの中はほこりやごみです。袋は紙でも、混合ごみに入れます。"
       }
     }
   ],
   "vocabulary": [
     {
+      "word": "jätekatos",
+      "translation": "waste shelter (a roofed area for trash bins)",
+      "translationJa": "ごみ置き場（屋根つき）"
+    },
+    {
+      "word": "lajitella",
+      "translation": "to sort",
+      "translationJa": "分別する"
+    },
+    {
       "word": "biojäte",
-      "translation": "biowaste",
+      "translation": "biowaste, food waste",
       "translationJa": "生ごみ"
     },
     {
@@ -216,19 +446,29 @@
       "translationJa": "混合ごみ"
     },
     {
-      "word": "jätekatos",
-      "translation": "waste shelter",
-      "translationJa": "ごみ置き場（屋根つき）"
-    },
-    {
-      "word": "lajitella",
-      "translation": "to sort",
-      "translationJa": "分別する"
-    },
-    {
       "word": "pakkaus",
       "translation": "package, packaging",
       "translationJa": "容器・包装"
+    },
+    {
+      "word": "keräys",
+      "translation": "collection (for recycling)",
+      "translationJa": "回収"
+    },
+    {
+      "word": "kuulua",
+      "translation": "to belong (kuulua + illative: to go in)",
+      "translationJa": "属する（kuulua＋入格で「〜に入れるもの」）"
+    },
+    {
+      "word": "tyhjä",
+      "translation": "empty",
+      "translationJa": "空の"
+    },
+    {
+      "word": "pantti",
+      "translation": "deposit (on bottles and cans)",
+      "translationJa": "（瓶・缶の）デポジット"
     }
   ],
   "infoCards": [
@@ -249,16 +489,74 @@
         },
         {
           "fi": "Lajitteluohjeet voivat vaihdella kunnittain. Katso ohjeet jätekatoksen seinästä.",
-          "selko": "Ohjeet ovat jätekatoksen seinässä.",
+          "selko": "Ohjeet ovat jätekatoksen seinässä. Lue ne.",
           "en": "Sorting rules can vary by municipality. Check the instructions on the wall of the waste shelter.",
           "ja": "分け方は自治体によって少し違います。ごみ置き場の壁の案内を見ましょう。"
         }
       ],
       "grammarNote": {
-        "fi": "kuulua + mihin? → biojätteeseen, lasinkeräykseen",
+        "fi": "kuulua + mihin? → biojätteeseen, kartonginkeräykseen, lasinkeräykseen",
         "selko": "kuulua + mihin?",
-        "en": "kuulua + illative: \"belongs in\"",
-        "ja": "「kuulua＋入格」で「〜に入れるものだ」。"
+        "en": "kuulua + illative (\"goes in\"): biojätteeseen, kartonginkeräykseen",
+        "ja": "「kuulua＋入格」で「〜に入れるもの」: biojätteeseen（生ごみに）、kartonginkeräykseen（紙容器の回収に）"
+      }
+    },
+    {
+      "id": "jatekatos-2",
+      "title": {
+        "fi": "Pakkaus vai ei?",
+        "selko": "Onko se pakkaus?",
+        "en": "Packaging or not?",
+        "ja": "容器・包装かどうか"
+      },
+      "body": [
+        {
+          "fi": "Kartongin-, lasin- ja muovinkeräykseen kuuluvat vain pakkaukset: laatikot, purkit, pullot ja rasiat.",
+          "selko": "Laita kartonki-, lasi- ja muoviastiaan vain pakkauksia. Esimerkiksi purkki ja pullo ovat pakkauksia.",
+          "en": "The cardboard, glass and plastic bins are only for packaging: boxes, jars, bottles and tubs.",
+          "ja": "紙容器・ガラス・プラスチックの箱に入れるのは容器や包装（箱、瓶、ボトル、カップ）だけです。"
+        },
+        {
+          "fi": "Juomalasi tai hammasharja ei ole pakkaus, joten se kuuluu sekajätteeseen. Huuhtele pakkaukset ja anna niiden kuivua ennen lajittelua.",
+          "selko": "Juomalasi ei ole pakkaus. Se on sekajätettä. Huuhtele pakkaus ennen kuin laitat sen astiaan.",
+          "en": "A drinking glass or a toothbrush is not packaging, so it goes in the mixed waste. Rinse packaging and let it dry before you sort it.",
+          "ja": "コップや歯ブラシは容器ではないので混合ごみです。容器は洗って乾かしてから分けます。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "X on + partitiivi (materiaali): kartonkia, lasia, metallia, muovia",
+        "selko": "Maitotölkki on kartonkia.",
+        "en": "X on + partitive for the material: kartonkia, lasia, metallia, muovia",
+        "ja": "素材を言うときは「X on＋分格」: kartonkia（紙容器）、lasia（ガラス）、metallia（金属）、muovia（プラスチック）"
+      }
+    },
+    {
+      "id": "jatekatos-3",
+      "title": {
+        "fi": "Pantilliset pullot ja tölkit",
+        "selko": "Pullo ja tölkki kauppaan",
+        "en": "Bottles and cans with a deposit",
+        "ja": "デポジットつきの瓶と缶"
+      },
+      "body": [
+        {
+          "fi": "Monessa juomapullossa ja -tölkissä on pantti. Pantillisia pulloja ja tölkkejä ei viedä jätekatokseen.",
+          "selko": "Monessa pullossa ja tölkissä on pantti. Älä laita niitä jätekatokseen.",
+          "en": "Many drink bottles and cans have a deposit. They do not go in the waste shelter.",
+          "ja": "飲み物の瓶や缶の多くにはデポジット（pantti）がついています。ごみ置き場には出しません。"
+        },
+        {
+          "fi": "Palauta ne kaupan palautusautomaattiin, niin saat pantin takaisin.",
+          "selko": "Vie pullot ja tölkit kauppaan. Saat rahaa takaisin.",
+          "en": "Return them to the bottle return machine at the store, and you get the deposit back.",
+          "ja": "スーパーの回収機に返すと、デポジットが戻ってきます。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "Mihin tämä laitetaan? – passiivi: laitetaan, palautetaan",
+        "selko": "Mihin laitan tämän?",
+        "en": "Mihin tämä laitetaan? (\"Where does this go?\") – the passive: laitetaan, palautetaan",
+        "ja": "「Mihin tämä laitetaan?（これはどこに入れる？）」― 受動形: laitetaan（入れる）、palautetaan（返す）"
       }
     }
   ]

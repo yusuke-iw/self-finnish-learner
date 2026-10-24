@@ -66,6 +66,22 @@ MongoDB を使う環境では、利用者が `npm run seed --prefix server`（�
 - `wear` の文は全体目的語: `laittaa X päähän / jalkaan / käteen`、`pukea X päälle`（単数 `pipon`・`takin`、複数 `kengät`）、`ottaa X mukaan`。`ei mitään` には `wear` を付けない。
 - 天気の文は既存の例文（`m11_*`）と同じ形: `… astetta lämmintä / pakkasta`、`sataa lunta / vettä / räntää`、`aurinko paistaa`、`tuulee kovaa`。`ja` でつないだ短い主文 2 つの間には読点を打たない（`On viisi astetta pakkasta ja sataa lunta.`）。
 
+**SortGame（ごみの分別）の決まり**
+- `items` は 12〜16 件、`playLength` 8（「もう一度」で違うごみが出る）。どの箱（`bins`）にも 1 件以上。
+- 分け方は多くの自治体に共通するものだけ（HSY などの集合住宅の 7 区分: biojäte / kartonki / paperi / lasi / metalli / muovi / sekajäte）。地域で違うもの（電池、電球、猫砂など）は入れない。デポジット（pantti）つきの瓶・缶は箱に入れず、説明カードで「店に返す」と書く。
+- ごみの名前（`label`）は小文字で主格（`tyhjä muropaketti`）。`selko` は付けない。
+- `sentence` は `fi` を「X kuuluu ＋入格」（`biojätteeseen`・`kartonginkeräykseen`・`sekajätteeseen`）、`selko` を「X on ＋素材の分格」（`kartonkia`・`sekajätettä`）にそろえる。
+- `hint` は 1 件に 1 つで、どの箱を間違えても出る。だから「その物が何か／なぜその箱か」を言い、よくある取り違え（牛乳パックは紙ではない、コップは lasi ではない、など）に触れる。
+- 「容器・包装だけ」の区別（kartonki / lasi / muovi は pakkaus だけ。コップ・歯ブラシは sekajäte）を入れると学びになる。
+
+**DialogueScene（会話）の決まり**
+- 会話は一本道。相手のセリフ（`nodes`）は 4〜6。good / ok の `next` はどれも同じ次のセリフ、最後は `null`。bad / repeat には `next` を書かない。
+- 各セリフに good を 1 つ以上と、ok・bad・repeat のどれかを 1 つ以上。選択肢は 3〜4。ok は「通じるが短い・そっけない」返事にし、`feedback` で何を足せばよいかを言う（画面は ok のあとに最初の good を「より自然な返事」として出す）。
+- repeat（聞き返し）の `feedback` は「よい方法」として書く（相手がゆっくり言い直す）。
+- `spokenNotes` は相手のセリフの下ではなく、答えたあとのフィードバックに出る。だから相手のセリフと good の返事の両方の変化を書く（`Matti: onko → onks, sinulla → sulla. You: adds mä.`）。変化がなければ `same in speech` / `会話でもこのまま使う`。
+- 返事の取り違えをわざと混ぜる: `Kiitos, samoin`（願いの言葉へ）/ `Ei kestä`（お礼へ）/ `Ei kiitos`（申し出を断る）。どれもどこかで good、ほかの場所で bad にする。
+- 英語は米式（neighbor, bulletin board）。
+
 **確かめ方**
 1. 1 行ずつ確かめる: `node -e` で JSON を読み、文ごとに `ID | fi | selko | en | ja` を 1 行で出して読む（天気には `accept` も並べる）。
 2. `cd client && npx oxlint src --deny-warnings && npx vitest run && npx vite build`。`sceneData.test.js` が形（必須の欄、`accept` と `hints` の部位、正解でない選択肢があること、`ja` がそろっていること）を確かめる。`SceneGame.test.jsx` は実データで 1 回遊ぶ。
