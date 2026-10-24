@@ -1,9 +1,11 @@
 import rawScenes from './scenes.json';
 import vaatteet from './vaatteet.json';
+import jatekatos from './jatekatos.json';
+import upcoming from './upcoming.json';
 
 export const scenes = [...rawScenes].sort((a, b) => a.order - b.order);
 
-export const games = [vaatteet];
+export const games = [vaatteet, jatekatos];
 
 const gamesMap = new Map(games.map((g) => [g.id, g]));
 
@@ -45,4 +47,10 @@ export function getNextRecommended(gameId) {
     return null;
   }
   return list[index + 1];
+}
+
+// Games announced but not built yet. Once a game with the same id exists in `games`,
+// the real card replaces the placeholder.
+export function getUpcomingGames(sceneId) {
+  return upcoming.filter((u) => u.sceneId === sceneId && !gamesMap.has(u.id));
 }

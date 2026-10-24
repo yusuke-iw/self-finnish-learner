@@ -1,28 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { scenes, games, findGameById, getRecommendedGames } from '../data/scenes/index';
+import { scenes, games, findGameById, getRecommendedGames, getUpcomingGames } from '../data/scenes/index';
 import SceneText from '../components/scenes/SceneText';
 import SceneTextToggle from '../components/scenes/SceneTextToggle';
-import { getSceneTextMode, setSceneTextMode, hasJapanese } from '../utils/sceneText';
+import { getSceneTextMode, setSceneTextMode, hasJapanese, resolveMode } from '../utils/sceneText';
 import { hasPlayed } from '../utils/sceneProgress';
 import { useLanguage } from '../context/useLanguage';
-
-const UPCOMING_GAMES = [
-  {
-    id: 'jatekatos',
-    sceneId: 'lahio',
-    icon: '♻️',
-    title: { fi: 'Jätekatoksessa', en: 'At the waste shelter', ja: 'ごみ置き場で' },
-    number: 2
-  },
-  {
-    id: 'rappukaytava',
-    sceneId: 'lahio',
-    icon: '🗣️',
-    title: { fi: 'Rappukäytävässä', en: 'In the stairwell', ja: '階段で' },
-    number: 3
-  }
-];
 
 export default function Scenes() {
   const { t } = useLanguage();
@@ -34,6 +17,8 @@ export default function Scenes() {
   };
 
   const showJapanese = games.length > 0 && games.every((g) => hasJapanese(g));
+
+  const displayMode = resolveMode(mode, showJapanese);
 
   const recommendedList = getRecommendedGames();
   const gameNumberMap = new Map(recommendedList.map((item) => [item.game.id, item.number]));
@@ -47,7 +32,7 @@ export default function Scenes() {
         </div>
         <div className="scenes-toggle-area">
           <SceneTextToggle
-            mode={mode}
+            mode={displayMode}
             onChange={handleModeChange}
             showJapanese={showJapanese}
           />
@@ -60,16 +45,14 @@ export default function Scenes() {
             ? scene.gameIds.map((id) => findGameById(id)).filter(Boolean)
             : [];
 
-          const upcomingForScene = UPCOMING_GAMES.filter(
-            (ug) => ug.sceneId === scene.id && !findGameById(ug.id)
-          );
+          const upcomingForScene = getUpcomingGames(scene.id);
 
           return (
             <section key={scene.id} className="scene-section">
               <div className="scene-section-header">
                 <span className="scene-section-icon">{scene.icon}</span>
                 <h2 className="scene-section-title">
-                  <SceneText text={scene.title} mode={mode} variant="word" />
+                  <SceneText text={scene.title} mode={displayMode} variant="word" />
                 </h2>
                 {scene.comingSoon && (
                   <span className="scene-coming-soon-badge">{t('scenes.comingSoon')}</span>
@@ -92,7 +75,7 @@ export default function Scenes() {
                       <div className="scene-card-info">
                         <SceneText
                           text={game.title}
-                          mode={mode}
+                          mode={displayMode}
                           variant="word"
                           className="scene-card-title"
                         />
@@ -119,7 +102,7 @@ export default function Scenes() {
                     <div className="scene-card-info">
                       <SceneText
                         text={ug.title}
-                        mode={mode}
+                        mode={displayMode}
                         variant="word"
                         className="scene-card-title"
                       />

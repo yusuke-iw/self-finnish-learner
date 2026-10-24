@@ -7,6 +7,9 @@ import { LanguageProvider } from '../../context/LanguageContext';
 import * as apiModule from '../../services/api';
 import { hasPlayed } from '../../utils/sceneProgress';
 import vaatteet from '../../data/scenes/vaatteet.json';
+import jatekatos from '../../data/scenes/jatekatos.json';
+import { setSceneTextMode } from '../../utils/sceneText';
+import { hasJapanese } from '../../utils/sceneText';
 
 vi.mock('../../services/api', () => ({
   saveProgress: vi.fn().mockResolvedValue({ success: true })
@@ -105,6 +108,76 @@ describe('SceneGame Page', () => {
     fireEvent.click(retryBtn);
     expect(screen.queryByText(/Valmis!/)).toBeNull();
     expect(screen.getByRole('button', { name: /Lähden ulos!/i })).toBeInTheDocument();
+  });
+
+  const renderGame = (id) =>
+    render(
+      <MemoryRouter initialEntries={[`/scenes/${id}`]}>
+        <LanguageProvider>
+          <Routes>
+            <Route path="/scenes/:gameId" element={<SceneGame />} />
+          </Routes>
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+  it('plays the sort game through with wrong taps, then marks it played and offers no next game', () => {
+    renderGame('jatekatos');
+    expect(screen.getByRole('heading', { level: 2, name: /Jätekatoksessa/ })).toBeInTheDocument();
+
+    for (let i = 0; i < jatekatos.playLength; i++) {
+      const item = jatekatos.items.find((it) => screen.queryByText(it.label.fi));
+      expect(item).toBeDefined();
+      const wrongBin = jatekatos.bins.find((b) => b.id !== item.binId);
+      const rightBin = jatekatos.bins.find((b) => b.id === item.binId);
+      const binsGroup = screen.getByRole('group', { name: /ごみの箱|Bins/ });
+      const pick = (bin) =>
+        within(binsGroup).getAllByRole('button').find((btn) => btn.textContent.includes(bin.label.fi));
+
+      fireEvent.click(pick(wrongBin));
+      expect(pick(wrongBin)).toHaveClass('wrong-choice');
+      fireEvent.click(pick(rightBin));
+      fireEvent.click(screen.getByRole('button', { name: /次へ|完了|Next|Valmis!/i }));
+    }
+
+    expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+    expect(hasPlayed('jatekatos')).toBe(true);
+    expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l10&level=1');
+  });
+
+  it('offers the sort game as the next recommended game after the outfit game', () => {
+    renderGame('vaatteet');
+    for (let roundIdx = 0; roundIdx < vaatteet.playLength; roundIdx++) {
+      const condition = vaatteet.conditions.find((c) => screen.queryByText(c.weather.fi));
+      for (const slot of vaatteet.slots) {
+        const option = slot.options.find((o) => o.id === condition.accept[slot.id][0]);
+        const slotEl = screen.getByText(slot.label.fi).closest('.scene-slot');
+        fireEvent.click(
+          within(slotEl).getAllByRole('button').find((btn) => btn.textContent.includes(option.label.fi))
+        );
+      }
+      fireEvent.click(screen.getByRole('button', { name: /Lähden ulos!/i }));
+      fireEvent.click(screen.getByRole('button', { name: /次へ|完了|Next|Valmis!/i }));
+    }
+    fireEvent.click(screen.getByRole('button', { name: /次のおすすめ|Next recommended/ }));
+    expect(mockNavigate).toHaveBeenCalledWith('/scenes/jatekatos');
+  });
+
+  it('shows the resolved mode as pressed when the saved mode is ja but the game has no Japanese', () => {
+    setSceneTextMode('ja');
+    const original = jatekatos.title.ja;
+    delete jatekatos.title.ja;
+    try {
+      expect(hasJapanese(jatekatos)).toBe(false);
+      renderGame('jatekatos');
+      expect(screen.queryByRole('button', { name: /^JA$/ })).toBeNull();
+      expect(screen.getByRole('button', { name: /^EN$/ })).toHaveAttribute('aria-pressed', 'true');
+      expect(screen.getByRole('button', { name: /^EN$/ })).toHaveClass('active');
+    } finally {
+      jatekatos.title.ja = original;
+    }
   });
 
   it('allows toggling text mode within the game header', () => {

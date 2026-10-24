@@ -7,6 +7,7 @@ import SceneTextToggle from '../scenes/SceneTextToggle';
 import InfoCard from '../scenes/InfoCard';
 import SceneResult from '../scenes/SceneResult';
 import OutfitGame from '../scenes/OutfitGame';
+import SortGame from '../scenes/SortGame';
 import * as audioModule from '../../utils/audio';
 import * as soundModule from '../../utils/feedbackSounds';
 import * as statsModule from '../../utils/studyStats';
@@ -400,6 +401,127 @@ describe('Scene UI Components', () => {
         0.6,
         expect.anything()
       );
+    });
+  });
+
+  describe('OutfitGame accessibility', () => {
+    it('groups options per slot with the slot label as name, not the raw id', () => {
+      const game = {
+        playLength: 1,
+        slots: [
+          { id: 'paa', label: { fi: 'Päässä', en: 'Head' }, options: [{ id: 'pipo', icon: '🧶', label: { fi: 'pipo', en: 'beanie' } }] }
+        ],
+        conditions: [{
+          id: 'c1', icon: '❄️', temperature: -5,
+          weather: { fi: 'Pakkasta.', en: 'Frost.' },
+          accept: { paa: ['pipo'] }, hints: {}
+        }]
+      };
+      render(
+        <LanguageProvider>
+          <OutfitGame game={game} mode="en" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+      expect(screen.getByRole('group', { name: 'Päässä' })).toBeInTheDocument();
+      expect(screen.queryByRole('radiogroup')).toBeNull();
+    });
+  });
+
+  describe('SortGame', () => {
+    const sortGame = {
+      id: 'roskat',
+      playLength: 2,
+      bins: [
+        { id: 'lasi', label: { fi: 'Lasi', en: 'Glass' }, color: '#3fa37a' },
+        { id: 'metalli', label: { fi: 'Metalli', en: 'Metal' }, color: '#8a8f98' }
+      ],
+      items: [
+        {
+          id: 'purkki', icon: '🫙', binId: 'lasi',
+          label: { fi: 'lasipurkki', en: 'glass jar' },
+          sentence: { fi: 'Lasipurkki kuuluu lasinkeräykseen.', en: 'A jar goes in glass.' },
+          hint: { fi: 'Lasille on oma astia.', en: 'Glass has its own bin.' }
+        },
+        {
+          id: 'tolkki', icon: '🥫', binId: 'metalli',
+          label: { fi: 'säilyketölkki', en: 'tin can' },
+          sentence: { fi: 'Tölkki kuuluu metallinkeräykseen.', en: 'A can goes in metal.' },
+          hint: { fi: 'Tölkki on metallia.', en: 'A can is metal.' }
+        }
+      ]
+    };
+
+    const renderGame = (onFinish = vi.fn(), mode = 'en') =>
+      render(
+        <LanguageProvider>
+          <SortGame game={sortGame} mode={mode} onFinish={onFinish} />
+        </LanguageProvider>
+      );
+
+    const correctBinName = (container) =>
+      container.querySelector('.sort-item-label .scene-text-main').textContent === 'lasipurkki'
+        ? /Lasi/
+        : /Metalli/;
+    const wrongBinName = (container) =>
+      container.querySelector('.sort-item-label .scene-text-main').textContent === 'lasipurkki'
+        ? /Metalli/
+        : /Lasi/;
+
+    it('renders nothing without items and names the bins group', () => {
+      const { container } = render(
+        <LanguageProvider>
+          <SortGame game={{ bins: [], items: [] }} mode="en" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+      expect(container.firstChild).toBeNull();
+    });
+
+    it('shows the hint and marks the bin on a wrong tap, then lets the player retry', () => {
+      const { container } = renderGame();
+      expect(screen.getByRole('group')).toBeInTheDocument();
+
+      const wrongBtn = screen.getByRole('button', { name: wrongBinName(container) });
+      fireEvent.click(wrongBtn);
+      expect(wrongBtn).toHaveClass('wrong-choice');
+      expect(wrongBtn).toBeDisabled();
+      expect(container.querySelector('.scene-slot-hint')).not.toBeNull();
+      expect(soundModule.playIncorrectSound).toHaveBeenCalledTimes(1);
+      expect(screen.queryByRole('button', { name: /次へ|Next/ })).toBeNull();
+
+      const rightBtn = screen.getByRole('button', { name: correctBinName(container) });
+      fireEvent.click(rightBtn);
+      expect(rightBtn).toHaveClass('correct-choice');
+      expect(container.querySelector('.scene-slot-hint')).toBeNull();
+      expect(soundModule.playCorrectSound).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('button', { name: /次へ|Next/ })).toBeInTheDocument();
+    });
+
+    it('records the answer once per item even after wrong taps, and finishes after the last item', () => {
+      const onFinish = vi.fn();
+      const { container } = renderGame(onFinish);
+
+      for (let i = 0; i < 2; i++) {
+        fireEvent.click(screen.getByRole('button', { name: wrongBinName(container) }));
+        fireEvent.click(screen.getByRole('button', { name: correctBinName(container) }));
+        expect(statsModule.recordAnswer).toHaveBeenCalledTimes(i + 1);
+        fireEvent.click(screen.getByRole('button', { name: i === 1 ? /Valmis!/ : /次へ|Next/ }));
+      }
+
+      expect(onFinish).toHaveBeenCalledTimes(1);
+      expect(soundModule.playLessonCompleteSound).toHaveBeenCalledTimes(1);
+    });
+
+    it('plays the item name and the sentence audio', () => {
+      const { container } = renderGame();
+      fireEvent.click(screen.getByRole('button', { name: /発音を聞く|Listen$/ }));
+      expect(audioModule.playAudio).toHaveBeenCalledTimes(1);
+      fireEvent.click(screen.getByRole('button', { name: /ゆっくり聞く|Listen slowly/ }));
+      expect(audioModule.playAudio.mock.calls[1][3]).toBe(0.6);
+
+      fireEvent.click(screen.getByRole('button', { name: correctBinName(container) }));
+      const buttons = screen.getAllByRole('button', { name: /発音を聞く|Listen$/ });
+      fireEvent.click(buttons[buttons.length - 1]);
+      expect(audioModule.playAudio.mock.calls[2][0]).toMatch(/kuuluu/);
     });
   });
 });
