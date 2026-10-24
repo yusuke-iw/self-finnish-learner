@@ -38,16 +38,17 @@ describe('Scene Index Module', () => {
     expect(kotiGames.map((g) => g.id)).toEqual(['vaatteet']);
 
     const lahioGames = getGamesByScene('lahio');
-    expect(lahioGames.map((g) => g.id)).toEqual(['jatekatos']);
+    expect(lahioGames.map((g) => g.id)).toEqual(['jatekatos', 'rappukaytava']);
 
     const unknownGames = getGamesByScene('unknown');
     expect(unknownGames).toEqual([]);
   });
 
-  it('getRecommendedGames returns games with sequential numbers and scenes', () => {
+  it('getRecommendedGames returns games with sequential numbers and scenes in order', () => {
     const recs = getRecommendedGames();
     expect(Array.isArray(recs)).toBe(true);
-    expect(recs.length).toBe(games.length);
+    expect(recs.length).toBe(3);
+    expect(recs.map((r) => r.game.id)).toEqual(['vaatteet', 'jatekatos', 'rappukaytava']);
 
     recs.forEach((item, idx) => {
       expect(item.number).toBe(idx + 1);
@@ -58,22 +59,16 @@ describe('Scene Index Module', () => {
   });
 
   it('getUpcomingGames lists only games that are not built yet', () => {
-    expect(getUpcomingGames('lahio').map((u) => u.id)).toEqual(['rappukaytava']);
+    expect(getUpcomingGames('lahio')).toEqual([]);
     expect(getUpcomingGames('koti')).toEqual([]);
   });
 
   it('getNextRecommended returns the next game or null if last/unknown', () => {
-    const recs = getRecommendedGames();
-    if (recs.length === 1) {
-      // With only 1 game, next recommended is null
-      expect(getNextRecommended('vaatteet')).toBeNull();
-    } else {
-      const next = getNextRecommended(recs[0].game.id);
-      expect(next).toEqual(recs[1]);
-    }
-
     expect(getNextRecommended('vaatteet').game.id).toBe('jatekatos');
-    expect(getNextRecommended('jatekatos')).toBeNull();
+    const nextAfterJatekatos = getNextRecommended('jatekatos');
+    expect(nextAfterJatekatos.game.id).toBe('rappukaytava');
+    expect(nextAfterJatekatos.number).toBe(3);
+    expect(getNextRecommended('rappukaytava')).toBeNull();
     expect(getNextRecommended('non-existent')).toBeNull();
     expect(getNextRecommended(null)).toBeNull();
   });

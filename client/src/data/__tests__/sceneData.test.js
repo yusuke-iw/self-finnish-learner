@@ -2,12 +2,15 @@ import { describe, it, expect } from 'vitest';
 import scenes from '../scenes/scenes.json';
 import vaatteet from '../scenes/vaatteet.json';
 import jatekatos from '../scenes/jatekatos.json';
+import rappukaytava from '../scenes/rappukaytava.json';
 import upcoming from '../scenes/upcoming.json';
+import { getUpcomingGames } from '../scenes/index';
 import { findLessonById } from '../curriculumData';
 import { hasJapanese } from '../../utils/sceneText';
+import { SPEAKERS } from '../../utils/speakers';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet, jatekatos];
+  const games = [vaatteet, jatekatos, rappukaytava];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -229,18 +232,114 @@ describe('Scene Data Schema & Integrity', () => {
     }
   });
 
-  it('upcoming games point to a scene and are not yet real games', () => {
+  it('dialogue games have valid dialogues, nodes, speakers, choices, and reachability', () => {
+    const dialogueGames = games.filter((g) => g.type === 'dialogue');
+    expect(dialogueGames.length).toBeGreaterThan(0);
+    const validQualities = ['good', 'ok', 'bad', 'repeat'];
+    const speakerIds = SPEAKERS.map((s) => s.id);
+
+    for (const game of dialogueGames) {
+      expect(Array.isArray(game.characters)).toBe(true);
+      expect(game.characters.length).toBeGreaterThan(0);
+      for (const char of game.characters) {
+        expect(char.id).toMatch(/^[a-z0-9-]+$/);
+        expect(char.name).toBeTruthy();
+        expect(char.icon).toBeTruthy();
+        expect(speakerIds).toContain(char.speakerId);
+        expect(char.role?.fi).toBeTruthy();
+        expect(char.role?.en).toBeTruthy();
+        expect(char.role?.ja).toBeTruthy();
+      }
+
+      expect(Array.isArray(game.dialogues)).toBe(true);
+      expect(game.dialogues.length).toBeGreaterThan(0);
+
+      for (const dlg of game.dialogues) {
+        expect(dlg.id).toMatch(/^[a-z0-9-]+$/);
+        expect(Array.isArray(dlg.nodes)).toBe(true);
+        expect(dlg.nodes.length).toBeGreaterThan(0);
+
+        const nodeMap = new Map(dlg.nodes.map((n) => [n.id, n]));
+        expect(nodeMap.has(dlg.startNodeId)).toBe(true);
+
+        for (const node of dlg.nodes) {
+          expect(node.id).toMatch(/^[a-z0-9-]+$/);
+          expect(game.characters.some((c) => c.id === node.speaker)).toBe(true);
+
+          expect(node.line?.fi).toBeTruthy();
+          expect(node.line?.en).toBeTruthy();
+          expect(node.line?.spoken).toBeTruthy();
+          expect(node.line?.spokenNotes?.en).toBeTruthy();
+
+          expect(Array.isArray(node.choices)).toBe(true);
+          expect(node.choices.length).toBeGreaterThan(0);
+
+          const goodChoices = node.choices.filter((c) => c.quality === 'good');
+          expect(goodChoices.length).toBeGreaterThanOrEqual(1);
+
+          for (const choice of node.choices) {
+            expect(choice.id).toMatch(/^[a-z0-9-]+$/);
+            expect(validQualities).toContain(choice.quality);
+
+            expect(choice.text?.fi).toBeTruthy();
+            expect(choice.text?.en).toBeTruthy();
+            expect(choice.text?.spoken).toBeTruthy();
+
+            expect(choice.feedback?.fi).toBeTruthy();
+            expect(choice.feedback?.en).toBeTruthy();
+            expect(choice.feedback?.selko).toBeTruthy();
+
+            if (choice.quality === 'good' || choice.quality === 'ok') {
+              if (choice.next !== null) {
+                expect(nodeMap.has(choice.next)).toBe(true);
+              }
+            } else {
+              expect(choice.next).toBeUndefined();
+            }
+          }
+        }
+
+        // Reachability check from startNodeId
+        const reachable = new Set([dlg.startNodeId]);
+        const queue = [dlg.startNodeId];
+        let canReachEnd = false;
+
+        while (queue.length > 0) {
+          const currId = queue.shift();
+          const currNode = nodeMap.get(currId);
+          if (!currNode) continue;
+
+          for (const choice of currNode.choices) {
+            if (choice.quality === 'good' || choice.quality === 'ok') {
+              if (choice.next === null) {
+                canReachEnd = true;
+              } else if (choice.next && !reachable.has(choice.next)) {
+                reachable.add(choice.next);
+                queue.push(choice.next);
+              }
+            }
+          }
+        }
+
+        expect(reachable.size).toBe(dlg.nodes.length);
+        expect(canReachEnd).toBe(true);
+      }
+    }
+  });
+
+  it('upcoming games point to a scene, and rappukaytava is no longer an upcoming game in lahio', () => {
     const sceneIds = scenes.map((s) => s.id);
     for (const u of upcoming) {
       expect(sceneIds).toContain(u.sceneId);
       expect(u.title?.fi).toBeTruthy();
       expect(u.title?.en).toBeTruthy();
     }
+    expect(getUpcomingGames('lahio').some((u) => u.id === 'rappukaytava')).toBe(false);
   });
 
-  it('hasJapanese correctly identifies whether vaatteet.json has full Japanese text', () => {
-    // vaatteet.json is written with full Japanese support
+  it('hasJapanese correctly identifies whether games have full Japanese text', () => {
     expect(hasJapanese(vaatteet)).toBe(true);
     expect(hasJapanese(jatekatos)).toBe(true);
+    expect(hasJapanese(rappukaytava)).toBe(true);
   });
 });

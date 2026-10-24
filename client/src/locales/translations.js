@@ -336,6 +336,15 @@ export const translations = {
       sort: {
         prompt: 'どの箱に入れる？',
         binsLabel: 'ごみの箱'
+      },
+      dialogue: {
+        speechLabel: '話し言葉／書き言葉',
+        spoken: 'puhekieli',
+        written: 'kirjakieli',
+        choicesLabel: '返事の選択肢',
+        pickReply: '返事を選ぼう',
+        better: 'もっと自然な返事',
+        writtenLabel: '📖 書き言葉:'
       }
     }
   },
@@ -677,6 +686,15 @@ export const translations = {
       sort: {
         prompt: 'Which bin does it go in?',
         binsLabel: 'Bins'
+      },
+      dialogue: {
+        speechLabel: 'Spoken / written Finnish',
+        spoken: 'puhekieli',
+        written: 'kirjakieli',
+        choicesLabel: 'Reply choices',
+        pickReply: 'Pick your reply',
+        better: 'A more natural reply',
+        writtenLabel: '📖 Written:'
       }
     }
   }
