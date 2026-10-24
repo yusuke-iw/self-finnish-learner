@@ -14,6 +14,8 @@ const Passage = lazy(() => import('./pages/Passage'));
 const GrammarHub = lazy(() => import('./pages/GrammarHub'));
 const GrammarDetail = lazy(() => import('./pages/GrammarDetail'));
 const GrammarPractice = lazy(() => import('./pages/GrammarPractice'));
+const Scenes = lazy(() => import('./pages/Scenes'));
+const SceneGame = lazy(() => import('./pages/SceneGame'));
 
 function RouteFallback() {
   const { t } = useLanguage();
@@ -36,6 +38,7 @@ function NavigationBar() {
         <li><Link to="/review">{t('nav.review')}</Link></li>
         <li><Link to="/words">{t('nav.words')}</Link></li>
         <li><Link to="/numbers">{t('nav.numbers')}</Link></li>
+        <li><Link to="/scenes">{t('nav.scenes')}</Link></li>
         <li><Link to="/grammar">{t('nav.grammar')}</Link></li>
         <li><Link to="/grammar/practice">{t('nav.drillStudio')}</Link></li>
         <li><Link to="/passages">{t('nav.passages')}</Link></li>
@@ -61,6 +64,8 @@ function App() {
                 <Route path="/review" element={<Review />} />
                 <Route path="/words" element={<WordBook />} />
                 <Route path="/numbers" element={<NumberPractice />} />
+                <Route path="/scenes" element={<Scenes />} />
+                <Route path="/scenes/:gameId" element={<SceneGame />} />
                 <Route path="/passages" element={<Passage />} />
                 <Route path="/grammar" element={<GrammarHub />} />
                 <Route path="/grammar/practice" element={<GrammarPractice />} />

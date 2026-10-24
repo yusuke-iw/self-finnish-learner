@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import GuidebookModal from '../components/GuidebookModal';
 import LessonCard from '../components/LessonCard';
 import { units } from '../data/curriculumData';
@@ -195,6 +195,16 @@ export default function Home() {
           </div>
         );
       })}
+
+      <div className="home-scenes-card">
+        <div className="home-scenes-content">
+          <h3 className="home-scenes-title">{t('home.scenesTitle')}</h3>
+          <p className="home-scenes-desc">{t('home.scenesDesc')}</p>
+        </div>
+        <Link to="/scenes" className="btn-primary home-scenes-btn">
+          {t('scenes.title')}
+        </Link>
+      </div>
 
       <div className="progress-actions">
         <button

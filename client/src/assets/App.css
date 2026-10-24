@@ -3792,3 +3792,649 @@
   border-color: var(--accent-border);
 }
 
+/* ================================================================
+   SCENES MODE (暮らしの場面)
+   ================================================================ */
+
+/* ---- Home Scenes Card ---- */
+.home-scenes-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+}
+
+.home-scenes-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.home-scenes-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.home-scenes-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.home-scenes-btn {
+  white-space: nowrap;
+  padding: 10px 20px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Scene Text & Toggle ---- */
+.scene-text {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.scene-text-main {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.scene-text-sub {
+  font-size: 0.85em;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.scene-text-toggle-wrapper {
+  display: inline-flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 2px;
+}
+
+.scene-mode-btn {
+  min-height: 36px;
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.scene-mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.scene-mode-btn.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+/* ---- Scenes List Page ---- */
+.scenes-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.scenes-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.scenes-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scenes-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.scenes-lead {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.scene-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.scene-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.scene-section-icon {
+  font-size: 24px;
+}
+
+.scene-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.scene-coming-soon-badge,
+.scene-card-upcoming-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card-hover);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.scene-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.scene-game-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  min-height: 44px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s var(--ease);
+}
+
+.scene-game-card:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+}
+
+.scene-game-card-upcoming {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.scene-game-card-upcoming:hover {
+  border-color: var(--border);
+  background: var(--bg-card);
+  transform: none;
+}
+
+.scene-card-number {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.scene-card-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.scene-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.scene-card-title .scene-text-main {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.scene-card-played {
+  font-size: 18px;
+  font-weight: 800;
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+/* ---- Scene Game Page ---- */
+.scene-game-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.scene-game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.scene-back-btn {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.scene-back-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
+.scene-game-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scene-game-header-icon {
+  font-size: 24px;
+}
+
+.scene-not-found {
+  text-align: center;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.scene-game-placeholder {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+/* ---- Outfit Game ---- */
+.outfit-game {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.scene-progress-bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.scene-round-counter {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+}
+
+.scene-weather-card {
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scene-weather-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scene-weather-icon {
+  font-size: 32px;
+}
+
+.scene-weather-temp {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.scene-weather-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.scene-weather-text .scene-text-main {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.scene-weather-audio-btns {
+  display: inline-flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.scene-slots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scene-slot {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s var(--ease);
+}
+
+.scene-slot-wrong {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.scene-slot-correct {
+  border-color: #22c55e;
+}
+
+.scene-slot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scene-slot-label .scene-text-main {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.scene-slot-status-icon {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.scene-slot-wrong .scene-slot-status-icon {
+  color: #ef4444;
+}
+
+.scene-slot-correct .scene-slot-status-icon {
+  color: #22c55e;
+}
+
+.scene-slot-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.scene-option-btn {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  transition: all 0.2s var(--ease);
+}
+
+.scene-option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.scene-option-btn.selected {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.scene-option-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.scene-slot-hint {
+  font-size: 13px;
+  color: #ef4444;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: var(--radius-sm);
+}
+
+.scene-wear-sentences {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+}
+
+.scene-wear-sentence-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.scene-game-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.scene-check-btn,
+.scene-next-btn {
+  min-height: 48px;
+  min-width: 200px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ---- Scene Result ---- */
+.scene-result {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 10px 0;
+}
+
+.scene-result-title {
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--accent);
+  margin: 0;
+}
+
+.scene-result-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scene-info-card {
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.scene-info-title .scene-text-main {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.scene-info-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scene-info-sentence-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.scene-info-grammar-note {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-size: 14px;
+}
+
+.scene-info-grammar-label {
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.scene-result-vocab {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.scene-result-vocab-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+.scene-result-vocab-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.scene-result-vocab-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-sm);
+}
+
+.scene-result-vocab-word {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.scene-result-vocab-meaning {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.scene-result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.scene-result-lesson-btn {
+  min-height: 48px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.scene-result-nav-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.scene-result-retry-btn,
+.scene-result-next-btn,
+.scene-result-list-btn {
+  min-height: 44px;
+  padding: 10px 20px;
+}
+
+/* ---- Responsive Rules for Mobile ---- */
+@media (max-width: 768px) {
+  .scene-slot-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-scenes-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-scenes-btn {
+    width: 100%;
+  }
+
+  .scene-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+

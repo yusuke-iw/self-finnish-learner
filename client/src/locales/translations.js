@@ -6,6 +6,7 @@ export const translations = {
       review: '復習',
       words: '単語帳',
       numbers: '数字',
+      scenes: '暮らし',
       grammar: '文法・イディオム',
       drillStudio: '演習スタジオ',
       passages: '読解パッセージ',
@@ -32,6 +33,8 @@ export const translations = {
     // Home Page
     home: {
       guidebook: 'ガイドブック',
+      scenesTitle: '🏘️ 暮らしの場面',
+      scenesDesc: '家の玄関、ごみ置き場、階段など、日常の具体的な場面でフィンランド語を使おう',
       practiceMatch: '🧩 単語マッチ特訓',
       practiceSpeaking: '🎙️ 発音・スピーキング特訓',
       practiceDictation: '🎧 聞き取り練習',
@@ -300,6 +303,35 @@ export const translations = {
       finnishLabel: 'フィンランド語:',
       completedTitle: '10問完了！',
       scoreResult: '{total}問中 {score}問正解'
+    },
+
+    // Scenes Mode
+    scenes: {
+      title: '暮らしの場面',
+      lead: 'おすすめの順に遊ぶと、家から近所へ進めます。どれからでも遊べます。',
+      played: 'プレイ済み',
+      comingSoon: '準備中',
+      notFound: '場面が見つかりません',
+      backToList: '場面一覧へ',
+      back: '戻る',
+      mode: {
+        fi: 'FI',
+        selko: 'Selko',
+        en: 'EN',
+        ja: 'JA'
+      },
+      modeLabel: '表示モード',
+      done: 'Valmis!',
+      retry: 'もう一度',
+      nextRecommended: '次のおすすめ',
+      toList: '一覧へ',
+      vocabulary: 'この場面の語彙',
+      practiceLesson: 'このテーマの例文を練習',
+      grammar: '文法',
+      listen: '発音を聞く',
+      slowListen: 'ゆっくり聞く',
+      next: '次へ',
+      check: 'Lähden ulos!'
     }
   },
 
@@ -310,6 +342,7 @@ export const translations = {
       review: 'Review',
       words: 'Words',
       numbers: 'Numbers',
+      scenes: 'Daily life',
       grammar: 'Grammar & Idioms',
       drillStudio: 'Drill Studio',
       passages: 'Passages',
@@ -336,6 +369,8 @@ export const translations = {
     // Home Page
     home: {
       guidebook: 'Guidebook',
+      scenesTitle: '🏘️ Daily-life scenes',
+      scenesDesc: 'Practice Finnish in real-life contexts like your doorway, waste shelter, and stairwell',
       practiceMatch: '🧩 Practice Word Match',
       practiceSpeaking: '🎙️ Practice Speaking',
       practiceDictation: '🎧 Dictation',
@@ -604,6 +639,35 @@ export const translations = {
       finnishLabel: 'Finnish:',
       completedTitle: 'Set Complete!',
       scoreResult: '{score} / {total} correct'
+    },
+
+    // Scenes Mode
+    scenes: {
+      title: 'Daily-Life Scenes',
+      lead: 'Follow the recommended order to explore from home to neighbourhood, or jump into any scene.',
+      played: 'Played',
+      comingSoon: 'Coming soon',
+      notFound: 'Scene not found',
+      backToList: 'Back to scenes',
+      back: 'Back',
+      mode: {
+        fi: 'FI',
+        selko: 'Selko',
+        en: 'EN',
+        ja: 'JA'
+      },
+      modeLabel: 'Text mode',
+      done: 'Valmis!',
+      retry: 'Try again',
+      nextRecommended: 'Next recommended',
+      toList: 'To scenes list',
+      vocabulary: 'Vocabulary for this scene',
+      practiceLesson: 'Practice sentences for this topic',
+      grammar: 'Grammar',
+      listen: 'Listen',
+      slowListen: 'Listen slowly',
+      next: 'Next',
+      check: 'Lähden ulos!'
     }
   }
 };

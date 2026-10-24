@@ -1,0 +1,38 @@
+[
+  {
+    "id": "koti",
+    "icon": "🏠",
+    "order": 1,
+    "title": {
+      "fi": "Koti",
+      "en": "Home",
+      "ja": "家"
+    },
+    "gameIds": [
+      "vaatteet"
+    ]
+  },
+  {
+    "id": "lahio",
+    "icon": "🏢",
+    "order": 2,
+    "title": {
+      "fi": "Lähiö",
+      "en": "Neighbourhood",
+      "ja": "団地・近所"
+    },
+    "gameIds": []
+  },
+  {
+    "id": "kaupunki",
+    "icon": "🏙️",
+    "order": 3,
+    "title": {
+      "fi": "Kaupunki",
+      "en": "Town",
+      "ja": "街"
+    },
+    "comingSoon": true,
+    "gameIds": []
+  }
+]

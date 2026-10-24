@@ -63,5 +63,12 @@ describe('App Component', () => {
     expect(screen.getByRole('link', { name: /^Numbers$|^数字$/i })).toBeInTheDocument();
     expect(await screen.findByText(/Numbers, Prices & Time Listening|数字・値段・時刻の聞き取り練習/i)).toBeInTheDocument();
   });
+
+  it('renders Scenes page when navigating to /scenes', async () => {
+    window.history.pushState({}, 'Scenes page', '/scenes');
+    render(<App />);
+    expect(screen.getByRole('link', { name: /^Daily life$|^暮らし$/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /Daily-Life Scenes|暮らしの場面/i })).toBeInTheDocument();
+  });
 });
 
