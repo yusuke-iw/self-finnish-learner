@@ -29,7 +29,7 @@ describe('audio utility', () => {
 
     await playAudio('Kissa', '', 'fi-FI', 1.0);
 
-    expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/api/tts', expect.any(Object));
+    expect(global.fetch).toHaveBeenCalledWith('/api/tts', expect.any(Object));
     expect(global.Audio).toHaveBeenCalledWith('data:audio/mp3;base64,fetched-base64');
     expect(playMock).toHaveBeenCalled();
   });
@@ -52,7 +52,7 @@ describe('audio utility', () => {
     expect(playMock).toHaveBeenCalledTimes(2);
   });
 
-  it('should handle API errors and show alert', async () => {
+  it('should log API errors without showing an alert', async () => {
     global.fetch.mockResolvedValueOnce({
       json: vi.fn().mockResolvedValue({ success: false, error: 'Invalid API Key' })
     });
@@ -61,7 +61,7 @@ describe('audio utility', () => {
     await playAudio('Talo');
 
     expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to fetch TTS audio:', 'Invalid API Key');
-    expect(global.alert).toHaveBeenCalled();
+    expect(global.alert).not.toHaveBeenCalled();
     expect(playMock).not.toHaveBeenCalled();
     
     consoleErrorSpy.mockRestore();
@@ -93,7 +93,7 @@ describe('audio utility', () => {
     const matti = { id: 'matti', pitch: -5.0, voiceName: 'fi-FI-Wavenet-A' };
     await playAudio('Omena', '', 'fi-FI', 1.0, matti);
 
-    expect(global.fetch).toHaveBeenCalledWith('http://localhost:5000/api/tts', {
+    expect(global.fetch).toHaveBeenCalledWith('/api/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
