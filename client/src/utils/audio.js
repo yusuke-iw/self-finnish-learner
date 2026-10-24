@@ -29,7 +29,8 @@ export const playAudio = async (text, seedString = '', lang = 'fi-FI', speed = 1
       if (speaker.voiceName) payload.voiceName = speaker.voiceName;
     }
 
-    const response = await fetch('http://localhost:5000/api/tts', {
+    // Relative URL so requests go through the Vite proxy (works from other devices on the LAN)
+    const response = await fetch('/api/tts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,8 +46,8 @@ export const playAudio = async (text, seedString = '', lang = 'fi-FI', speed = 1
       // Play it
       playBase64Audio(data.audioContent);
     } else {
+      // Log only: an alert() here would repeat on every auto-played line when the API key is missing
       console.error('Failed to fetch TTS audio:', data.error);
-      alert(`TTS Error: ${data.error}. Please check your GOOGLE_TTS_API_KEY.`);
     }
   } catch (error) {
     console.error('Network error fetching TTS:', error);
