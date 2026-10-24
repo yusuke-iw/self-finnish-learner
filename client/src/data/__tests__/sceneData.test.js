@@ -186,6 +186,14 @@ describe('Scene Data Schema & Integrity', () => {
     }
   });
 
+  it('vaatteet has 6-8 unique weathers, more than playLength so "Try again" can vary', () => {
+    const ids = vaatteet.conditions.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.length).toBeGreaterThanOrEqual(6);
+    expect(ids.length).toBeLessThanOrEqual(8);
+    expect(ids.length).toBeGreaterThan(vaatteet.playLength);
+  });
+
   it('hasJapanese correctly identifies whether vaatteet.json has full Japanese text', () => {
     // vaatteet.json is written with full Japanese support
     expect(hasJapanese(vaatteet)).toBe(true);

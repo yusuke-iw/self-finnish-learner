@@ -93,6 +93,20 @@
           }
         },
         {
+          "id": "valikausitakki",
+          "icon": "🧥",
+          "label": {
+            "fi": "välikausitakki",
+            "en": "light jacket",
+            "ja": "春秋用の上着"
+          },
+          "wear": {
+            "fi": "Puen välikausitakin päälle.",
+            "en": "I put on my light jacket.",
+            "ja": "春秋用の上着を着る。"
+          }
+        },
+        {
           "id": "sadetakki",
           "icon": "🧥",
           "label": {
@@ -159,6 +173,20 @@
           }
         },
         {
+          "id": "lenkkarit",
+          "icon": "👟",
+          "label": {
+            "fi": "lenkkarit",
+            "en": "sneakers",
+            "ja": "スニーカー"
+          },
+          "wear": {
+            "fi": "Laitan lenkkarit jalkaan.",
+            "en": "I put on my sneakers.",
+            "ja": "スニーカーを履く。"
+          }
+        },
+        {
           "id": "sandaalit",
           "icon": "🩴",
           "label": {
@@ -197,6 +225,20 @@
           }
         },
         {
+          "id": "kasineet",
+          "icon": "🧤",
+          "label": {
+            "fi": "käsineet",
+            "en": "gloves",
+            "ja": "手袋"
+          },
+          "wear": {
+            "fi": "Laitan käsineet käteen.",
+            "en": "I put on my gloves.",
+            "ja": "手袋をはめる。"
+          }
+        },
+        {
           "id": "sateenvarjo",
           "icon": "☂️",
           "label": {
@@ -224,14 +266,14 @@
   ],
   "conditions": [
     {
-      "id": "pakkanen",
-      "icon": "❄️",
-      "temperature": -15,
+      "id": "kova-pakkanen",
+      "icon": "🥶",
+      "temperature": -25,
       "weather": {
-        "fi": "Ulkona on viisitoista astetta pakkasta, ja sataa lunta.",
-        "selko": "Ulkona on kylmä. Sataa lunta.",
-        "en": "It's fifteen degrees below zero outside, and it's snowing.",
-        "ja": "外は氷点下15度で、雪が降っている。"
+        "fi": "On kaksikymmentäviisi astetta pakkasta, mutta aurinko paistaa.",
+        "selko": "On todella kylmä. Aurinko paistaa.",
+        "en": "It's twenty-five degrees below zero, but the sun is shining.",
+        "ja": "氷点下25度だが、日が照っている。"
       },
       "accept": {
         "paa": [
@@ -249,40 +291,146 @@
       },
       "hints": {
         "paa": {
-          "fi": "Pakkasella pää ja korvat pitää suojata.",
-          "selko": "Kun on kylmä, laita jotain päähän.",
-          "en": "In freezing weather, keep your head and ears covered.",
-          "ja": "氷点下では頭と耳を守ろう。"
+          "fi": "Vaikka aurinko paistaa, kovalla pakkasella pitää laittaa pipo päähän.",
+          "selko": "On todella kylmä. Laita pipo päähän.",
+          "en": "The sun may be shining, but in this kind of cold you need a beanie.",
+          "ja": "日が照っていても、厳しい寒さの日はニット帽をかぶろう。"
         },
         "ylla": {
-          "fi": "Pakkasella tarvitset lämpimän takin.",
-          "selko": "Kun on kylmä, tarvitset lämpimän takin.",
-          "en": "In freezing weather, you need a warm coat.",
-          "ja": "氷点下では暖かいコートが必要。"
+          "fi": "Kovalla pakkasella tarvitset lämpimän talvitakin.",
+          "selko": "On todella kylmä. Tarvitset talvitakin.",
+          "en": "In this kind of cold, you need a warm winter coat.",
+          "ja": "厳しい寒さの日は、暖かい冬のコートが必要。"
         },
         "jalat": {
-          "fi": "Lumessa tarvitset lämpimät kengät.",
-          "selko": "Kun on lunta, tarvitset lämpimät kengät.",
-          "en": "In the snow, you need warm shoes.",
-          "ja": "雪の中では暖かい靴が必要。"
+          "fi": "Kovalla pakkasella vain talvikengät pitävät jalat lämpiminä.",
+          "selko": "On todella kylmä. Laita talvikengät jalkaan.",
+          "en": "In this kind of cold, only winter shoes keep your feet warm.",
+          "ja": "厳しい寒さの日に足を暖かく保てるのは冬靴だけ。"
         },
         "kadet": {
-          "fi": "Pakkasella sormet jäätyvät ilman lapasia.",
-          "selko": "Kun on kylmä, laita lapaset käteen.",
-          "en": "In freezing weather, your fingers get cold without mittens.",
-          "ja": "氷点下ではミトンがないと指が凍える。"
+          "fi": "Kovalla pakkasella tarvitset lapaset, koska ne ovat lämpimämmät kuin käsineet.",
+          "selko": "On todella kylmä. Lapaset ovat lämpimämmät kuin käsineet.",
+          "en": "In this kind of cold, you need mittens because they're warmer than gloves.",
+          "ja": "厳しい寒さの日は、手袋より暖かいミトンが必要。"
         }
       }
     },
     {
-      "id": "sade",
+      "id": "lumisade",
+      "icon": "🌨️",
+      "temperature": -5,
+      "weather": {
+        "fi": "On viisi astetta pakkasta ja sataa lunta.",
+        "selko": "On kylmä. Sataa lunta.",
+        "en": "It's five degrees below zero and snowing.",
+        "ja": "氷点下5度で、雪が降っている。"
+      },
+      "accept": {
+        "paa": [
+          "pipo"
+        ],
+        "ylla": [
+          "talvitakki"
+        ],
+        "jalat": [
+          "talvikengat"
+        ],
+        "kadet": [
+          "lapaset",
+          "kasineet"
+        ]
+      },
+      "hints": {
+        "paa": {
+          "fi": "Pakkasella pää ja korvat pitää suojata pipolla.",
+          "selko": "On kylmä. Laita pipo päähän.",
+          "en": "When it's below zero, keep your head and ears warm with a beanie.",
+          "ja": "氷点下の日は、ニット帽で頭と耳を守ろう。"
+        },
+        "ylla": {
+          "fi": "Pakkasella ja lumisateella tarvitset lämpimän talvitakin.",
+          "selko": "On kylmä ja sataa lunta. Tarvitset talvitakin.",
+          "en": "When it's below zero and snowing, you need a warm winter coat.",
+          "ja": "氷点下で雪の日は、暖かい冬のコートが必要。"
+        },
+        "jalat": {
+          "fi": "Lumessa ja pakkasessa tarvitset lämpimät talvikengät.",
+          "selko": "Sataa lunta. Laita talvikengät jalkaan.",
+          "en": "In snow and freezing weather, you need warm winter shoes.",
+          "ja": "雪で氷点下の日は、暖かい冬靴が必要。"
+        },
+        "kadet": {
+          "fi": "Pakkasella sormet jäätyvät ilman lapasia tai käsineitä.",
+          "selko": "On kylmä. Laita lapaset tai käsineet käteen.",
+          "en": "When it's below zero, your fingers freeze without mittens or gloves.",
+          "ja": "氷点下では、ミトンか手袋がないと指が凍える。"
+        }
+      }
+    },
+    {
+      "id": "rantasade",
       "icon": "🌧️",
+      "temperature": 0,
+      "weather": {
+        "fi": "On nolla astetta ja sataa räntää. Kaduilla on loskaa.",
+        "selko": "Sataa märkää lunta. Kadulla on vettä ja lunta.",
+        "en": "It's zero degrees and sleeting. There's slush on the streets.",
+        "ja": "0度で、みぞれが降っている。道はシャーベット状の雪でぐちゃぐちゃだ。"
+      },
+      "accept": {
+        "paa": [
+          "pipo"
+        ],
+        "ylla": [
+          "talvitakki",
+          "valikausitakki"
+        ],
+        "jalat": [
+          "kumisaappaat",
+          "talvikengat"
+        ],
+        "kadet": [
+          "lapaset",
+          "kasineet"
+        ]
+      },
+      "hints": {
+        "paa": {
+          "fi": "Räntäsateella pää kastuu ja kylmenee ilman pipoa.",
+          "selko": "Sataa märkää lunta. Laita pipo päähän.",
+          "en": "In sleet, your head gets wet and cold without a beanie.",
+          "ja": "みぞれの日は、ニット帽がないと頭がぬれて冷える。"
+        },
+        "ylla": {
+          "fi": "Nollan asteen räntäsateella tarvitset lämpimän takin.",
+          "selko": "On kylmä. Tarvitset lämpimän takin.",
+          "en": "In sleet at zero degrees, you need a warm coat.",
+          "ja": "0度のみぞれの日は、暖かい上着が必要。"
+        },
+        "jalat": {
+          "fi": "Loskassa jalat kastuvat, jos kengät eivät pidä vettä.",
+          "selko": "Kadulla on vettä. Laita kumisaappaat jalkaan.",
+          "en": "In slush, your feet get wet if your shoes aren't waterproof.",
+          "ja": "シャーベット状の雪の中では、水を通さない靴でないと足がぬれる。"
+        },
+        "kadet": {
+          "fi": "Räntäsateella kädet kylmenevät, joten tarvitset lapaset tai käsineet.",
+          "selko": "On kylmä. Laita lapaset tai käsineet käteen.",
+          "en": "In sleet, your hands get cold, so you need mittens or gloves.",
+          "ja": "みぞれの日は手が冷えるので、ミトンか手袋が必要。"
+        }
+      }
+    },
+    {
+      "id": "kevatsade",
+      "icon": "☔",
       "temperature": 10,
       "weather": {
-        "fi": "On kymmenen astetta lämmintä, ja sataa vettä.",
-        "selko": "Ulkona sataa vettä.",
-        "en": "It's ten degrees above zero, and it's raining.",
-        "ja": "気温は10度で、雨が降っている。"
+        "fi": "On kymmenen astetta lämmintä ja sataa vettä. Lumet ovat jo sulaneet.",
+        "selko": "On kevät. Sataa vettä.",
+        "en": "It's ten degrees above zero and raining. The snow has already melted.",
+        "ja": "気温は10度で、雨が降っている。雪はもう解けた。"
       },
       "accept": {
         "paa": [
@@ -302,40 +450,94 @@
       },
       "hints": {
         "paa": {
-          "fi": "Pipo kastuu sateessa, ja kymmenen astetta on liian lämmin pipolle.",
-          "selko": "Nyt ei ole kylmä. Pipoa ei tarvita.",
-          "en": "A beanie gets wet in the rain, and ten degrees is too warm for one.",
-          "ja": "ニット帽は雨でぬれるし、10度では暑い。"
+          "fi": "Pipo kastuu sateessa ja on liian lämmin, kun on kymmenen astetta.",
+          "selko": "Nyt ei ole kylmä. Et tarvitse pipoa.",
+          "en": "A beanie gets wet in the rain, and it's too warm at ten degrees.",
+          "ja": "ニット帽は雨でぬれるし、10度では暑すぎる。"
         },
         "ylla": {
-          "fi": "Sateella tarvitset takin, joka ei kastu.",
-          "selko": "Kun sataa, tarvitset sadetakin.",
-          "en": "When it rains, you need a coat that doesn't get wet.",
-          "ja": "雨の日はぬれない上着が必要。"
+          "fi": "Vesisateessa tarvitset takin, joka ei päästä vettä läpi.",
+          "selko": "Sataa vettä. Tarvitset sadetakin.",
+          "en": "In the rain, you need a coat that keeps the water out.",
+          "ja": "雨の日は、水を通さない上着が必要。"
         },
         "jalat": {
-          "fi": "Lätäköissä jalat kastuvat, jos kengät eivät pidä vettä.",
-          "selko": "Kun sataa, laita kumisaappaat jalkaan.",
-          "en": "Your feet get wet in puddles if your shoes aren't waterproof.",
-          "ja": "水たまりでは、水を通さない靴でないと足がぬれる。"
+          "fi": "Sateella kumisaappaat pitävät jalat kuivina lätäköissäkin.",
+          "selko": "Sataa vettä. Laita kumisaappaat jalkaan.",
+          "en": "In the rain, rubber boots keep your feet dry, even in puddles.",
+          "ja": "雨の日は、長靴なら水たまりでも足がぬれない。"
         },
         "kadet": {
-          "fi": "Lapaset kastuvat, eikä nyt ole pakkasta.",
-          "selko": "Nyt ei ole kylmä. Lapasia ei tarvita.",
-          "en": "Mittens get wet, and it isn't freezing now.",
-          "ja": "ミトンはぬれるし、今は氷点下ではない。"
+          "fi": "Nyt ei ole kylmä, joten et tarvitse lapasia etkä käsineitä.",
+          "selko": "Nyt ei ole kylmä. Et tarvitse lapasia.",
+          "en": "It isn't cold now, so you don't need mittens or gloves.",
+          "ja": "今は寒くないので、ミトンも手袋もいらない。"
+        }
+      }
+    },
+    {
+      "id": "syystuuli",
+      "icon": "🍂",
+      "temperature": 7,
+      "weather": {
+        "fi": "On seitsemän astetta lämmintä ja tuulee kovaa. Puista putoaa lehtiä.",
+        "selko": "On syksy. Tuulee kovaa.",
+        "en": "It's seven degrees above zero and very windy. Leaves are falling from the trees.",
+        "ja": "気温は7度で、風が強い。木から葉が落ちている。"
+      },
+      "accept": {
+        "paa": [
+          "pipo",
+          "ei-paa"
+        ],
+        "ylla": [
+          "valikausitakki"
+        ],
+        "jalat": [
+          "lenkkarit"
+        ],
+        "kadet": [
+          "kasineet",
+          "lapaset",
+          "ei-kadet"
+        ]
+      },
+      "hints": {
+        "paa": {
+          "fi": "Kova tuuli voi viedä lippiksen päästä.",
+          "selko": "Tuulee kovaa. Lippis voi lentää pois.",
+          "en": "A strong wind can blow your cap off.",
+          "ja": "強い風でキャップが飛ばされるかもしれない。"
+        },
+        "ylla": {
+          "fi": "Välikausitakki sopii tuuliseen syyssäähän, koska se ei ole liian ohut eikä liian lämmin.",
+          "selko": "On syksy ja tuulee. Tarvitset välikausitakin.",
+          "en": "A light jacket is right for windy fall weather: not too thin and not too warm.",
+          "ja": "風の強い秋の日には、薄すぎず暖かすぎない春秋用の上着がちょうどいい。"
+        },
+        "jalat": {
+          "fi": "Ei sada, joten lenkkarit riittävät, mutta sandaaleissa varpaat kylmenevät.",
+          "selko": "Ei sada. Laita lenkkarit jalkaan.",
+          "en": "It isn't raining, so sneakers are enough, but your toes get cold in sandals.",
+          "ja": "雨は降っていないのでスニーカーで十分だが、サンダルではつま先が冷える。"
+        },
+        "kadet": {
+          "fi": "Ei sada, joten et tarvitse sateenvarjoa.",
+          "selko": "Ei sada. Et tarvitse sateenvarjoa.",
+          "en": "It isn't raining, so you don't need an umbrella.",
+          "ja": "雨は降っていないので、傘はいらない。"
         }
       }
     },
     {
       "id": "helle",
       "icon": "☀️",
-      "temperature": 25,
+      "temperature": 27,
       "weather": {
-        "fi": "Aurinko paistaa, ja on kaksikymmentäviisi astetta lämmintä.",
-        "selko": "Aurinko paistaa. On lämmin.",
-        "en": "The sun is shining, and it's twenty-five degrees.",
-        "ja": "晴れていて、気温は25度。"
+        "fi": "Aurinko paistaa ja on kaksikymmentäseitsemän astetta lämmintä.",
+        "selko": "Aurinko paistaa. On kuuma.",
+        "en": "The sun is shining, and it's a hot twenty-seven degrees.",
+        "ja": "日が照っていて、気温は27度もある。"
       },
       "accept": {
         "paa": [
@@ -346,7 +548,8 @@
           "t-paita"
         ],
         "jalat": [
-          "sandaalit"
+          "sandaalit",
+          "lenkkarit"
         ],
         "kadet": [
           "ei-kadet"
@@ -354,28 +557,81 @@
       },
       "hints": {
         "paa": {
-          "fi": "Pipossa tulee kuuma, kun on näin lämmin.",
-          "selko": "On lämmin. Pipoa ei tarvita.",
-          "en": "A beanie is too hot when it's this warm.",
-          "ja": "こんなに暖かいとニット帽では暑い。"
+          "fi": "Helteellä pipossa tulee kuuma.",
+          "selko": "On kuuma. Et tarvitse pipoa.",
+          "en": "A beanie is too hot in this heat.",
+          "ja": "この暑さでは、ニット帽は暑すぎる。"
         },
         "ylla": {
-          "fi": "Lämpimällä säällä takissa tulee kuuma.",
-          "selko": "On lämmin. Takkia ei tarvita.",
-          "en": "A coat is too hot in warm weather.",
-          "ja": "暖かい日にコートを着ると暑い。"
+          "fi": "Helteellä takissa tulee kuuma, joten t-paita riittää.",
+          "selko": "On kuuma. Pue t-paita päälle.",
+          "en": "A coat is too hot in this heat, so a T-shirt is enough.",
+          "ja": "この暑さでは上着は暑すぎるので、Tシャツで十分。"
         },
         "jalat": {
-          "fi": "Talvikengissä ja kumisaappaissa jalat hikoilevat helteellä.",
-          "selko": "On lämmin. Laita kevyet kengät.",
-          "en": "Your feet sweat in winter shoes or rubber boots on a hot day.",
-          "ja": "暑い日に冬靴や長靴では足が汗をかく。"
+          "fi": "Helteellä jalat hikoilevat talvikengissä ja kumisaappaissa.",
+          "selko": "On kuuma. Laita sandaalit tai lenkkarit jalkaan.",
+          "en": "In this heat, your feet sweat in winter shoes or rubber boots.",
+          "ja": "この暑さでは、冬靴や長靴だと足が汗をかく。"
         },
         "kadet": {
-          "fi": "Aurinko paistaa, joten sateenvarjoa tai lapasia ei tarvita.",
-          "selko": "Ei sada, eikä ole kylmä.",
-          "en": "The sun is shining, so you don't need an umbrella or mittens.",
-          "ja": "晴れているので、傘もミトンもいらない。"
+          "fi": "Ei sada eikä ole kylmä, joten käsiin ei tarvita mitään.",
+          "selko": "Ei sada. Ei ole kylmä. Et tarvitse mitään.",
+          "en": "It isn't raining or cold, so you don't need anything in your hands.",
+          "ja": "雨も降らず寒くもないので、手には何もいらない。"
+        }
+      }
+    },
+    {
+      "id": "kesakuuro",
+      "icon": "🌦️",
+      "temperature": 20,
+      "weather": {
+        "fi": "On kaksikymmentä astetta lämmintä, mutta iltapäivällä voi sataa.",
+        "selko": "On lämmin. Iltapäivällä voi sataa.",
+        "en": "It's a warm twenty degrees, but it might rain this afternoon.",
+        "ja": "気温は20度で暖かいが、午後は雨が降るかもしれない。"
+      },
+      "accept": {
+        "paa": [
+          "lippis",
+          "ei-paa"
+        ],
+        "ylla": [
+          "t-paita"
+        ],
+        "jalat": [
+          "sandaalit",
+          "lenkkarit"
+        ],
+        "kadet": [
+          "sateenvarjo"
+        ]
+      },
+      "hints": {
+        "paa": {
+          "fi": "Pipossa tulee kuuma, kun on kaksikymmentä astetta lämmintä.",
+          "selko": "On lämmin. Et tarvitse pipoa.",
+          "en": "A beanie is too hot when it's twenty degrees.",
+          "ja": "20度もあると、ニット帽では暑い。"
+        },
+        "ylla": {
+          "fi": "On lämmin, joten t-paita riittää, jos otat sateenvarjon mukaan.",
+          "selko": "On lämmin. Pue t-paita päälle.",
+          "en": "It's warm, so a T-shirt is enough if you take an umbrella.",
+          "ja": "暖かいので、傘を持っていけばTシャツで十分。"
+        },
+        "jalat": {
+          "fi": "Lämpimällä säällä jalat hikoilevat talvikengissä ja kumisaappaissa.",
+          "selko": "On lämmin. Laita sandaalit tai lenkkarit jalkaan.",
+          "en": "In warm weather, your feet sweat in winter shoes or rubber boots.",
+          "ja": "暖かい日は、冬靴や長靴だと足が汗をかく。"
+        },
+        "kadet": {
+          "fi": "Iltapäivällä voi sataa, joten ota sateenvarjo mukaan.",
+          "selko": "Iltapäivällä voi sataa. Ota sateenvarjo mukaan.",
+          "en": "It might rain this afternoon, so take an umbrella with you.",
+          "ja": "午後は雨が降るかもしれないので、傘を持っていこう。"
         }
       }
     }
@@ -387,24 +643,24 @@
       "translationJa": "ニット帽"
     },
     {
-      "word": "lippis",
-      "translation": "cap",
-      "translationJa": "キャップ"
-    },
-    {
       "word": "takki",
       "translation": "coat, jacket",
       "translationJa": "上着・コート"
     },
     {
-      "word": "kumisaappaat",
-      "translation": "rubber boots",
-      "translationJa": "長靴"
+      "word": "välikausitakki",
+      "translation": "light jacket (for spring and fall)",
+      "translationJa": "春秋用の上着"
     },
     {
-      "word": "lapaset",
-      "translation": "mittens",
-      "translationJa": "ミトン"
+      "word": "kumisaapas",
+      "translation": "rubber boot (usually plural: kumisaappaat)",
+      "translationJa": "長靴（ふつう複数形 kumisaappaat）"
+    },
+    {
+      "word": "lapanen",
+      "translation": "mitten (usually plural: lapaset)",
+      "translationJa": "ミトン（ふつう複数形 lapaset）"
     },
     {
       "word": "sateenvarjo",
@@ -413,8 +669,18 @@
     },
     {
       "word": "pakkanen",
-      "translation": "frost, freezing weather",
+      "translation": "frost, below-zero temperature",
       "translationJa": "氷点下の寒さ"
+    },
+    {
+      "word": "räntä",
+      "translation": "sleet",
+      "translationJa": "みぞれ"
+    },
+    {
+      "word": "loska",
+      "translation": "slush",
+      "translationJa": "シャーベット状の雪・雪どけのぬかるみ"
     },
     {
       "word": "pukea",
@@ -427,52 +693,99 @@
       "id": "vaatteet-1",
       "title": {
         "fi": "Pukeudu sään mukaan",
-        "selko": "Pue vaatteet sään mukaan",
+        "selko": "Valitse vaatteet sään mukaan",
         "en": "Dress for the weather",
         "ja": "天気に合わせて着る"
       },
       "body": [
         {
-          "fi": "Suomessa sää vaihtelee paljon, ja pakkasella pitää suojata pää, kädet ja jalat.",
-          "selko": "Suomessa sää vaihtelee. Kun on kylmä, pue lämpimät vaatteet.",
-          "en": "The weather in Finland changes a lot, and in freezing weather you should cover your head, hands and feet.",
-          "ja": "フィンランドは天気の変化が大きく、氷点下では頭・手・足を守る必要があります。"
+          "fi": "Suomessa sää vaihtelee paljon vuodenajan mukaan, joten ennen ulos lähtemistä kannattaa katsoa sääennuste.",
+          "selko": "Suomessa sää vaihtelee paljon. Katso sääennuste, ennen kuin lähdet ulos.",
+          "en": "In Finland, the weather changes a lot with the seasons, so it's a good idea to check the forecast before you go out.",
+          "ja": "フィンランドは季節によって天気が大きく変わるので、出かける前に天気予報を見ておくとよいです。"
         },
         {
-          "fi": "Ulos lähtiessä katsotaan ensin sääennuste.",
-          "selko": "Katso ensin sääennuste. Sitten lähde ulos.",
-          "en": "Before going out, people usually check the forecast first.",
-          "ja": "出かける前にまず天気予報を見るのが普通です。"
+          "fi": "Pakkasella tärkeintä on suojata pää, kädet ja jalat.",
+          "selko": "Kun on pakkasta, tarvitset pipon, lapaset ja talvikengät.",
+          "en": "When it's below zero, the most important thing is to keep your head, hands and feet warm.",
+          "ja": "氷点下の日にいちばん大事なのは、頭・手・足を寒さから守ることです。"
         }
       ],
       "grammarNote": {
         "fi": "laittaa + kohde + päähän / jalkaan / käteen; pukea + kohde + päälle",
-        "selko": "laittaa pipo päähän; pukea takki päälle",
-        "en": "laittaa + object + päähän / jalkaan / käteen; pukea + object + päälle",
-        "ja": "「laittaa＋目的語＋päähän／jalkaan／käteen」「pukea＋目的語＋päälle」で身につける動作を言う。"
+        "selko": "Laitan pipon päähän. Puen takin päälle.",
+        "en": "laittaa + object + päähän / jalkaan / käteen; pukea + object + päälle. The object is a total object: pipon, takin (singular -n), kengät (plural -t).",
+        "ja": "「laittaa＋目的語＋päähän／jalkaan／käteen」「pukea＋目的語＋päälle」。目的語は全体目的語（単数は -n：pipon・takin、複数は -t：kengät）。"
       }
     },
     {
       "id": "vaatteet-2",
       "title": {
-        "fi": "Lämpötila ja astetta",
+        "fi": "Kuinka monta astetta?",
         "selko": "Lämpötila",
-        "en": "Temperature",
-        "ja": "気温の言い方"
+        "en": "How many degrees?",
+        "ja": "気温は何度？"
       },
       "body": [
         {
-          "fi": "Lämpötilan kanssa käytetään sanaa astetta: kymmenen astetta lämmintä, viisitoista astetta pakkasta.",
-          "selko": "Sanotaan: kymmenen astetta lämmintä. Tai: viisitoista astetta pakkasta.",
-          "en": "Temperatures use the word astetta: ten degrees above zero, fifteen degrees below zero.",
-          "ja": "気温には astetta を使います。「kymmenen astetta lämmintä（10度）」「viisitoista astetta pakkasta（氷点下15度）」。"
+          "fi": "Lämpötilasta sanotaan esimerkiksi näin: kymmenen astetta lämmintä tai viisi astetta pakkasta.",
+          "selko": "Sano näin: kymmenen astetta lämmintä. Tai: viisi astetta pakkasta.",
+          "en": "For temperatures, you say, for example, kymmenen astetta lämmintä (ten degrees above zero) or viisi astetta pakkasta (five degrees below zero).",
+          "ja": "気温は「kymmenen astetta lämmintä（10度）」「viisi astetta pakkasta（氷点下5度）」のように言います。"
+        },
+        {
+          "fi": "Voit sanoa myös miinus viisi astetta tai plus kymmenen astetta.",
+          "selko": "Voit sanoa myös: miinus viisi astetta.",
+          "en": "You can also say miinus viisi astetta (minus five degrees) or plus kymmenen astetta (plus ten degrees).",
+          "ja": "「miinus viisi astetta（マイナス5度）」「plus kymmenen astetta（プラス10度）」とも言えます。"
+        },
+        {
+          "fi": "Kun lämpötila on alle nollan, sanotaan, että on pakkasta.",
+          "selko": "Kun lämpötila on alle nollan, on pakkasta.",
+          "en": "When the temperature is below zero, you say on pakkasta (it is freezing).",
+          "ja": "0度より低いときは「on pakkasta（氷点下だ）」と言います。"
         }
       ],
       "grammarNote": {
-        "fi": "numero + astetta + lämmintä / pakkasta",
+        "fi": "lukusana + astetta + lämmintä / pakkasta",
         "selko": "kymmenen astetta lämmintä",
-        "en": "number + astetta + lämmintä / pakkasta (partitive)",
-        "ja": "数詞＋astetta＋lämmintä／pakkasta（分格）。"
+        "en": "number + astetta + lämmintä / pakkasta (astetta and lämmintä / pakkasta are partitive)",
+        "ja": "数詞＋astetta＋lämmintä／pakkasta（astetta と lämmintä／pakkasta は分格）。"
+      }
+    },
+    {
+      "id": "vaatteet-3",
+      "title": {
+        "fi": "Sataa lunta, vettä vai räntää?",
+        "selko": "Millainen sää on?",
+        "en": "Snow, rain or sleet?",
+        "ja": "雪、雨、それともみぞれ？"
+      },
+      "body": [
+        {
+          "fi": "Sateesta sanotaan: sataa lunta, sataa vettä tai sataa räntää.",
+          "selko": "Sataa lunta. Sataa vettä. Sataa räntää.",
+          "en": "For rain and snow, you say sataa lunta (it's snowing), sataa vettä (it's raining) or sataa räntää (it's sleeting).",
+          "ja": "降るものは「sataa lunta（雪が降る）」「sataa vettä（雨が降る）」「sataa räntää（みぞれが降る）」のように言います。"
+        },
+        {
+          "fi": "Räntä on märkää lunta, joka sataa taivaalta. Loska on sulavaa lunta kadulla.",
+          "selko": "Räntä on märkää lunta. Loska on märkää lunta kadulla.",
+          "en": "Räntä is wet snow falling from the sky (sleet). Loska is melting snow on the street (slush).",
+          "ja": "räntä は空から降るぬれた雪（みぞれ）、loska は道にたまった解けかけの雪（シャーベット状の雪）です。"
+        },
+        {
+          "fi": "Keväällä ja syksyllä monet käyttävät välikausitakkia, joka on ohuempi kuin talvitakki.",
+          "selko": "Keväällä ja syksyllä monet käyttävät välikausitakkia. Se on ohuempi kuin talvitakki.",
+          "en": "In spring and fall, many people wear a välikausitakki, a jacket lighter than a winter coat.",
+          "ja": "春と秋には、冬のコートより薄い välikausitakki（春秋用の上着）を着る人が多いです。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "sataa + partitiivi: sataa lunta / vettä / räntää",
+        "selko": "sataa lunta, sataa vettä",
+        "en": "sataa + partitive: sataa lunta / vettä / räntää",
+        "ja": "sataa＋分格：sataa lunta／vettä／räntää。"
       }
     }
   ]

@@ -6,6 +6,7 @@ import SceneGame from '../SceneGame';
 import { LanguageProvider } from '../../context/LanguageContext';
 import * as apiModule from '../../services/api';
 import { hasPlayed } from '../../utils/sceneProgress';
+import vaatteet from '../../data/scenes/vaatteet.json';
 
 vi.mock('../../services/api', () => ({
   saveProgress: vi.fn().mockResolvedValue({ success: true })
@@ -65,34 +66,21 @@ describe('SceneGame Page', () => {
     expect(screen.getByRole('heading', { level: 2, name: /Sää ja vaatteet/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /戻る|Back/i })).toHaveAttribute('href', '/scenes');
 
-    // Play through the 3 conditions in vaatteet
-    // For each round, we select the accepted items
-    for (let roundIdx = 0; roundIdx < 3; roundIdx++) {
-      // Look at weather text to determine condition
+    // Play through playLength rounds. For each round, find the shown weather
+    // in the data and pick the first accepted option in every slot.
+    for (let roundIdx = 0; roundIdx < vaatteet.playLength; roundIdx++) {
       const checkBtn = screen.getByRole('button', { name: /Lähden ulos!/i });
 
-      // If text mentions pakkasta -> pipo, talvitakki, talvikengat, lapaset
-      // If text mentions sadetta / sataa vettä -> lippis/ei-paa, sadetakki, kumisaappaat, sateenvarjo/ei-kadet
-      // If text mentions helle / 25 -> lippis/ei-paa, t-paita, sandaalit, ei-kadet
-      if (screen.queryByText(/pakkasta/i)) {
-        fireEvent.click(screen.getByRole('button', { name: /🧶.*pipo/i }));
-        fireEvent.click(screen.getByRole('button', { name: /🧥.*talvitakki/i }));
-        fireEvent.click(screen.getByRole('button', { name: /🥾.*talvikengät/i }));
-        fireEvent.click(screen.getByRole('button', { name: /🧤.*lapaset/i }));
-      } else if (screen.queryByText(/sataa vettä/i)) {
-        fireEvent.click(screen.getByRole('button', { name: /🧢.*lippis/i }));
-        fireEvent.click(screen.getByRole('button', { name: /🧥.*sadetakki/i }));
-        fireEvent.click(screen.getByRole('button', { name: /👢.*kumisaappaat/i }));
-        fireEvent.click(screen.getByRole('button', { name: /☂️.*sateenvarjo/i }));
-      } else {
-        // helle
-        fireEvent.click(screen.getByRole('button', { name: /🧢.*lippis/i }));
-        fireEvent.click(screen.getByRole('button', { name: /👕.*t-paita/i }));
-        fireEvent.click(screen.getByRole('button', { name: /🩴.*sandaalit/i }));
-        // hands: ei mitään (has icon ➖)
-        const handSlot = screen.getByText(/Käsissä/i).closest('.scene-slot');
-        const noHandBtn = within(handSlot).getByRole('button', { name: /➖.*ei mitään/i });
-        fireEvent.click(noHandBtn);
+      const condition = vaatteet.conditions.find((c) => screen.queryByText(c.weather.fi));
+      expect(condition).toBeDefined();
+
+      for (const slot of vaatteet.slots) {
+        const option = slot.options.find((o) => o.id === condition.accept[slot.id][0]);
+        const slotEl = screen.getByText(slot.label.fi).closest('.scene-slot');
+        const optionBtn = within(slotEl)
+          .getAllByRole('button')
+          .find((btn) => btn.textContent.includes(option.label.fi));
+        fireEvent.click(optionBtn);
       }
 
       fireEvent.click(checkBtn);
