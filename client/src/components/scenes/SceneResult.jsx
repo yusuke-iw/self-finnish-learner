@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InfoCard from './InfoCard';
 import { useLanguage } from '../../context/useLanguage';
 import { useProgressStore } from '../../store/useProgressStore';
 import { findLessonById } from '../../data/curriculumData';
+import { addWord, getWords } from '../../utils/wordBook';
 
 export default function SceneResult({ game, mode, onRetry, onNext, next }) {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { progress } = useProgressStore();
+  const [bookWords, setBookWords] = useState(getWords);
 
   const handlePracticeLesson = () => {
     if (!game?.relatedLessonId) return;
@@ -51,10 +53,33 @@ export default function SceneResult({ game, mode, onRetry, onNext, next }) {
           <ul className="scene-result-vocab-list">
             {game.vocabulary.map((entry, idx) => {
               const meaning = language === 'ja' ? entry.translationJa ?? entry.translation : entry.translation;
+              const isAdded = bookWords.some(
+                (word) => word.id === entry.word.trim().toLowerCase()
+              );
               return (
                 <li key={idx} className="scene-result-vocab-item">
                   <span className="scene-result-vocab-word">{entry.word}</span>
                   <span className="scene-result-vocab-meaning">{meaning}</span>
+                  <button
+                    type="button"
+                    className="btn-secondary wordbook-add-btn"
+                    disabled={isAdded}
+                    onClick={() => {
+                      addWord({
+                        word: entry.word,
+                        translation: entry.translation,
+                        translationJa: entry.translationJa,
+                        source: {
+                          type: 'scene',
+                          gameId: game.id,
+                          title: game.title?.fi
+                        }
+                      });
+                      setBookWords(getWords());
+                    }}
+                  >
+                    {isAdded ? t('wordBook.added') : t('wordBook.addToBook')}
+                  </button>
                 </li>
               );
             })}

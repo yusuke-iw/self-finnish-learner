@@ -54,6 +54,74 @@ describe('Scenes Page', () => {
     expect(playedBadge).toBeInTheDocument();
   });
 
+  it('does not show read-info button for unplayed games, shows it for played games, and opens/closes the info modal via button and Escape', () => {
+    const { unmount } = render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <Scenes />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByRole('button', { name: /説明を読む|Read the notes/i })).toBeNull();
+    unmount();
+
+    markGamePlayed('vaatteet');
+    render(
+      <MemoryRouter>
+        <LanguageProvider>
+          <Scenes />
+        </LanguageProvider>
+      </MemoryRouter>
+    );
+
+    const readInfoBtn = screen.getByRole('button', { name: /説明を読む|Read the notes/i });
+    expect(readInfoBtn).toBeInTheDocument();
+    expect(readInfoBtn.closest('a')).toBeNull();
+
+    // Click to open modal
+    fireEvent.click(readInfoBtn);
+    const dialog = screen.getByRole('dialog', { name: /Sää ja vaatteet/i });
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    expect(screen.getByText('Pukeudu sään mukaan')).toBeInTheDocument();
+
+    // Close via close button
+    const closeBtn = screen.getByRole('button', { name: /閉じる|Close/i });
+    fireEvent.click(closeBtn);
+    expect(screen.queryByRole('dialog')).toBeNull();
+
+    // Reopen and close via Escape key
+    fireEvent.click(readInfoBtn);
+    expect(screen.getByRole('dialog', { name: /Sää ja vaatteet/i })).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
+
+    // Reopen and close via overlay click
+    fireEvent.click(readInfoBtn);
+    const reopenedDialog = screen.getByRole('dialog', { name: /Sää ja vaatteet/i });
+    fireEvent.click(reopenedDialog.parentElement);
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('hides read-info button even for played games when infoCards is empty', () => {
+    markGamePlayed('vaatteet');
+    const originalCards = vaatteet.infoCards;
+    vaatteet.infoCards = [];
+    try {
+      render(
+        <MemoryRouter>
+          <LanguageProvider>
+            <Scenes />
+          </LanguageProvider>
+        </MemoryRouter>
+      );
+      expect(screen.queryByRole('button', { name: /説明を読む|Read the notes/i })).toBeNull();
+    } finally {
+      vaatteet.infoCards = originalCards;
+    }
+  });
+
   it('shows no JA button and falls back to English when the saved mode is ja but some game lacks Japanese', () => {
     setSceneTextMode('ja');
     const original = vaatteet.title.ja;

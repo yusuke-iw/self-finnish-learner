@@ -41,10 +41,13 @@ describe('WordBook', () => {
 
   it('lists localized meanings and sources, searches all meanings, plays and deletes a word', () => {
     addWord({ word: 'kissa', translation: 'cat', translationJa: '猫', source: { type: 'passage', passageId: 'p1', title: 'Animals' } });
+    addWord({ word: 'pipo', translation: 'beanie', translationJa: 'ニット帽', source: { type: 'scene', gameId: 'vaatteet', title: 'Sää ja vaatteet' } });
     addWord({ word: 'koira', translation: 'dog', translationJa: '犬' });
     renderBook();
     expect(screen.getByText('cat')).toBeInTheDocument();
     expect(screen.getByText('Animals')).toBeInTheDocument();
+    expect(screen.getByText('beanie')).toBeInTheDocument();
+    expect(screen.getByText('Sää ja vaatteet')).toBeInTheDocument();
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: '猫' } });
     expect(screen.queryByText('koira')).not.toBeInTheDocument();
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'KIS' } });
@@ -52,7 +55,7 @@ describe('WordBook', () => {
     fireEvent.click(within(item).getByRole('button', { name: /Listen/ }));
     expect(playAudio).toHaveBeenCalledWith('kissa');
     fireEvent.click(within(item).getByRole('button', { name: /Delete/ }));
-    expect(getWords().map(w => w.id)).toEqual(['koira']);
+    expect(getWords().map(w => w.id)).toEqual(['pipo', 'koira']);
     expect(review.getReviewSchedule()['word:kissa']).toBeUndefined();
   });
 

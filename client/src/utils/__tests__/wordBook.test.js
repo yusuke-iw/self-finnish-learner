@@ -54,6 +54,54 @@ describe('wordBook', () => {
     expect(mergeWordBooks(null, [null, {}, { word: ' ' }])).toEqual([]);
   });
 
+  it('preserves scene source across addWord and mergeWordBooks and falls back to manual for invalid sources', () => {
+    const sceneWord = addWord({
+      word: 'pipo',
+      translation: 'beanie',
+      translationJa: 'ニット帽',
+      source: { type: 'scene', gameId: 'vaatteet', title: 'Sää ja vaatteet' }
+    });
+    expect(sceneWord.source).toEqual({
+      type: 'scene',
+      gameId: 'vaatteet',
+      title: 'Sää ja vaatteet'
+    });
+    expect(getWords()[0].source).toEqual({
+      type: 'scene',
+      gameId: 'vaatteet',
+      title: 'Sää ja vaatteet'
+    });
+
+    const merged = mergeWordBooks(
+      [
+        {
+          word: 'pipo',
+          translation: 'beanie',
+          translationJa: 'ニット帽',
+          source: { type: 'scene', gameId: 'vaatteet', title: 'Sää ja vaatteet' },
+          addedAt: '2026-10-01T00:00:00Z'
+        }
+      ],
+      [
+        {
+          word: 'takki',
+          source: { type: 'unknown', gameId: 'vaatteet', title: 'Invalid' }
+        },
+        {
+          word: 'lapanen',
+          source: 'invalid'
+        }
+      ]
+    );
+    expect(merged.find((w) => w.id === 'pipo').source).toEqual({
+      type: 'scene',
+      gameId: 'vaatteet',
+      title: 'Sää ja vaatteet'
+    });
+    expect(merged.find((w) => w.id === 'takki').source).toEqual({ type: 'manual' });
+    expect(merged.find((w) => w.id === 'lapanen').source).toEqual({ type: 'manual' });
+  });
+
   it('tolerates corrupt or unavailable storage and rejects blank words', () => {
     localStorage.setItem('finnishLearnerWordBook', '{broken');
     expect(getWords()).toEqual([]);

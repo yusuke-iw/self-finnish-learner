@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { scenes, games, findGameById, getRecommendedGames, getUpcomingGames } from '../data/scenes/index';
 import SceneText from '../components/scenes/SceneText';
 import SceneTextToggle from '../components/scenes/SceneTextToggle';
+import InfoCardModal from '../components/scenes/InfoCardModal';
 import { getSceneTextMode, setSceneTextMode, hasJapanese, resolveMode } from '../utils/sceneText';
 import { hasPlayed } from '../utils/sceneProgress';
 import { useLanguage } from '../context/useLanguage';
@@ -10,6 +11,7 @@ import { useLanguage } from '../context/useLanguage';
 export default function Scenes() {
   const { t } = useLanguage();
   const [mode, setMode] = useState(() => getSceneTextMode());
+  const [infoGame, setInfoGame] = useState(null);
 
   const handleModeChange = (nextMode) => {
     setMode(nextMode);
@@ -63,32 +65,43 @@ export default function Scenes() {
                 {sceneGames.map((game) => {
                   const num = gameNumberMap.get(game.id) || 1;
                   const isPlayed = hasPlayed(game.id);
+                  const hasInfoCards = Array.isArray(game.infoCards) && game.infoCards.length > 0;
 
                   return (
-                    <Link
-                      key={game.id}
-                      to={`/scenes/${game.id}`}
-                      className="scene-game-card"
-                    >
-                      <span className="scene-card-number">{num}</span>
-                      <span className="scene-card-icon">{game.icon}</span>
-                      <div className="scene-card-info">
-                        <SceneText
-                          text={game.title}
-                          mode={displayMode}
-                          variant="word"
-                          className="scene-card-title"
-                        />
-                      </div>
-                      {isPlayed && (
-                        <span
-                          className="scene-card-played"
-                          aria-label={t('scenes.played')}
+                    <div key={game.id} className="scene-game-card-row">
+                      <Link
+                        to={`/scenes/${game.id}`}
+                        className="scene-game-card"
+                      >
+                        <span className="scene-card-number">{num}</span>
+                        <span className="scene-card-icon">{game.icon}</span>
+                        <div className="scene-card-info">
+                          <SceneText
+                            text={game.title}
+                            mode={displayMode}
+                            variant="word"
+                            className="scene-card-title"
+                          />
+                        </div>
+                        {isPlayed && (
+                          <span
+                            className="scene-card-played"
+                            aria-label={t('scenes.played')}
+                          >
+                            ✔
+                          </span>
+                        )}
+                      </Link>
+                      {isPlayed && hasInfoCards && (
+                        <button
+                          type="button"
+                          className="btn-secondary scene-read-info-btn"
+                          onClick={() => setInfoGame(game)}
                         >
-                          ✔
-                        </span>
+                          {t('scenes.readInfo')}
+                        </button>
                       )}
-                    </Link>
+                    </div>
                   );
                 })}
 
@@ -117,6 +130,14 @@ export default function Scenes() {
           );
         })}
       </div>
+
+      {infoGame && (
+        <InfoCardModal
+          game={infoGame}
+          mode={displayMode}
+          onClose={() => setInfoGame(null)}
+        />
+      )}
     </div>
   );
 }

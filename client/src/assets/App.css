@@ -4025,6 +4025,67 @@
   flex-shrink: 0;
 }
 
+.scene-game-card-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scene-game-card-row .scene-game-card {
+  flex: 1;
+  min-width: 0;
+}
+
+.scene-read-info-btn {
+  padding: 8px 14px;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.scene-info-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 640px;
+  max-height: 85vh;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.scene-info-modal-header {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.scene-info-modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scene-info-modal-close {
+  color: var(--text-primary);
+}
+
+.scene-info-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 /* ---- Scene Game Page ---- */
 .scene-game-page {
   max-width: 760px;

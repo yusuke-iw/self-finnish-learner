@@ -314,6 +314,8 @@ export const translations = {
       notFound: '場面が見つかりません',
       backToList: '場面一覧へ',
       back: '戻る',
+      readInfo: '説明を読む',
+      closeInfo: '閉じる',
       mode: {
         fi: 'FI',
         selko: 'Selko',
@@ -658,12 +660,14 @@ export const translations = {
     // Scenes Mode
     scenes: {
       title: 'Daily-Life Scenes',
-      lead: 'Follow the recommended order to explore from home to neighbourhood, or jump into any scene.',
+      lead: 'Follow the recommended order to explore from home to neighborhood, or jump into any scene.',
       played: 'Played',
       comingSoon: 'Coming soon',
       notFound: 'Scene not found',
       backToList: 'Back to scenes',
       back: 'Back',
+      readInfo: 'Read the notes',
+      closeInfo: 'Close',
       mode: {
         fi: 'FI',
         selko: 'Selko',
