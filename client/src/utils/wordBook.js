@@ -9,7 +9,9 @@ function normalizeWord(entry) {
   const text = (value) => typeof value === 'string' ? value : '';
   const source = entry.source?.type === 'passage'
     ? { type: 'passage', passageId: text(entry.source.passageId), title: text(entry.source.title) }
-    : { type: 'manual' };
+    : entry.source?.type === 'scene'
+      ? { type: 'scene', gameId: text(entry.source.gameId), title: text(entry.source.title) }
+      : { type: 'manual' };
   return {
     id: word.toLowerCase(),
     word,

@@ -4,7 +4,8 @@ import {
   getCurrentNode,
   getNodeCount,
   answerDialogue,
-  nextDialogueNode
+  nextDialogueNode,
+  getSpokenNotes
 } from '../dialogue';
 
 describe('dialogue utility functions', () => {
@@ -270,6 +271,50 @@ describe('dialogue utility functions', () => {
 
       expect(ans.state.visited).toEqual(['n1', 'n2', 'n3']);
       expect(ans.state.answeredNodeIds).toEqual(['n1', 'n2', 'n3']);
+    });
+  });
+
+  describe('getSpokenNotes', () => {
+    const nodeWithNotes = {
+      id: 'n1',
+      line: {
+        fi: 'Hei!',
+        spoken: 'Moi!',
+        spokenNotes: { en: 'Node note', ja: 'ノードのメモ' }
+      }
+    };
+    const nodeWithoutNotes = {
+      id: 'n2',
+      line: { fi: 'Hei!', spoken: 'Moi!' }
+    };
+
+    it('returns choice.spokenNotes when present (choice takes priority over node)', () => {
+      const choiceWithNotes = {
+        id: 'b',
+        spokenNotes: { en: 'Choice note', ja: '選択肢のメモ' }
+      };
+      expect(getSpokenNotes(nodeWithNotes, choiceWithNotes)).toEqual({
+        en: 'Choice note',
+        ja: '選択肢のメモ'
+      });
+    });
+
+    it('falls back to node.line.spokenNotes when choice has no spokenNotes', () => {
+      const choiceWithoutNotes = { id: 'a' };
+      expect(getSpokenNotes(nodeWithNotes, choiceWithoutNotes)).toEqual({
+        en: 'Node note',
+        ja: 'ノードのメモ'
+      });
+      expect(getSpokenNotes(nodeWithNotes, null)).toEqual({
+        en: 'Node note',
+        ja: 'ノードのメモ'
+      });
+    });
+
+    it('returns null when neither choice nor node has spokenNotes', () => {
+      expect(getSpokenNotes(nodeWithoutNotes, { id: 'a' })).toBeNull();
+      expect(getSpokenNotes(null, null)).toBeNull();
+      expect(getSpokenNotes(undefined, undefined)).toBeNull();
     });
   });
 });

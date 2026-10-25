@@ -5,7 +5,8 @@ import {
   getCurrentNode,
   getNodeCount,
   answerDialogue,
-  nextDialogueNode
+  nextDialogueNode,
+  getSpokenNotes
 } from '../../utils/dialogue';
 import { playAudio } from '../../utils/audio';
 import { getSpeakerById, DEFAULT_SPEAKER } from '../../utils/speakers';
@@ -130,6 +131,8 @@ export default function DialogueScene({ game, mode, onFinish }) {
     feedbackChoice && feedbackChoice.quality === 'ok'
       ? currentNode.choices.find((c) => c.quality === 'good')
       : null;
+
+  const spokenNotes = getSpokenNotes(currentNode, feedbackChoice);
 
   return (
     <div className="dialogue-scene">
@@ -294,11 +297,11 @@ export default function DialogueScene({ game, mode, onFinish }) {
                     : `${t('session.spokenLabel')} ${feedbackChoice.text.spoken}`}
                 </span>
               </div>
-              {currentNode.line.spokenNotes && (
+              {spokenNotes && (
                 <p className="spoken-notes">
                   {mode === 'ja'
-                    ? currentNode.line.spokenNotes.ja || currentNode.line.spokenNotes.en
-                    : currentNode.line.spokenNotes.en}
+                    ? spokenNotes.ja || spokenNotes.en
+                    : spokenNotes.en}
                 </p>
               )}
             </div>

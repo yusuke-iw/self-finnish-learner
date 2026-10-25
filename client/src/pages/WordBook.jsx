@@ -35,7 +35,8 @@ function shuffled(words) {
 
 function Source({ word }) {
   const { t } = useLanguage();
-  return <span className="wordbook-source">{word.source.type === 'passage' ? word.source.title : t('wordBook.manualSource')}</span>;
+  const isTitledSource = word.source.type === 'passage' || word.source.type === 'scene';
+  return <span className="wordbook-source">{isTitledSource ? word.source.title : t('wordBook.manualSource')}</span>;
 }
 
 function Flashcards({ cards, isReview, onBack }) {

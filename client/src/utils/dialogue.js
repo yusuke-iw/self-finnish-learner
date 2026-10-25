@@ -120,3 +120,7 @@ export function nextDialogueNode(state) {
     repeatCount: 0
   };
 }
+
+export function getSpokenNotes(node, choice) {
+  return choice?.spokenNotes ?? node?.line?.spokenNotes ?? null;
+}

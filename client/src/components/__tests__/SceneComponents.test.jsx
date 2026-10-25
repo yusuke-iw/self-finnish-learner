@@ -12,7 +12,12 @@ import DialogueScene from '../scenes/DialogueScene';
 import * as audioModule from '../../utils/audio';
 import * as soundModule from '../../utils/feedbackSounds';
 import * as statsModule from '../../utils/studyStats';
+import * as wordBookModule from '../../utils/wordBook';
 import { LanguageProvider } from '../../context/LanguageContext';
+
+vi.mock('../../services/api', () => ({
+  saveProgress: vi.fn().mockResolvedValue({})
+}));
 
 vi.mock('../../utils/audio', () => ({
   playAudio: vi.fn().mockResolvedValue(undefined)
@@ -34,6 +39,7 @@ vi.mock('../../utils/studyStats', async () => {
 
 describe('Scene UI Components', () => {
   beforeEach(() => {
+    localStorage.clear();
     vi.clearAllMocks();
   });
 
@@ -171,6 +177,7 @@ describe('Scene UI Components', () => {
   describe('SceneResult', () => {
     const game = {
       id: 'vaatteet',
+      title: { fi: 'Sää ja vaatteet', en: 'Weather and clothes', ja: '天気と服' },
       relatedLessonId: 'l11',
       infoCards: [
         {
@@ -219,6 +226,39 @@ describe('Scene UI Components', () => {
 
       const listBtn = screen.getByRole('button', { name: /一覧へ|To scenes list/i });
       fireEvent.click(listBtn);
+    });
+
+    it('adds a vocabulary word to the word book and updates button to added and disabled', () => {
+      const addWordSpy = vi.spyOn(wordBookModule, 'addWord');
+
+      render(
+        <MemoryRouter>
+          <LanguageProvider>
+            <SceneResult game={game} mode="en" onRetry={vi.fn()} />
+          </LanguageProvider>
+        </MemoryRouter>
+      );
+
+      const addButtons = screen.getAllByRole('button', { name: /＋単語帳|\+ Words/i });
+      expect(addButtons).toHaveLength(2);
+      expect(addButtons[0]).toBeEnabled();
+
+      fireEvent.click(addButtons[0]);
+
+      expect(addWordSpy).toHaveBeenCalledWith({
+        word: 'pipo',
+        translation: 'beanie',
+        translationJa: 'ニット帽',
+        source: {
+          type: 'scene',
+          gameId: 'vaatteet',
+          title: 'Sää ja vaatteet'
+        }
+      });
+
+      const addedBtn = screen.getByRole('button', { name: /✓ 追加済み|✓ Added/i });
+      expect(addedBtn).toBeDisabled();
+      expect(screen.getAllByRole('button', { name: /＋単語帳|\+ Words/i })).toHaveLength(1);
     });
 
     it('renders cleanly with minimal game data and navigate fallback for next', () => {
@@ -651,6 +691,10 @@ describe('Scene UI Components', () => {
                     selko: 'Selko: Vähän lyhyt.',
                     en: 'Works, but a bit brief.',
                     ja: '通じますが少し短いです。'
+                  },
+                  spokenNotes: {
+                    en: 'Choice-specific spoken note',
+                    ja: '選択肢ごとの口語メモ'
                   }
                 },
                 {
@@ -836,6 +880,21 @@ describe('Scene UI Components', () => {
       // "A more natural reply" should display the good choice text
       expect(screen.getByText(/A more natural reply|もっと自然な返事/)).toBeInTheDocument();
       expect(screen.getAllByText(/Kiitti paljon!/).length).toBeGreaterThanOrEqual(2);
+      // Choice-level spokenNotes takes priority over node-level spokenNotes
+      expect(screen.getByText('Choice-specific spoken note')).toBeInTheDocument();
+      expect(screen.queryByText('Same in speech')).toBeNull();
+    });
+
+    it('falls back to node spokenNotes when chosen reply has no spokenNotes', () => {
+      renderDialogue();
+
+      // Advance from node 1 to node 2
+      fireEvent.click(screen.getByRole('button', { name: /Joo, muutin tänne eilen/i }));
+      fireEvent.click(screen.getByRole('button', { name: /次へ|Next/i }));
+
+      // Select good choice on node 2 (which has no choice.spokenNotes)
+      fireEvent.click(screen.getByRole('button', { name: /Kiitti paljon!/i }));
+      expect(screen.getByText('Same in speech')).toBeInTheDocument();
     });
 
     it('last node shows Valmis! and calls onFinish with playLessonCompleteSound', () => {

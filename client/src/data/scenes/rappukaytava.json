@@ -167,6 +167,10 @@
                 "selko": "Vastaus on oikein. Kerro myös, milloin muutit.",
                 "en": "That works, but just \"yes\" is short. Also say when you moved in.",
                 "ja": "通じますが、「はい」だけでは短いです。いつ引っ越してきたかも言ってみましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: kyllä → joo (the everyday \"yes\").",
+                "ja": "あなた: kyllä → joo（日常の「はい」）。"
               }
             },
             {
@@ -249,6 +253,10 @@
                 "selko": "Vastaus on oikein. Sano myös: hauska tutustua.",
                 "en": "That works, but Matti told you his name. Also say \"Hauska tutustua!\" (Nice to meet you!).",
                 "ja": "通じますが、マッティは名乗っています。「Hauska tutustua!（はじめまして）」も言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: toisessa → tokassa (toka = second).",
+                "ja": "あなた: toisessa → tokassa（toka ＝ 2番目）。"
               }
             },
             {
@@ -315,6 +323,10 @@
                 "selko": "Vastaus on oikein. Voit myös kysyä: Miten voin varata saunavuoron?",
                 "en": "That works, but you can also ask how to book a sauna slot.",
                 "ja": "通じますが、予約のしかたも聞いてみましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: ole → oo (ei ole → ei oo).",
+                "ja": "あなた: ole → oo（ei ole → ei oo）。"
               }
             },
             {
@@ -397,6 +409,10 @@
                 "selko": "Sano \"ei kiitos\". Se on kohtelias vastaus.",
                 "en": "That works, but just \"no\" sounds curt. Say \"Ei kiitos\" (No, thank you).",
                 "ja": "通じますが、「Ei」だけではそっけなく聞こえます。「Ei kiitos」と言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: \"Ei\" stays the same in speech.",
+                "ja": "あなた: 「Ei」は話し言葉でもそのまま。"
               }
             },
             {

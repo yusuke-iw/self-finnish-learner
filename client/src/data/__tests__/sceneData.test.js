@@ -309,6 +309,15 @@ describe('Scene Data Schema & Integrity', () => {
             expect(choice.feedback?.en).toBeTruthy();
             expect(choice.feedback?.selko).toBeTruthy();
 
+            if (choice.spokenNotes !== undefined) {
+              expect(typeof choice.spokenNotes.en).toBe('string');
+              expect(choice.spokenNotes.en.trim()).not.toBe('');
+              if (choice.spokenNotes.ja !== undefined) {
+                expect(typeof choice.spokenNotes.ja).toBe('string');
+                expect(choice.spokenNotes.ja.trim()).not.toBe('');
+              }
+            }
+
             if (choice.quality === 'good' || choice.quality === 'ok') {
               if (choice.next !== null) {
                 expect(nodeMap.has(choice.next)).toBe(true);
