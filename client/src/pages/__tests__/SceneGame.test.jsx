@@ -179,6 +179,8 @@ describe('SceneGame Page', () => {
   });
 
   it('plays the dialogue scene for /scenes/rappukaytava through to the end, then marks it played and offers no next game', () => {
+    // The scene picks one of the dialogues at random; pin it to the first one
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0);
     renderGame('rappukaytava');
     expect(screen.getByRole('heading', { level: 2, name: /Rappukäytävässä/ })).toBeInTheDocument();
 
@@ -209,6 +211,7 @@ describe('SceneGame Page', () => {
     expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l10&level=1');
+    randomSpy.mockRestore();
   });
 
   it('offers the sort game as the next recommended game after the outfit game', () => {
