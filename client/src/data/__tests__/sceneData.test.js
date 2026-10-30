@@ -471,6 +471,21 @@ describe('Scene Data Schema & Integrity', () => {
     expect(recs[4].number).toBe(5);
   });
 
+  it('pankkiautomaatti has 3 procedures of 5-8 screens, a balance question, 3 info cards and 10-12 words', () => {
+    expect(pankkiautomaatti.procedures.map((p) => p.id)).toEqual(['nosto', 'saldo', 'vaara-tunnusluku']);
+    for (const proc of pankkiautomaatti.procedures) {
+      expect(proc.steps.length).toBeGreaterThanOrEqual(5);
+      expect(proc.steps.length).toBeLessThanOrEqual(8);
+    }
+    const saldo = pankkiautomaatti.procedures.find((p) => p.id === 'saldo');
+    const questionSteps = saldo.steps.filter((s) => s.question);
+    expect(questionSteps).toHaveLength(1);
+    expect(questionSteps[0].buttons).toHaveLength(3);
+    expect(pankkiautomaatti.infoCards.length).toBe(3);
+    expect(pankkiautomaatti.vocabulary.length).toBeGreaterThanOrEqual(10);
+    expect(pankkiautomaatti.vocabulary.length).toBeLessThanOrEqual(12);
+  });
+
   it('hasJapanese correctly identifies whether games have full Japanese text', () => {
     expect(hasJapanese(vaatteet)).toBe(true);
     expect(hasJapanese(jatekatos)).toBe(true);

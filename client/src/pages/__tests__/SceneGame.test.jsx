@@ -13,6 +13,7 @@ import ajanvaraus from '../../data/scenes/ajanvaraus.json';
 import pankkiautomaatti from '../../data/scenes/pankkiautomaatti.json';
 import { setSceneTextMode } from '../../utils/sceneText';
 import { hasJapanese } from '../../utils/sceneText';
+import { createProcedureRound } from '../../utils/procedureSim';
 
 vi.mock('../../services/api', () => ({
   saveProgress: vi.fn().mockResolvedValue({ success: true })
@@ -253,36 +254,45 @@ describe('SceneGame Page', () => {
     }
   );
 
-  it('plays the procedure game for /scenes/pankkiautomaatti through to the end, marks it played, and offers no next game', () => {
-    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0);
-    renderGame('pankkiautomaatti');
-    expect(screen.getByRole('heading', { level: 2, name: /Pankkiautomaatilla/ })).toBeInTheDocument();
+  it.each(pankkiautomaatti.procedures.map((p) => [p.id]))(
+    'plays the /scenes/pankkiautomaatti procedure %s through to the end, marks it played, and offers no next game',
+    (procedureId) => {
+      // The game picks one of the procedures at random; find a value that picks this one and pin it
+      const pinned = [0.05, 0.25, 0.4, 0.6, 0.85].find(
+        (r) => createProcedureRound(pankkiautomaatti, () => r).procedure.id === procedureId
+      );
+      expect(pinned).toBeDefined();
+      const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(pinned);
+      renderGame('pankkiautomaatti');
+      expect(screen.getByRole('heading', { level: 2, name: /Pankkiautomaatilla/ })).toBeInTheDocument();
 
-    const procedure = pankkiautomaatti.procedures[0];
-    const buttonsGroup = screen.getByRole('group', { name: /ボタン|Buttons/ });
+      const procedure = pankkiautomaatti.procedures.find((p) => p.id === procedureId);
+      expect(screen.getAllByText(procedure.goal.fi).length).toBeGreaterThan(0);
+      const buttonsGroup = screen.getByRole('group', { name: /ボタン|Buttons/ });
 
-    for (let i = 0; i < procedure.steps.length; i++) {
-      const step = procedure.steps[i];
-      const correctBtnData = step.buttons.find((b) => b.correct);
-      expect(correctBtnData).toBeDefined();
+      for (let i = 0; i < procedure.steps.length; i++) {
+        const step = procedure.steps[i];
+        const correctBtnData = step.buttons.find((b) => b.correct);
+        expect(correctBtnData).toBeDefined();
 
-      const btnEl = within(buttonsGroup)
-        .getAllByRole('button')
-        .find((b) => b.textContent.includes(correctBtnData.label.fi));
-      expect(btnEl).toBeDefined();
-      fireEvent.click(btnEl);
+        const btnEl = within(buttonsGroup)
+          .getAllByRole('button')
+          .find((b) => b.querySelector('.scene-text-main')?.textContent === correctBtnData.label.fi);
+        expect(btnEl).toBeDefined();
+        fireEvent.click(btnEl);
 
-      const isLast = i === procedure.steps.length - 1;
-      fireEvent.click(screen.getByRole('button', { name: isLast ? /Valmis!/ : /次へ|Next/i }));
+        const isLast = i === procedure.steps.length - 1;
+        fireEvent.click(screen.getByRole('button', { name: isLast ? /Valmis!/ : /次へ|Next/i }));
+      }
+
+      expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+      expect(hasPlayed('pankkiautomaatti')).toBe(true);
+      expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
+      expect(mockNavigate).toHaveBeenCalledWith(`/sessions?lessonId=${pankkiautomaatti.relatedLessonId}&level=1`);
+      randomSpy.mockRestore();
     }
-
-    expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
-    expect(hasPlayed('pankkiautomaatti')).toBe(true);
-    expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
-    expect(mockNavigate).toHaveBeenCalledWith(`/sessions?lessonId=${pankkiautomaatti.relatedLessonId}&level=1`);
-    randomSpy.mockRestore();
-  });
+  );
 
   it('offers the sort game as the next recommended game after the outfit game', () => {
     renderGame('vaatteet');
