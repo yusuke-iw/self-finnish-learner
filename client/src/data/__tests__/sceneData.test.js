@@ -3,14 +3,15 @@ import scenes from '../scenes/scenes.json';
 import vaatteet from '../scenes/vaatteet.json';
 import jatekatos from '../scenes/jatekatos.json';
 import rappukaytava from '../scenes/rappukaytava.json';
+import ajanvaraus from '../scenes/ajanvaraus.json';
 import upcoming from '../scenes/upcoming.json';
-import { getUpcomingGames } from '../scenes/index';
+import { getUpcomingGames, getRecommendedGames } from '../scenes/index';
 import { findLessonById } from '../curriculumData';
 import { hasJapanese } from '../../utils/sceneText';
 import { SPEAKERS } from '../../utils/speakers';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet, jatekatos, rappukaytava];
+  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -242,8 +243,8 @@ describe('Scene Data Schema & Integrity', () => {
     }
   });
 
-  it('rappukaytava dialogues have 4-6 lines, each with a good reply and at least one other kind', () => {
-    for (const dlg of rappukaytava.dialogues) {
+  it('dialogue scenes have 4-6 lines, each with a good reply and at least one other kind', () => {
+    for (const dlg of [...rappukaytava.dialogues, ...ajanvaraus.dialogues]) {
       expect(dlg.nodes.length).toBeGreaterThanOrEqual(4);
       expect(dlg.nodes.length).toBeLessThanOrEqual(6);
       for (const node of dlg.nodes) {
@@ -366,9 +367,45 @@ describe('Scene Data Schema & Integrity', () => {
     expect(getUpcomingGames('lahio').some((u) => u.id === 'rappukaytava')).toBe(false);
   });
 
+  it('kaupunki has the phone-call game as its first game and is no longer marked coming soon', () => {
+    const kaupunki = scenes.find((s) => s.id === 'kaupunki');
+    expect(kaupunki.gameIds).toContain('ajanvaraus');
+    expect(kaupunki.comingSoon).toBeUndefined();
+    expect(ajanvaraus.sceneId).toBe('kaupunki');
+    expect(ajanvaraus.relatedLessonId).toBe('l9');
+  });
+
+  it('ajanvaraus is the 4th recommended game', () => {
+    const recs = getRecommendedGames();
+    expect(recs[3].game.id).toBe('ajanvaraus');
+    expect(recs[3].number).toBe(4);
+  });
+
+  it('ajanvaraus has 3 dialogues, each with at least one repeat choice, and only Helmi speaks', () => {
+    expect(ajanvaraus.dialogues.map((d) => d.id)).toEqual(['varaa-aika', 'oireet', 'siirra-aika']);
+    expect(ajanvaraus.characters.map((c) => c.speakerId)).toEqual(['helmi']);
+    for (const dlg of ajanvaraus.dialogues) {
+      const choices = dlg.nodes.flatMap((n) => n.choices);
+      expect(choices.some((c) => c.quality === 'repeat')).toBe(true);
+    }
+    expect(ajanvaraus.infoCards.length).toBe(3);
+    expect(ajanvaraus.vocabulary.length).toBeGreaterThanOrEqual(10);
+    expect(ajanvaraus.vocabulary.length).toBeLessThanOrEqual(12);
+  });
+
+  it('the ATM game is announced as upcoming in kaupunki', () => {
+    const upcomingKaupunki = getUpcomingGames('kaupunki');
+    const atm = upcomingKaupunki.find((u) => u.id === 'pankkiautomaatti');
+    expect(atm).toBeDefined();
+    expect(atm.number).toBe(5);
+    expect(atm.title.fi).toBe('Pankkiautomaatilla');
+    expect(upcomingKaupunki.some((u) => u.id === 'ajanvaraus')).toBe(false);
+  });
+
   it('hasJapanese correctly identifies whether games have full Japanese text', () => {
     expect(hasJapanese(vaatteet)).toBe(true);
     expect(hasJapanese(jatekatos)).toBe(true);
     expect(hasJapanese(rappukaytava)).toBe(true);
+    expect(hasJapanese(ajanvaraus)).toBe(true);
   });
 });

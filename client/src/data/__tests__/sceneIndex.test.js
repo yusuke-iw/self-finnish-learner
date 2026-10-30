@@ -40,6 +40,8 @@ describe('Scene Index Module', () => {
     const lahioGames = getGamesByScene('lahio');
     expect(lahioGames.map((g) => g.id)).toEqual(['jatekatos', 'rappukaytava']);
 
+    expect(getGamesByScene('kaupunki').map((g) => g.id)).toEqual(['ajanvaraus']);
+
     const unknownGames = getGamesByScene('unknown');
     expect(unknownGames).toEqual([]);
   });
@@ -47,8 +49,8 @@ describe('Scene Index Module', () => {
   it('getRecommendedGames returns games with sequential numbers and scenes in order', () => {
     const recs = getRecommendedGames();
     expect(Array.isArray(recs)).toBe(true);
-    expect(recs.length).toBe(3);
-    expect(recs.map((r) => r.game.id)).toEqual(['vaatteet', 'jatekatos', 'rappukaytava']);
+    expect(recs.length).toBe(4);
+    expect(recs.map((r) => r.game.id)).toEqual(['vaatteet', 'jatekatos', 'rappukaytava', 'ajanvaraus']);
 
     recs.forEach((item, idx) => {
       expect(item.number).toBe(idx + 1);
@@ -61,6 +63,7 @@ describe('Scene Index Module', () => {
   it('getUpcomingGames lists only games that are not built yet', () => {
     expect(getUpcomingGames('lahio')).toEqual([]);
     expect(getUpcomingGames('koti')).toEqual([]);
+    expect(getUpcomingGames('kaupunki').map((u) => u.id)).toEqual(['pankkiautomaatti']);
   });
 
   it('getNextRecommended returns the next game or null if last/unknown', () => {
@@ -68,7 +71,8 @@ describe('Scene Index Module', () => {
     const nextAfterJatekatos = getNextRecommended('jatekatos');
     expect(nextAfterJatekatos.game.id).toBe('rappukaytava');
     expect(nextAfterJatekatos.number).toBe(3);
-    expect(getNextRecommended('rappukaytava')).toBeNull();
+    expect(getNextRecommended('rappukaytava').game.id).toBe('ajanvaraus');
+    expect(getNextRecommended('ajanvaraus')).toBeNull();
     expect(getNextRecommended('non-existent')).toBeNull();
     expect(getNextRecommended(null)).toBeNull();
   });

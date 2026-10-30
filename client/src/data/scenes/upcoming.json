@@ -9,5 +9,16 @@
       "en": "In the stairwell",
       "ja": "階段で"
     }
+  },
+  {
+    "id": "pankkiautomaatti",
+    "sceneId": "kaupunki",
+    "icon": "🏧",
+    "number": 5,
+    "title": {
+      "fi": "Pankkiautomaatilla",
+      "en": "At the ATM",
+      "ja": "ATM で"
+    }
   }
 ]
