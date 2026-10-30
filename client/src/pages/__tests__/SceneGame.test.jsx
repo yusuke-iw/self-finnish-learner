@@ -10,6 +10,7 @@ import vaatteet from '../../data/scenes/vaatteet.json';
 import jatekatos from '../../data/scenes/jatekatos.json';
 import rappukaytava from '../../data/scenes/rappukaytava.json';
 import ajanvaraus from '../../data/scenes/ajanvaraus.json';
+import pankkiautomaatti from '../../data/scenes/pankkiautomaatti.json';
 import { setSceneTextMode } from '../../utils/sceneText';
 import { hasJapanese } from '../../utils/sceneText';
 
@@ -217,7 +218,7 @@ describe('SceneGame Page', () => {
   });
 
   it.each(ajanvaraus.dialogues.map((d, i) => [d.id, i]))(
-    'plays the /scenes/ajanvaraus dialogue %s through to the end and offers no next game',
+    'plays the /scenes/ajanvaraus dialogue %s through to the end and offers the ATM game next',
     (_id, index) => {
       // Pin the random pick to this dialogue
       const randomSpy = vi.spyOn(Math, 'random').mockReturnValue((index + 0.5) / ajanvaraus.dialogues.length);
@@ -244,12 +245,44 @@ describe('SceneGame Page', () => {
 
       expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
       expect(hasPlayed('ajanvaraus')).toBe(true);
-      expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: /次のおすすめ|Next recommended/ }));
+      expect(mockNavigate).toHaveBeenCalledWith('/scenes/pankkiautomaatti');
       fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
       expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l9&level=1');
       randomSpy.mockRestore();
     }
   );
+
+  it('plays the procedure game for /scenes/pankkiautomaatti through to the end, marks it played, and offers no next game', () => {
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0);
+    renderGame('pankkiautomaatti');
+    expect(screen.getByRole('heading', { level: 2, name: /Pankkiautomaatilla/ })).toBeInTheDocument();
+
+    const procedure = pankkiautomaatti.procedures[0];
+    const buttonsGroup = screen.getByRole('group', { name: /ボタン|Buttons/ });
+
+    for (let i = 0; i < procedure.steps.length; i++) {
+      const step = procedure.steps[i];
+      const correctBtnData = step.buttons.find((b) => b.correct);
+      expect(correctBtnData).toBeDefined();
+
+      const btnEl = within(buttonsGroup)
+        .getAllByRole('button')
+        .find((b) => b.textContent.includes(correctBtnData.label.fi));
+      expect(btnEl).toBeDefined();
+      fireEvent.click(btnEl);
+
+      const isLast = i === procedure.steps.length - 1;
+      fireEvent.click(screen.getByRole('button', { name: isLast ? /Valmis!/ : /次へ|Next/i }));
+    }
+
+    expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+    expect(hasPlayed('pankkiautomaatti')).toBe(true);
+    expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
+    expect(mockNavigate).toHaveBeenCalledWith(`/sessions?lessonId=${pankkiautomaatti.relatedLessonId}&level=1`);
+    randomSpy.mockRestore();
+  });
 
   it('offers the sort game as the next recommended game after the outfit game', () => {
     renderGame('vaatteet');

@@ -4,6 +4,7 @@ import vaatteet from '../scenes/vaatteet.json';
 import jatekatos from '../scenes/jatekatos.json';
 import rappukaytava from '../scenes/rappukaytava.json';
 import ajanvaraus from '../scenes/ajanvaraus.json';
+import pankkiautomaatti from '../scenes/pankkiautomaatti.json';
 import upcoming from '../scenes/upcoming.json';
 import { getUpcomingGames, getRecommendedGames } from '../scenes/index';
 import { findLessonById } from '../curriculumData';
@@ -11,7 +12,7 @@ import { hasJapanese } from '../../utils/sceneText';
 import { SPEAKERS } from '../../utils/speakers';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus];
+  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -47,7 +48,7 @@ describe('Scene Data Schema & Integrity', () => {
 
   it('games have unique ASCII lowercase/hyphen IDs and known types', () => {
     const seenGameIds = new Set();
-    const knownTypes = ['outfit', 'sort', 'dialogue'];
+    const knownTypes = ['outfit', 'sort', 'dialogue', 'procedure'];
 
     for (const game of games) {
       expect(game.id).toMatch(/^[a-z0-9-]+$/);
@@ -357,6 +358,73 @@ describe('Scene Data Schema & Integrity', () => {
     }
   });
 
+  it('procedure games have valid procedures, steps, buttons, keys, feedback, and selko text', () => {
+    const procedureGames = games.filter((g) => g.type === 'procedure');
+    expect(procedureGames.length).toBeGreaterThan(0);
+    const validKeys = ['ok', 'korjaa', 'peruuta', null];
+
+    for (const game of procedureGames) {
+      expect(Array.isArray(game.procedures)).toBe(true);
+      expect(game.procedures.length).toBeGreaterThanOrEqual(1);
+
+      const procIds = game.procedures.map((p) => p.id);
+      expect(new Set(procIds).size).toBe(procIds.length);
+
+      for (const proc of game.procedures) {
+        expect(proc.id).toMatch(/^[a-z0-9-]+$/);
+        expect(proc.goal?.fi).toBeTruthy();
+        expect(proc.goal?.en).toBeTruthy();
+        expect(proc.goal?.selko).toBeTruthy();
+
+        expect(Array.isArray(proc.steps)).toBe(true);
+        expect(proc.steps.length).toBeGreaterThan(0);
+
+        const stepIds = proc.steps.map((s) => s.id);
+        expect(new Set(stepIds).size).toBe(stepIds.length);
+
+        for (const step of proc.steps) {
+          expect(step.id).toMatch(/^[a-z0-9-]+$/);
+          expect(Array.isArray(step.screen)).toBe(true);
+          expect(step.screen.length).toBeGreaterThan(0);
+
+          for (const line of step.screen) {
+            expect(line.fi).toBeTruthy();
+            expect(line.en).toBeTruthy();
+            if (line.fi !== '****') {
+              expect(line.selko).toBeTruthy();
+            }
+          }
+
+          if (step.question !== null && step.question !== undefined) {
+            expect(step.question.fi).toBeTruthy();
+            expect(step.question.en).toBeTruthy();
+            expect(step.question.selko).toBeTruthy();
+          }
+
+          expect(Array.isArray(step.buttons)).toBe(true);
+          expect(step.buttons.length).toBeGreaterThanOrEqual(2);
+
+          const buttonIds = step.buttons.map((b) => b.id);
+          expect(new Set(buttonIds).size).toBe(buttonIds.length);
+
+          const correctButtons = step.buttons.filter((b) => b.correct === true);
+          expect(correctButtons).toHaveLength(1);
+
+          for (const btn of step.buttons) {
+            expect(btn.id).toMatch(/^[a-z0-9-]+$/);
+            expect(btn.label?.fi).toBeTruthy();
+            expect(btn.label?.en).toBeTruthy();
+            expect(validKeys).toContain(btn.key);
+            expect(typeof btn.correct).toBe('boolean');
+            expect(btn.feedback?.fi).toBeTruthy();
+            expect(btn.feedback?.en).toBeTruthy();
+            expect(btn.feedback?.selko).toBeTruthy();
+          }
+        }
+      }
+    }
+  });
+
   it('upcoming games point to a scene, and rappukaytava is no longer an upcoming game in lahio', () => {
     const sceneIds = scenes.map((s) => s.id);
     for (const u of upcoming) {
@@ -367,12 +435,14 @@ describe('Scene Data Schema & Integrity', () => {
     expect(getUpcomingGames('lahio').some((u) => u.id === 'rappukaytava')).toBe(false);
   });
 
-  it('kaupunki has the phone-call game as its first game and is no longer marked coming soon', () => {
+  it('kaupunki has the phone-call and ATM games and is no longer marked coming soon', () => {
     const kaupunki = scenes.find((s) => s.id === 'kaupunki');
-    expect(kaupunki.gameIds).toContain('ajanvaraus');
+    expect(kaupunki.gameIds).toEqual(['ajanvaraus', 'pankkiautomaatti']);
     expect(kaupunki.comingSoon).toBeUndefined();
     expect(ajanvaraus.sceneId).toBe('kaupunki');
     expect(ajanvaraus.relatedLessonId).toBe('l9');
+    expect(pankkiautomaatti.sceneId).toBe('kaupunki');
+    expect(findLessonById(pankkiautomaatti.relatedLessonId)).toBeDefined();
   });
 
   it('ajanvaraus is the 4th recommended game', () => {
@@ -393,13 +463,12 @@ describe('Scene Data Schema & Integrity', () => {
     expect(ajanvaraus.vocabulary.length).toBeLessThanOrEqual(12);
   });
 
-  it('the ATM game is announced as upcoming in kaupunki', () => {
+  it('the ATM game is built in kaupunki and no longer listed as upcoming', () => {
     const upcomingKaupunki = getUpcomingGames('kaupunki');
-    const atm = upcomingKaupunki.find((u) => u.id === 'pankkiautomaatti');
-    expect(atm).toBeDefined();
-    expect(atm.number).toBe(5);
-    expect(atm.title.fi).toBe('Pankkiautomaatilla');
-    expect(upcomingKaupunki.some((u) => u.id === 'ajanvaraus')).toBe(false);
+    expect(upcomingKaupunki).toEqual([]);
+    const recs = getRecommendedGames();
+    expect(recs[4].game.id).toBe('pankkiautomaatti');
+    expect(recs[4].number).toBe(5);
   });
 
   it('hasJapanese correctly identifies whether games have full Japanese text', () => {
@@ -407,5 +476,6 @@ describe('Scene Data Schema & Integrity', () => {
     expect(hasJapanese(jatekatos)).toBe(true);
     expect(hasJapanese(rappukaytava)).toBe(true);
     expect(hasJapanese(ajanvaraus)).toBe(true);
+    expect(hasJapanese(pankkiautomaatti)).toBe(true);
   });
 });

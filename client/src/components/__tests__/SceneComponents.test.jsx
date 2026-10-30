@@ -9,6 +9,7 @@ import SceneResult from '../scenes/SceneResult';
 import OutfitGame from '../scenes/OutfitGame';
 import SortGame from '../scenes/SortGame';
 import DialogueScene from '../scenes/DialogueScene';
+import ProcedureSim from '../scenes/ProcedureSim';
 import * as audioModule from '../../utils/audio';
 import * as soundModule from '../../utils/feedbackSounds';
 import * as statsModule from '../../utils/studyStats';
@@ -953,6 +954,219 @@ describe('Scene UI Components', () => {
 
       const audioBtns = screen.getAllByRole('button', { name: /発音を聞く|Listen$/i });
       expect(() => fireEvent.click(audioBtns[0])).not.toThrow();
+    });
+  });
+
+  describe('ProcedureSim', () => {
+    const procedureGame = {
+      id: 'atm-test',
+      playLength: 1,
+      procedures: [
+        {
+          id: 'nosto',
+          goal: {
+            fi: 'Nosta 40 euroa.',
+            selko: 'Ota 40 euroa.',
+            en: 'Withdraw 40 euros.'
+          },
+          steps: [
+            {
+              id: 's1',
+              screen: [
+                {
+                  fi: 'Valitse kieli',
+                  selko: 'Valitse kieli, jota käytät.',
+                  en: 'Choose a language'
+                }
+              ],
+              question: null,
+              buttons: [
+                {
+                  id: 'fi',
+                  label: { fi: 'Suomi', en: 'Finnish' },
+                  key: null,
+                  correct: true,
+                  feedback: {
+                    fi: 'Hyvä! Valitsit suomen.',
+                    selko: 'Hyvä! Valitsit suomen.',
+                    en: 'Good! You chose Finnish.'
+                  }
+                },
+                {
+                  id: 'sv',
+                  label: { fi: 'Svenska', en: 'Swedish' },
+                  key: null,
+                  correct: false,
+                  feedback: {
+                    fi: 'Svenska on ruotsi.',
+                    selko: 'Se on ruotsi.',
+                    en: 'Svenska is Swedish.'
+                  }
+                }
+              ]
+            },
+            {
+              id: 's2',
+              screen: [
+                {
+                  fi: 'Näppäile tunnusluku ja paina OK',
+                  selko: 'Kirjoita tunnusluku. Paina OK.',
+                  en: 'Enter PIN and press OK'
+                },
+                { fi: '****', en: '****' }
+              ],
+              question: null,
+              buttons: [
+                {
+                  id: 'ok',
+                  label: { fi: 'OK', en: 'OK' },
+                  key: 'ok',
+                  correct: true,
+                  feedback: {
+                    fi: 'Hyvä! OK vahvistaa.',
+                    selko: 'Hyvä! OK vahvistaa.',
+                    en: 'Good! OK confirms.'
+                  }
+                },
+                {
+                  id: 'korjaa',
+                  label: { fi: 'Korjaa', en: 'Correct' },
+                  key: 'korjaa',
+                  correct: false,
+                  feedback: {
+                    fi: 'Korjaa pyyhkii numeron.',
+                    selko: 'Korjaa poistaa numeron.',
+                    en: 'Korjaa clears a digit.'
+                  }
+                },
+                {
+                  id: 'peruuta',
+                  label: { fi: 'Peruuta', en: 'Cancel' },
+                  key: 'peruuta',
+                  correct: false,
+                  feedback: {
+                    fi: 'Peruuta keskeyttää tapahtuman.',
+                    selko: 'Peruuta lopettaa.',
+                    en: 'Peruuta cancels the transaction.'
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const renderProcedure = (onFinish = vi.fn(), mode = 'en') =>
+      render(
+        <LanguageProvider>
+          <ProcedureSim game={procedureGame} mode={mode} onFinish={onFinish} />
+        </LanguageProvider>
+      );
+
+    it('renders nothing when game has no procedures', () => {
+      const { container } = render(
+        <LanguageProvider>
+          <ProcedureSim game={{ procedures: [] }} mode="en" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+      expect(container.firstChild).toBeNull();
+    });
+
+    it('always renders screen text in fi, shows translation in en mode, hides translation in fi mode, and falls back to en in ja mode when ja is missing', () => {
+      const { container, rerender } = render(
+        <LanguageProvider>
+          <ProcedureSim game={procedureGame} mode="en" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+
+      const atmScreen = container.querySelector('.scene-atm-screen');
+      expect(atmScreen.querySelector('.scene-text-main')?.textContent).toBe('Valitse kieli');
+      expect(atmScreen.querySelector('.scene-text-sub')?.textContent).toBe('Choose a language');
+
+      // fi mode: no sub translation on screen or buttons
+      rerender(
+        <LanguageProvider>
+          <ProcedureSim game={procedureGame} mode="fi" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+      expect(atmScreen.querySelector('.scene-text-main')?.textContent).toBe('Valitse kieli');
+      expect(atmScreen.querySelector('.scene-text-sub')).toBeNull();
+
+      // selko mode: main stays fi on the ATM screen, sub shows selko
+      rerender(
+        <LanguageProvider>
+          <ProcedureSim game={procedureGame} mode="selko" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+      expect(atmScreen.querySelector('.scene-text-main')?.textContent).toBe('Valitse kieli');
+      expect(atmScreen.querySelector('.scene-text-sub')?.textContent).toBe('Valitse kieli, jota käytät.');
+
+      // ja mode on data without ja: falls back to en
+      rerender(
+        <LanguageProvider>
+          <ProcedureSim game={procedureGame} mode="ja" onFinish={vi.fn()} />
+        </LanguageProvider>
+      );
+      expect(atmScreen.querySelector('.scene-text-main')?.textContent).toBe('Valitse kieli');
+      expect(atmScreen.querySelector('.scene-text-sub')?.textContent).toBe('Choose a language');
+    });
+
+    it('marks wrong button red with feedback, records answer once per step, applies key color classes, skips **** in audio, and calls onFinish on the last step', () => {
+      const onFinish = vi.fn();
+      const { container } = renderProcedure(onFinish, 'en');
+
+      expect(screen.getByText('1 / 2')).toBeInTheDocument();
+
+      // Wrong tap on step 1
+      const wrongBtn = screen.getByRole('button', { name: /Svenska/ });
+      fireEvent.click(wrongBtn);
+      expect(wrongBtn).toHaveClass('scene-atm-wrong');
+      expect(wrongBtn).toBeDisabled();
+      expect(screen.getByRole('status')).toHaveTextContent('Svenska on ruotsi.');
+      expect(soundModule.playIncorrectSound).toHaveBeenCalledTimes(1);
+      expect(statsModule.recordAnswer).toHaveBeenCalledTimes(1);
+
+      // Correct tap on step 1 (retry should not call recordAnswer again)
+      const rightBtn = screen.getByRole('button', { name: /Suomi/ });
+      fireEvent.click(rightBtn);
+      expect(statsModule.recordAnswer).toHaveBeenCalledTimes(1);
+      expect(soundModule.playCorrectSound).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('status')).toHaveTextContent('Hyvä! Valitsit suomen.');
+
+      // Advance to step 2
+      fireEvent.click(screen.getByRole('button', { name: /次へ|Next/ }));
+      expect(screen.getByText('2 / 2')).toBeInTheDocument();
+
+      // Check **** line does not duplicate translation sub and is excluded from audio
+      const lines = container.querySelectorAll('.scene-atm-screen-line');
+      expect(lines).toHaveLength(2);
+      expect(lines[1].querySelector('.scene-text-sub')).toBeNull();
+
+      fireEvent.click(screen.getByRole('button', { name: /発音を聞く|Listen$/ }));
+      expect(audioModule.playAudio).toHaveBeenCalledWith(
+        'Näppäile tunnusluku ja paina OK',
+        's2-screen',
+        'fi-FI',
+        1.0,
+        expect.anything()
+      );
+
+      // Check key color classes on step 2
+      const okBtn = screen.getByRole('button', { name: /^OK/ });
+      const korjaaBtn = screen.getByRole('button', { name: /Korjaa/ });
+      const peruutaBtn = screen.getByRole('button', { name: /Peruuta/ });
+      expect(okBtn).toHaveClass('scene-atm-key', 'scene-atm-key-ok');
+      expect(korjaaBtn).toHaveClass('scene-atm-key', 'scene-atm-key-korjaa');
+      expect(peruutaBtn).toHaveClass('scene-atm-key', 'scene-atm-key-peruuta');
+
+      // Correct tap on final step -> Valmis! -> onFinish
+      fireEvent.click(okBtn);
+      expect(statsModule.recordAnswer).toHaveBeenCalledTimes(2);
+      const doneBtn = screen.getByRole('button', { name: /Valmis!/ });
+      fireEvent.click(doneBtn);
+      expect(soundModule.playLessonCompleteSound).toHaveBeenCalledTimes(1);
+      expect(onFinish).toHaveBeenCalledTimes(1);
     });
   });
 });

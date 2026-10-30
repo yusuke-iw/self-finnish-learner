@@ -3,11 +3,12 @@ import vaatteet from './vaatteet.json';
 import jatekatos from './jatekatos.json';
 import rappukaytava from './rappukaytava.json';
 import ajanvaraus from './ajanvaraus.json';
+import pankkiautomaatti from './pankkiautomaatti.json';
 import upcoming from './upcoming.json';
 
 export const scenes = [...rawScenes].sort((a, b) => a.order - b.order);
 
-export const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus];
+export const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti];
 
 const gamesMap = new Map(games.map((g) => [g.id, g]));
 
