@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { findGameById, getNextRecommended } from '../data/scenes/index';
 import OutfitGame from '../components/scenes/OutfitGame';
 import SortGame from '../components/scenes/SortGame';
+import ProcedureSim from '../components/scenes/ProcedureSim';
 import DialogueScene from '../components/scenes/DialogueScene';
 import SceneResult from '../components/scenes/SceneResult';
 import SceneText from '../components/scenes/SceneText';
@@ -17,6 +18,12 @@ import { markGamePlayed } from '../utils/sceneProgress';
 import { getStudyStats } from '../utils/studyStats';
 import { saveProgress } from '../services/api';
 import { useLanguage } from '../context/useLanguage';
+
+const GAME_COMPONENTS = {
+  outfit: OutfitGame,
+  sort: SortGame,
+  procedure: ProcedureSim
+};
 
 // Keyed by gameId so that moving to the next recommended game (same route, new id)
 // starts fresh instead of keeping the previous game's finished state.
@@ -76,6 +83,7 @@ function SceneGameBody({ gameId }) {
   };
 
   const nextRecommended = getNextRecommended(game.id);
+  const GameComponent = GAME_COMPONENTS[game.type] || DialogueScene;
 
   return (
     <div className="scene-game-page">
@@ -98,28 +106,12 @@ function SceneGameBody({ gameId }) {
 
       <main className="scene-game-content">
         {!isFinished ? (
-          game.type === 'outfit' ? (
-            <OutfitGame
-              key={replayKey}
-              game={game}
-              mode={displayMode}
-              onFinish={handleFinish}
-            />
-          ) : game.type === 'sort' ? (
-            <SortGame
-              key={replayKey}
-              game={game}
-              mode={displayMode}
-              onFinish={handleFinish}
-            />
-          ) : (
-            <DialogueScene
-              key={replayKey}
-              game={game}
-              mode={displayMode}
-              onFinish={handleFinish}
-            />
-          )
+          <GameComponent
+            key={replayKey}
+            game={game}
+            mode={displayMode}
+            onFinish={handleFinish}
+          />
         ) : (
           <SceneResult
             game={game}

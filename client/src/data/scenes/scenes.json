@@ -36,7 +36,8 @@
       "ja": "街"
     },
     "gameIds": [
-      "ajanvaraus"
+      "ajanvaraus",
+      "pankkiautomaatti"
     ]
   }
 ]

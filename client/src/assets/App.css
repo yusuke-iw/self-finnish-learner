@@ -4634,6 +4634,180 @@
   color: var(--accent);
 }
 
+/* ---- Procedure (ATM) ---- */
+.scene-atm-game {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scene-atm-goal {
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scene-atm-goal-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.scene-atm-goal-text .scene-text-main {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.scene-atm-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(180px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.scene-atm-screen {
+  padding: 20px;
+  background: var(--bg-input);
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 160px;
+}
+
+.scene-atm-screen-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scene-atm-screen-line .scene-text-main {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.scene-atm-screen-line .scene-text-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.scene-atm-question {
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.scene-atm-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scene-atm-side-btn,
+.scene-atm-key {
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  transition: all 0.2s var(--ease);
+}
+
+.scene-atm-side-btn:hover:not(:disabled),
+.scene-atm-key:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.scene-atm-key {
+  border-left-width: 6px;
+}
+
+.scene-atm-key-ok {
+  border-color: var(--success);
+  background: var(--success-dim);
+}
+
+.scene-atm-key-korjaa {
+  border-color: var(--warning);
+  background: var(--warning-dim);
+}
+
+.scene-atm-key-peruuta {
+  border-color: var(--error);
+  background: var(--error-dim);
+}
+
+.scene-atm-wrong {
+  border-color: var(--error);
+  background: var(--error-dim);
+  opacity: 0.85;
+}
+
+.scene-atm-correct {
+  border-color: var(--success);
+  background: var(--success-dim);
+}
+
+.scene-atm-mark {
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.scene-atm-wrong .scene-atm-mark {
+  color: var(--error);
+}
+
+.scene-atm-correct .scene-atm-mark {
+  color: var(--success);
+}
+
+.scene-atm-feedback {
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.scene-atm-feedback-wrong {
+  border-color: var(--error);
+  background: var(--error-dim);
+  color: var(--error);
+}
+
+.scene-atm-feedback-correct {
+  border-color: var(--success);
+  background: var(--success-dim);
+}
+
+@media (max-width: 560px) {
+  .scene-atm-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---- Scene Result ---- */
 .scene-result {
   display: flex;

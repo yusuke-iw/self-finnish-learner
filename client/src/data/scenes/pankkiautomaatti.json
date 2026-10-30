@@ -1,0 +1,508 @@
+{
+  "id": "pankkiautomaatti",
+  "sceneId": "kaupunki",
+  "type": "procedure",
+  "schemaVersion": 1,
+  "icon": "🏧",
+  "title": {
+    "fi": "Pankkiautomaatilla",
+    "en": "At the ATM",
+    "ja": "ATM で"
+  },
+  "place": {
+    "fi": "pankkiautomaatti",
+    "en": "ATM",
+    "ja": "ATM"
+  },
+  "instruction": {
+    "fi": "Käytät pankkiautomaattia. Lue ruutu ja paina oikeaa nappia.",
+    "selko": "Olet pankkiautomaatilla. Lue ruudun teksti. Paina oikeaa nappia.",
+    "en": "You are using an ATM. Read the screen and press the right button.",
+    "ja": "ATM を使う。画面を読んで、合うボタンを押そう。"
+  },
+  "playLength": 1,
+  "relatedLessonId": "l1",
+  "procedures": [
+    {
+      "id": "nosto",
+      "goal": {
+        "fi": "Nosta 40 euroa käteistä. Et tarvitse kuittia.",
+        "selko": "Nosta 40 euroa. Et tarvitse kuittia.",
+        "en": "Withdraw 40 euros in cash. You don't need a receipt.",
+        "ja": "現金を 40 ユーロ引き出す。レシートはいらない。"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "screen": [
+            {
+              "fi": "Valitse kieli",
+              "selko": "Valitse kieli, jota haluat käyttää.",
+              "en": "Choose a language",
+              "ja": "言語を選んでください"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "suomi",
+              "label": {
+                "fi": "Suomi",
+                "en": "Finnish",
+                "ja": "フィンランド語"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Valitsit suomen kielen, joten ruudun tekstit ovat nyt suomeksi.",
+                "selko": "Hyvä! Nyt automaatti käyttää suomen kieltä.",
+                "en": "Good! You chose Finnish, so the screen texts will now be in Finnish.",
+                "ja": "フィンランド語を選んだので、これからの画面はフィンランド語で出ます。"
+              }
+            },
+            {
+              "id": "svenska",
+              "label": {
+                "fi": "Svenska",
+                "en": "Swedish",
+                "ja": "スウェーデン語"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Svenska\" on ruotsin kieli. Tässä harjoituksessa käytämme suomea, joten valitse \"Suomi\".",
+                "selko": "Svenska tarkoittaa ruotsin kieltä. Valitse Suomi.",
+                "en": "\"Svenska\" is Swedish. In this practice we use Finnish, so choose \"Suomi\".",
+                "ja": "「Svenska」はスウェーデン語です。ここではフィンランド語を練習するので「Suomi」を選びます。"
+              }
+            },
+            {
+              "id": "english",
+              "label": {
+                "fi": "English",
+                "en": "English",
+                "ja": "英語"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"English\" vaihtaa kielen englanniksi. Harjoittelemme suomeksi asiointia, joten valitse \"Suomi\".",
+                "selko": "Haluamme harjoitella suomea. Valitse Suomi.",
+                "en": "\"English\" switches the screen to English. We're practicing Finnish, so choose \"Suomi\".",
+                "ja": "「English」は英語に切り替わります。フィンランド語の練習なので「Suomi」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "screen": [
+            {
+              "fi": "Näppäile tunnusluku ja paina OK",
+              "selko": "Kirjoita tunnusluku. Paina sitten OK.",
+              "en": "Enter your PIN and press OK",
+              "ja": "暗証番号を入力して OK を押してください"
+            },
+            {
+              "fi": "****",
+              "en": "****",
+              "ja": "****"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "ok",
+              "label": {
+                "fi": "OK",
+                "en": "OK",
+                "ja": "OK"
+              },
+              "key": "ok",
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Tunnusluku on näppäilty, ja vihreä OK-näppäin vahvistaa sen.",
+                "selko": "Hyvä! Vihreä OK-näppäin hyväksyy tunnusluvun.",
+                "en": "Good! Your PIN has been entered, and the green OK key confirms it.",
+                "ja": "暗証番号が入力されているので、緑の OK キーで確定します。"
+              }
+            },
+            {
+              "id": "korjaa",
+              "label": {
+                "fi": "Korjaa",
+                "en": "Clear / Correct",
+                "ja": "訂正"
+              },
+              "key": "korjaa",
+              "correct": false,
+              "feedback": {
+                "fi": "Keltainen \"Korjaa\" pyyhkii näppäillyn numeron. Tunnusluku on jo valmiina, joten paina \"OK\".",
+                "selko": "Korjaa poistaa numeron. Tunnusluku on jo oikein. Paina OK.",
+                "en": "The yellow \"Korjaa\" key clears what you typed. The PIN is already entered, so press \"OK\".",
+                "ja": "黄色の「Korjaa（訂正）」は入力した数字を消すキーです。暗証番号はもう入っているので「OK」を押します。"
+              }
+            },
+            {
+              "id": "peruuta",
+              "label": {
+                "fi": "Peruuta",
+                "en": "Cancel",
+                "ja": "取消"
+              },
+              "key": "peruuta",
+              "correct": false,
+              "feedback": {
+                "fi": "Punainen \"Peruuta\" keskeyttää koko tapahtuman ja palauttaa kortin. Paina \"OK\" jatkaaksesi.",
+                "selko": "Peruuta lopettaa käytön ja antaa kortin takaisin. Paina OK.",
+                "en": "The red \"Peruuta\" key cancels the whole transaction and returns your card. Press \"OK\" to continue.",
+                "ja": "赤の「Peruuta（取消）」は取引を中止してカードを返却します。続けるには「OK」を押します。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s3",
+          "screen": [
+            {
+              "fi": "Valitse toiminto",
+              "selko": "Valitse, mitä haluat tehdä.",
+              "en": "Select a transaction",
+              "ja": "取引を選んでください"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "nosto",
+              "label": {
+                "fi": "Nosto",
+                "en": "Withdrawal",
+                "ja": "引き出し"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! \"Nosto\" tarkoittaa käteisen nostamista tililtä.",
+                "selko": "Hyvä! Nosto tarkoittaa, että otat tililtä rahaa.",
+                "en": "Good! \"Nosto\" (withdrawal) means taking cash out of your account.",
+                "ja": "「Nosto（引き出し）」は口座から現金を引き出すことです。"
+              }
+            },
+            {
+              "id": "saldo",
+              "label": {
+                "fi": "Saldo",
+                "en": "Balance",
+                "ja": "残高照会"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Saldo\" näyttää vain, paljonko tilillä on rahaa. Kun haluat nostaa käteistä, valitse \"Nosto\".",
+                "selko": "Saldo näyttää vain tilin rahamäärän. Valitse Nosto, kun haluat rahaa.",
+                "en": "\"Saldo\" only shows how much money is in your account. To withdraw cash, choose \"Nosto\".",
+                "ja": "「Saldo」は口座の残高を見るだけです。現金を引き出すときは「Nosto」を選びます。"
+              }
+            },
+            {
+              "id": "tilinsiirto",
+              "label": {
+                "fi": "Tilinsiirto",
+                "en": "Bank transfer",
+                "ja": "振込"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Tilinsiirto\" siirtää rahaa tililtä toiselle. Käteisen nostoon valitaan \"Nosto\".",
+                "selko": "Tilinsiirto lähettää rahaa toiselle tilille. Valitse Nosto.",
+                "en": "\"Tilinsiirto\" transfers money to another account. For cash withdrawal, choose \"Nosto\".",
+                "ja": "「Tilinsiirto」は別の口座へのお金の振込です。現金を引き出すには「Nosto」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "screen": [
+            {
+              "fi": "Valitse summa",
+              "selko": "Valitse, kuinka paljon rahaa nostat.",
+              "en": "Select an amount",
+              "ja": "金額を選んでください"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "20",
+              "label": {
+                "fi": "20 €",
+                "en": "€20",
+                "ja": "20 €"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Tarkoitus oli nostaa 40 euroa, ei 20 euroa.",
+                "selko": "Sinun piti nostaa 40 euroa. Valitse 40 €.",
+                "en": "Your goal is to withdraw 40 euros, not 20 euros.",
+                "ja": "目的は 40 ユーロの引き出しなので、20 ユーロではありません。"
+              }
+            },
+            {
+              "id": "40",
+              "label": {
+                "fi": "40 €",
+                "en": "€40",
+                "ja": "40 €"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Valitsit 40 euroa, kuten oli tarkoitus.",
+                "selko": "Hyvä! Valitsit oikean summan, 40 euroa.",
+                "en": "Good! You selected 40 euros, just as planned.",
+                "ja": "目的どおり 40 ユーロを選べました。"
+              }
+            },
+            {
+              "id": "60",
+              "label": {
+                "fi": "60 €",
+                "en": "€60",
+                "ja": "60 €"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "60 euroa on liikaa. Tarkoitus oli nostaa 40 euroa.",
+                "selko": "Sinun piti nostaa 40 euroa, ei 60 euroa.",
+                "en": "60 euros is too much. Your goal is to withdraw 40 euros.",
+                "ja": "60 ユーロでは多すぎます。目的は 40 ユーロを引き出すことです。"
+              }
+            },
+            {
+              "id": "muu",
+              "label": {
+                "fi": "Muu summa",
+                "en": "Other amount",
+                "ja": "その他の金額"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Muu summa\" antaa näppäillä jonkin toisen summan itse. Koska 40 € on jo ruudulla, valitse se suoraan.",
+                "selko": "Muu summa tarkoittaa, että kirjoitat summan itse. 40 € on jo ruudulla, joten valitse se.",
+                "en": "\"Muu summa\" lets you type a different amount yourself. Since 40 € is already on the screen, you don't need it.",
+                "ja": "「Muu summa」は別の金額を自分で打つボタンです。40 € はもう画面にあるので不要です。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s5",
+          "screen": [
+            {
+              "fi": "Haluatko kuitin?",
+              "selko": "Haluatko paperisen kuitin?",
+              "en": "Would you like a receipt?",
+              "ja": "レシートは必要ですか？"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "kylla",
+              "label": {
+                "fi": "Kyllä",
+                "en": "Yes",
+                "ja": "はい"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Kyllä\" tulostaa paperisen kuitin. Tällä kertaa et tarvitse kuittia, joten valitse \"Ei\".",
+                "selko": "Et tarvitse kuittia. Valitse Ei.",
+                "en": "\"Kyllä\" prints a paper receipt. This time you don't need a receipt, so choose \"Ei\".",
+                "ja": "「Kyllä（はい）」を押すと紙のレシートが出ます。今回はレシート不要なので「Ei」を選びます。"
+              }
+            },
+            {
+              "id": "ei",
+              "label": {
+                "fi": "Ei",
+                "en": "No",
+                "ja": "いいえ"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Et tarvitse kuittia, joten \"Ei\" on oikea valinta.",
+                "selko": "Hyvä! Et tarvitse kuittia.",
+                "en": "Good! You don't need a receipt, so \"Ei\" (No) is the right choice.",
+                "ja": "レシートはいらないので「Ei（いいえ）」で正解です。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s6",
+          "screen": [
+            {
+              "fi": "Ota kortti",
+              "selko": "Ota pankkikortti automaatista.",
+              "en": "Please take your card",
+              "ja": "カードをお取りください"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "ota-kortti",
+              "label": {
+                "fi": "Otan kortin",
+                "en": "Take the card",
+                "ja": "カードを受け取る"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Automaatti antaa ensin kortin takaisin ja vasta sen jälkeen rahat.",
+                "selko": "Hyvä! Ota ensin kortti. Sitten saat rahat.",
+                "en": "Good! The ATM returns your card first and dispenses the cash only after you take it.",
+                "ja": "ATM では先にカードが返却され、カードを抜いてから現金が出てきます。"
+              }
+            },
+            {
+              "id": "peruuta",
+              "label": {
+                "fi": "Peruuta",
+                "en": "Cancel",
+                "ja": "取消"
+              },
+              "key": "peruuta",
+              "correct": false,
+              "feedback": {
+                "fi": "Nosto on jo valmis ja kortti on tulossa ulos. Älä paina \"Peruuta\", vaan ota kortti.",
+                "selko": "Kortti on jo ulkona. Ota kortti automaatista.",
+                "en": "The withdrawal is already processed and your card is coming out. Don't press \"Peruuta\"—just take your card.",
+                "ja": "手続きは済んでカードが出てきています。取消ではなく、カードを受け取りましょう。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "screen": [
+            {
+              "fi": "Ota rahat",
+              "selko": "Ota rahat automaatista.",
+              "en": "Please take your cash",
+              "ja": "現金をお取りください"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "ota-rahat",
+              "label": {
+                "fi": "Otan rahat",
+                "en": "Take the cash",
+                "ja": "現金を受け取る"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hienoa! Nostit 40 euroa käteistä ja otit sekä kortin että rahat.",
+                "selko": "Hienoa! Sait 40 euroa ja otit rahat.",
+                "en": "Great! You withdrew 40 euros in cash and took both your card and your money.",
+                "ja": "40 ユーロを引き出して、カードも現金も受け取れました。"
+              }
+            },
+            {
+              "id": "syota-kortti",
+              "label": {
+                "fi": "Syötän kortin uudelleen",
+                "en": "Insert the card again",
+                "ja": "カードをもう一度入れる"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Ota rahat\" tarkoittaa, että setelit ovat luukussa valmiina. Ota rahat, älä syötä korttia uudelleen.",
+                "selko": "Rahat ovat jo ulkona. Ota rahat automaatista.",
+                "en": "\"Ota rahat\" means the bills are ready in the slot. Take the cash instead of inserting your card again.",
+                "ja": "「Ota rahat」はお札が出てきているという意味です。カードを入れ直すのではなく、現金を受け取りましょう。"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "pankkiautomaatti-1",
+      "title": {
+        "fi": "Automaatin ohjeet ja käskymuoto",
+        "selko": "Automaatin sanat",
+        "en": "ATM instructions and the imperative",
+        "ja": "画面の決まり文句と命令形"
+      },
+      "body": [
+        {
+          "fi": "Automaatin ja sovellusten ruuduilla käytetään lyhyitä käskymuotoja: \"Syötä kortti\", \"Näppäile tunnusluku\", \"Valitse summa\" ja \"Ota rahat\".",
+          "selko": "Automaatin ruudulla on lyhyitä ohjeita: Syötä kortti. Valitse summa. Ota rahat.",
+          "en": "ATM screens and apps use short imperatives for instructions: \"Syötä kortti\" (Insert card), \"Näppäile tunnusluku\" (Enter PIN), \"Valitse summa\" (Select amount), and \"Ota rahat\" (Take cash).",
+          "ja": "ATM やアプリの画面では、「Syötä kortti（カードを入れてください）」「Näppäile tunnusluku（暗証番号を入力してください）」「Valitse summa（金額を選んでください）」「Ota rahat（現金をお取りください）」のように短い命令形がよく使われます。"
+        },
+        {
+          "fi": "Automaatti antaa ensin kortin takaisin (\"Ota kortti\") ja vasta sen jälkeen setelit (\"Ota rahat\"), jotta kortti ei unohdu koneeseen.",
+          "selko": "Ota ensin kortti. Sen jälkeen saat rahat. Näin kortti ei unohdu automaattiin.",
+          "en": "The machine returns your card first (\"Ota kortti\") and dispenses the bills only after that (\"Ota rahat\"), so you don't forget your card.",
+          "ja": "カードの取り忘れを防ぐため、先にカードが返却され（「Ota kortti」）、カードを抜いてから紙幣が出てきます（「Ota rahat」）。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "imperatiivi (yksikön 2. persoona): syöttää → syötä, näppäillä → näppäile, valita → valitse, ottaa → ota",
+        "selko": "Käskymuoto: syötä, näppäile, valitse, ota",
+        "en": "Imperative (2nd person singular, formed from the 1st person singular minus -n): syöttää → syötä, näppäillä → näppäile, valita → valitse, ottaa → ota",
+        "ja": "命令形（単数 2 人称、1 人称単数現在形から -n を取った形）: syöttää → syötä、näppäillä → näppäile、valita → valitse、ottaa → ota"
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "pankkiautomaatti",
+      "translation": "ATM, cash machine",
+      "translationJa": "ATM・現金自動預払機"
+    },
+    {
+      "word": "kortti",
+      "translation": "card (pankkikortti = bank card)",
+      "translationJa": "カード（pankkikortti ＝ キャッシュカード・デビットカード）"
+    },
+    {
+      "word": "tunnusluku",
+      "translation": "PIN, personal identification number",
+      "translationJa": "暗証番号（PIN コード）"
+    },
+    {
+      "word": "nostaa",
+      "translation": "to withdraw (money); to lift",
+      "translationJa": "（お金を）引き出す・持ち上げる"
+    },
+    {
+      "word": "nosto",
+      "translation": "withdrawal",
+      "translationJa": "引き出し"
+    },
+    {
+      "word": "summa",
+      "translation": "amount, sum",
+      "translationJa": "金額・合計"
+    }
+  ]
+}

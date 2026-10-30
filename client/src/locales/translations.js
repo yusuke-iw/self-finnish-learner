@@ -347,6 +347,11 @@ export const translations = {
         pickReply: '返事を選ぼう',
         better: 'もっと自然な返事',
         writtenLabel: '📖 書き言葉:'
+      },
+      procedure: {
+        goal: '目的',
+        screenLabel: 'ATM の画面',
+        buttonsLabel: 'ボタン'
       }
     }
   },
@@ -699,6 +704,11 @@ export const translations = {
         pickReply: 'Pick your reply',
         better: 'A more natural reply',
         writtenLabel: '📖 Written:'
+      },
+      procedure: {
+        goal: 'Your task',
+        screenLabel: 'ATM screen',
+        buttonsLabel: 'Buttons'
       }
     }
   }
