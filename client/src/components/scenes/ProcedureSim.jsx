@@ -100,6 +100,12 @@ export default function ProcedureSim({ game, mode, onFinish }) {
         <SceneText text={procedure.goal} mode={mode} className="scene-atm-goal-text" />
       </div>
 
+      {step.question && (
+        <div className="scene-atm-question">
+          <SceneText text={step.question} mode={mode} />
+        </div>
+      )}
+
       <div className="scene-atm-layout">
         <div
           className="scene-atm-screen"
@@ -184,12 +190,6 @@ export default function ProcedureSim({ game, mode, onFinish }) {
             })}
         </div>
       </div>
-
-      {step.question && (
-        <div className="scene-atm-question">
-          <SceneText text={step.question} mode={mode} />
-        </div>
-      )}
 
       {lastButton && lastButton.feedback && (
         <div
