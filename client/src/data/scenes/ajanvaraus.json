@@ -1,0 +1,1627 @@
+{
+  "id": "ajanvaraus",
+  "sceneId": "kaupunki",
+  "type": "dialogue",
+  "schemaVersion": 1,
+  "icon": "📞",
+  "title": {
+    "fi": "Ajanvaraus puhelimessa",
+    "en": "Booking an appointment by phone",
+    "ja": "電話で診療の予約"
+  },
+  "place": {
+    "fi": "terveysasema",
+    "en": "health center",
+    "ja": "保健センター"
+  },
+  "instruction": {
+    "fi": "Soitat terveysasemalle. Valitse sopiva vastaus.",
+    "selko": "Soitat terveysasemalle. Hoitaja puhuu sinulle. Valitse hyvä vastaus.",
+    "en": "You call the health center. Choose a suitable reply.",
+    "ja": "保健センターに電話をかける。合う返事を選ぼう。"
+  },
+  "playLength": 1,
+  "relatedLessonId": "l9",
+  "characters": [
+    {
+      "id": "hoitaja",
+      "name": "Helmi",
+      "icon": "👩‍⚕️",
+      "speakerId": "helmi",
+      "role": {
+        "fi": "sairaanhoitaja",
+        "en": "nurse",
+        "ja": "看護師"
+      }
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "varaa-aika",
+      "startNodeId": "n1",
+      "nodes": [
+        {
+          "id": "n1",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Terveysasema, sairaanhoitaja Helmi. Miten voin auttaa?",
+            "spoken": "Terveysasema, sairaanhoitaja Helmi. Miten voin auttaa?",
+            "en": "Health center, this is Nurse Helmi. How can I help you?",
+            "ja": "保健センター、看護師のヘルミです。どうなさいましたか？",
+            "spokenNotes": {
+              "en": "Helmi: same on the phone. You: haluaisin → haluisin.",
+              "ja": "ヘルミ: 電話ではほぼこのまま。あなた: haluaisin → haluisin。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "ok",
+              "next": "n2",
+              "text": {
+                "fi": "Haluaisin varata ajan lääkärille.",
+                "spoken": "Haluisin varata ajan lääkärille.",
+                "en": "I'd like to book an appointment with a doctor.",
+                "ja": "医師の診察の予約を取りたいのですが。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta puhelimessa kerrotaan ensin oma nimi: \"Täällä on …\".",
+                "selko": "Vastaus on oikein. Sano ensin nimesi: Täällä on …",
+                "en": "That works, but on the phone you give your name first: \"Täällä on …\" (This is …).",
+                "ja": "通じますが、電話ではまず「Täällä on …（こちらは〜です）」と名乗ります。"
+              },
+              "spokenNotes": {
+                "en": "You: haluaisin → haluisin.",
+                "ja": "あなた: haluaisin → haluisin。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "good",
+              "next": "n2",
+              "text": {
+                "fi": "Hei, täällä on Alex Kim. Haluaisin varata ajan lääkärille.",
+                "spoken": "Hei, täällä on Alex Kim. Haluisin varata ajan lääkärille.",
+                "en": "Hi, this is Alex Kim. I'd like to book an appointment with a doctor.",
+                "ja": "こんにちは、アレックス・キムです。医師の診察の予約を取りたいのですが。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kerroit ensin nimesi ja sitten asiasi.",
+                "selko": "Hyvä! Sanoit nimesi ja asiasi.",
+                "en": "Good! You gave your name first and then said why you're calling.",
+                "ja": "まず名乗ってから、用件を伝えられました。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "bad",
+              "text": {
+                "fi": "Hei hei!",
+                "spoken": "Hei hei!",
+                "en": "Bye!",
+                "ja": "じゃあね！"
+              },
+              "feedback": {
+                "fi": "\"Hei hei\" sanotaan, kun lopetetaan. Puhelu alkaa vasta. Sano \"hei\" ja kerro nimesi.",
+                "selko": "Sano \"hei hei\" lopussa. Nyt puhelu alkaa. Sano: Hei, täällä on …",
+                "en": "\"Hei hei\" is how you say goodbye. The call is just starting. Say \"hei\" and give your name.",
+                "ja": "「Hei hei」は別れのあいさつです。電話は始まったばかり。「Hei」と言って名乗りましょう。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, voitteko toistaa?",
+                "spoken": "Anteeks, voitteko toistaa?",
+                "en": "Sorry, could you repeat that?",
+                "ja": "すみません、もう一度言っていただけますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch it. Helmi says it again slowly.",
+                "ja": "聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n2",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Selvä. Mikä on syntymäaikasi?",
+            "spoken": "Selvä. Mikä sun syntymäaika on?",
+            "en": "All right. What's your date of birth?",
+            "ja": "わかりました。生年月日を教えてください。",
+            "spokenNotes": {
+              "en": "Helmi: syntymäaikasi → sun syntymäaika. You: syntymäaikani → mun syntymäaika.",
+              "ja": "ヘルミ: syntymäaikasi → sun syntymäaika。あなた: syntymäaikani → mun syntymäaika。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "bad",
+              "text": {
+                "fi": "Olen 34-vuotias.",
+                "spoken": "Mä oon 34-vuotias.",
+                "en": "I'm 34 years old.",
+                "ja": "34 歳です。"
+              },
+              "feedback": {
+                "fi": "Helmi ei kysy ikääsi. Hän kysyy syntymäaikaasi.",
+                "selko": "Helmi kysyy, milloin olet syntynyt. Sano päivä, kuukausi ja vuosi.",
+                "en": "Helmi isn't asking your age. She's asking for your date of birth.",
+                "ja": "ヘルミが聞いているのは年齢ではなく、生年月日です。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "good",
+              "next": "n3",
+              "text": {
+                "fi": "Syntymäaikani on 14.3.1992.",
+                "spoken": "Mun syntymäaika on 14.3.1992.",
+                "en": "My date of birth is March 14, 1992.",
+                "ja": "生年月日は 1992 年 3 月 14 日です。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kerroit syntymäaikasi: päivä, kuukausi ja vuosi.",
+                "selko": "Hyvä! Sanoit päivän, kuukauden ja vuoden.",
+                "en": "Good! You gave your date of birth: day, month, and year.",
+                "ja": "日・月・年の順で生年月日を伝えられました。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, voitteko puhua hitaammin?",
+                "spoken": "Anteeks, voitteko puhuu hitaammin?",
+                "en": "Sorry, could you speak more slowly?",
+                "ja": "すみません、もう少しゆっくり話していただけますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch it. Helmi says it again slowly.",
+                "ja": "聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n3",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Kiitos. Seuraava vapaa aika on torstaina kello 10.15. Sopiiko se?",
+            "spoken": "Kiitos. Seuraava vapaa aika on torstaina kello 10.15. Sopiiks se?",
+            "en": "Thank you. The next available appointment is on Thursday at 10:15 a.m. Does that work for you?",
+            "ja": "ありがとうございます。次に空いているのは木曜日の 10 時 15 分です。ご都合はいかがですか？",
+            "spokenNotes": {
+              "en": "Helmi: sopiiko → sopiiks. You: olen → mä oon, onko → onks, teillä → teil.",
+              "ja": "ヘルミ: sopiiko → sopiiks。あなた: olen → mä oon、onko → onks、teillä → teil。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n4",
+              "text": {
+                "fi": "Aamupäivisin olen töissä. Onko teillä vapaita aikoja iltapäivällä?",
+                "spoken": "Aamupäivisin mä oon töissä. Onks teil vapaita aikoja iltapäivällä?",
+                "en": "I work in the mornings. Do you have anything available in the afternoon?",
+                "ja": "午前中は仕事なんです。午後に空きはありますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kerroit, miksi aika ei sovi, ja kysyit toista aikaa.",
+                "selko": "Hyvä! Kerroit syyn ja kysyit toista aikaa.",
+                "en": "Good! You explained why the time doesn't work and asked for another one.",
+                "ja": "都合が合わない理由を言って、別の時間を頼めました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Kiitos, samoin!",
+                "spoken": "Kiitti, samoin!",
+                "en": "Thanks, you too!",
+                "ja": "ありがとう、あなたも！"
+              },
+              "feedback": {
+                "fi": "\"Samoin\" vastataan toivotukseen. Helmi kysyy, sopiiko aika sinulle.",
+                "selko": "Helmi kysyy kysymyksen. Sano, sopiiko aika.",
+                "en": "\"Samoin\" is a reply to a wish. Helmi is asking whether the time works for you.",
+                "ja": "「Samoin」は願いの言葉への返事です。ヘルミは時間の都合を聞いています。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "ok",
+              "next": "n4",
+              "text": {
+                "fi": "Ei sovi.",
+                "spoken": "Ei sovi.",
+                "en": "That doesn't work.",
+                "ja": "都合が合いません。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta kysy myös toista aikaa, esimerkiksi \"Onko teillä vapaita aikoja iltapäivällä?\".",
+                "selko": "Vastaus on oikein. Kysy myös toista aikaa.",
+                "en": "That works, but also ask for another time, for example \"Onko teillä vapaita aikoja iltapäivällä?\" (Do you have anything in the afternoon?).",
+                "ja": "通じますが、「Onko teillä vapaita aikoja iltapäivällä?（午後に空きはありますか）」のように別の時間も頼みましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n4",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Perjantaina kello 14.30 on vapaa aika. Käykö se?",
+            "spoken": "Perjantaina kello 14.30 on vapaa aika. Käyks se?",
+            "en": "There's an opening on Friday at 2:30 p.m. Would that be OK?",
+            "ja": "金曜日の 14 時 30 分なら空いています。いかがですか？",
+            "spokenNotes": {
+              "en": "Helmi: käykö → käyks. You: kiitos → kiitti.",
+              "ja": "ヘルミ: käykö → käyks。あなた: kiitos → kiitti。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "bad",
+              "text": {
+                "fi": "Ei kiitos.",
+                "spoken": "Ei kiitos.",
+                "en": "No, thank you.",
+                "ja": "いいえ、結構です。"
+              },
+              "feedback": {
+                "fi": "\"Ei kiitos\" tarkoittaa, että et halua aikaa. Sinä tarvitset ajan, ja perjantai iltapäivällä sopii.",
+                "selko": "Sano \"ei kiitos\", kun et halua jotakin. Nyt sinä haluat ajan.",
+                "en": "\"Ei kiitos\" means you're turning the appointment down. You need an appointment, and Friday afternoon works.",
+                "ja": "「Ei kiitos」だと予約を断ることになります。予約は必要で、金曜の午後なら都合が合います。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "ok",
+              "next": "n5",
+              "text": {
+                "fi": "Kyllä.",
+                "spoken": "Joo.",
+                "en": "Yes.",
+                "ja": "はい。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta sano mieluummin \"Sopii hyvin, kiitos\". Silloin Helmi tietää varmasti, että aika sopii.",
+                "selko": "Vastaus on oikein. Sano myös: Sopii hyvin, kiitos.",
+                "en": "That works, but \"Sopii hyvin, kiitos\" is better. Then Helmi knows for sure that the time works.",
+                "ja": "通じますが、「Sopii hyvin, kiitos」と言うと、時間が合うことがはっきり伝わります。"
+              },
+              "spokenNotes": {
+                "en": "You: kyllä → joo (the everyday \"yes\").",
+                "ja": "あなた: kyllä → joo（日常の「はい」）。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, mihin aikaan?",
+                "spoken": "Anteeks, mihin aikaan?",
+                "en": "Sorry, what time?",
+                "ja": "すみません、何時ですか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut aikaa. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo ajan uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch the time. Helmi says it again slowly.",
+                "ja": "時間が聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "good",
+              "next": "n5",
+              "text": {
+                "fi": "Sopii hyvin, kiitos.",
+                "spoken": "Sopii hyvin, kiitti.",
+                "en": "That works well, thank you.",
+                "ja": "大丈夫です、ありがとうございます。"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Sopii hyvin\" on selvä vastaus.",
+                "selko": "Hyvä! Aika sopii sinulle.",
+                "en": "Good! \"Sopii hyvin\" (That works well) is a clear answer.",
+                "ja": "「Sopii hyvin（大丈夫です）」ははっきりした返事です。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n5",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Hyvä. Varasin sinulle ajan lääkäri Laineelle perjantaiksi kello 14.30. Jos et pääse tulemaan, peruuta aika ajoissa.",
+            "spoken": "Hyvä. Varasin sulle ajan lääkäri Laineelle perjantaiks kello 14.30. Jos et pääse tulemaan, peruuta aika ajoissa.",
+            "en": "Good. I've booked you an appointment with Dr. Laine on Friday at 2:30 p.m. If you can't come, please cancel in good time.",
+            "ja": "では、金曜日の 14 時 30 分にライネ医師の予約をお取りしました。来られなくなったら、早めにキャンセルしてください。",
+            "spokenNotes": {
+              "en": "Helmi: sinulle → sulle, perjantaiksi → perjantaiks. You: kiitos → kiitti.",
+              "ja": "ヘルミ: sinulle → sulle、perjantaiksi → perjantaiks。あなた: kiitos → kiitti。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n6",
+              "text": {
+                "fi": "Selvä. Kiitos paljon avusta!",
+                "spoken": "Selvä. Kiitti paljon avusta!",
+                "en": "Got it. Thank you so much for your help!",
+                "ja": "わかりました。ありがとうございました！"
+              },
+              "feedback": {
+                "fi": "Hyvä! Sanoit, että ymmärsit, ja kiitit avusta.",
+                "selko": "Hyvä! Ymmärsit ja kiitit.",
+                "en": "Good! You showed you understood and thanked her for her help.",
+                "ja": "わかったことを伝えて、お礼も言えました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "ok",
+              "next": "n6",
+              "text": {
+                "fi": "Okei.",
+                "spoken": "Okei.",
+                "en": "Okay.",
+                "ja": "オーケー。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta kiitä myös avusta: \"Kiitos paljon avusta!\".",
+                "selko": "Vastaus on oikein. Sano myös kiitos.",
+                "en": "That works, but also thank her: \"Kiitos paljon avusta!\" (Thank you so much for your help!).",
+                "ja": "通じますが、「Kiitos paljon avusta!（ありがとうございました）」とお礼も言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "bad",
+              "text": {
+                "fi": "Ei kestä.",
+                "spoken": "Ei kestä.",
+                "en": "You're welcome.",
+                "ja": "どういたしまして。"
+              },
+              "feedback": {
+                "fi": "\"Ei kestä\" vastataan kiitokseen. Helmi ei kiittänyt sinua. Hän kertoi ajan.",
+                "selko": "Sano \"ei kestä\", kun joku sanoo kiitos. Nyt Helmi kertoo ajan.",
+                "en": "\"Ei kestä\" is a reply to a thank-you. Helmi didn't thank you; she told you your appointment time.",
+                "ja": "「Ei kestä」はお礼への返事です。ヘルミはお礼ではなく、予約の時間を伝えています。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, mikä lääkärin nimi oli?",
+                "spoken": "Anteeks, mikä lääkärin nimi oli?",
+                "en": "Sorry, what was the doctor's name?",
+                "ja": "すみません、医師のお名前は何でしたか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut nimeä. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch the name. Helmi says it again slowly.",
+                "ja": "名前が聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n6",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Ole hyvä. Kuulemiin!",
+            "spoken": "Ole hyvä. Kuulemiin!",
+            "en": "You're welcome. Goodbye!",
+            "ja": "どういたしまして。失礼します。",
+            "spokenNotes": {
+              "en": "Helmi: same on the phone. You: same on the phone.",
+              "ja": "ヘルミ: 電話ではほぼこのまま。あなた: 電話でもこのまま使う。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "ok",
+              "next": null,
+              "text": {
+                "fi": "Hei hei!",
+                "spoken": "Hei hei!",
+                "en": "Bye!",
+                "ja": "じゃあね！"
+              },
+              "feedback": {
+                "fi": "Käy, mutta \"hei hei\" sopii paremmin tutuille. Virallinen puhelu päättyy yleensä sanaan \"kuulemiin\".",
+                "selko": "Vastaus on oikein. Mutta sano mieluummin: Kuulemiin.",
+                "en": "That works, but \"Hei hei\" is better with people you know. A formal call usually ends with \"Kuulemiin\".",
+                "ja": "通じますが、「Hei hei」は親しい人向けです。改まった電話はふつう「Kuulemiin」で終えます。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Hyvää huomenta!",
+                "spoken": "Huomenta!",
+                "en": "Good morning!",
+                "ja": "おはようございます！"
+              },
+              "feedback": {
+                "fi": "\"Hyvää huomenta\" on aamun tervehdys. Nyt puhelu loppuu.",
+                "selko": "Sano \"hyvää huomenta\", kun tapaat jonkun aamulla. Nyt puhelu loppuu.",
+                "en": "\"Hyvää huomenta\" is a morning greeting. Now the call is ending.",
+                "ja": "「Hyvää huomenta」は朝のあいさつです。今は電話を終えるところです。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "good",
+              "next": null,
+              "text": {
+                "fi": "Kuulemiin!",
+                "spoken": "Kuulemiin!",
+                "en": "Goodbye!",
+                "ja": "失礼します！"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Kuulemiin\" on tavallinen tapa lopettaa puhelu.",
+                "selko": "Hyvä! Puhelu loppuu. Sinä sanot: kuulemiin.",
+                "en": "Good! \"Kuulemiin\" is the usual way to end a phone call.",
+                "ja": "「Kuulemiin」は電話を終えるときのふつうのあいさつです。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oireet",
+      "startNodeId": "n1",
+      "nodes": [
+        {
+          "id": "n1",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Terveysasema, sairaanhoitaja Helmi. Mikä sinulla on hätänä?",
+            "spoken": "Terveysasema, sairaanhoitaja Helmi. Mikä sulla on hätänä?",
+            "en": "Health center, this is Nurse Helmi. What's the problem?",
+            "ja": "保健センター、看護師のヘルミです。どうされましたか？",
+            "spokenNotes": {
+              "en": "Helmi: sinulla → sulla. You: minulla → mulla.",
+              "ja": "ヘルミ: sinulla → sulla。あなた: minulla → mulla。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n2",
+              "text": {
+                "fi": "Hei, täällä on Alex Kim. Minulla on kuumetta ja yskää.",
+                "spoken": "Hei, täällä on Alex Kim. Mulla on kuumetta ja yskää.",
+                "en": "Hi, this is Alex Kim. I have a fever and a cough.",
+                "ja": "こんにちは、アレックス・キムです。熱と咳があります。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kerroit nimesi ja oireesi.",
+                "selko": "Hyvä! Sanoit nimesi ja oireesi.",
+                "en": "Good! You gave your name and your symptoms.",
+                "ja": "名乗ってから、症状を伝えられました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Kyllä.",
+                "spoken": "Joo.",
+                "en": "Yes.",
+                "ja": "はい。"
+              },
+              "feedback": {
+                "fi": "Helmi kysyy, mikä sinulla on hätänä. Kerro oireesi, esimerkiksi \"Minulla on kuumetta\".",
+                "selko": "Helmi kysyy, mikä on vialla. Kerro oireesi.",
+                "en": "Helmi is asking what's wrong. Tell her your symptoms, for example \"Minulla on kuumetta\" (I have a fever).",
+                "ja": "ヘルミはどうしたのかを聞いています。「Minulla on kuumetta（熱があります）」のように症状を伝えましょう。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "ok",
+              "next": "n2",
+              "text": {
+                "fi": "Minulla on kuume.",
+                "spoken": "Mulla on kuume.",
+                "en": "I have a fever.",
+                "ja": "熱があります。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta \"Minulla on kuumetta\" (partitiivi) on tavallisempi. Kerro myös nimesi.",
+                "selko": "Vastaus on oikein. Sano mieluummin: Minulla on kuumetta.",
+                "en": "That works, but \"Minulla on kuumetta\" (partitive) is more common. Also give your name.",
+                "ja": "通じますが、分格の「Minulla on kuumetta」のほうがふつうです。名前も言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: minulla → mulla.",
+                "ja": "あなた: minulla → mulla。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, voitteko puhua hitaammin?",
+                "spoken": "Anteeks, voitteko puhuu hitaammin?",
+                "en": "Sorry, could you speak more slowly?",
+                "ja": "すみません、もう少しゆっくり話していただけますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch it. Helmi says it again slowly.",
+                "ja": "聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n2",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Voi ikävää. Onko sinulla muita oireita?",
+            "spoken": "Voi ikävää. Onks sulla muita oireita?",
+            "en": "Oh, I'm sorry to hear that. Do you have any other symptoms?",
+            "ja": "それはおつらいですね。ほかに症状はありますか？",
+            "spokenNotes": {
+              "en": "Helmi: onko → onks, sinulla → sulla. You: kipeä → kipee.",
+              "ja": "ヘルミ: onko → onks、sinulla → sulla。あなた: kipeä → kipee。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "ok",
+              "next": "n3",
+              "text": {
+                "fi": "Kurkku.",
+                "spoken": "Kurkku.",
+                "en": "My throat.",
+                "ja": "喉です。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta sano koko lause: \"Kurkku on kipeä\".",
+                "selko": "Vastaus on oikein. Sano: Kurkku on kipeä.",
+                "en": "That works, but say the whole sentence: \"Kurkku on kipeä\" (My throat is sore).",
+                "ja": "通じますが、「Kurkku on kipeä（喉が痛い）」と文で言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Pää on särkee.",
+                "spoken": "Pää on särkee.",
+                "en": "My head aches. (wrong form)",
+                "ja": "頭が痛いです。（誤った形）"
+              },
+              "feedback": {
+                "fi": "Verbin \"särkeä\" kanssa ei sanota \"on\", ja kipeä paikka on partitiivissa: \"Päätä särkee\". Voit myös sanoa \"Pää on kipeä\".",
+                "selko": "Sano: Päätä särkee. Tai sano: Pää on kipeä.",
+                "en": "With särkeä (to ache) you don't use \"on\", and the body part goes in the partitive: \"Päätä särkee\". You can also say \"Pää on kipeä\" (My head hurts).",
+                "ja": "särkeä（ずきずき痛む）には on を付けず、体の部分を分格にします: 「Päätä särkee」。「Pää on kipeä（頭が痛い）」とも言えます。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "good",
+              "next": "n3",
+              "text": {
+                "fi": "Kurkku on kipeä ja päätä särkee.",
+                "spoken": "Kurkku on kipee ja päätä särkee.",
+                "en": "My throat is sore and I have a headache.",
+                "ja": "喉が痛くて、頭も痛いです。"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Kurkku on kipeä\" ja \"päätä särkee\" ovat molemmat oikein.",
+                "selko": "Hyvä! Kerroit kaksi oiretta.",
+                "en": "Good! \"Kurkku on kipeä\" and \"päätä särkee\" are both correct.",
+                "ja": "「Kurkku on kipeä」も「päätä särkee」も正しい言い方です。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n3",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Milloin oireet alkoivat?",
+            "spoken": "Milloin oireet alko?",
+            "en": "When did the symptoms start?",
+            "ja": "症状はいつ始まりましたか？",
+            "spokenNotes": {
+              "en": "Helmi: alkoivat → alko (plural subject, singular verb). You: alkoivat → alko.",
+              "ja": "ヘルミ: alkoivat → alko（主語が複数でも動詞は単数形）。あなた: alkoivat → alko。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "bad",
+              "text": {
+                "fi": "Kolmen päivän päästä.",
+                "spoken": "Kolmen päivän päästä.",
+                "en": "In three days.",
+                "ja": "3 日後です。"
+              },
+              "feedback": {
+                "fi": "\"Kolmen päivän päästä\" tarkoittaa tulevaisuutta. Oireet alkoivat jo, joten sano \"kolme päivää sitten\".",
+                "selko": "Oireet alkoivat jo. Sano: kolme päivää sitten.",
+                "en": "\"Kolmen päivän päästä\" refers to the future. Your symptoms have already started, so say \"kolme päivää sitten\" (three days ago).",
+                "ja": "「Kolmen päivän päästä」は「3 日後」で未来のことです。症状はもう始まっているので「kolme päivää sitten（3 日前）」と言います。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "good",
+              "next": "n4",
+              "text": {
+                "fi": "Ne alkoivat kolme päivää sitten.",
+                "spoken": "Ne alko kolme päivää sitten.",
+                "en": "They started three days ago.",
+                "ja": "3 日前に始まりました。"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Kolme päivää sitten\" kertoo, milloin oireet alkoivat.",
+                "selko": "Hyvä! Sanoit, milloin oireet alkoivat.",
+                "en": "Good! \"Kolme päivää sitten\" (three days ago) tells her when the symptoms started.",
+                "ja": "「Kolme päivää sitten（3 日前）」で、いつ始まったかを伝えられました。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "ok",
+              "next": "n4",
+              "text": {
+                "fi": "Kolme päivää.",
+                "spoken": "Kolme päivää.",
+                "en": "Three days.",
+                "ja": "3 日です。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta Helmi kysyy \"milloin\". Sano \"kolme päivää sitten\".",
+                "selko": "Vastaus on melkein oikein. Sano: kolme päivää sitten.",
+                "en": "That works, but Helmi asked \"when\". Say \"kolme päivää sitten\" (three days ago).",
+                "ja": "通じますが、ヘルミは「いつ」と聞いています。「kolme päivää sitten（3 日前）」と言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, mitä sanoitte?",
+                "spoken": "Anteeks, mitä te sanoitte?",
+                "en": "Sorry, what did you say?",
+                "ja": "すみません、何とおっしゃいましたか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch it. Helmi says it again slowly.",
+                "ja": "聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n4",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Oletko mitannut kuumeen? Kuinka korkea se on?",
+            "spoken": "Ootko mitannu kuumeen? Kuinka korkee se on?",
+            "en": "Have you taken your temperature? How high is it?",
+            "ja": "熱は測りましたか？何度ありますか？",
+            "spokenNotes": {
+              "en": "Helmi: oletko → ootko, mitannut → mitannu, korkea → korkee. You: kyllä → joo.",
+              "ja": "ヘルミ: oletko → ootko、mitannut → mitannu、korkea → korkee。あなた: kyllä → joo。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n5",
+              "text": {
+                "fi": "Kyllä, kuumetta on 38,5 astetta.",
+                "spoken": "Joo, kuumetta on 38,5 astetta.",
+                "en": "Yes, my temperature is 38.5 degrees Celsius.",
+                "ja": "はい、熱は 38.5 度です。"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Kuumetta on 38,5 astetta\" on selvä vastaus.",
+                "selko": "Hyvä! Sanoit, kuinka paljon kuumetta on.",
+                "en": "Good! \"Kuumetta on 38,5 astetta\" is a clear answer.",
+                "ja": "「Kuumetta on 38,5 astetta（熱が 38.5 度あります）」ははっきりした答えです。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "ok",
+              "next": "n5",
+              "text": {
+                "fi": "38,5.",
+                "spoken": "38,5.",
+                "en": "38.5.",
+                "ja": "38.5 度です。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta sano koko lause: \"Kuumetta on 38,5 astetta\".",
+                "selko": "Vastaus on oikein. Sano: Kuumetta on 38,5 astetta.",
+                "en": "That works, but say the whole sentence: \"Kuumetta on 38,5 astetta\".",
+                "ja": "通じますが、「Kuumetta on 38,5 astetta」と文で言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "bad",
+              "text": {
+                "fi": "Kuumetta on 38,5 astetta lämmintä.",
+                "spoken": "Kuumetta on 38,5 astetta lämmintä.",
+                "en": "My temperature is 38.5 degrees above zero. (wrong word)",
+                "ja": "熱はプラス 38.5 度です。（誤った言い方）"
+              },
+              "feedback": {
+                "fi": "\"Lämmintä\" sanotaan säästä: \"Ulkona on 20 astetta lämmintä\". Kuumeesta sanotaan vain \"38,5 astetta\".",
+                "selko": "Sano \"lämmintä\" vain säästä. Sano: Kuumetta on 38,5 astetta.",
+                "en": "\"Lämmintä\" is for the weather: \"Ulkona on 20 astetta lämmintä\" (It's 20 degrees out). For a fever, just say \"38,5 astetta\".",
+                "ja": "「lämmintä」は天気に使います（「Ulkona on 20 astetta lämmintä（外は 20 度）」）。熱は「38,5 astetta」だけで言います。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n5",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Lepää kotona ja juo paljon vettä. Jos kuume ei laske tai olo huononee, soita uudestaan.",
+            "spoken": "Lepää kotona ja juo paljon vettä. Jos kuume ei laske tai olo huononee, soita uudestaan.",
+            "en": "Rest at home and drink plenty of water. If your fever doesn't go down or you feel worse, call again.",
+            "ja": "家で休んで、水分をたくさんとってください。熱が下がらないときや具合が悪くなったときは、また電話してください。",
+            "spokenNotes": {
+              "en": "Helmi: same on the phone. You: kiitos → kiitti.",
+              "ja": "ヘルミ: 電話ではほぼこのまま。あなた: kiitos → kiitti。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "bad",
+              "text": {
+                "fi": "Kiitos, samoin!",
+                "spoken": "Kiitti, samoin!",
+                "en": "Thanks, you too!",
+                "ja": "ありがとう、あなたも！"
+              },
+              "feedback": {
+                "fi": "\"Samoin\" vastataan toivotukseen. Helmi antoi sinulle neuvoja. Kiitä niistä.",
+                "selko": "Helmi antaa neuvoja. Sano: Kiitos neuvoista.",
+                "en": "\"Samoin\" is a reply to a wish. Helmi gave you advice, so thank her for it.",
+                "ja": "「Samoin」は願いの言葉への返事です。ヘルミはアドバイスをくれたので、そのお礼を言いましょう。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "good",
+              "next": "n6",
+              "text": {
+                "fi": "Selvä. Kiitos neuvoista!",
+                "spoken": "Selvä. Kiitti neuvoista!",
+                "en": "Got it. Thanks for the advice!",
+                "ja": "わかりました。アドバイスありがとうございます！"
+              },
+              "feedback": {
+                "fi": "Hyvä! Sanoit, että ymmärsit, ja kiitit neuvoista.",
+                "selko": "Hyvä! Ymmärsit ja kiitit.",
+                "en": "Good! You showed you understood and thanked her for the advice.",
+                "ja": "わかったことを伝えて、アドバイスのお礼も言えました。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, en ymmärtänyt. Voitteko sanoa sen uudestaan?",
+                "spoken": "Anteeks, mä en ymmärtäny. Voitteko sanoo sen uudestaan?",
+                "en": "Sorry, I didn't understand. Could you say that again?",
+                "ja": "すみません、わかりませんでした。もう一度言っていただけますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et ymmärtänyt. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't understand. Helmi says it again slowly.",
+                "ja": "わからなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n6",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Ole hyvä. Haluatko silti, että varaan sinulle ajan lääkärille?",
+            "spoken": "Ole hyvä. Haluutko silti, et mä varaan sulle ajan lääkärille?",
+            "en": "You're welcome. Would you still like me to book you an appointment with a doctor?",
+            "ja": "どういたしまして。それでも医師の予約をお取りしましょうか？",
+            "spokenNotes": {
+              "en": "Helmi: haluatko → haluutko, että → et, sinulle → sulle, adds mä. You: adds mä.",
+              "ja": "ヘルミ: haluatko → haluutko、että → et、sinulle → sulle、mä を足す。あなた: mä を足す。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "ok",
+              "next": null,
+              "text": {
+                "fi": "Ei.",
+                "spoken": "Ei.",
+                "en": "No.",
+                "ja": "いいえ。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta pelkkä \"ei\" kuulostaa tylyltä. Sano \"Ei kiitos\".",
+                "selko": "Sano \"ei kiitos\". Se on kohtelias vastaus.",
+                "en": "That works, but just \"no\" sounds curt. Say \"Ei kiitos\" (No, thank you).",
+                "ja": "通じますが、「Ei」だけではそっけなく聞こえます。「Ei kiitos」と言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "good",
+              "next": null,
+              "text": {
+                "fi": "Ei kiitos. Lepään ensin kotona ja soitan uudestaan, jos olo ei parane.",
+                "spoken": "Ei kiitos. Mä lepään ensin kotona ja soitan uudestaan, jos olo ei parane.",
+                "en": "No, thank you. I'll rest at home first and call again if I don't feel better.",
+                "ja": "いいえ、大丈夫です。まず家で休んで、よくならなければまた電話します。"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Ei kiitos\" on kohtelias tapa kieltäytyä, kun joku tarjoaa apua.",
+                "selko": "Hyvä! Et tarvitse aikaa nyt. Sanot: ei kiitos.",
+                "en": "Good! \"Ei kiitos\" is a polite way to turn down an offer of help.",
+                "ja": "「Ei kiitos」は申し出を丁寧に断る言い方です。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "good",
+              "next": null,
+              "text": {
+                "fi": "Kyllä kiitos, se olisi hyvä.",
+                "spoken": "Joo kiitti, se ois hyvä.",
+                "en": "Yes, please. That would be good.",
+                "ja": "はい、お願いします。"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Kyllä kiitos\" on kohtelias tapa ottaa apu vastaan.",
+                "selko": "Hyvä! Haluat ajan. Sanot: kyllä kiitos.",
+                "en": "Good! \"Kyllä kiitos\" (Yes, please) is a polite way to accept an offer.",
+                "ja": "「Kyllä kiitos（はい、お願いします）」は申し出を丁寧に受ける言い方です。"
+              },
+              "spokenNotes": {
+                "en": "Helmi: haluatko → haluutko, että → et, sinulle → sulle. You: kyllä → joo, kiitos → kiitti, olisi → ois.",
+                "ja": "ヘルミ: haluatko → haluutko、että → et、sinulle → sulle。あなた: kyllä → joo、kiitos → kiitti、olisi → ois。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "bad",
+              "text": {
+                "fi": "Ei kestä.",
+                "spoken": "Ei kestä.",
+                "en": "You're welcome.",
+                "ja": "どういたしまして。"
+              },
+              "feedback": {
+                "fi": "\"Ei kestä\" vastataan kiitokseen. Helmi tarjoaa apua. Vastaa \"Kyllä kiitos\" tai \"Ei kiitos\".",
+                "selko": "Helmi tarjoaa apua. Sano: kyllä kiitos tai ei kiitos.",
+                "en": "\"Ei kestä\" is a reply to a thank-you. Helmi is offering help. Answer \"Kyllä kiitos\" (Yes, please) or \"Ei kiitos\" (No, thank you).",
+                "ja": "「Ei kestä」はお礼への返事です。ヘルミは手伝いを申し出ています。「Kyllä kiitos」か「Ei kiitos」で答えましょう。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "siirra-aika",
+      "startNodeId": "n1",
+      "nodes": [
+        {
+          "id": "n1",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Terveysasema, sairaanhoitaja Helmi. Miten voin auttaa?",
+            "spoken": "Terveysasema, sairaanhoitaja Helmi. Miten voin auttaa?",
+            "en": "Health center, this is Nurse Helmi. How can I help you?",
+            "ja": "保健センター、看護師のヘルミです。どうなさいましたか？",
+            "spokenNotes": {
+              "en": "Helmi: same on the phone. You: minulla → mulla, mutta → mut, adds mä, voinko → voinks.",
+              "ja": "ヘルミ: 電話ではほぼこのまま。あなた: minulla → mulla、mutta → mut、mä を足す、voinko → voinks。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "bad",
+              "text": {
+                "fi": "Haluaisin varata ajan.",
+                "spoken": "Haluisin varata ajan.",
+                "en": "I'd like to book an appointment.",
+                "ja": "予約を取りたいのですが。"
+              },
+              "feedback": {
+                "fi": "Sinulla on jo aika. Et tarvitse uutta aikaa. Haluat siirtää vanhan ajan.",
+                "selko": "Sinulla on jo aika. Haluat siirtää sen.",
+                "en": "You already have an appointment. You don't need a new one; you want to move the one you have.",
+                "ja": "予約はもうあります。新しく取るのではなく、今の予約を変更したいのです。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "ok",
+              "next": "n2",
+              "text": {
+                "fi": "Haluan siirtää ajan.",
+                "spoken": "Mä haluun siirtää ajan.",
+                "en": "I want to move my appointment.",
+                "ja": "予約を変更したいです。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta kerro ensin nimesi ja se, milloin aikasi on. \"Haluaisin\" on myös kohteliaampi kuin \"haluan\".",
+                "selko": "Vastaus on oikein. Sano myös nimesi ja päivä.",
+                "en": "That works, but first give your name and say when your appointment is. \"Haluaisin\" (I'd like) is also more polite than \"haluan\" (I want).",
+                "ja": "通じますが、まず名前といつの予約かを言いましょう。また「haluan（〜したい）」より「haluaisin（〜したいのですが）」のほうがていねいです。"
+              },
+              "spokenNotes": {
+                "en": "You: haluan → mä haluun.",
+                "ja": "あなた: haluan → mä haluun。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "good",
+              "next": "n2",
+              "text": {
+                "fi": "Hei, täällä on Alex Kim. Minulla on aika maanantaina, mutta en pääse. Voinko siirtää sen?",
+                "spoken": "Hei, täällä on Alex Kim. Mulla on aika maanantaina, mut mä en pääse. Voinks mä siirtää sen?",
+                "en": "Hi, this is Alex Kim. I have an appointment on Monday, but I can't make it. Can I reschedule it?",
+                "ja": "こんにちは、アレックス・キムです。月曜日に予約があるのですが、行けなくなりました。変更できますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kerroit nimesi, milloin aikasi on ja mitä haluat.",
+                "selko": "Hyvä! Sanoit nimesi ja asiasi.",
+                "en": "Good! You gave your name, said when your appointment is, and what you want.",
+                "ja": "名前と予約の日、してほしいことを伝えられました。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, kuulin huonosti. Voitteko toistaa?",
+                "spoken": "Anteeks, mä kuulin huonosti. Voitteko toistaa?",
+                "en": "Sorry, I couldn't hear you well. Could you repeat that?",
+                "ja": "すみません、よく聞こえませんでした。もう一度言っていただけますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos yhteys on huono. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move when the line is bad. Helmi says it again slowly.",
+                "ja": "電話が聞こえにくいときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n2",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Totta kai. Kerro vielä syntymäaikasi.",
+            "spoken": "Totta kai. Kerro vielä sun syntymäaika.",
+            "en": "Of course. Could you tell me your date of birth?",
+            "ja": "もちろんです。生年月日を教えてください。",
+            "spokenNotes": {
+              "en": "Helmi: syntymäaikasi → sun syntymäaika. You: same on the phone.",
+              "ja": "ヘルミ: syntymäaikasi → sun syntymäaika。あなた: 電話でもこのまま使う。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n3",
+              "text": {
+                "fi": "Se on 2.11.1988.",
+                "spoken": "Se on 2.11.1988.",
+                "en": "It's November 2, 1988.",
+                "ja": "1988 年 11 月 2 日です。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kerroit syntymäaikasi: päivä, kuukausi ja vuosi.",
+                "selko": "Hyvä! Sanoit päivän, kuukauden ja vuoden.",
+                "en": "Good! You gave your date of birth: day, month, and year.",
+                "ja": "日・月・年の順で生年月日を伝えられました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Maanantaina kello 9.",
+                "spoken": "Maanantaina kello 9.",
+                "en": "On Monday at 9.",
+                "ja": "月曜日の 9 時です。"
+              },
+              "feedback": {
+                "fi": "Tämä on ajan päivä ja kellonaika. Helmi kysyy syntymäaikaasi.",
+                "selko": "Helmi kysyy, milloin olet syntynyt.",
+                "en": "That's the day and time of your appointment. Helmi is asking for your date of birth.",
+                "ja": "それは予約の日時です。ヘルミは生年月日を聞いています。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, voitteko sanoa sen uudestaan?",
+                "spoken": "Anteeks, voitteko sanoo sen uudestaan?",
+                "en": "Sorry, could you say that again?",
+                "ja": "すみません、もう一度言っていただけますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch it. Helmi says it again slowly.",
+                "ja": "聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n3",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Kiitos. Löysin ajan: maanantaina kello 9 lääkäri Laineelle. Haluatko siirtää ajan vai peruuttaa sen?",
+            "spoken": "Kiitos. Löysin ajan: maanantaina kello 9 lääkäri Laineelle. Haluutko siirtää ajan vai peruuttaa sen?",
+            "en": "Thank you. I found it: Monday at 9 a.m. with Dr. Laine. Do you want to reschedule it or cancel it?",
+            "ja": "ありがとうございます。ありました。月曜日の 9 時、ライネ医師の予約ですね。変更しますか、それともキャンセルしますか？",
+            "spokenNotes": {
+              "en": "Helmi: haluatko → haluutko. You: haluaisin → haluisin, minulla → mulla.",
+              "ja": "ヘルミ: haluatko → haluutko。あなた: haluaisin → haluisin、minulla → mulla。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "ok",
+              "next": "n4",
+              "text": {
+                "fi": "Siirtää.",
+                "spoken": "Siirtää.",
+                "en": "Reschedule.",
+                "ja": "変更です。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta sano koko lause: \"Haluaisin siirtää sen\".",
+                "selko": "Vastaus on oikein. Sano: Haluaisin siirtää sen.",
+                "en": "That works, but say the whole sentence: \"Haluaisin siirtää sen\" (I'd like to reschedule it).",
+                "ja": "通じますが、「Haluaisin siirtää sen（変更したいです）」と文で言いましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "good",
+              "next": "n4",
+              "text": {
+                "fi": "Haluaisin siirtää sen. Minulla on silloin työvuoro.",
+                "spoken": "Haluisin siirtää sen. Mulla on silloin työvuoro.",
+                "en": "I'd like to reschedule it. I have a work shift then.",
+                "ja": "変更したいです。その時間は仕事のシフトが入っているので。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Valitsit toisen vaihtoehdon ja kerroit syyn.",
+                "selko": "Hyvä! Sanoit, mitä haluat ja miksi.",
+                "en": "Good! You chose one of the options and gave a reason.",
+                "ja": "どちらにするかを選んで、理由も言えました。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "bad",
+              "text": {
+                "fi": "Kyllä.",
+                "spoken": "Joo.",
+                "en": "Yes.",
+                "ja": "はい。"
+              },
+              "feedback": {
+                "fi": "Helmi kysyy \"vai\": siirtää vai peruuttaa. Tähän ei voi vastata \"kyllä\". Valitse toinen.",
+                "selko": "Helmi kysyy: siirtää vai peruuttaa? Valitse yksi.",
+                "en": "Helmi asked an either/or question with \"vai\": reschedule or cancel. You can't answer it with \"yes\". Pick one.",
+                "ja": "ヘルミは「vai（それとも）」で、変更かキャンセルかを聞いています。「はい」では答えられません。どちらかを選びましょう。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n4",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Selvä. Mikä päivä sinulle sopisi?",
+            "spoken": "Selvä. Mikä päivä sulle sopis?",
+            "en": "All right. What day would suit you?",
+            "ja": "わかりました。何曜日がよろしいですか？",
+            "spokenNotes": {
+              "en": "Helmi: sinulle → sulle, sopisi → sopis. You: käykö → käyks, olisi → ois.",
+              "ja": "ヘルミ: sinulle → sulle、sopisi → sopis。あなた: käykö → käyks、olisi → ois。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": "n5",
+              "text": {
+                "fi": "Käykö keskiviikko? Iltapäivä olisi paras.",
+                "spoken": "Käyks keskiviikko? Iltapäivä ois paras.",
+                "en": "Would Wednesday work? The afternoon would be best.",
+                "ja": "水曜日はどうですか？午後だと助かります。"
+              },
+              "feedback": {
+                "fi": "Hyvä! Ehdotit päivää kohteliaasti ja kerroit, mikä aika sopii parhaiten.",
+                "selko": "Hyvä! Sanoit päivän ja ajan.",
+                "en": "Good! You suggested a day politely and said which time suits you best.",
+                "ja": "曜日をていねいに提案して、都合のよい時間帯も伝えられました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Maanantaina.",
+                "spoken": "Maanantaina.",
+                "en": "On Monday.",
+                "ja": "月曜日です。"
+              },
+              "feedback": {
+                "fi": "Et pääse maanantaina. Siksi siirrät aikaa. Valitse toinen päivä.",
+                "selko": "Et pääse maanantaina. Sano toinen päivä.",
+                "en": "You can't make it on Monday. That's why you're rescheduling. Pick another day.",
+                "ja": "月曜日は行けないから予約を変えるのでした。別の日を選びましょう。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "ok",
+              "next": "n5",
+              "text": {
+                "fi": "Keskiviikko.",
+                "spoken": "Keskiviikko.",
+                "en": "Wednesday.",
+                "ja": "水曜日です。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta kysy kohteliaasti: \"Käykö keskiviikko?\".",
+                "selko": "Vastaus on oikein. Kysy: Käykö keskiviikko?",
+                "en": "That works, but ask politely: \"Käykö keskiviikko?\" (Would Wednesday work?).",
+                "ja": "通じますが、「Käykö keskiviikko?（水曜日はどうですか）」とていねいに聞きましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, voitteko puhua hitaammin?",
+                "spoken": "Anteeks, voitteko puhuu hitaammin?",
+                "en": "Sorry, could you speak more slowly?",
+                "ja": "すみません、もう少しゆっくり話していただけますか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo sen uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch it. Helmi says it again slowly.",
+                "ja": "聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n5",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Keskiviikkona kello 13 on vapaa aika. Varaanko sen sinulle?",
+            "spoken": "Keskiviikkona kello 13 on vapaa aika. Varaanks mä sen sulle?",
+            "en": "There's an opening on Wednesday at 1 p.m. Shall I book it for you?",
+            "ja": "水曜日の 13 時が空いています。お取りしましょうか？",
+            "spokenNotes": {
+              "en": "Helmi: varaanko → varaanks mä, sinulle → sulle. You: kyllä → joo, kiitos → kiitti.",
+              "ja": "ヘルミ: varaanko → varaanks mä、sinulle → sulle。あなた: kyllä → joo、kiitos → kiitti。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "bad",
+              "text": {
+                "fi": "Ei kestä.",
+                "spoken": "Ei kestä.",
+                "en": "You're welcome.",
+                "ja": "どういたしまして。"
+              },
+              "feedback": {
+                "fi": "\"Ei kestä\" vastataan kiitokseen. Helmi tarjoaa sinulle aikaa.",
+                "selko": "Sano \"ei kestä\", kun joku sanoo kiitos. Nyt Helmi tarjoaa aikaa.",
+                "en": "\"Ei kestä\" is a reply to a thank-you. Helmi is offering you an appointment.",
+                "ja": "「Ei kestä」はお礼への返事です。ヘルミは予約の時間を提案しています。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "ok",
+              "next": "n6",
+              "text": {
+                "fi": "Kyllä.",
+                "spoken": "Joo.",
+                "en": "Yes.",
+                "ja": "はい。"
+              },
+              "feedback": {
+                "fi": "Käy, mutta sano myös \"kiitos\": \"Kyllä kiitos\".",
+                "selko": "Vastaus on oikein. Sano myös kiitos.",
+                "en": "That works, but add \"kiitos\": \"Kyllä kiitos\" (Yes, please).",
+                "ja": "通じますが、「Kyllä kiitos（はい、お願いします）」と kiitos も足しましょう。"
+              },
+              "spokenNotes": {
+                "en": "You: kyllä → joo (the everyday \"yes\").",
+                "ja": "あなた: kyllä → joo（日常の「はい」）。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "good",
+              "next": "n6",
+              "text": {
+                "fi": "Kyllä kiitos, se sopii hyvin.",
+                "spoken": "Joo kiitti, se sopii hyvin.",
+                "en": "Yes, please. That works well.",
+                "ja": "はい、お願いします。その時間で大丈夫です。"
+              },
+              "feedback": {
+                "fi": "Hyvä! \"Kyllä kiitos\" on kohtelias tapa ottaa tarjous vastaan.",
+                "selko": "Hyvä! Haluat ajan. Sanot: kyllä kiitos.",
+                "en": "Good! \"Kyllä kiitos\" (Yes, please) is a polite way to accept an offer.",
+                "ja": "「Kyllä kiitos（はい、お願いします）」は申し出を丁寧に受ける言い方です。"
+              }
+            },
+            {
+              "id": "d",
+              "quality": "repeat",
+              "text": {
+                "fi": "Anteeksi, mihin aikaan?",
+                "spoken": "Anteeks, mihin aikaan?",
+                "en": "Sorry, what time?",
+                "ja": "すみません、何時ですか？"
+              },
+              "feedback": {
+                "fi": "Hyvä keino, jos et kuullut aikaa. Helmi sanoo sen uudestaan hitaasti.",
+                "selko": "Helmi sanoo ajan uudestaan. Hän puhuu hitaasti.",
+                "en": "A good move if you didn't catch the time. Helmi says it again slowly.",
+                "ja": "時間が聞き取れなかったときに使えます。ヘルミがもう一度ゆっくり言ってくれます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "n6",
+          "speaker": "hoitaja",
+          "line": {
+            "fi": "Hyvä. Aikasi on nyt keskiviikkona kello 13. Maanantain aika on peruttu. Kuulemiin!",
+            "spoken": "Hyvä. Sun aika on nyt keskiviikkona kello 13. Maanantain aika on peruttu. Kuulemiin!",
+            "en": "Great. Your appointment is now on Wednesday at 1 p.m. The Monday appointment has been canceled. Goodbye!",
+            "ja": "では、予約は水曜日の 13 時になりました。月曜日の予約はキャンセルしました。失礼します。",
+            "spokenNotes": {
+              "en": "Helmi: aikasi → sun aika. You: kiitos → kiitti.",
+              "ja": "ヘルミ: aikasi → sun aika。あなた: kiitos → kiitti。"
+            }
+          },
+          "choices": [
+            {
+              "id": "a",
+              "quality": "good",
+              "next": null,
+              "text": {
+                "fi": "Kiitos paljon. Kuulemiin!",
+                "spoken": "Kiitti paljon. Kuulemiin!",
+                "en": "Thank you very much. Goodbye!",
+                "ja": "ありがとうございました。失礼します！"
+              },
+              "feedback": {
+                "fi": "Hyvä! Kiitit ja lopetit puhelun sanalla \"kuulemiin\".",
+                "selko": "Hyvä! Sanoit kiitos ja kuulemiin.",
+                "en": "Good! You said thank you and ended the call with \"Kuulemiin\".",
+                "ja": "お礼を言って、「Kuulemiin」で電話を終えられました。"
+              }
+            },
+            {
+              "id": "b",
+              "quality": "bad",
+              "text": {
+                "fi": "Kiitos, samoin!",
+                "spoken": "Kiitti, samoin!",
+                "en": "Thanks, you too!",
+                "ja": "ありがとう、あなたも！"
+              },
+              "feedback": {
+                "fi": "\"Kuulemiin\" ei ole toivotus, johon vastataan \"samoin\". Vastaa \"Kuulemiin\".",
+                "selko": "Helmi sanoo kuulemiin. Sinäkin sanot: kuulemiin.",
+                "en": "\"Kuulemiin\" isn't a wish you answer with \"samoin\". Just say \"Kuulemiin\" back.",
+                "ja": "「Kuulemiin」には「samoin」とは返しません。「Kuulemiin」と返しましょう。"
+              }
+            },
+            {
+              "id": "c",
+              "quality": "ok",
+              "next": null,
+              "text": {
+                "fi": "Hei hei!",
+                "spoken": "Hei hei!",
+                "en": "Bye!",
+                "ja": "じゃあね！"
+              },
+              "feedback": {
+                "fi": "Käy, mutta \"hei hei\" sopii paremmin tutuille. Virallinen puhelu päättyy yleensä sanaan \"kuulemiin\".",
+                "selko": "Vastaus on oikein. Mutta sano mieluummin: Kuulemiin.",
+                "en": "That works, but \"Hei hei\" is better with people you know. A formal call usually ends with \"Kuulemiin\".",
+                "ja": "通じますが、「Hei hei」は親しい人向けです。改まった電話はふつう「Kuulemiin」で終えます。"
+              },
+              "spokenNotes": {
+                "en": "You: same on the phone.",
+                "ja": "あなた: 電話でもこのまま使う。"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "terveysasema",
+      "translation": "health center",
+      "translationJa": "保健センター"
+    },
+    {
+      "word": "ajanvaraus",
+      "translation": "booking an appointment; appointment booking line",
+      "translationJa": "予約（予約の受付・窓口）"
+    },
+    {
+      "word": "aika",
+      "translation": "time; appointment (a booked time)",
+      "translationJa": "時間・予約（取ってある時間）"
+    },
+    {
+      "word": "lääkäri",
+      "translation": "doctor",
+      "translationJa": "医師"
+    },
+    {
+      "word": "sairaanhoitaja",
+      "translation": "nurse",
+      "translationJa": "看護師"
+    },
+    {
+      "word": "oire",
+      "translation": "symptom",
+      "translationJa": "症状"
+    },
+    {
+      "word": "kuume",
+      "translation": "fever",
+      "translationJa": "熱"
+    },
+    {
+      "word": "yskä",
+      "translation": "cough",
+      "translationJa": "咳"
+    },
+    {
+      "word": "kurkku",
+      "translation": "throat (also: cucumber)",
+      "translationJa": "喉（きゅうりの意味もある）"
+    },
+    {
+      "word": "särkeä",
+      "translation": "to ache (Päätä särkee = I have a headache)",
+      "translationJa": "ずきずき痛む（Päätä särkee ＝ 頭が痛い）"
+    },
+    {
+      "word": "peruuttaa",
+      "translation": "to cancel (also: perua)",
+      "translationJa": "キャンセルする（perua とも言う）"
+    },
+    {
+      "word": "siirtää",
+      "translation": "to move, to reschedule",
+      "translationJa": "移す・（予約を）変更する"
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "ajanvaraus-1",
+      "title": {
+        "fi": "Mihin numeroon soitan?",
+        "selko": "Mihin soitan?",
+        "en": "Which number do I call?",
+        "ja": "どこに電話する？"
+      },
+      "body": [
+        {
+          "fi": "Hätätilanteessa, kun ihmisen henki tai terveys on vaarassa, soita numeroon 112.",
+          "selko": "Onko tilanne vaarallinen? Soita numeroon 112.",
+          "en": "In an emergency, when someone's life or health is in danger, call 112.",
+          "ja": "命や健康が危ないなど、緊急のときは 112 に電話します。"
+        },
+        {
+          "fi": "Kun terveysasema on kiinni ja tarvitset kiireellisesti apua, soita Päivystysapuun numeroon 116117. Soita sinne ennen kuin menet päivystykseen. Puhelu on maksuton.",
+          "selko": "Terveysasema on kiinni, mutta tarvitset apua nopeasti. Soita numeroon 116117. Puhelu on ilmainen.",
+          "en": "When the health center is closed and you need help urgently, call the Medical Helpline (Päivystysapu) at 116117. Call before you go to the emergency department. The call is free.",
+          "ja": "保健センターが閉まっていて急いで助けが必要なときは、Päivystysapu（116117）に電話します。救急外来（päivystys）に行く前に電話しましょう。通話は無料です。"
+        },
+        {
+          "fi": "Muissa asioissa soita omalle terveysasemalle, kun se on auki. Numeron löydät oman alueesi verkkosivuilta.",
+          "selko": "Muissa asioissa soita omalle terveysasemalle. Soita, kun terveysasema on auki.",
+          "en": "For everything else, call your own health center during its opening hours. You can find the number on your area's website.",
+          "ja": "それ以外のことは、開いている時間に自分の保健センターに電話します。番号は住んでいる地域のウェブサイトに載っています。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "soittaa + illatiivi tai allatiivi: numeroon 112, Päivystysapuun, terveysasemalle",
+        "selko": "Soita numeroon 112. Soita terveysasemalle.",
+        "en": "soittaa (to call) + illative or allative: numeroon 112 (to 112), Päivystysapuun, terveysasemalle (to the health center)",
+        "ja": "soittaa（電話する）＋入格または向格: numeroon 112（112 番に）、Päivystysapuun、terveysasemalle（保健センターに）"
+      }
+    },
+    {
+      "id": "ajanvaraus-2",
+      "title": {
+        "fi": "Miten kerron oireista?",
+        "selko": "Oireet",
+        "en": "Describing your symptoms",
+        "ja": "症状の言い方"
+      },
+      "body": [
+        {
+          "fi": "\"Minulla on\" + partitiivi: Minulla on kuumetta. Minulla on yskää ja nuhaa.",
+          "selko": "Sano: Minulla on kuumetta. Minulla on yskää.",
+          "en": "\"Minulla on\" (I have) + partitive: Minulla on kuumetta (I have a fever). Minulla on yskää ja nuhaa (I have a cough and a runny nose).",
+          "ja": "「Minulla on」＋分格: Minulla on kuumetta（熱があります）。Minulla on yskää ja nuhaa（咳と鼻水があります）。"
+        },
+        {
+          "fi": "Kun jokin paikka on kipeä, sano \"X on kipeä\": Kurkku on kipeä. Vatsa on kipeä.",
+          "selko": "Sano: Kurkku on kipeä. Vatsa on kipeä.",
+          "en": "When a part of your body hurts, say \"X on kipeä\": Kurkku on kipeä (My throat is sore). Vatsa on kipeä (My stomach hurts).",
+          "ja": "痛いところは「X on kipeä」で言います: Kurkku on kipeä（喉が痛い）。Vatsa on kipeä（お腹が痛い）。"
+        },
+        {
+          "fi": "Verbin \"särkeä\" kanssa kipeä paikka on partitiivissa, eikä lauseessa ole sanaa \"on\": Päätä särkee. Selkää särkee.",
+          "selko": "Sano: Päätä särkee. Selkää särkee.",
+          "en": "With särkeä (to ache), the body part goes in the partitive and there is no \"on\": Päätä särkee (I have a headache). Selkää särkee (My back aches).",
+          "ja": "särkeä（ずきずき痛む）では、体の部分が分格になり、on は入りません: Päätä särkee（頭が痛い）。Selkää särkee（腰が痛い）。"
+        },
+        {
+          "fi": "Kuumeen kerrot näin: Kuumetta on 38,5 astetta. Sana \"lämmintä\" kuuluu säähän.",
+          "selko": "Sano: Kuumetta on 38,5 astetta.",
+          "en": "Give your temperature like this: Kuumetta on 38,5 astetta (My temperature is 38.5 degrees). \"Lämmintä\" is for the weather.",
+          "ja": "熱は「Kuumetta on 38,5 astetta（熱が 38.5 度あります）」と言います。「lämmintä」は天気に使う言葉です。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "partitiivi: kuume → kuumetta, yskä → yskää, pää → päätä",
+        "selko": "kuumetta, yskää, päätä",
+        "en": "Partitive: kuume → kuumetta, yskä → yskää, pää → päätä",
+        "ja": "分格: kuume → kuumetta、yskä → yskää、pää → päätä"
+      }
+    },
+    {
+      "id": "ajanvaraus-3",
+      "title": {
+        "fi": "Puhelimessa",
+        "selko": "Puhelimessa",
+        "en": "Useful phrases on the phone",
+        "ja": "電話の決まり文句"
+      },
+      "body": [
+        {
+          "fi": "Kerro alussa nimesi: \"Täällä on Alex Kim\" tai \"Minun nimeni on Alex Kim\".",
+          "selko": "Sano ensin nimesi: Täällä on Alex Kim.",
+          "en": "Start by giving your name: \"Täällä on Alex Kim\" (This is Alex Kim) or \"Minun nimeni on Alex Kim\" (My name is Alex Kim).",
+          "ja": "最初に名乗ります: 「Täällä on Alex Kim（こちらは Alex Kim です）」または「Minun nimeni on Alex Kim（私の名前は Alex Kim です）」。"
+        },
+        {
+          "fi": "Jos et kuule tai ymmärrä, kysy: \"Voitteko toistaa?\" tai \"Voitteko puhua hitaammin?\".",
+          "selko": "Et ymmärrä? Sano: Voitteko toistaa?",
+          "en": "If you can't hear or understand, ask: \"Voitteko toistaa?\" (Could you repeat that?) or \"Voitteko puhua hitaammin?\" (Could you speak more slowly?).",
+          "ja": "聞こえない・わからないときは「Voitteko toistaa?（もう一度言っていただけますか）」や「Voitteko puhua hitaammin?（もう少しゆっくり話していただけますか）」と聞きます。"
+        },
+        {
+          "fi": "Virallinen puhelu päättyy usein sanaan \"kuulemiin\". \"Hei hei\" sopii paremmin tutuille.",
+          "selko": "Puhelun lopussa sano: Kuulemiin.",
+          "en": "A formal call often ends with \"Kuulemiin\" (Goodbye; literally \"until we hear each other again\"). \"Hei hei\" is better with people you know.",
+          "ja": "改まった電話は「Kuulemiin（失礼します。直訳は「また声を聞くときまで」）」で終わることが多いです。「Hei hei」は親しい人向けです。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "haluaisin on verbin haluta konditionaali. Se on kohteliaampi kuin \"haluan\".",
+        "selko": "Sano: Haluaisin varata ajan.",
+        "en": "haluaisin (I would like) is the conditional of haluta. It is more polite than haluan (I want).",
+        "ja": "haluaisin（〜したいのですが）は haluta の条件法で、haluan（〜したい）よりていねいです。"
+      }
+    }
+  ]
+}

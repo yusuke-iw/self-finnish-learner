@@ -9,6 +9,7 @@ import { hasPlayed } from '../../utils/sceneProgress';
 import vaatteet from '../../data/scenes/vaatteet.json';
 import jatekatos from '../../data/scenes/jatekatos.json';
 import rappukaytava from '../../data/scenes/rappukaytava.json';
+import ajanvaraus from '../../data/scenes/ajanvaraus.json';
 import { setSceneTextMode } from '../../utils/sceneText';
 import { hasJapanese } from '../../utils/sceneText';
 
@@ -178,7 +179,7 @@ describe('SceneGame Page', () => {
     expect(screen.queryByText(/Valmis!/)).toBeNull();
   });
 
-  it('plays the dialogue scene for /scenes/rappukaytava through to the end, then marks it played and offers no next game', () => {
+  it('plays the dialogue scene for /scenes/rappukaytava through to the end, then marks it played and offers the phone call next', () => {
     // The scene picks one of the dialogues at random; pin it to the first one
     const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0);
     renderGame('rappukaytava');
@@ -208,11 +209,47 @@ describe('SceneGame Page', () => {
 
     expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
     expect(hasPlayed('rappukaytava')).toBe(true);
-    expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /次のおすすめ|Next recommended/ }));
+    expect(mockNavigate).toHaveBeenCalledWith('/scenes/ajanvaraus');
     fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l10&level=1');
     randomSpy.mockRestore();
   });
+
+  it.each(ajanvaraus.dialogues.map((d, i) => [d.id, i]))(
+    'plays the /scenes/ajanvaraus dialogue %s through to the end and offers no next game',
+    (_id, index) => {
+      // Pin the random pick to this dialogue
+      const randomSpy = vi.spyOn(Math, 'random').mockReturnValue((index + 0.5) / ajanvaraus.dialogues.length);
+      renderGame('ajanvaraus');
+      expect(screen.getByRole('heading', { level: 2, name: /Ajanvaraus puhelimessa/ })).toBeInTheDocument();
+
+      const dialogue = ajanvaraus.dialogues[index];
+      let currNodeId = dialogue.startNodeId;
+
+      while (currNodeId) {
+        const node = dialogue.nodes.find((n) => n.id === currNodeId);
+        expect(node).toBeDefined();
+
+        const goodChoice = node.choices.find((c) => c.quality === 'good');
+        const choiceBtn = screen.getByRole('button', {
+          name: new RegExp(goodChoice.text.spoken.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        });
+        fireEvent.click(choiceBtn);
+
+        const isLast = !goodChoice.next;
+        fireEvent.click(screen.getByRole('button', { name: isLast ? /Valmis!/ : /次へ|Next/i }));
+        currNodeId = goodChoice.next;
+      }
+
+      expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+      expect(hasPlayed('ajanvaraus')).toBe(true);
+      expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+      fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
+      expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l9&level=1');
+      randomSpy.mockRestore();
+    }
+  );
 
   it('offers the sort game as the next recommended game after the outfit game', () => {
     renderGame('vaatteet');
