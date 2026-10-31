@@ -17,7 +17,7 @@ import { recordAnswer } from '../../utils/studyStats';
 import { useLanguage } from '../../context/useLanguage';
 
 export default function SortGame({ game, mode, onFinish }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [round, setRound] = useState(() => createSortRound(game));
   const [wrongBinIds, setWrongBinIds] = useState([]);
   const [lastWrongBinId, setLastWrongBinId] = useState(null);
@@ -103,9 +103,9 @@ export default function SortGame({ game, mode, onFinish }) {
         </div>
       </div>
 
-      <p className="sort-prompt">{t('scenes.sort.prompt')}</p>
+      <p className="sort-prompt">{game.prompt?.[language] || t('scenes.sort.prompt')}</p>
 
-      <div className="sort-bins" role="group" aria-label={t('scenes.sort.binsLabel')}>
+      <div className="sort-bins" role="group" aria-label={game.binsLabel?.[language] || t('scenes.sort.binsLabel')}>
         {game.bins.map((bin) => {
           const isWrong = wrongBinIds.includes(bin.id);
           const isCorrect = round.solved && bin.id === item.binId;

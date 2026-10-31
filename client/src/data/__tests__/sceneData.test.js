@@ -5,6 +5,7 @@ import jatekatos from '../scenes/jatekatos.json';
 import rappukaytava from '../scenes/rappukaytava.json';
 import ajanvaraus from '../scenes/ajanvaraus.json';
 import pankkiautomaatti from '../scenes/pankkiautomaatti.json';
+import virastot from '../scenes/virastot.json';
 import upcoming from '../scenes/upcoming.json';
 import { getUpcomingGames, getRecommendedGames } from '../scenes/index';
 import { findLessonById } from '../curriculumData';
@@ -12,7 +13,7 @@ import { hasJapanese } from '../../utils/sceneText';
 import { SPEAKERS } from '../../utils/speakers';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti];
+  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -435,9 +436,9 @@ describe('Scene Data Schema & Integrity', () => {
     expect(getUpcomingGames('lahio').some((u) => u.id === 'rappukaytava')).toBe(false);
   });
 
-  it('kaupunki has the phone-call and ATM games and is no longer marked coming soon', () => {
+  it('kaupunki has the phone-call, ATM and office games and is no longer marked coming soon', () => {
     const kaupunki = scenes.find((s) => s.id === 'kaupunki');
-    expect(kaupunki.gameIds).toEqual(['ajanvaraus', 'pankkiautomaatti']);
+    expect(kaupunki.gameIds).toEqual(['ajanvaraus', 'pankkiautomaatti', 'virastot']);
     expect(kaupunki.comingSoon).toBeUndefined();
     expect(ajanvaraus.sceneId).toBe('kaupunki');
     expect(ajanvaraus.relatedLessonId).toBe('l9');
@@ -486,11 +487,35 @@ describe('Scene Data Schema & Integrity', () => {
     expect(pankkiautomaatti.vocabulary.length).toBeLessThanOrEqual(12);
   });
 
+  it('virastot is a sort game with 12-16 errands, every office used, its own prompt, 3 info cards and 10-12 words', () => {
+    expect(virastot.type).toBe('sort');
+    expect(virastot.sceneId).toBe('kaupunki');
+    expect(virastot.relatedLessonId).toBe('l12');
+    expect(virastot.bins.map((b) => b.id)).toEqual(['kela', 'poliisi', 'verohallinto', 'dvv', 'migri']);
+    expect(virastot.items.length).toBeGreaterThanOrEqual(12);
+    expect(virastot.items.length).toBeLessThanOrEqual(16);
+    expect(virastot.items.length).toBeGreaterThan(virastot.playLength);
+    for (const bin of virastot.bins) {
+      expect(virastot.items.some((i) => i.binId === bin.id)).toBe(true);
+    }
+    for (const item of virastot.items) {
+      expect(item.sentence.selko).toBeTruthy();
+    }
+    for (const key of ['prompt', 'binsLabel']) {
+      expect(virastot[key].ja).toBeTruthy();
+      expect(virastot[key].en).toBeTruthy();
+    }
+    expect(virastot.infoCards.length).toBe(3);
+    expect(virastot.vocabulary.length).toBeGreaterThanOrEqual(10);
+    expect(virastot.vocabulary.length).toBeLessThanOrEqual(12);
+  });
+
   it('hasJapanese correctly identifies whether games have full Japanese text', () => {
     expect(hasJapanese(vaatteet)).toBe(true);
     expect(hasJapanese(jatekatos)).toBe(true);
     expect(hasJapanese(rappukaytava)).toBe(true);
     expect(hasJapanese(ajanvaraus)).toBe(true);
     expect(hasJapanese(pankkiautomaatti)).toBe(true);
+    expect(hasJapanese(virastot)).toBe(true);
   });
 });

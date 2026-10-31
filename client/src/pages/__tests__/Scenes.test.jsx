@@ -37,6 +37,7 @@ describe('Scenes Page', () => {
     expect(screen.getByRole('link', { name: /Jätekatoksessa/i })).toHaveAttribute('href', '/scenes/jatekatos');
     expect(screen.getByRole('link', { name: /Rappukäytävässä/i })).toHaveAttribute('href', '/scenes/rappukaytava');
     expect(screen.getByRole('link', { name: /Pankkiautomaatilla/i })).toHaveAttribute('href', '/scenes/pankkiautomaatti');
+    expect(screen.getByRole('link', { name: /Virastoissa/i })).toHaveAttribute('href', '/scenes/virastot');
     expect(screen.queryAllByText(/準備中|Coming soon/i)).toHaveLength(0);
   });
 

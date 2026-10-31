@@ -565,6 +565,33 @@ describe('Scene UI Components', () => {
       fireEvent.click(buttons[buttons.length - 1]);
       expect(audioModule.playAudio.mock.calls[2][0]).toMatch(/kuuluu/);
     });
+
+    it('uses the default prompt and bins label, or the ones in the game data in the UI language', () => {
+      const { unmount } = renderGame();
+      expect(screen.getByText(/どの箱に入れる？|Which bin does it go in\?/)).toBeInTheDocument();
+      expect(screen.getByRole('group', { name: /ごみの箱|Bins/ })).toBeInTheDocument();
+      unmount();
+
+      const officeGame = {
+        ...sortGame,
+        prompt: { en: 'Which office handles it?', ja: 'どの役所で手続きする？' },
+        binsLabel: { en: 'Offices', ja: '役所' }
+      };
+      for (const [lang, prompt, binsLabel] of [
+        ['en', 'Which office handles it?', 'Offices'],
+        ['ja', 'どの役所で手続きする？', '役所']
+      ]) {
+        const view = render(
+          <LanguageProvider defaultLanguage={lang}>
+            <SortGame game={officeGame} mode="en" onFinish={vi.fn()} />
+          </LanguageProvider>
+        );
+        expect(screen.getByText(prompt)).toBeInTheDocument();
+        expect(screen.getByRole('group', { name: binsLabel })).toBeInTheDocument();
+        expect(screen.queryByText(/どの箱に入れる？|Which bin does it go in\?/)).toBeNull();
+        view.unmount();
+      }
+    });
   });
 
   describe('DialogueScene', () => {
