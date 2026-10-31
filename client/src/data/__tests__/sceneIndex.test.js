@@ -40,7 +40,7 @@ describe('Scene Index Module', () => {
     const lahioGames = getGamesByScene('lahio');
     expect(lahioGames.map((g) => g.id)).toEqual(['jatekatos', 'rappukaytava']);
 
-    expect(getGamesByScene('kaupunki').map((g) => g.id)).toEqual(['ajanvaraus', 'pankkiautomaatti']);
+    expect(getGamesByScene('kaupunki').map((g) => g.id)).toEqual(['ajanvaraus', 'pankkiautomaatti', 'virastot']);
 
     const unknownGames = getGamesByScene('unknown');
     expect(unknownGames).toEqual([]);
@@ -49,13 +49,14 @@ describe('Scene Index Module', () => {
   it('getRecommendedGames returns games with sequential numbers and scenes in order', () => {
     const recs = getRecommendedGames();
     expect(Array.isArray(recs)).toBe(true);
-    expect(recs.length).toBe(5);
+    expect(recs.length).toBe(6);
     expect(recs.map((r) => r.game.id)).toEqual([
       'vaatteet',
       'jatekatos',
       'rappukaytava',
       'ajanvaraus',
-      'pankkiautomaatti'
+      'pankkiautomaatti',
+      'virastot'
     ]);
 
     recs.forEach((item, idx) => {
@@ -81,7 +82,10 @@ describe('Scene Index Module', () => {
     const nextAfterAjanvaraus = getNextRecommended('ajanvaraus');
     expect(nextAfterAjanvaraus.game.id).toBe('pankkiautomaatti');
     expect(nextAfterAjanvaraus.number).toBe(5);
-    expect(getNextRecommended('pankkiautomaatti')).toBeNull();
+    const nextAfterPankkiautomaatti = getNextRecommended('pankkiautomaatti');
+    expect(nextAfterPankkiautomaatti.game.id).toBe('virastot');
+    expect(nextAfterPankkiautomaatti.number).toBe(6);
+    expect(getNextRecommended('virastot')).toBeNull();
     expect(getNextRecommended('non-existent')).toBeNull();
     expect(getNextRecommended(null)).toBeNull();
   });

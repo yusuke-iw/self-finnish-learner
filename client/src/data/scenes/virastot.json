@@ -1,0 +1,514 @@
+{
+  "id": "virastot",
+  "sceneId": "kaupunki",
+  "type": "sort",
+  "schemaVersion": 1,
+  "icon": "🏛️",
+  "title": {
+    "fi": "Virastoissa",
+    "en": "At the government offices",
+    "ja": "役所で"
+  },
+  "place": {
+    "fi": "virasto",
+    "en": "government office",
+    "ja": "役所"
+  },
+  "instruction": {
+    "fi": "Sinulla on monta asiaa hoidettavana. Valitse jokaiselle asialle oikea virasto.",
+    "selko": "Mikä virasto auttaa? Valitse oikea virasto.",
+    "en": "You have several errands to run. Choose the right office for each one.",
+    "ja": "いくつも用事があります。それぞれの用事に合う役所を選ぼう。"
+  },
+  "prompt": {
+    "en": "Which office handles it?",
+    "ja": "どの役所で手続きする？"
+  },
+  "binsLabel": {
+    "en": "Offices",
+    "ja": "役所"
+  },
+  "playLength": 8,
+  "relatedLessonId": "l12",
+  "bins": [
+    {
+      "id": "kela",
+      "label": {
+        "fi": "Kela",
+        "en": "Kela (social security)",
+        "ja": "Kela（社会保険庁）"
+      },
+      "color": "#2a7f9e"
+    },
+    {
+      "id": "poliisi",
+      "label": {
+        "fi": "Poliisi",
+        "en": "Police",
+        "ja": "警察"
+      },
+      "color": "#1f3a8a"
+    },
+    {
+      "id": "verohallinto",
+      "label": {
+        "fi": "Verohallinto",
+        "en": "Tax Administration (Vero)",
+        "ja": "税務署（Vero）"
+      },
+      "color": "#7a4fa0"
+    },
+    {
+      "id": "dvv",
+      "label": {
+        "fi": "DVV",
+        "en": "DVV (population data agency)",
+        "ja": "DVV（デジタル・人口情報庁）"
+      },
+      "color": "#c0563a"
+    },
+    {
+      "id": "migri",
+      "label": {
+        "fi": "Migri",
+        "en": "Migri (Immigration Service)",
+        "ja": "Migri（移民局）"
+      },
+      "color": "#3f7f3a"
+    }
+  ],
+  "items": [
+    {
+      "id": "henkilokortti",
+      "icon": "🪪",
+      "binId": "poliisi",
+      "label": {
+        "fi": "henkilökortti",
+        "en": "identity card",
+        "ja": "身分証明書（IDカード）"
+      },
+      "sentence": {
+        "fi": "Henkilökortin saa poliisilta.",
+        "selko": "Saat henkilökortin poliisilta.",
+        "en": "You get an identity card from the police.",
+        "ja": "身分証明書は警察で発行してもらいます。"
+      },
+      "hint": {
+        "fi": "Henkilökortin myöntää poliisi. Älä sekoita sitä oleskelulupakorttiin, joka tulee Migristä.",
+        "selko": "Poliisi tekee henkilökortin. Oleskelulupakortti on eri kortti. Se tulee Migristä.",
+        "en": "The police issue identity cards. Don't confuse it with the residence permit card, which comes from Migri.",
+        "ja": "身分証明書を出すのは警察です。Migri から届く在留カードと混同しないように。"
+      }
+    },
+    {
+      "id": "passi",
+      "icon": "🛂",
+      "binId": "poliisi",
+      "label": {
+        "fi": "Suomen passi",
+        "en": "Finnish passport",
+        "ja": "フィンランドのパスポート"
+      },
+      "sentence": {
+        "fi": "Suomen passia haetaan poliisilta.",
+        "selko": "Hae Suomen passia poliisilta.",
+        "en": "You apply for a Finnish passport from the police.",
+        "ja": "フィンランドのパスポートは警察に申請します。"
+      },
+      "hint": {
+        "fi": "Suomen kansalainen saa passin poliisilta. Jos olet toisen maan kansalainen, haet passia oman maasi suurlähetystöstä.",
+        "selko": "Poliisi tekee Suomen passin. Oletko toisen maan kansalainen? Hae passia oman maasi suurlähetystöstä.",
+        "en": "Finnish citizens get their passport from the police. If you are a citizen of another country, you apply for a passport at your own country's embassy.",
+        "ja": "フィンランド国籍の人は警察でパスポートを受け取ります。ほかの国の国籍なら、自分の国の大使館で申請します。"
+      }
+    },
+    {
+      "id": "rikosilmoitus",
+      "icon": "🚲",
+      "binId": "poliisi",
+      "label": {
+        "fi": "rikosilmoitus varastetusta pyörästä",
+        "en": "crime report about a stolen bike",
+        "ja": "盗まれた自転車の被害届"
+      },
+      "sentence": {
+        "fi": "Rikosilmoitus tehdään poliisille.",
+        "selko": "Ilmoita rikoksesta poliisille.",
+        "en": "You file a crime report with the police.",
+        "ja": "被害届は警察に出します。"
+      },
+      "hint": {
+        "fi": "Jos sinulta varastetaan jotain, tee rikosilmoitus poliisille. Sen voi tehdä myös verkossa.",
+        "selko": "Varastiko joku pyöräsi? Ilmoita siitä poliisille. Voit tehdä ilmoituksen netissä.",
+        "en": "If something is stolen from you, report the crime to the police. You can also do it online.",
+        "ja": "何かを盗まれたら、警察に被害届を出します。オンラインでも出せます。"
+      }
+    },
+    {
+      "id": "verokortti",
+      "icon": "💳",
+      "binId": "verohallinto",
+      "label": {
+        "fi": "verokortti",
+        "en": "tax card",
+        "ja": "税カード"
+      },
+      "sentence": {
+        "fi": "Verokortin saa Verohallinnolta.",
+        "selko": "Saat verokortin Verohallinnolta.",
+        "en": "You get a tax card from the Tax Administration.",
+        "ja": "税カードは税務署（Verohallinto）から受け取ります。"
+      },
+      "hint": {
+        "fi": "Verokortista työnantaja näkee, kuinka paljon veroa palkasta pidätetään. Sen antaa Verohallinto, ei Kela.",
+        "selko": "Työnantaja tarvitsee verokortin. Saat sen Verohallinnolta. Kela ei tee verokorttia.",
+        "en": "The tax card tells your employer how much tax to withhold from your pay. It comes from the Tax Administration, not from Kela.",
+        "ja": "税カードで、雇い主は給料から源泉徴収する税額を知ります。出すのは税務署で、Kela ではありません。"
+      }
+    },
+    {
+      "id": "veroilmoitus",
+      "icon": "🧾",
+      "binId": "verohallinto",
+      "label": {
+        "fi": "veroilmoitus",
+        "en": "tax return",
+        "ja": "確定申告書"
+      },
+      "sentence": {
+        "fi": "Veroilmoituksen voi tarkistaa ja korjata OmaVerossa.",
+        "selko": "Tarkista veroilmoitus OmaVerossa.",
+        "en": "You can check and correct your tax return in OmaVero.",
+        "ja": "確定申告書は OmaVero で確認・修正できます。"
+      },
+      "hint": {
+        "fi": "Saat esitäytetyn veroilmoituksen keväällä. Tarkista se ja korjaa virheet Verohallinnon OmaVero-palvelussa.",
+        "selko": "Saat veroilmoituksen keväällä. Tarkista se. OmaVero on Verohallinnon palvelu.",
+        "en": "You get a pre-completed tax return in the spring. Check it and correct any mistakes in the Tax Administration's OmaVero service.",
+        "ja": "記入済みの確定申告書が春に届きます。税務署の OmaVero で確認し、間違いを直します。"
+      }
+    },
+    {
+      "id": "lapsilisa",
+      "icon": "👶",
+      "binId": "kela",
+      "label": {
+        "fi": "lapsilisä",
+        "en": "child benefit",
+        "ja": "児童手当"
+      },
+      "sentence": {
+        "fi": "Lapsilisää haetaan Kelasta.",
+        "selko": "Kela maksaa lapsilisää.",
+        "en": "You apply for child benefit from Kela.",
+        "ja": "児童手当は Kela に申請します。"
+      },
+      "hint": {
+        "fi": "Lapsilisää maksetaan Suomessa asuvista lapsista. Sen maksaa Kela, ei kunta.",
+        "selko": "Lapsilisä on rahaa lasta varten. Kela maksaa sen.",
+        "en": "Child benefit is paid for children who live in Finland. Kela pays it, not the municipality.",
+        "ja": "児童手当はフィンランドに住む子どもについて支払われます。払うのは自治体ではなく Kela です。"
+      }
+    },
+    {
+      "id": "asumistuki",
+      "icon": "🏠",
+      "binId": "kela",
+      "label": {
+        "fi": "asumistuki",
+        "en": "housing allowance",
+        "ja": "住宅手当"
+      },
+      "sentence": {
+        "fi": "Asumistukea voi hakea verkossa OmaKelassa.",
+        "selko": "Hae asumistukea OmaKelassa.",
+        "en": "You can apply for housing allowance online in OmaKela.",
+        "ja": "住宅手当はオンラインの OmaKela で申請できます。"
+      },
+      "hint": {
+        "fi": "Yleinen asumistuki auttaa maksamaan asumiskuluja, jos tulot ovat pienet. Tuen maksaa Kela.",
+        "selko": "Onko sinulla pienet tulot? Kela voi auttaa vuokran maksamisessa.",
+        "en": "General housing allowance helps with housing costs if your income is low. Kela pays it.",
+        "ja": "収入が少ないとき、一般住宅手当が住居費を助けます。払うのは Kela です。"
+      }
+    },
+    {
+      "id": "toimeentulotuki",
+      "icon": "🛒",
+      "binId": "kela",
+      "label": {
+        "fi": "toimeentulotuki",
+        "en": "social assistance",
+        "ja": "生活保護（生計援助）"
+      },
+      "sentence": {
+        "fi": "Toimeentulotuen hakemus lähetetään Kelaan.",
+        "selko": "Lähetä toimeentulotuen hakemus Kelaan.",
+        "en": "The application for social assistance is sent to Kela.",
+        "ja": "生活保護の申請書は Kela に送ります。"
+      },
+      "hint": {
+        "fi": "Toimeentulotuki on viimesijainen tuki. Hae ensin muut tuet ja sitten toimeentulotukea Kelasta.",
+        "selko": "Toimeentulotuki auttaa, kun raha ei riitä. Hae ensin muita tukia. Hae sitten toimeentulotukea Kelasta.",
+        "en": "Social assistance is the last-resort benefit. First apply for other benefits, then apply for social assistance from Kela.",
+        "ja": "生活保護は最後の手段の支援です。まずほかの手当を申請し、それから Kela に生活保護を申請します。"
+      }
+    },
+    {
+      "id": "muuttoilmoitus",
+      "icon": "📦",
+      "binId": "dvv",
+      "label": {
+        "fi": "muuttoilmoitus",
+        "en": "notice of move",
+        "ja": "転居届"
+      },
+      "sentence": {
+        "fi": "Muuttoilmoitus tehdään DVV:lle.",
+        "selko": "Kun muutat, ilmoita uusi osoite DVV:lle.",
+        "en": "You file a notice of move with the DVV.",
+        "ja": "転居届は DVV に出します。"
+      },
+      "hint": {
+        "fi": "DVV pitää kirjaa osoitteista. Muuttoilmoituksen voi tehdä verkossa, ja samalla tieto voi mennä myös Postille.",
+        "selko": "DVV tietää, missä asut. Ilmoita uusi osoite netissä. Tieto voi mennä myös Postille.",
+        "en": "The DVV keeps records of addresses. You can file the notice of move online, and at the same time the information can also go to Posti.",
+        "ja": "住所の記録をしているのは DVV です。転居届はオンラインで出せて、同時に郵便（Posti）にも伝えられます。"
+      }
+    },
+    {
+      "id": "nimenmuutos",
+      "icon": "✍️",
+      "binId": "dvv",
+      "label": {
+        "fi": "nimenmuutos",
+        "en": "change of name",
+        "ja": "氏名の変更"
+      },
+      "sentence": {
+        "fi": "Nimenmuutosta haetaan DVV:ltä.",
+        "selko": "Haluatko uuden nimen? Hae sitä DVV:ltä.",
+        "en": "You apply for a change of name from the DVV.",
+        "ja": "氏名の変更は DVV に申請します。"
+      },
+      "hint": {
+        "fi": "Nimet merkitään väestötietoihin, joita DVV ylläpitää. Ennen tämä asia hoidettiin maistraatissa.",
+        "selko": "DVV tietää nimesi. Ennen tätä asiaa hoiti maistraatti. Nyt sitä hoitaa DVV.",
+        "en": "Names are recorded in the population data that the DVV maintains. This used to be done at the maistraatti (local register office).",
+        "ja": "名前は DVV が管理する住民情報に登録されます。以前は maistraatti（登記所）で手続きしていました。"
+      }
+    },
+    {
+      "id": "oleskelulupa",
+      "icon": "📄",
+      "binId": "migri",
+      "label": {
+        "fi": "oleskelulupa",
+        "en": "residence permit",
+        "ja": "在留許可"
+      },
+      "sentence": {
+        "fi": "Oleskeluluvista päättää Migri.",
+        "selko": "Migri päättää oleskeluluvasta.",
+        "en": "Migri decides on residence permits.",
+        "ja": "在留許可を決めるのは Migri です。"
+      },
+      "hint": {
+        "fi": "Maahanmuuttovirasto eli Migri käsittelee oleskelulupahakemukset. Poliisi ei myönnä oleskelulupia.",
+        "selko": "Migri päättää oleskeluluvista. Poliisi ei päätä niistä.",
+        "en": "The Finnish Immigration Service, Migri, handles residence permit applications. The police do not grant residence permits.",
+        "ja": "在留許可の申請を扱うのは移民局（Migri）です。警察は在留許可を出しません。"
+      }
+    },
+    {
+      "id": "kansalaisuus",
+      "icon": "🇫🇮",
+      "binId": "migri",
+      "label": {
+        "fi": "Suomen kansalaisuus",
+        "en": "Finnish citizenship",
+        "ja": "フィンランド国籍"
+      },
+      "sentence": {
+        "fi": "Suomen kansalaisuutta haetaan Migristä.",
+        "selko": "Hae Suomen kansalaisuutta Migristä.",
+        "en": "You apply for Finnish citizenship from Migri.",
+        "ja": "フィンランド国籍は Migri に申請します。"
+      },
+      "hint": {
+        "fi": "Kansalaisuushakemuksen käsittelee Migri. Kun olet saanut kansalaisuuden, voit hakea Suomen passia poliisilta.",
+        "selko": "Migri päättää kansalaisuudesta. Sen jälkeen saat passin poliisilta.",
+        "en": "Migri handles citizenship applications. Once you have become a citizen, you can apply for a Finnish passport from the police.",
+        "ja": "国籍の申請を扱うのは Migri です。国籍を得たら、警察でフィンランドのパスポートを申請できます。"
+      }
+    },
+    {
+      "id": "perheenyhdistaminen",
+      "icon": "👨‍👩‍👧",
+      "binId": "migri",
+      "label": {
+        "fi": "perheenyhdistäminen",
+        "en": "family reunification",
+        "ja": "家族の呼び寄せ"
+      },
+      "sentence": {
+        "fi": "Perheenyhdistämisestä päättää Migri.",
+        "selko": "Migri päättää, saako perhe oleskeluluvan.",
+        "en": "Migri decides on family reunification.",
+        "ja": "家族の呼び寄せを決めるのは Migri です。"
+      },
+      "hint": {
+        "fi": "Perheenyhdistämisessä perheenjäsen hakee oleskelulupaa Suomeen. Oleskeluluvista päättää Migri.",
+        "selko": "Perhe tarvitsee oleskeluluvan. Migri päättää oleskeluluvista.",
+        "en": "In family reunification, a family member applies for a residence permit for Finland. Migri decides on residence permits.",
+        "ja": "家族の呼び寄せでは、家族がフィンランドの在留許可を申請します。在留許可を決めるのは Migri です。"
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "virasto",
+      "translation": "government office, agency",
+      "translationJa": "役所・官庁"
+    },
+    {
+      "word": "asioida",
+      "translation": "to run errands, to do business (with an office)",
+      "translationJa": "（役所などで）用事を済ませる"
+    },
+    {
+      "word": "hakea",
+      "translation": "to apply for (hakea + partitive: hakea passia)",
+      "translationJa": "申請する（hakea＋分格: hakea passia）"
+    },
+    {
+      "word": "hakemus",
+      "translation": "application",
+      "translationJa": "申請（書）"
+    },
+    {
+      "word": "myöntää",
+      "translation": "to grant, to issue (a permit or card)",
+      "translationJa": "（許可・カードを）与える、発行する"
+    },
+    {
+      "word": "henkilökortti",
+      "translation": "identity card",
+      "translationJa": "身分証明書"
+    },
+    {
+      "word": "oleskelulupa",
+      "translation": "residence permit",
+      "translationJa": "在留許可"
+    },
+    {
+      "word": "verokortti",
+      "translation": "tax card",
+      "translationJa": "税カード"
+    },
+    {
+      "word": "muuttoilmoitus",
+      "translation": "notice of move (change of address)",
+      "translationJa": "転居届"
+    },
+    {
+      "word": "asumistuki",
+      "translation": "housing allowance",
+      "translationJa": "住宅手当"
+    },
+    {
+      "word": "palvelupiste",
+      "translation": "service point, customer service office",
+      "translationJa": "窓口・サービス窓口"
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "virastot-1",
+      "title": {
+        "fi": "Kuka hoitaa mitäkin?",
+        "selko": "Mikä virasto auttaa?",
+        "en": "Which office does what?",
+        "ja": "どの役所が何を担当する？"
+      },
+      "body": [
+        {
+          "fi": "Kela maksaa sosiaaliturvan etuuksia, kuten lapsilisää ja asumistukea. Verohallinto hoitaa verotuksen.",
+          "selko": "Kela maksaa tukia. Verohallinto hoitaa verot.",
+          "en": "Kela pays social security benefits such as child benefit and housing allowance. The Tax Administration takes care of taxation.",
+          "ja": "Kela は児童手当や住宅手当などの社会保障の給付を払います。税金は税務署（Verohallinto）の担当です。"
+        },
+        {
+          "fi": "Poliisi myöntää henkilökortit ja passit. Migri päättää oleskeluluvista ja kansalaisuudesta. DVV pitää kirjaa esimerkiksi osoitteista ja nimistä.",
+          "selko": "Poliisi tekee henkilökortin ja passin. Migri päättää oleskeluluvasta. DVV tietää osoitteesi ja nimesi.",
+          "en": "The police issue identity cards and passports. Migri decides on residence permits and citizenship. The DVV keeps records of things like addresses and names.",
+          "ja": "警察は身分証明書とパスポートを発行します。Migri は在留許可と国籍を決めます。DVV は住所や名前などを記録しています。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "hakea jotakin + mistä? / keneltä?: Kelasta, Migristä – poliisilta, DVV:ltä",
+        "selko": "Hae passia poliisilta. Hae lapsilisää Kelasta.",
+        "en": "hakea (to apply for) + elative or ablative: Kelasta, Migristä – poliisilta, DVV:ltä. Both cases are used with office names.",
+        "ja": "「hakea＋出格／奪格」で「〜に申請する」: Kelasta、Migristä（出格）、poliisilta、DVV:ltä（奪格）。役所の名前にはどちらの格も使われます。"
+      }
+    },
+    {
+      "id": "virastot-2",
+      "title": {
+        "fi": "Uudet nimet",
+        "selko": "Uudet nimet",
+        "en": "New names",
+        "ja": "新しい名前"
+      },
+      "body": [
+        {
+          "fi": "Maistraatteja ei enää ole. Niiden tehtävät siirtyivät vuonna 2020 Digi- ja väestötietovirastolle eli DVV:lle.",
+          "selko": "Maistraattia ei ole enää. Nyt DVV hoitaa samat asiat.",
+          "en": "The maistraatti offices no longer exist. In 2020 their tasks moved to the Digital and Population Data Services Agency, the DVV.",
+          "ja": "maistraatti（登記所）はもうありません。その仕事は 2020 年にデジタル・人口情報庁（DVV）に移りました。"
+        },
+        {
+          "fi": "Myös TE-toimistot lakkautettiin vuoden 2025 alussa. Työnhaun asioita hoidetaan nyt kunnan työllisyyspalveluissa.",
+          "selko": "TE-toimistoa ei ole enää. Kun haet töitä, mene kunnan työllisyyspalveluihin.",
+          "en": "The TE offices were also closed down at the start of 2025. Job-seeking matters are now handled by the municipality's employment services.",
+          "ja": "TE 事務所（職業安定所）も 2025 年の初めに廃止されました。仕事探しの手続きは、いまは自治体の就労支援窓口で行います。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "Lyhenteen taivutus: DVV:n, DVV:ssä, DVV:lle, DVV:ltä",
+        "selko": "DVV:lle, DVV:ltä",
+        "en": "Abbreviations take case endings after a colon: DVV:n, DVV:ssä, DVV:lle, DVV:ltä",
+        "ja": "略語の格語尾はコロンの後に付ける: DVV:n（属格）、DVV:ssä（内格）、DVV:lle（向格）、DVV:ltä（奪格）"
+      }
+    },
+    {
+      "id": "virastot-3",
+      "title": {
+        "fi": "Asioi verkossa",
+        "selko": "Hoida asiat netissä",
+        "en": "Do it online",
+        "ja": "オンラインで手続き"
+      },
+      "body": [
+        {
+          "fi": "Monet asiat voi hoitaa verkossa, esimerkiksi OmaKelassa, OmaVerossa ja virastojen omissa verkkopalveluissa. Kirjautumiseen tarvitaan yleensä pankkitunnukset tai mobiilivarmenne.",
+          "selko": "Voit hoitaa monta asiaa netissä. Yleensä tarvitset pankkitunnukset tai mobiilivarmenteen.",
+          "en": "You can handle many matters online, for example in OmaKela, OmaVero and the offices' own e-services. To log in, you usually need online banking credentials or a mobile certificate.",
+          "ja": "多くの手続きは、OmaKela や OmaVero、各役所のオンラインサービスでできます。ログインには、ふつうネットバンキングの認証かモバイル認証が必要です。"
+        },
+        {
+          "fi": "Suomi.fi kokoaa ohjeet ja palvelut yhteen paikkaan. Joskus pitää silti käydä palvelupisteessä, esimerkiksi poliisiasemalla tai Migrin palvelupisteessä.",
+          "selko": "Suomi.fi-sivulla on ohjeita. Joskus sinun pitää silti mennä virastoon.",
+          "en": "Suomi.fi gathers instructions and services in one place. Sometimes you still have to visit a service point, for example a police station or a Migri service point.",
+          "ja": "Suomi.fi には案内とサービスがまとまっています。それでも、警察署や Migri の窓口などに行かなければならないこともあります。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "Missä? – OmaKelassa, OmaVerossa, palvelupisteessä",
+        "selko": "Missä? OmaKelassa.",
+        "en": "Where? – the inessive: OmaKelassa, OmaVerossa, palvelupisteessä",
+        "ja": "「どこで？」は内格: OmaKelassa（OmaKela で）、OmaVerossa（OmaVero で）、palvelupisteessä（窓口で）"
+      }
+    }
+  ]
+}
