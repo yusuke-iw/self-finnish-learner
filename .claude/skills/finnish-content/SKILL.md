@@ -41,7 +41,7 @@ MongoDB を使う環境では、利用者が `npm run seed --prefix server`（�
 | ファイル | 中身 |
 | --- | --- |
 | `scenes.json` | 場面の一覧（`koti` / `lahio` / `kaupunki`）と、場面ごとのゲームの並び（`gameIds`、おすすめの順） |
-| `vaatteet.json` など | ゲーム 1 本ずつ（`type`: `outfit` / `sort` / `dialogue`） |
+| `vaatteet.json` など | ゲーム 1 本ずつ（`type`: `outfit` / `sort` / `dialogue` / `procedure`） |
 | `index.js` | 上を import する。ゲームを足したらここと `client/src/data/__tests__/sceneData.test.js` の `games` に足す |
 
 - client の JSON なので、server の seed は関係ない（`npm run seed` は不要）。
@@ -73,6 +73,13 @@ MongoDB を使う環境では、利用者が `npm run seed --prefix server`（�
 - `sentence` は `fi` を「X kuuluu ＋入格」（`biojätteeseen`・`kartonginkeräykseen`・`sekajätteeseen`）、`selko` を「X on ＋素材の分格」（`kartonkia`・`sekajätettä`）にそろえる。
 - `hint` は 1 件に 1 つで、どの箱を間違えても出る。だから「その物が何か／なぜその箱か」を言い、よくある取り違え（牛乳パックは紙ではない、コップは lasi ではない、など）に触れる。
 - 「容器・包装だけ」の区別（kartonki / lasi / muovi は pakkaus だけ。コップ・歯ブラシは sekajäte）を入れると学びになる。
+- ごみ以外の分類（`virastot.json` の役所と用件など）では、画面の問いと箱の読み上げ名をゲームごとに `prompt` / `binsLabel`（`{ "en", "ja" }`、UI の言語で出る）で上書きする。書かなければ「どの箱に入れる？」「ごみの箱」になる。
+
+**SortGame（役所と用件）の決まり**
+- `items` は 12〜16 件。用件の名前（`label`）は小文字で主格（`verokortti`、`rikosilmoitus varastetusta pyörästä`）。
+- 役所と用件の対応は、その役所の公式サイト（kela.fi、vero.fi、dvv.fi、migri.fi、poliisi.fi、suomi.fi）で今の分担を確かめ、PR に出典を書く。確かめられないもの・役所をまたぐもの（運転免許など）・制度が変わったばかりのもの（2025 年の TE 改革後の求職）は入れない。古い名前（maistraatti → DVV）は説明カードで触れる。
+- `sentence` は `fi` を「hakea ＋出格／離格」か受け身でそろえる（`Lapsilisää haetaan Kelasta.`、`Henkilökortin saa poliisilta.`、`Muuttoilmoitus tehdään DVV:lle.`）。Kela・Migri は -sta、poliisi・Verohallinto・DVV は -lta を使う。略語の語尾はコロンでつなぐ（`DVV:n`、`DVV:ssä`）。
+- `hint` は取り違えやすい役所に触れる（verokortti は Kela ではない、oleskelulupa は poliisi ではない、など）。
 
 **DialogueScene（会話）の決まり**
 - 会話は一本道。相手のセリフ（`nodes`）は 4〜6。good / ok の `next` はどれも同じ次のセリフ、最後は `null`。bad / repeat には `next` を書かない。
