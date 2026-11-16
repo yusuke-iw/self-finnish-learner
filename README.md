@@ -1,6 +1,6 @@
 # Finnish Learner
 
-A web app for learning Finnish, from A2 basics up to C1 reading. It combines a graded curriculum with three-level quizzes, spaced-repetition review, listening practice, a word book, grammar explanations with drills, graded reading passages, and a "daily-life scenes" mode where you practise Finnish through small games set in a home, a neighbourhood, a town, health care and money matters. Audio comes from Google Cloud Text-to-Speech, called through the Express server so the API key never reaches the browser.
+A web app for learning Finnish, from A2 basics up to C1 reading. It combines a graded curriculum with three-level quizzes, spaced-repetition review, listening practice, a word book, grammar explanations with drills, graded reading passages, and a "daily-life scenes" mode where you practise Finnish through small games set in a home, a neighbourhood, a town, health care, money matters and nature. Audio comes from Google Cloud Text-to-Speech, called through the Express server so the API key never reaches the browser.
 
 The client is React 19 + Vite and the server is Express + Mongoose. The app also runs without MongoDB: the server then serves the built-in seed data from memory.
 
@@ -34,7 +34,7 @@ The client is React 19 + Vite and the server is Express + Mongoose. The app also
 
 ### Daily-life scenes
 
-Five settings, eight mini-games. Every game is driven by a JSON file in `client/src/data/scenes/`, and a data test checks each file's shape.
+Six settings, nine mini-games. Every game is driven by a JSON file in `client/src/data/scenes/`, and a data test checks each file's shape.
 
 | Setting | Game | Type |
 | --- | --- | --- |
@@ -46,6 +46,7 @@ Five settings, eight mini-games. Every game is driven by a JSON file in `client/
 | Kaupunki | At the government offices | Sort errands to the right office |
 | Terveys (health) | Where to get help? | Sort health problems to the pharmacy, health centre, dental clinic, emergency room or 112 |
 | Raha (money) | Paying a bill | Step-by-step online-bank simulation: pay a bill by its due date, approve an e-invoice, handle a payment reminder |
+| Luonto (nature) | Everyman's rights | Sort things to do in the forest into allowed, only with permission, or not allowed |
 
 Each game explains why an answer is right or wrong, ends with info cards (re-readable from the list), a vocabulary list you can add to the word book, a link to related lessons, and the next recommended game. Game text can be shown in Finnish, simplified Finnish (selko), English or Japanese. Progress is marked with a check on the scenes list.
 
@@ -77,8 +78,8 @@ Measured on 2026-11-09 from the `main` branch.
 | Example sentences | 270 (5 units, 15 lessons, 18 sentences each) |
 | Reading passages | 12 (A1/A2 to C1) |
 | Grammar topics | 22 in 5 categories |
-| Scene settings | 5 (Koti, Lähiö, Kaupunki, Terveys, Raha) |
-| Scene mini-games | 8, across 4 game types (outfit, sort, dialogue, procedure) |
+| Scene settings | 6 (Koti, Lähiö, Kaupunki, Terveys, Raha, Luonto) |
+| Scene mini-games | 9, across 4 game types (outfit, sort, dialogue, procedure) |
 
 ## Milestones
 
@@ -98,7 +99,7 @@ Planned work, grouped into milestones. Items are directions, not detailed design
 
 - [x] A health setting, for example a quiz at the health centre
 - [x] A money setting, for example paying a bill before its due date
-- [ ] A nature setting, for example picking berries and mushrooms in the forest
+- [x] A nature setting, for example picking berries and mushrooms in the forest
 - [ ] Branching dialogues, where the answer you pick changes the conversation (the data format already allows it)
 - [ ] Spoken-register versions for the games other than the stairwell dialogues
 - [ ] Per-item selko (simplified Finnish) text instead of per-game

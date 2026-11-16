@@ -7,11 +7,12 @@ import pankkiautomaatti from './pankkiautomaatti.json';
 import virastot from './virastot.json';
 import mistaApua from './mista-apua.json';
 import laskut from './laskut.json';
+import jokaisenoikeudet from './jokaisenoikeudet.json';
 import upcoming from './upcoming.json';
 
 export const scenes = [...rawScenes].sort((a, b) => a.order - b.order);
 
-export const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua, laskut];
+export const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua, laskut, jokaisenoikeudet];
 
 const gamesMap = new Map(games.map((g) => [g.id, g]));
 
