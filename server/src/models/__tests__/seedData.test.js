@@ -8,9 +8,13 @@ const lessonTitles = [
   'Menneet ajat',
   'Työelämä ja Opiskelu',
   'Konditionaali ja Potentiaali',
+  'Passiivi',
   'Yhteiskunta ja Ympäristö',
   'Lauseenvastikkeet',
+  'Media ja kulttuuri',
   'Abstraktit keskustelut',
+  'Sanonnat ja idiomit',
+  'Asiatyyli ja argumentointi',
   'Kaupassa ja apteekissa',
   'Terveys ja lääkärissä',
   'Asuminen',
@@ -19,17 +23,25 @@ const lessonTitles = [
   'Vapaa-aika ja harrastukset',
 ];
 
-const lifeLessons = [
+// Lessons whose ids run m<module>_1 to m<module>_18 in order.
+const numberedLessons = [
   [8, 'Kaupassa ja apteekissa', ['easy']],
   [9, 'Terveys ja lääkärissä', ['easy', 'medium']],
   [10, 'Asuminen', ['medium']],
   [11, 'Sää ja vuodenajat', ['easy']],
   [12, 'Virastoissa', ['medium', 'hard']],
   [13, 'Vapaa-aika ja harrastukset', ['easy']],
+  [14, 'Passiivi', ['medium']],
+  [15, 'Media ja kulttuuri', ['hard']],
+  [16, 'Sanonnat ja idiomit', ['hard']],
+  [17, 'Asiatyyli ja argumentointi', ['hard']],
 ];
 
 describe('Curriculum seed sentences', () => {
-  const excludedSpokenLessons = ['Yhteiskunta ja Ympäristö', 'Lauseenvastikkeet', 'Abstraktit keskustelut'];
+  const excludedSpokenLessons = [
+    'Yhteiskunta ja Ympäristö', 'Lauseenvastikkeet', 'Media ja kulttuuri',
+    'Abstraktit keskustelut', 'Sanonnat ja idiomit', 'Asiatyyli ja argumentointi',
+  ];
 
   test.each(lessonTitles.filter(title => !excludedSpokenLessons.includes(title)))('%s has spoken text and bilingual notes on every sentence', (title) => {
     for (const sentence of sentences.filter(s => s.category === title)) {
@@ -68,7 +80,7 @@ describe('Curriculum seed sentences', () => {
     expect(new Set(sentences.map((sentence) => sentence._id)).size).toBe(sentences.length);
   });
 
-  test.each(lifeLessons)('module %i has the expected ids and difficulty levels', (moduleId, title, difficulties) => {
+  test.each(numberedLessons)('module %i has the expected ids and difficulty levels', (moduleId, title, difficulties) => {
     const lessonSentences = sentences.filter((sentence) => sentence.category === title);
     const expectedIds = Array.from({ length: 18 }, (_, index) => `m${moduleId}_${index + 1}`);
 
@@ -77,7 +89,7 @@ describe('Curriculum seed sentences', () => {
       .toEqual([...difficulties].sort());
   });
 
-  test.each(lifeLessons)('module %i has complete, unique learning content', (moduleId, title) => {
+  test.each(numberedLessons)('module %i has complete, unique learning content', (moduleId, title) => {
     const lessonSentences = sentences.filter((sentence) => sentence.category === title);
 
     for (const sentence of lessonSentences) {

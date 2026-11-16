@@ -107,6 +107,46 @@ const categoryVocab = {
     { fi: 'Taide', en: 'Art', ja: '芸術' },
     { fi: 'Todellisuus', en: 'Reality', ja: '現実' },
     { fi: 'Totuus', en: 'Truth', ja: '真実' }
+  ],
+  "Passiivi": [
+    { fi: 'Juhannus', en: 'Midsummer', ja: '夏至祭' },
+    { fi: 'Järvi', en: 'Lake', ja: '湖' },
+    { fi: 'Lausua', en: 'Pronounce', ja: '発音する' },
+    { fi: 'Kenkä', en: 'Shoe', ja: '靴' },
+    { fi: 'Ikkuna', en: 'Window', ja: '窓' },
+    { fi: 'Lippu', en: 'Ticket', ja: 'チケット' },
+    { fi: 'Rakentaa', en: 'Build', ja: '建てる' },
+    { fi: 'Mökki', en: 'Cottage', ja: 'コテージ' }
+  ],
+  "Media ja kulttuuri": [
+    { fi: 'Sanomalehti', en: 'Newspaper', ja: '新聞' },
+    { fi: 'Kirjallisuus', en: 'Literature', ja: '文学' },
+    { fi: 'Valeuutinen', en: 'Fake news', ja: '偽ニュース' },
+    { fi: 'Lähdekriittisyys', en: 'Source criticism', ja: '情報源の吟味' },
+    { fi: 'Sävellys', en: 'Composition', ja: '楽曲' },
+    { fi: 'Elokuva', en: 'Film', ja: '映画' },
+    { fi: 'Arvostelu', en: 'Review', ja: '批評' },
+    { fi: 'Haastattelu', en: 'Interview', ja: 'インタビュー' }
+  ],
+  "Sanonnat ja idiomit": [
+    { fi: 'Pöytä', en: 'Table', ja: 'テーブル' },
+    { fi: 'Kirves', en: 'Axe', ja: '斧' },
+    { fi: 'Kaivo', en: 'Well', ja: '井戸' },
+    { fi: 'Metsä', en: 'Forest', ja: '森' },
+    { fi: 'Lumiukko', en: 'Snowman', ja: '雪だるま' },
+    { fi: 'Sarvi', en: 'Horn', ja: '角' },
+    { fi: 'Jäävuori', en: 'Iceberg', ja: '氷山' },
+    { fi: 'Sananlasku', en: 'Proverb', ja: 'ことわざ' }
+  ],
+  "Asiatyyli ja argumentointi": [
+    { fi: 'Etätyö', en: 'Remote work', ja: 'リモートワーク' },
+    { fi: 'Tuottavuus', en: 'Productivity', ja: '生産性' },
+    { fi: 'Vuorovaikutus', en: 'Interaction', ja: '対話・相互作用' },
+    { fi: 'Suunnittelu', en: 'Planning', ja: '計画' },
+    { fi: 'Käsitys', en: 'Notion', ja: '考え・通念' },
+    { fi: 'Yhteistyö', en: 'Cooperation', ja: '協力' },
+    { fi: 'Rahoitus', en: 'Funding', ja: '資金' },
+    { fi: 'Johtopäätös', en: 'Conclusion', ja: '結論' }
   ]
 };
 
