@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import SceneText from './SceneText';
 import {
   createProcedureRound,
@@ -17,6 +17,7 @@ import {
 } from '../../utils/feedbackSounds';
 import { recordAnswer } from '../../utils/studyStats';
 import { useLanguage } from '../../context/useLanguage';
+import { collectFinnishTexts } from '../../utils/sceneMistakes';
 
 export default function ProcedureSim({ game, mode, onFinish }) {
   const { t } = useLanguage();
@@ -24,6 +25,7 @@ export default function ProcedureSim({ game, mode, onFinish }) {
   const [wrongButtonIds, setWrongButtonIds] = useState([]);
   const [lastButtonId, setLastButtonId] = useState(null);
   const [isLast, setIsLast] = useState(false);
+  const mistakeTextsRef = useRef([]);
 
   const procedure = getCurrentProcedure(round);
   const step = getCurrentStep(round);
@@ -60,6 +62,14 @@ export default function ProcedureSim({ game, mode, onFinish }) {
       setIsLast(result.finished);
     } else {
       playIncorrectSound();
+      mistakeTextsRef.current.push(
+        ...collectFinnishTexts(
+          procedure.goal,
+          step.question,
+          step.screen,
+          (step.buttons || []).filter((b) => b.id === buttonId || b.correct)
+        )
+      );
       setWrongButtonIds((prev) => (prev.includes(buttonId) ? prev : [...prev, buttonId]));
     }
   };
@@ -67,7 +77,7 @@ export default function ProcedureSim({ game, mode, onFinish }) {
   const handleNext = () => {
     if (isLast) {
       playLessonCompleteSound();
-      onFinish();
+      onFinish(mistakeTextsRef.current);
       return;
     }
     setRound((prev) => nextStep(prev));

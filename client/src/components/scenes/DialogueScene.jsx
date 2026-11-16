@@ -17,6 +17,7 @@ import {
 } from '../../utils/feedbackSounds';
 import { recordAnswer } from '../../utils/studyStats';
 import { useLanguage } from '../../context/useLanguage';
+import { collectFinnishTexts } from '../../utils/sceneMistakes';
 
 export default function DialogueScene({ game, mode, onFinish }) {
   const { t } = useLanguage();
@@ -26,6 +27,7 @@ export default function DialogueScene({ game, mode, onFinish }) {
   const [feedbackChoice, setFeedbackChoice] = useState(null);
 
   const playedNodeKeysRef = useRef(new Set());
+  const mistakeTextsRef = useRef([]);
 
   const currentNode = getCurrentNode(state);
   const totalNodes = getNodeCount(state);
@@ -96,6 +98,7 @@ export default function DialogueScene({ game, mode, onFinish }) {
       playCorrectSound();
     } else if (result.quality === 'bad') {
       playIncorrectSound();
+      mistakeTextsRef.current.push(...collectFinnishTexts(currentNode.line, choice));
       setWrongChoiceIds((prev) => (prev.includes(choice.id) ? prev : [...prev, choice.id]));
     } else if (result.quality === 'repeat') {
       const textToPlay = speechForm === 'spoken' ? currentNode.line.spoken : currentNode.line.fi;
@@ -118,7 +121,7 @@ export default function DialogueScene({ game, mode, onFinish }) {
   const handleNext = () => {
     if (isFinished) {
       playLessonCompleteSound();
-      onFinish();
+      onFinish(mistakeTextsRef.current);
       return;
     }
 

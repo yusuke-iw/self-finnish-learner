@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import SceneText from './SceneText';
 import {
   createSortRound,
@@ -15,6 +15,7 @@ import {
 } from '../../utils/feedbackSounds';
 import { recordAnswer } from '../../utils/studyStats';
 import { useLanguage } from '../../context/useLanguage';
+import { collectFinnishTexts } from '../../utils/sceneMistakes';
 
 export default function SortGame({ game, mode, onFinish }) {
   const { t, language } = useLanguage();
@@ -22,6 +23,7 @@ export default function SortGame({ game, mode, onFinish }) {
   const [wrongBinIds, setWrongBinIds] = useState([]);
   const [lastWrongBinId, setLastWrongBinId] = useState(null);
   const [isLast, setIsLast] = useState(false);
+  const mistakeTextsRef = useRef([]);
 
   const item = getCurrentSortItem(round);
   const totalRounds = round.items.length;
@@ -56,6 +58,7 @@ export default function SortGame({ game, mode, onFinish }) {
       setLastWrongBinId(null);
     } else {
       playIncorrectSound();
+      mistakeTextsRef.current.push(...collectFinnishTexts(item.label, item.sentence, item.hint));
       setWrongBinIds((prev) => (prev.includes(binId) ? prev : [...prev, binId]));
       setLastWrongBinId(binId);
     }
@@ -64,7 +67,7 @@ export default function SortGame({ game, mode, onFinish }) {
   const handleNext = () => {
     if (isLast) {
       playLessonCompleteSound();
-      onFinish();
+      onFinish(mistakeTextsRef.current);
       return;
     }
     setRound((prev) => nextSortItem(prev));

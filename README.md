@@ -104,7 +104,7 @@ Planned work, grouped into milestones. Items are directions, not detailed design
 
 ### M5 Connected learning
 
-- [ ] Automatically add words you got wrong to the word book (today you add them with a button)
+- [x] Automatically add words you got wrong to the word book (today you add them with a button)
 - [ ] Sync scene progress to the server (today it is stored in the browser only)
 - [ ] A library where collected info cards can be read in one place
 - [ ] An illustrated map to explore the scenes, replacing the plain list

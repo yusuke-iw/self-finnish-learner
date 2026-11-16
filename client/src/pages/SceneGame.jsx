@@ -17,6 +17,7 @@ import {
 import { markGamePlayed } from '../utils/sceneProgress';
 import { getStudyStats } from '../utils/studyStats';
 import { saveProgress } from '../services/api';
+import { addMistakeWords } from '../utils/sceneMistakes';
 import { useLanguage } from '../context/useLanguage';
 
 const GAME_COMPONENTS = {
@@ -38,6 +39,7 @@ function SceneGameBody({ gameId }) {
   const [mode, setMode] = useState(() => getSceneTextMode());
   const [replayKey, setReplayKey] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [autoAddedWords, setAutoAddedWords] = useState([]);
 
   const game = findGameById(gameId);
 
@@ -60,8 +62,9 @@ function SceneGameBody({ gameId }) {
     setSceneTextMode(nextMode);
   };
 
-  const handleFinish = () => {
+  const handleFinish = (mistakeTexts) => {
     markGamePlayed(game.id);
+    setAutoAddedWords(addMistakeWords(game, mistakeTexts).map((entry) => entry.word));
 
     try {
       const p = saveProgress({ studyStats: getStudyStats() });
@@ -117,6 +120,7 @@ function SceneGameBody({ gameId }) {
             game={game}
             mode={displayMode}
             onRetry={handleRetry}
+            autoAddedWords={autoAddedWords}
             next={nextRecommended}
           />
         )}

@@ -6,7 +6,7 @@ import { useProgressStore } from '../../store/useProgressStore';
 import { findLessonById } from '../../data/curriculumData';
 import { addWord, getWords } from '../../utils/wordBook';
 
-export default function SceneResult({ game, mode, onRetry, onNext, next }) {
+export default function SceneResult({ game, mode, onRetry, onNext, next, autoAddedWords = [] }) {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { progress } = useProgressStore();
@@ -45,6 +45,14 @@ export default function SceneResult({ game, mode, onRetry, onNext, next }) {
             <InfoCard key={card.id} card={card} mode={mode} />
           ))}
         </div>
+      )}
+
+      {autoAddedWords.length > 0 && (
+        <p className="scene-result-auto-added" role="status">
+          {t('scenes.autoAddedWords', { count: autoAddedWords.length })}
+          {' '}
+          <span className="scene-result-auto-added-words">{autoAddedWords.join(', ')}</span>
+        </p>
       )}
 
       {Array.isArray(game?.vocabulary) && game.vocabulary.length > 0 && (

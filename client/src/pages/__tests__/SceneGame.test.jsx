@@ -6,6 +6,7 @@ import SceneGame from '../SceneGame';
 import { LanguageProvider } from '../../context/LanguageContext';
 import * as apiModule from '../../services/api';
 import { hasPlayed } from '../../utils/sceneProgress';
+import { getWords } from '../../utils/wordBook';
 import vaatteet from '../../data/scenes/vaatteet.json';
 import jatekatos from '../../data/scenes/jatekatos.json';
 import rappukaytava from '../../data/scenes/rappukaytava.json';
@@ -152,6 +153,40 @@ describe('SceneGame Page', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/scenes/rappukaytava');
     fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l10&level=1');
+  });
+
+  it('adds vocabulary tied to wrong answers to the word book at the end and reports it on the result', () => {
+    renderGame('jatekatos');
+    for (let i = 0; i < jatekatos.playLength; i++) {
+      const item = jatekatos.items.find((it) => screen.queryByText(it.label.fi));
+      const wrongBin = jatekatos.bins.find((b) => b.id !== item.binId);
+      const rightBin = jatekatos.bins.find((b) => b.id === item.binId);
+      const binsGroup = screen.getByRole('group', { name: /ごみの箱|Bins/ });
+      const pick = (bin) =>
+        within(binsGroup).getAllByRole('button').find((btn) => btn.textContent.includes(bin.label.fi));
+      fireEvent.click(pick(wrongBin));
+      fireEvent.click(pick(rightBin));
+      fireEvent.click(screen.getByRole('button', { name: /次へ|完了|Next|Valmis!/i }));
+    }
+    expect(screen.getByRole('status')).toHaveTextContent(/単語帳に追加しました|word book/);
+    expect(getWords().length).toBeGreaterThan(0);
+    expect(getWords().every((w) => w.source.type === 'scene' && w.source.gameId === 'jatekatos')).toBe(true);
+  });
+
+  it('adds nothing to the word book when every answer is right', () => {
+    renderGame('jatekatos');
+    for (let i = 0; i < jatekatos.playLength; i++) {
+      const item = jatekatos.items.find((it) => screen.queryByText(it.label.fi));
+      const rightBin = jatekatos.bins.find((b) => b.id === item.binId);
+      const binsGroup = screen.getByRole('group', { name: /ごみの箱|Bins/ });
+      fireEvent.click(
+        within(binsGroup).getAllByRole('button').find((btn) => btn.textContent.includes(rightBin.label.fi))
+      );
+      fireEvent.click(screen.getByRole('button', { name: /次へ|完了|Next|Valmis!/i }));
+    }
+    expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(getWords()).toHaveLength(0);
   });
 
   it('starts the next game fresh when the route changes after a finished game', () => {
