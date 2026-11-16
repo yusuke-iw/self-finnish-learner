@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import SceneText from './SceneText';
 import { createOutfitRound, checkOutfit, getWearSentences } from '../../utils/outfitGame';
 import { playAudio } from '../../utils/audio';
@@ -10,6 +10,7 @@ import {
 } from '../../utils/feedbackSounds';
 import { recordAnswer } from '../../utils/studyStats';
 import { useLanguage } from '../../context/useLanguage';
+import { collectFinnishTexts } from '../../utils/sceneMistakes';
 
 export default function OutfitGame({ game, mode, onFinish }) {
   const { t } = useLanguage();
@@ -19,6 +20,7 @@ export default function OutfitGame({ game, mode, onFinish }) {
   const [result, setResult] = useState(null);
   const [solved, setSolved] = useState(false);
   const [answeredIds, setAnsweredIds] = useState(() => new Set());
+  const mistakeTextsRef = useRef([]);
 
   const condition = round[index];
   const totalRounds = round.length;
@@ -76,6 +78,15 @@ export default function OutfitGame({ game, mode, onFinish }) {
       setSolved(true);
     } else {
       playIncorrectSound();
+      for (const slotId of checkRes.wrongSlotIds) {
+        const slot = game.slots.find((s) => s.id === slotId);
+        const options = (slot?.options || []).filter(
+          (o) => o.id === selection[slotId] || (condition.accept[slotId] || []).includes(o.id)
+        );
+        mistakeTextsRef.current.push(
+          ...collectFinnishTexts(condition.weather, condition.hints?.[slotId], slot?.label, options)
+        );
+      }
     }
   };
 
@@ -87,7 +98,7 @@ export default function OutfitGame({ game, mode, onFinish }) {
       setSolved(false);
     } else {
       playLessonCompleteSound();
-      onFinish();
+      onFinish(mistakeTextsRef.current);
     }
   };
 
