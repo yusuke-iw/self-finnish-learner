@@ -40,5 +40,18 @@
       "pankkiautomaatti",
       "virastot"
     ]
+  },
+  {
+    "id": "terveys",
+    "icon": "🩺",
+    "order": 4,
+    "title": {
+      "fi": "Terveys",
+      "en": "Health",
+      "ja": "健康"
+    },
+    "gameIds": [
+      "mista-apua"
+    ]
   }
 ]

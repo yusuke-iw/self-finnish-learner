@@ -1,0 +1,569 @@
+{
+  "id": "mista-apua",
+  "sceneId": "terveys",
+  "type": "sort",
+  "schemaVersion": 1,
+  "icon": "🏥",
+  "title": {
+    "fi": "Mistä apua?",
+    "en": "Where to get help?",
+    "ja": "どこで助けてもらう？"
+  },
+  "place": {
+    "fi": "terveyspalvelut",
+    "en": "health services",
+    "ja": "医療サービス"
+  },
+  "instruction": {
+    "fi": "Sinulla tai läheiselläsi on terveysongelma. Valitse jokaiseen tilanteeseen oikea paikka, josta saat apua.",
+    "selko": "Mistä saat apua? Valitse oikea paikka.",
+    "en": "You or someone close to you has a health problem. For each situation, choose the right place to get help.",
+    "ja": "あなたか身近な人の体に不調があります。それぞれの場面で、助けを求める正しい行き先を選ぼう。"
+  },
+  "prompt": {
+    "en": "Where do you get help?",
+    "ja": "どこで助けてもらう？"
+  },
+  "binsLabel": {
+    "en": "Places to get help",
+    "ja": "行き先"
+  },
+  "playLength": 8,
+  "relatedLessonId": "l9",
+  "bins": [
+    {
+      "id": "apteekki",
+      "label": {
+        "fi": "Apteekki",
+        "en": "Pharmacy",
+        "ja": "薬局"
+      },
+      "color": "#2e8b57"
+    },
+    {
+      "id": "terveysasema",
+      "label": {
+        "fi": "Terveysasema",
+        "en": "Health center",
+        "ja": "保健センター"
+      },
+      "color": "#2a7f9e"
+    },
+    {
+      "id": "hammashoitola",
+      "label": {
+        "fi": "Hammashoitola",
+        "en": "Dental clinic",
+        "ja": "歯科"
+      },
+      "color": "#7a4fa0"
+    },
+    {
+      "id": "paivystys",
+      "label": {
+        "fi": "Päivystys",
+        "en": "Emergency room",
+        "ja": "救急外来"
+      },
+      "color": "#c46a12"
+    },
+    {
+      "id": "hatanumero",
+      "label": {
+        "fi": "Hätänumero 112",
+        "en": "Emergency number 112",
+        "ja": "緊急番号 112"
+      },
+      "color": "#b3261e"
+    }
+  ],
+  "items": [
+    {
+      "id": "flunssa",
+      "icon": "🤧",
+      "binId": "apteekki",
+      "label": {
+        "fi": "lievä flunssa",
+        "en": "mild cold",
+        "ja": "軽い風邪"
+      },
+      "sentence": {
+        "fi": "Kun sinulla on lievä flunssa, kysy neuvoa apteekista.",
+        "selko": "Sinulla on lievä flunssa. Kysy neuvoa apteekista.",
+        "en": "When you have a mild cold, ask for advice at the pharmacy.",
+        "ja": "軽い風邪なら、薬局で相談します。"
+      },
+      "hint": {
+        "fi": "Tavallinen flunssa paranee yleensä itsestään. Apteekin farmaseutti neuvoo, mikä itsehoitolääke helpottaa oireita.",
+        "selko": "Flunssa menee yleensä ohi itsestään. Apteekissa farmaseutti neuvoo, mikä lääke auttaa.",
+        "en": "An ordinary cold usually gets better on its own. The pharmacist can tell you which over-the-counter medicine eases the symptoms.",
+        "ja": "ふつうの風邪はたいてい自然に治ります。症状をやわらげる市販薬は、薬局の薬剤師が教えてくれます。"
+      }
+    },
+    {
+      "id": "reseptilaake",
+      "icon": "💊",
+      "binId": "apteekki",
+      "label": {
+        "fi": "reseptilääkkeen nouto",
+        "en": "picking up prescription medicine",
+        "ja": "処方薬の受け取り"
+      },
+      "sentence": {
+        "fi": "Kun lääkäri on kirjoittanut sinulle reseptin, hae lääke apteekista.",
+        "selko": "Lääkäri kirjoitti sinulle reseptin. Hae lääke apteekista.",
+        "en": "When a doctor has written you a prescription, pick up the medicine at the pharmacy.",
+        "ja": "医師に処方箋を出してもらったら、薬局で薬を受け取ります。"
+      },
+      "hint": {
+        "fi": "Resepti on sähköinen, joten paperia ei tarvita. Lääkkeen saat mistä tahansa apteekista, ei terveysasemalta.",
+        "selko": "Resepti on sähköinen. Et tarvitse paperia. Haet lääkkeen apteekista, et terveysasemalta.",
+        "en": "Prescriptions are electronic, so you don't need a paper copy. You can get the medicine at any pharmacy, not at the health center.",
+        "ja": "処方箋は電子化されているので、紙は要りません。薬は保健センターではなく、どの薬局でも受け取れます。"
+      }
+    },
+    {
+      "id": "siitepolyallergia",
+      "icon": "🌼",
+      "binId": "apteekki",
+      "label": {
+        "fi": "lievä siitepölyallergia",
+        "en": "mild pollen allergy",
+        "ja": "軽い花粉症"
+      },
+      "sentence": {
+        "fi": "Kun siitepölyallergian oireet ovat lieviä, kysy neuvoa apteekista.",
+        "selko": "Sinulla on lievä siitepölyallergia. Kysy neuvoa apteekista.",
+        "en": "When your pollen allergy symptoms are mild, ask for advice at the pharmacy.",
+        "ja": "花粉症の症状が軽いなら、薬局で相談します。"
+      },
+      "hint": {
+        "fi": "Allergialääkkeitä saa apteekista ilman reseptiä. Jos oireet ovat pahoja tai lääke ei auta, ota yhteyttä terveysasemaan.",
+        "selko": "Apteekista saat allergialääkettä ilman reseptiä. Onko sinulla pahat oireet? Ota yhteyttä terveysasemaan.",
+        "en": "You can buy allergy medicine at the pharmacy without a prescription. If the symptoms are bad or the medicine doesn't help, contact the health center.",
+        "ja": "アレルギーの薬は処方箋なしで薬局で買えます。症状が重いときや薬が効かないときは、保健センターに連絡します。"
+      }
+    },
+    {
+      "id": "yska",
+      "icon": "😷",
+      "binId": "terveysasema",
+      "label": {
+        "fi": "viikkoja jatkunut yskä",
+        "en": "cough that has lasted for weeks",
+        "ja": "何週間も続くせき"
+      },
+      "sentence": {
+        "fi": "Kun yskä on jatkunut viikkoja, ota yhteyttä terveysasemaan.",
+        "selko": "Sinulla on ollut yskä monta viikkoa. Ota yhteyttä terveysasemaan.",
+        "en": "When a cough has lasted for weeks, contact the health center.",
+        "ja": "せきが何週間も続いているなら、保健センターに連絡します。"
+      },
+      "hint": {
+        "fi": "Pitkään jatkunut yskä kannattaa näyttää lääkärille, mutta se ei ole hätätilanne. Terveysasema hoitaa kiireettömät asiat arkisin.",
+        "selko": "Lääkärin pitää tutkia pitkä yskä. Mutta se ei ole hätä. Terveysasema auttaa arkipäivinä.",
+        "en": "A cough that has gone on for a long time should be checked by a doctor, but it isn't an emergency. The health center handles non-urgent matters on weekdays.",
+        "ja": "長引くせきは医師に診てもらったほうがよいですが、緊急ではありません。急がない用件は、平日に保健センターが対応します。"
+      }
+    },
+    {
+      "id": "selkakipu",
+      "icon": "🧍",
+      "binId": "terveysasema",
+      "label": {
+        "fi": "pitkään jatkunut selkäkipu",
+        "en": "back pain that has lasted a long time",
+        "ja": "長く続く腰痛"
+      },
+      "sentence": {
+        "fi": "Kun selkäkipu ei mene ohi, ota yhteyttä terveysasemaan.",
+        "selko": "Selkä on ollut kipeä pitkään. Ota yhteyttä terveysasemaan.",
+        "en": "When back pain doesn't go away, contact the health center.",
+        "ja": "腰の痛みが治まらないなら、保健センターに連絡します。"
+      },
+      "hint": {
+        "fi": "Apteekin särkylääke voi auttaa hetken. Jos kipu jatkuu viikkoja, terveysasemalla selvitetään, mistä se johtuu.",
+        "selko": "Särkylääke auttaa vähän aikaa. Onko selkä kipeä monta viikkoa? Ota yhteyttä terveysasemaan. Lääkäri tutkii selän.",
+        "en": "A painkiller from the pharmacy may help for a while. If the pain goes on for weeks, the health center will find out what is causing it.",
+        "ja": "薬局の痛み止めで、しばらくはしのげます。痛みが何週間も続くなら、保健センターで原因を調べてもらいます。"
+      }
+    },
+    {
+      "id": "ihottuma",
+      "icon": "🩹",
+      "binId": "terveysasema",
+      "label": {
+        "fi": "ihottuma, joka ei parane",
+        "en": "rash that won't go away",
+        "ja": "治らない湿疹"
+      },
+      "sentence": {
+        "fi": "Kun ihottuma ei parane apteekin voiteella, ota yhteyttä terveysasemaan.",
+        "selko": "Apteekin voide ei auta ihottumaan. Ota yhteyttä terveysasemaan.",
+        "en": "When a rash doesn't get better with cream from the pharmacy, contact the health center.",
+        "ja": "薬局の塗り薬で湿疹が治らないなら、保健センターに連絡します。"
+      },
+      "hint": {
+        "fi": "Lievää ihottumaa voi ensin hoitaa apteekin voiteella. Jos se ei auta, lääkäri katsoo ihoa ja kirjoittaa tarvittaessa reseptin.",
+        "selko": "Ensin voit kokeilla voidetta apteekista. Jos se ei auta, lääkäri katsoo ihoa. Lääkäri voi kirjoittaa reseptin.",
+        "en": "You can treat a mild rash with cream from the pharmacy first. If that doesn't help, a doctor will look at your skin and write a prescription if needed.",
+        "ja": "軽い湿疹なら、まず薬局の塗り薬を試せます。効かなければ医師が肌を診て、必要なら処方箋を書きます。"
+      }
+    },
+    {
+      "id": "hammassarky",
+      "icon": "🦷",
+      "binId": "hammashoitola",
+      "label": {
+        "fi": "hammassärky",
+        "en": "toothache",
+        "ja": "歯痛"
+      },
+      "sentence": {
+        "fi": "Kun hammasta särkee, ota yhteyttä hammashoitolaan.",
+        "selko": "Hammas on kipeä. Ota yhteyttä hammashoitolaan.",
+        "en": "When you have a toothache, contact the dental clinic.",
+        "ja": "歯が痛いなら、歯科に連絡します。"
+      },
+      "hint": {
+        "fi": "Hampaita hoitaa hammaslääkäri, ei terveysaseman lääkäri. Julkisen hammashoitolan puhelinnumero löytyy oman alueesi verkkosivuilta.",
+        "selko": "Hammaslääkäri hoitaa hampaat. Terveysaseman lääkäri ei hoida hampaita. Hammashoitolan numero on alueesi verkkosivuilla.",
+        "en": "Teeth are treated by a dentist, not by a doctor at the health center. You can find the public dental clinic's phone number on your area's website.",
+        "ja": "歯を治療するのは歯科医で、保健センターの医師ではありません。公立の歯科の電話番号は、住んでいる地域のウェブサイトに載っています。"
+      }
+    },
+    {
+      "id": "irronnut-paikka",
+      "icon": "😬",
+      "binId": "hammashoitola",
+      "label": {
+        "fi": "hampaasta irronnut paikka",
+        "en": "filling that has fallen out",
+        "ja": "取れた歯の詰め物"
+      },
+      "sentence": {
+        "fi": "Kun hampaasta irtoaa paikka, ota yhteyttä hammashoitolaan.",
+        "selko": "Hampaasta lähti paikka. Ota yhteyttä hammashoitolaan.",
+        "en": "When a filling falls out of your tooth, contact the dental clinic.",
+        "ja": "歯の詰め物が取れたら、歯科に連絡します。"
+      },
+      "hint": {
+        "fi": "Irronnut paikka ei yleensä ole hätätilanne, mutta hammas kannattaa korjata pian. Hammashoitola arvioi, kuinka kiireellinen asia on.",
+        "selko": "Se ei ole hätä. Mutta hammaslääkärin pitää korjata hammas pian. Soita hammashoitolaan.",
+        "en": "A lost filling usually isn't an emergency, but the tooth should be fixed soon. The dental clinic will assess how urgent it is.",
+        "ja": "詰め物が取れても、たいていは緊急ではありません。でも早めに直したほうがよいです。どれくらい急ぐかは歯科が判断します。"
+      }
+    },
+    {
+      "id": "turvonnut-ranne",
+      "icon": "🦴",
+      "binId": "paivystys",
+      "label": {
+        "fi": "turvonnut ranne kaatumisen jälkeen",
+        "en": "swollen wrist after a fall",
+        "ja": "転んだ後に腫れた手首"
+      },
+      "sentence": {
+        "fi": "Kun ranne turpoaa kaatumisen jälkeen, soita Päivystysapuun 116117 ennen kuin lähdet päivystykseen.",
+        "selko": "Kaaduit, ja ranne on turvonnut. Soita ensin numeroon 116117. Sitten mene päivystykseen.",
+        "en": "When your wrist swells up after a fall, call the Päivystysapu helpline at 116117 before going to the emergency room.",
+        "ja": "転んで手首が腫れたら、救急外来に行く前に Päivystysapu（116117）に電話します。"
+      },
+      "hint": {
+        "fi": "Ranne voi olla murtunut, ja se pitää kuvata. Asia on kiireellinen mutta ei yleensä hengenvaarallinen, joten 112 ei ole oikea numero.",
+        "selko": "Ranne voi olla rikki. Lääkäri ottaa siitä röntgenkuvan. Se ei ole hengenvaarallista. Älä soita numeroon 112.",
+        "en": "The wrist may be broken and needs an X-ray. It is urgent but usually not life-threatening, so 112 is not the right number.",
+        "ja": "手首が折れているかもしれず、レントゲンを撮る必要があります。急ぎですが、ふつうは命に関わらないので、112 ではありません。"
+      }
+    },
+    {
+      "id": "syva-haava",
+      "icon": "🩸",
+      "binId": "paivystys",
+      "label": {
+        "fi": "syvä haava sormessa",
+        "en": "deep cut on a finger",
+        "ja": "指の深い切り傷"
+      },
+      "sentence": {
+        "fi": "Kun sormessa on syvä haava, soita Päivystysapuun 116117 ennen kuin lähdet päivystykseen.",
+        "selko": "Sormessa on syvä haava. Soita ensin numeroon 116117. Sitten mene päivystykseen.",
+        "en": "When you have a deep cut on your finger, call the Päivystysapu helpline at 116117 before going to the emergency room.",
+        "ja": "指に深い切り傷があるなら、救急外来に行く前に Päivystysapu（116117）に電話します。"
+      },
+      "hint": {
+        "fi": "Syvä haava pitää ehkä ommella, eikä se voi odottaa huomiseen. Paina haavaa puhtaalla liinalla, kunnes verenvuoto hidastuu.",
+        "selko": "Lääkäri ehkä ompelee haavan. Se ei voi odottaa huomiseen. Paina haavaa puhtaalla kankaalla.",
+        "en": "A deep cut may need stitches, and that can't wait until tomorrow. Press the wound with a clean cloth until the bleeding slows down.",
+        "ja": "深い傷は縫う必要があるかもしれず、翌日まで待てません。出血がおさまるまで、清潔な布で傷口を押さえます。"
+      }
+    },
+    {
+      "id": "vatsakipu",
+      "icon": "🤢",
+      "binId": "paivystys",
+      "label": {
+        "fi": "kova vatsakipu, joka pahenee",
+        "en": "severe stomach pain that keeps getting worse",
+        "ja": "どんどん強くなる激しい腹痛"
+      },
+      "sentence": {
+        "fi": "Kun kova vatsakipu pahenee, soita Päivystysapuun 116117 ennen kuin lähdet päivystykseen.",
+        "selko": "Vatsaan sattuu kovasti, ja kipu pahenee. Soita ensin numeroon 116117. Sitten mene päivystykseen.",
+        "en": "When severe stomach pain gets worse, call the Päivystysapu helpline at 116117 before going to the emergency room.",
+        "ja": "激しい腹痛がひどくなっていくなら、救急外来に行く前に Päivystysapu（116117）に電話します。"
+      },
+      "hint": {
+        "fi": "Kova ja paheneva vatsakipu voi olla esimerkiksi umpilisäkkeen tulehdus. Se ei voi odottaa terveysaseman vastaanottoaikaa.",
+        "selko": "Kova vatsakipu voi olla vakava sairaus. Älä odota aikaa terveysasemalle.",
+        "en": "Severe stomach pain that keeps getting worse can be, for example, appendicitis. It can't wait for a health center appointment.",
+        "ja": "強くなっていく激しい腹痛は、たとえば虫垂炎（盲腸）のこともあります。保健センターの予約まで待ってはいけません。"
+      }
+    },
+    {
+      "id": "tajuton",
+      "icon": "😵",
+      "binId": "hatanumero",
+      "label": {
+        "fi": "tajuton ihminen",
+        "en": "unconscious person",
+        "ja": "意識のない人"
+      },
+      "sentence": {
+        "fi": "Kun näet tajuttoman ihmisen, soita heti hätänumeroon 112.",
+        "selko": "Ihminen ei herää. Soita heti numeroon 112.",
+        "en": "When you see an unconscious person, call the emergency number 112 right away.",
+        "ja": "意識のない人を見つけたら、すぐに緊急番号 112 に電話します。"
+      },
+      "hint": {
+        "fi": "Jos ihminen ei herää eikä vastaa, kyse on hätätilanteesta. Hätäkeskus neuvoo puhelimessa, mitä teet, kunnes apu tulee.",
+        "selko": "Ihminen ei herää eikä puhu. Se on hätä. Hätäkeskus neuvoo sinua puhelimessa.",
+        "en": "If a person doesn't wake up or respond, it's an emergency. The emergency response center will tell you on the phone what to do until help arrives.",
+        "ja": "呼びかけても目を覚まさず返事もないなら、緊急事態です。助けが来るまでにすることを、緊急通報センターが電話で教えてくれます。"
+      }
+    },
+    {
+      "id": "rintakipu",
+      "icon": "🫀",
+      "binId": "hatanumero",
+      "label": {
+        "fi": "kova rintakipu ja hengenahdistus",
+        "en": "severe chest pain and shortness of breath",
+        "ja": "激しい胸の痛みと息苦しさ"
+      },
+      "sentence": {
+        "fi": "Kun sinulla on kova rintakipu ja hengenahdistus, soita heti hätänumeroon 112.",
+        "selko": "Rintaan sattuu kovasti, ja on vaikea hengittää. Soita heti numeroon 112.",
+        "en": "When you have severe chest pain and shortness of breath, call the emergency number 112 right away.",
+        "ja": "激しい胸の痛みと息苦しさがあるなら、すぐに緊急番号 112 に電話します。"
+      },
+      "hint": {
+        "fi": "Äkillinen kova rintakipu voi olla sydäninfarkti. Älä lähde itse päivystykseen, vaan soita 112.",
+        "selko": "Kipu voi tulla sydämestä. Älä mene itse päivystykseen. Soita numeroon 112.",
+        "en": "Sudden severe chest pain can be a heart attack. Don't go to the emergency room on your own; call 112.",
+        "ja": "突然の激しい胸の痛みは心筋梗塞かもしれません。自分で救急外来に向かわず、112 に電話します。"
+      }
+    },
+    {
+      "id": "aivoinfarkti",
+      "icon": "🧠",
+      "binId": "hatanumero",
+      "label": {
+        "fi": "äkillinen puhevaikeus ja käden heikkous",
+        "en": "sudden trouble speaking and a weak arm",
+        "ja": "急に話しにくくなり、腕に力が入らない"
+      },
+      "sentence": {
+        "fi": "Kun puhe muuttuu äkkiä epäselväksi eikä käsi toimi kunnolla, soita heti hätänumeroon 112.",
+        "selko": "Puhe on äkkiä epäselvää, eikä käsi toimi. Soita heti numeroon 112.",
+        "en": "When speech suddenly becomes slurred and an arm stops working properly, call the emergency number 112 right away.",
+        "ja": "急にろれつが回らなくなり、腕がうまく動かないなら、すぐに緊急番号 112 に電話します。"
+      },
+      "hint": {
+        "fi": "Äkillinen puhevaikeus tai toispuolinen heikkous kasvoissa tai kädessä voi olla aivoinfarkti. Silloin jokainen minuutti on tärkeä.",
+        "selko": "Se voi olla aivoinfarkti. Silloin tarvitset apua heti.",
+        "en": "Sudden difficulty speaking, or weakness on one side of the face or in one arm, can be a stroke. Then every minute counts.",
+        "ja": "急に話しにくくなったり、顔や腕の片側に力が入らなくなったりするのは、脳梗塞かもしれません。一刻を争います。"
+      }
+    },
+    {
+      "id": "ampiaisen-pisto",
+      "icon": "🐝",
+      "binId": "hatanumero",
+      "label": {
+        "fi": "hengitysvaikeus ampiaisen piston jälkeen",
+        "en": "trouble breathing after a wasp sting",
+        "ja": "ハチに刺された後の呼吸困難"
+      },
+      "sentence": {
+        "fi": "Kun hengitys vaikeutuu ampiaisen piston jälkeen, soita heti hätänumeroon 112.",
+        "selko": "Ampiainen pisti, ja on vaikea hengittää. Soita heti numeroon 112.",
+        "en": "When breathing becomes difficult after a wasp sting, call the emergency number 112 right away.",
+        "ja": "ハチに刺された後に息が苦しくなったら、すぐに緊急番号 112 に電話します。"
+      },
+      "hint": {
+        "fi": "Hengitysvaikeus tai kasvojen turvotus piston jälkeen voi olla vakava allerginen reaktio. Lievä siitepölyallergia on eri asia: siihen saa apua apteekista.",
+        "selko": "Se voi olla vakava allergia. Se on hätä. Lievä siitepölyallergia on eri asia.",
+        "en": "Trouble breathing or a swollen face after a sting can be a severe allergic reaction. A mild pollen allergy is a different matter: the pharmacy can help with that.",
+        "ja": "刺された後の呼吸困難や顔の腫れは、重いアレルギー反応かもしれません。軽い花粉症とは別物で、そちらは薬局で相談できます。"
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "terveysasema",
+      "translation": "health center",
+      "translationJa": "保健センター"
+    },
+    {
+      "word": "apteekki",
+      "translation": "pharmacy",
+      "translationJa": "薬局"
+    },
+    {
+      "word": "farmaseutti",
+      "translation": "pharmacist",
+      "translationJa": "薬剤師"
+    },
+    {
+      "word": "resepti",
+      "translation": "prescription",
+      "translationJa": "処方箋"
+    },
+    {
+      "word": "itsehoitolääke",
+      "translation": "over-the-counter medicine",
+      "translationJa": "市販薬"
+    },
+    {
+      "word": "päivystys",
+      "translation": "emergency room, urgent care",
+      "translationJa": "救急外来・当番診療"
+    },
+    {
+      "word": "hätänumero",
+      "translation": "emergency number",
+      "translationJa": "緊急番号"
+    },
+    {
+      "word": "hammashoitola",
+      "translation": "dental clinic",
+      "translationJa": "歯科医院"
+    },
+    {
+      "word": "oire",
+      "translation": "symptom",
+      "translationJa": "症状"
+    },
+    {
+      "word": "särkeä",
+      "translation": "to ache (hammasta särkee = my tooth aches)",
+      "translationJa": "痛む（hammasta särkee＝歯が痛む）"
+    },
+    {
+      "word": "kiireellinen",
+      "translation": "urgent",
+      "translationJa": "急ぎの・緊急の"
+    },
+    {
+      "word": "hyvinvointialue",
+      "translation": "wellbeing services county",
+      "translationJa": "福祉サービス地域（ウェルビーイング県）"
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "mista-apua-1",
+      "title": {
+        "fi": "Kiireetön, kiireellinen vai hätä?",
+        "selko": "Kuinka kiire on?",
+        "en": "Non-urgent, urgent or an emergency?",
+        "ja": "急がない？急ぐ？緊急？"
+      },
+      "body": [
+        {
+          "fi": "Kiireettömissä asioissa ota yhteyttä terveysasemaan arkisin. Hammasasioissa ota yhteyttä hammashoitolaan.",
+          "selko": "Jos asialla ei ole kiire, ota yhteyttä terveysasemaan. Jos hammas on kipeä, ota yhteyttä hammashoitolaan.",
+          "en": "For non-urgent matters, contact the health center on a weekday. For dental problems, contact the dental clinic.",
+          "ja": "急がない用件は、平日に保健センターへ連絡します。歯のことは歯科へ連絡します。"
+        },
+        {
+          "fi": "Jos asia ei voi odottaa seuraavaan arkipäivään, soita Päivystysapuun, puhelinnumero 116117. Sieltä kerrotaan, pitääkö sinun mennä päivystykseen vai riittääkö kotihoito.",
+          "selko": "Jos asia ei voi odottaa, soita numeroon 116117. Hoitaja kertoo, pitääkö sinun mennä päivystykseen.",
+          "en": "If it can't wait until the next weekday, call Päivystysapu at 116117. They will tell you whether you need to go to the emergency room or whether home care is enough.",
+          "ja": "翌平日まで待てないときは、Päivystysapu（116117）に電話します。救急外来に行くべきか、自宅でのケアで足りるかを教えてくれます。"
+        },
+        {
+          "fi": "Kun henki on vaarassa, soita heti hätänumeroon 112.",
+          "selko": "Onko henki vaarassa? Soita heti numeroon 112.",
+          "en": "When a life is in danger, call the emergency number 112 right away.",
+          "ja": "命に危険があるときは、すぐに緊急番号 112 に電話します。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "ottaa yhteyttä + mihin?: terveysasemaan, hammashoitolaan – soittaa + mihin? / kenelle?: numeroon 112, Päivystysapuun – lääkärille, terveysasemalle",
+        "selko": "Ota yhteyttä terveysasemaan. Soita numeroon 112.",
+        "en": "ottaa yhteyttä (to contact) takes the illative: terveysasemaan, hammashoitolaan. soittaa (to call) takes the illative with numbers and services (numeroon 112, Päivystysapuun) and the allative with people and places (lääkärille, terveysasemalle).",
+        "ja": "ottaa yhteyttä（連絡する）は入格: terveysasemaan、hammashoitolaan。soittaa（電話する）は、番号やサービスには入格（numeroon 112、Päivystysapuun）、人や施設には向格（lääkärille、terveysasemalle）。"
+      }
+    },
+    {
+      "id": "mista-apua-2",
+      "title": {
+        "fi": "Apteekissa",
+        "selko": "Apteekissa",
+        "en": "At the pharmacy",
+        "ja": "薬局で"
+      },
+      "body": [
+        {
+          "fi": "Apteekista saa itsehoitolääkkeitä ilman reseptiä, esimerkiksi särky-, flunssa- ja allergialääkkeitä. Farmaseutti neuvoo, mikä lääke sopii sinulle.",
+          "selko": "Apteekista saat lääkettä ilman reseptiä. Farmaseutti neuvoo sinua.",
+          "en": "At the pharmacy you can buy over-the-counter medicines without a prescription, for example for pain, colds and allergies. The pharmacist will advise you on which medicine suits you.",
+          "ja": "薬局では、痛み止め・風邪薬・アレルギー薬などの市販薬を処方箋なしで買えます。どの薬が合うかは薬剤師が教えてくれます。"
+        },
+        {
+          "fi": "Reseptit ovat sähköisiä. Kun näytät apteekissa Kela-kortin, Kela-korvaus vähennetään yleensä suoraan lääkkeen hinnasta.",
+          "selko": "Resepti on sähköinen. Näytä apteekissa Kela-kortti. Silloin maksat lääkkeestä usein vähemmän.",
+          "en": "Prescriptions are electronic. When you show your Kela card at the pharmacy, the Kela reimbursement is usually deducted from the price directly.",
+          "ja": "処方箋は電子化されています。薬局で Kela カードを見せると、Kela の払い戻し分はふつうその場で薬代から差し引かれます。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "lääke + mihin?: lääke flunssaan, päänsärkyyn, allergiaan",
+        "selko": "Tarvitsen lääkettä flunssaan.",
+        "en": "Medicine for an illness uses the illative: lääke flunssaan (medicine for a cold), päänsärkyyn (for a headache), allergiaan (for an allergy).",
+        "ja": "「〜の薬」は病名の入格: lääke flunssaan（風邪の薬）、päänsärkyyn（頭痛の）、allergiaan（アレルギーの）"
+      }
+    },
+    {
+      "id": "mista-apua-3",
+      "title": {
+        "fi": "Kuka järjestää palvelut?",
+        "selko": "Kuka hoitaa palvelut?",
+        "en": "Who runs the services?",
+        "ja": "だれが運営している？"
+      },
+      "body": [
+        {
+          "fi": "Vuoden 2023 alussa terveysasemat ja julkinen hammashoito siirtyivät kunnilta hyvinvointialueille. Helsingissä palvelut järjestää edelleen kaupunki.",
+          "selko": "Terveysasema ei kuulu enää kunnalle. Se kuuluu hyvinvointialueelle. Helsingissä kaupunki hoitaa palvelut.",
+          "en": "At the start of 2023, health centers and public dental care moved from the municipalities to the wellbeing services counties. In Helsinki, the city still organizes the services.",
+          "ja": "2023 年の初めに、保健センターと公立の歯科は市町村から福祉サービス地域（hyvinvointialue）に移りました。ヘルシンキでは今も市が運営しています。"
+        },
+        {
+          "fi": "Oman alueesi terveysaseman ja hammashoitolan puhelinnumerot löydät hyvinvointialueen verkkosivuilta. OmaKanta-palvelussa näet omat reseptisi ja laboratoriotuloksesi.",
+          "selko": "Puhelinnumerot ovat alueesi verkkosivuilla. OmaKanta-palvelussa näet reseptisi.",
+          "en": "You can find the phone numbers of your local health center and dental clinic on your wellbeing services county's website. In the OmaKanta service you can see your own prescriptions and lab results.",
+          "ja": "地域の保健センターと歯科の電話番号は、福祉サービス地域のウェブサイトに載っています。OmaKanta では、自分の処方箋や検査結果を見られます。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "Missä? terveysasemalla – mutta apteekissa, hammashoitolassa, päivystyksessä",
+        "selko": "Olen terveysasemalla. Olen apteekissa.",
+        "en": "Where? terveysasema takes the adessive (terveysasemalla), but apteekki, hammashoitola and päivystys take the inessive (apteekissa, hammashoitolassa, päivystyksessä).",
+        "ja": "「どこで？」: terveysasema は接格（terveysasemalla）、apteekki・hammashoitola・päivystys は内格（apteekissa、hammashoitolassa、päivystyksessä）。"
+      }
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import rappukaytava from '../scenes/rappukaytava.json';
 import ajanvaraus from '../scenes/ajanvaraus.json';
 import pankkiautomaatti from '../scenes/pankkiautomaatti.json';
 import virastot from '../scenes/virastot.json';
+import mistaApua from '../scenes/mista-apua.json';
 import upcoming from '../scenes/upcoming.json';
 import { getUpcomingGames, getRecommendedGames } from '../scenes/index';
 import { findLessonById } from '../curriculumData';
@@ -13,7 +14,7 @@ import { hasJapanese } from '../../utils/sceneText';
 import { SPEAKERS } from '../../utils/speakers';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot];
+  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -510,6 +511,42 @@ describe('Scene Data Schema & Integrity', () => {
     expect(virastot.vocabulary.length).toBeLessThanOrEqual(12);
   });
 
+  it('terveys is the 4th scene with the health sort game: 12-16 situations, every place used, its own prompt, 3 info cards and 10-12 words', () => {
+    const terveys = scenes.find((s) => s.id === 'terveys');
+    expect(terveys.order).toBe(4);
+    expect(terveys.gameIds).toEqual(['mista-apua']);
+    expect(mistaApua.type).toBe('sort');
+    expect(mistaApua.sceneId).toBe('terveys');
+    expect(mistaApua.relatedLessonId).toBe('l9');
+    expect(mistaApua.bins.map((b) => b.id)).toEqual(['apteekki', 'terveysasema', 'hammashoitola', 'paivystys', 'hatanumero']);
+    expect(mistaApua.items.length).toBeGreaterThanOrEqual(12);
+    expect(mistaApua.items.length).toBeLessThanOrEqual(16);
+    expect(mistaApua.items.length).toBeGreaterThan(mistaApua.playLength);
+    for (const bin of mistaApua.bins) {
+      expect(mistaApua.items.some((i) => i.binId === bin.id)).toBe(true);
+    }
+    for (const item of mistaApua.items) {
+      expect(item.sentence.selko).toBeTruthy();
+    }
+    for (const key of ['prompt', 'binsLabel']) {
+      expect(mistaApua[key].ja).toBeTruthy();
+      expect(mistaApua[key].en).toBeTruthy();
+    }
+    expect(mistaApua.infoCards.length).toBe(3);
+    expect(mistaApua.vocabulary.length).toBeGreaterThanOrEqual(10);
+    expect(mistaApua.vocabulary.length).toBeLessThanOrEqual(12);
+    const recs = getRecommendedGames();
+    expect(recs[recs.length - 1].game.id).toBe('mista-apua');
+  });
+
+  it('upcoming.json is empty now that every announced game is built, and getUpcomingGames still works', () => {
+    expect(upcoming).toEqual([]);
+    for (const scene of scenes) {
+      expect(getUpcomingGames(scene.id)).toEqual([]);
+    }
+    expect(getUpcomingGames('no-such-scene')).toEqual([]);
+  });
+
   it('hasJapanese correctly identifies whether games have full Japanese text', () => {
     expect(hasJapanese(vaatteet)).toBe(true);
     expect(hasJapanese(jatekatos)).toBe(true);
@@ -517,5 +554,6 @@ describe('Scene Data Schema & Integrity', () => {
     expect(hasJapanese(ajanvaraus)).toBe(true);
     expect(hasJapanese(pankkiautomaatti)).toBe(true);
     expect(hasJapanese(virastot)).toBe(true);
+    expect(hasJapanese(mistaApua)).toBe(true);
   });
 });

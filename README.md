@@ -34,7 +34,7 @@ The client is React 19 + Vite and the server is Express + Mongoose. The app also
 
 ### Daily-life scenes
 
-Three settings, six mini-games. Every game is driven by a JSON file in `client/src/data/scenes/`, and a data test checks each file's shape.
+Four settings, seven mini-games. Every game is driven by a JSON file in `client/src/data/scenes/`, and a data test checks each file's shape.
 
 | Setting | Game | Type |
 | --- | --- | --- |
@@ -44,6 +44,7 @@ Three settings, six mini-games. Every game is driven by a JSON file in `client/s
 | Kaupunki (town) | Booking an appointment by phone | Dialogue with a health-centre nurse |
 | Kaupunki | At the ATM | Step-by-step procedure simulation |
 | Kaupunki | At the government offices | Sort errands to the right office |
+| Terveys (health) | Where to get help? | Sort health problems to the pharmacy, health centre, dental clinic, emergency room or 112 |
 
 Each game explains why an answer is right or wrong, ends with info cards (re-readable from the list), a vocabulary list you can add to the word book, a link to related lessons, and the next recommended game. Game text can be shown in Finnish, simplified Finnish (selko), English or Japanese. Progress is marked with a check on the scenes list.
 
@@ -94,7 +95,7 @@ Planned work, grouped into milestones. Items are directions, not detailed design
 
 ### M4 More scenes
 
-- [ ] A health setting, for example a quiz at the health centre
+- [x] A health setting, for example a quiz at the health centre
 - [ ] A money setting, for example paying a bill before its due date
 - [ ] A nature setting, for example picking berries and mushrooms in the forest
 - [ ] Branching dialogues, where the answer you pick changes the conversation (the data format already allows it)
@@ -124,7 +125,7 @@ Planned work, grouped into milestones. Items are directions, not detailed design
 
 ### Housekeeping
 
-- [ ] Remove the already-built stairwell game from `client/src/data/scenes/upcoming.json`. It is hidden automatically, so nothing is visible, but the entry is stale.
+- [x] Remove the already-built stairwell game from `client/src/data/scenes/upcoming.json`. It is hidden automatically, so nothing is visible, but the entry is stale.
 
 ## Tech stack
 
