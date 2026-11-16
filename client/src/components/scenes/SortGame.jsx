@@ -58,7 +58,7 @@ export default function SortGame({ game, mode, onFinish }) {
       setLastWrongBinId(null);
     } else {
       playIncorrectSound();
-      mistakeTextsRef.current.push(...collectFinnishTexts(item.label, item.sentence, item.hint));
+      mistakeTextsRef.current.push(...collectFinnishTexts(item.label, item.sentence));
       setWrongBinIds((prev) => (prev.includes(binId) ? prev : [...prev, binId]));
       setLastWrongBinId(binId);
     }

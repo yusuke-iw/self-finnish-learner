@@ -80,12 +80,10 @@ export default function OutfitGame({ game, mode, onFinish }) {
       playIncorrectSound();
       for (const slotId of checkRes.wrongSlotIds) {
         const slot = game.slots.find((s) => s.id === slotId);
-        const options = (slot?.options || []).filter(
-          (o) => o.id === selection[slotId] || (condition.accept[slotId] || []).includes(o.id)
+        const options = (slot?.options || []).filter((o) =>
+          (condition.accept[slotId] || []).includes(o.id)
         );
-        mistakeTextsRef.current.push(
-          ...collectFinnishTexts(condition.weather, condition.hints?.[slotId], slot?.label, options)
-        );
+        mistakeTextsRef.current.push(...collectFinnishTexts(options));
       }
     }
   };

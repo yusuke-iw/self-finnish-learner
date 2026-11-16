@@ -64,10 +64,8 @@ export default function ProcedureSim({ game, mode, onFinish }) {
       playIncorrectSound();
       mistakeTextsRef.current.push(
         ...collectFinnishTexts(
-          procedure.goal,
           step.question,
-          step.screen,
-          (step.buttons || []).filter((b) => b.id === buttonId || b.correct)
+          (step.buttons || []).filter((b) => b.correct)
         )
       );
       setWrongButtonIds((prev) => (prev.includes(buttonId) ? prev : [...prev, buttonId]));
