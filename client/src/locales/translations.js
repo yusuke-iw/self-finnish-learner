@@ -351,7 +351,7 @@ export const translations = {
       },
       procedure: {
         goal: '目的',
-        screenLabel: 'ATM の画面',
+        screenLabel: '画面',
         buttonsLabel: 'ボタン'
       }
     }
@@ -709,7 +709,7 @@ export const translations = {
       },
       procedure: {
         goal: 'Your task',
-        screenLabel: 'ATM screen',
+        screenLabel: 'Screen',
         buttonsLabel: 'Buttons'
       }
     }
