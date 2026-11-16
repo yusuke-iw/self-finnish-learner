@@ -8,6 +8,7 @@ import pankkiautomaatti from '../scenes/pankkiautomaatti.json';
 import virastot from '../scenes/virastot.json';
 import mistaApua from '../scenes/mista-apua.json';
 import laskut from '../scenes/laskut.json';
+import jokaisenoikeudet from '../scenes/jokaisenoikeudet.json';
 import upcoming from '../scenes/upcoming.json';
 import { getUpcomingGames, getRecommendedGames } from '../scenes/index';
 import { findLessonById } from '../curriculumData';
@@ -15,7 +16,7 @@ import { hasJapanese } from '../../utils/sceneText';
 import { SPEAKERS } from '../../utils/speakers';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua, laskut];
+  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua, laskut, jokaisenoikeudet];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -562,7 +563,35 @@ describe('Scene Data Schema & Integrity', () => {
     expect(laskut.vocabulary.length).toBeGreaterThanOrEqual(10);
     expect(laskut.vocabulary.length).toBeLessThanOrEqual(12);
     const recs = getRecommendedGames();
-    expect(recs[recs.length - 1].game.id).toBe('laskut');
+    expect(recs[7].game.id).toBe('laskut');
+  });
+
+  it('luonto is the 6th scene with the everyman\'s rights sort game: 12-16 activities, every rule used, its own prompt, 3 info cards and 10-12 words', () => {
+    const luonto = scenes.find((s) => s.id === 'luonto');
+    expect(luonto.order).toBe(6);
+    expect(luonto.gameIds).toEqual(['jokaisenoikeudet']);
+    expect(jokaisenoikeudet.type).toBe('sort');
+    expect(jokaisenoikeudet.sceneId).toBe('luonto');
+    expect(jokaisenoikeudet.relatedLessonId).toBe('l13');
+    expect(jokaisenoikeudet.bins.map((b) => b.id)).toEqual(['saa', 'luvalla', 'ei-saa']);
+    expect(jokaisenoikeudet.items.length).toBeGreaterThanOrEqual(12);
+    expect(jokaisenoikeudet.items.length).toBeLessThanOrEqual(16);
+    expect(jokaisenoikeudet.items.length).toBeGreaterThan(jokaisenoikeudet.playLength);
+    for (const bin of jokaisenoikeudet.bins) {
+      expect(jokaisenoikeudet.items.some((i) => i.binId === bin.id)).toBe(true);
+    }
+    for (const item of jokaisenoikeudet.items) {
+      expect(item.sentence.selko).toBeTruthy();
+    }
+    for (const key of ['prompt', 'binsLabel']) {
+      expect(jokaisenoikeudet[key].ja).toBeTruthy();
+      expect(jokaisenoikeudet[key].en).toBeTruthy();
+    }
+    expect(jokaisenoikeudet.infoCards.length).toBe(3);
+    expect(jokaisenoikeudet.vocabulary.length).toBeGreaterThanOrEqual(10);
+    expect(jokaisenoikeudet.vocabulary.length).toBeLessThanOrEqual(12);
+    const recs = getRecommendedGames();
+    expect(recs[recs.length - 1].game.id).toBe('jokaisenoikeudet');
   });
 
   it('upcoming.json is empty now that every announced game is built, and getUpcomingGames still works', () => {
@@ -582,5 +611,6 @@ describe('Scene Data Schema & Integrity', () => {
     expect(hasJapanese(virastot)).toBe(true);
     expect(hasJapanese(mistaApua)).toBe(true);
     expect(hasJapanese(laskut)).toBe(true);
+    expect(hasJapanese(jokaisenoikeudet)).toBe(true);
   });
 });

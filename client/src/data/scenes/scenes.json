@@ -66,5 +66,18 @@
     "gameIds": [
       "laskut"
     ]
+  },
+  {
+    "id": "luonto",
+    "icon": "🌲",
+    "order": 6,
+    "title": {
+      "fi": "Luonto",
+      "en": "Nature",
+      "ja": "自然"
+    },
+    "gameIds": [
+      "jokaisenoikeudet"
+    ]
   }
 ]

@@ -31,6 +31,7 @@ describe('Scenes Page', () => {
     expect(screen.getByText(/Kaupunki/)).toBeInTheDocument();
     expect(screen.getByText(/Terveys/)).toBeInTheDocument();
     expect(screen.getByText(/Raha/)).toBeInTheDocument();
+    expect(screen.getByText(/Luonto/)).toBeInTheDocument();
 
     // Outfit game card
     expect(screen.getByText(/Sää ja vaatteet/i)).toBeInTheDocument();
@@ -42,6 +43,7 @@ describe('Scenes Page', () => {
     expect(screen.getByRole('link', { name: /Virastoissa/i })).toHaveAttribute('href', '/scenes/virastot');
     expect(screen.getByRole('link', { name: /Mistä apua/i })).toHaveAttribute('href', '/scenes/mista-apua');
     expect(screen.getByRole('link', { name: /Laskun maksaminen/i })).toHaveAttribute('href', '/scenes/laskut');
+    expect(screen.getByRole('link', { name: /Jokaisenoikeudet/i })).toHaveAttribute('href', '/scenes/jokaisenoikeudet');
     expect(screen.queryAllByText(/準備中|Coming soon/i)).toHaveLength(0);
   });
 

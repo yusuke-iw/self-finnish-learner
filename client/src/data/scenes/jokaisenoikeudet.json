@@ -1,0 +1,541 @@
+{
+  "id": "jokaisenoikeudet",
+  "sceneId": "luonto",
+  "type": "sort",
+  "schemaVersion": 1,
+  "icon": "🫐",
+  "title": {
+    "fi": "Jokaisenoikeudet",
+    "en": "Everyman's rights",
+    "ja": "自然享受権"
+  },
+  "place": {
+    "fi": "metsä",
+    "en": "forest",
+    "ja": "森"
+  },
+  "instruction": {
+    "fi": "Olet metsässä. Saako tämän tehdä ilman lupaa, vain luvalla vai ei ollenkaan? Valitse oikea vaihtoehto.",
+    "selko": "Olet metsässä. Mitä saat tehdä ilman lupaa? Mihin tarvitset luvan? Mitä et saa tehdä? Valitse oikea vaihtoehto.",
+    "en": "You are in the forest. Can you do this without permission, only with permission, or not at all? Choose the right option.",
+    "ja": "森にいます。これは許可なしでしてよいこと？許可が必要なこと？それともしてはいけないこと？正しい選択肢を選ぼう。"
+  },
+  "prompt": {
+    "en": "Is it allowed?",
+    "ja": "してもいい？"
+  },
+  "binsLabel": {
+    "en": "Rules",
+    "ja": "ルール"
+  },
+  "playLength": 8,
+  "relatedLessonId": "l13",
+  "bins": [
+    {
+      "id": "saa",
+      "label": {
+        "fi": "Saa tehdä",
+        "en": "Allowed",
+        "ja": "してよい"
+      },
+      "color": "#2e8b57"
+    },
+    {
+      "id": "luvalla",
+      "label": {
+        "fi": "Vain luvalla",
+        "en": "Only with permission",
+        "ja": "許可が必要"
+      },
+      "color": "#c46a12"
+    },
+    {
+      "id": "ei-saa",
+      "label": {
+        "fi": "Ei saa",
+        "en": "Not allowed",
+        "ja": "してはいけない"
+      },
+      "color": "#b3261e"
+    }
+  ],
+  "items": [
+    {
+      "id": "mustikat",
+      "icon": "🫐",
+      "binId": "saa",
+      "label": {
+        "fi": "mustikoiden poimiminen metsästä",
+        "en": "picking bilberries in the forest",
+        "ja": "森でビルベリー（野生のブルーベリー）を摘むこと"
+      },
+      "sentence": {
+        "fi": "Metsästä saa poimia mustikoita ilman lupaa.",
+        "selko": "Saat poimia mustikoita metsästä ilman lupaa.",
+        "en": "You are allowed to pick bilberries in the forest without permission.",
+        "ja": "森では許可なしでビルベリーを摘んでよいです。"
+      },
+      "hint": {
+        "fi": "Luonnonmarjoja saa poimia vapaasti myös toisen omistamasta metsästä, ja niitä saa myös myydä. Toisen pihalta marjoja ei kuitenkaan saa poimia ilman lupaa.",
+        "selko": "Saat poimia marjoja metsästä ilman maanomistajan lupaa. Saat myös myydä poimimiasi marjoja.",
+        "en": "You can freely pick wild berries even in a forest owned by someone else, and you are allowed to sell them too. However, you may not pick berries from someone's yard without permission.",
+        "ja": "他人が所有する森でも許可なく野生のベリーを摘んでよく、摘んだベリーを売ることもできます。ただし他人の家の庭からは無断で摘めません。"
+      }
+    },
+    {
+      "id": "sienet",
+      "icon": "🍄",
+      "binId": "saa",
+      "label": {
+        "fi": "sienten poimiminen metsästä",
+        "en": "picking mushrooms in the forest",
+        "ja": "森でキノコを摘むこと"
+      },
+      "sentence": {
+        "fi": "Metsästä saa poimia sieniä ilman lupaa.",
+        "selko": "Saat poimia sieniä metsästä ilman lupaa.",
+        "en": "You are allowed to pick mushrooms in the forest without permission.",
+        "ja": "森では許可なしでキノコを摘んでよいです。"
+      },
+      "hint": {
+        "fi": "Sienten poimiminen kuuluu jokaisenoikeuksiin eikä vaadi maanomistajan lupaa. Poimi silti vain sieniä, jotka varmasti tunnistat syötäviksi, sillä metsissä kasvaa myös myrkkysieniä.",
+        "selko": "Saat poimia sieniä ilman lupaa. Poimi kuitenkin vain sieniä, jotka varmasti tunnet. Jotkut sienet ovat myrkyllisiä.",
+        "en": "Picking mushrooms is part of everyman's rights and requires no permission from the landowner. Still, only pick mushrooms you can definitely identify as edible, because poisonous mushrooms also grow in the forests.",
+        "ja": "キノコ狩りは自然享受権に含まれ、土地の所有者の許可は要りません。ただし毒キノコもあるので、確実に食用だと分かるキノコだけを摘みましょう。"
+      }
+    },
+    {
+      "id": "kavely",
+      "icon": "🥾",
+      "binId": "saa",
+      "label": {
+        "fi": "kävely toisen omistamassa metsässä",
+        "en": "walking in a forest owned by someone else",
+        "ja": "他人が所有する森を歩くこと"
+      },
+      "sentence": {
+        "fi": "Toisen omistamassa metsässä saa kävellä ilman lupaa.",
+        "selko": "Saat kävellä toisen metsässä ilman lupaa.",
+        "en": "You are allowed to walk in a forest owned by someone else without permission.",
+        "ja": "他人が所有する森でも、許可なしで歩いてよいです。"
+      },
+      "hint": {
+        "fi": "Metsässä saa liikkua jalan, hiihtäen ja pyörällä riippumatta siitä, kuka maan omistaa. Toisen pihapiiriin, pellolle tai istutuksille ei kuitenkaan saa mennä.",
+        "selko": "Saat kävellä metsässä, vaikka joku toinen omistaa sen. Älä kuitenkaan mene toisen pihalle tai pellolle.",
+        "en": "You may move around in the forest on foot, on skis or by bike regardless of who owns the land. However, you must not enter someone's yard, fields or planted areas.",
+        "ja": "森の所有者がだれであっても、徒歩やスキー、自転車で通ってよいです。ただし他人の家の敷地（pihapiiri）や畑、植林地には入ってはいけません。"
+      }
+    },
+    {
+      "id": "teltta",
+      "icon": "⛺",
+      "binId": "saa",
+      "label": {
+        "fi": "teltan pystyttäminen metsään yhdeksi yöksi",
+        "en": "pitching a tent in the forest for one night",
+        "ja": "森に 1 晩だけテントを張ること"
+      },
+      "sentence": {
+        "fi": "Metsässä saa yöpyä tilapäisesti teltassa ilman lupaa.",
+        "selko": "Saat nukkua teltassa metsässä yhden yön ilman lupaa.",
+        "en": "You are allowed to camp temporarily in a tent in the forest without permission.",
+        "ja": "森では許可なしで一時的にテント泊をしてよいです。"
+      },
+      "hint": {
+        "fi": "Tilapäinen telttailu kuuluu jokaisenoikeuksiin, kunhan teltta on tarpeeksi kaukana taloista ja mökeistä. Kansallispuistoissa ja muilla suojelualueilla on kuitenkin omat sääntönsä.",
+        "selko": "Saat telttailla metsässä lyhyen aikaa, kun olet kaukana taloista. Et tarvitse maanomistajan lupaa.",
+        "en": "Temporary tent camping is part of everyman's rights as long as you camp far enough from houses and cottages. National parks and other nature reserves, however, have their own rules.",
+        "ja": "家やコテージから十分離れていれば、一時的なテント泊は自然享受権で認められています。ただし国立公園などの自然保護区には独自のルールがあります。"
+      }
+    },
+    {
+      "id": "onkiminen",
+      "icon": "🎣",
+      "binId": "saa",
+      "label": {
+        "fi": "onkiminen järvellä",
+        "en": "angling with a simple rod and line on a lake",
+        "ja": "湖でのべ竿釣りをすること"
+      },
+      "sentence": {
+        "fi": "Järvellä saa onkia ilman lupaa ja maksua.",
+        "selko": "Saat onkia järvellä ilman lupaa.",
+        "en": "You are allowed to angle with a simple rod on a lake without a permit or fee.",
+        "ja": "湖でのべ竿釣り（onkiminen）は、許可や料金なしでしてよいです。"
+      },
+      "hint": {
+        "fi": "Tavallinen onkiminen ja pilkkiminen ovat maksuttomia jokaisenoikeuksia. Sen sijaan virvelöintiin ja uisteluun tarvitaan kalastonhoitomaksu.",
+        "selko": "Onkiminen ja pilkkiminen ovat ilmaisia, etkä tarvitse lupaa. Virvelillä kalastaminen on eri asia: siihen tarvitset luvan.",
+        "en": "Simple rod angling (\"onkiminen\") and ice fishing (\"pilkkiminen\") are free under everyman's rights. Fishing with a reel and lure (\"virvelöinti\"), on the other hand, requires the fishing management fee.",
+        "ja": "リールを使わないのべ竿釣り（onkiminen）と氷上の穴釣り（pilkkiminen）は無料で許可も要りません。一方、リール竿でのルアー釣り（virvelöinti）には釣りの管理料が必要です。"
+      }
+    },
+    {
+      "id": "nuotio",
+      "icon": "🔥",
+      "binId": "luvalla",
+      "label": {
+        "fi": "nuotion tekeminen toisen maalle",
+        "en": "making a campfire on someone else's land",
+        "ja": "他人の土地で焚き火をすること"
+      },
+      "sentence": {
+        "fi": "Nuotion saa tehdä toisen maalle vain maanomistajan luvalla.",
+        "selko": "Tarvitset luvan maanomistajalta, jos teet nuotion.",
+        "en": "You may make a campfire on someone else's land only with the landowner's permission.",
+        "ja": "他人の土地で焚き火をしてよいのは、土地の所有者の許可があるときだけです。"
+      },
+      "hint": {
+        "fi": "Avotulen eli nuotion tekeminen ei kuulu jokaisenoikeuksiin. Siihen tarvitaan aina maanomistajan lupa tai virallinen tulentekopaikka, ja maastopalovaroituksen aikana avotuli on kokonaan kielletty.",
+        "selko": "Nuotio ei kuulu jokaisenoikeuksiin. Tarvitset aina maanomistajan luvan tai virallisen nuotiopaikan.",
+        "en": "Making an open fire or campfire is not part of everyman's rights. You always need the landowner's permission or an official campfire site, and during a wildfire warning open fires are banned altogether.",
+        "ja": "焚き火（avotuli・nuotio）は自然享受権には含まれません。土地の所有者の許可か公式の焚き火場所が必要で、山林火災警報の間は全面禁止です。"
+      }
+    },
+    {
+      "id": "puun-kaataminen",
+      "icon": "🪓",
+      "binId": "luvalla",
+      "label": {
+        "fi": "elävän puun kaataminen",
+        "en": "felling a living tree",
+        "ja": "生きている木を切ること"
+      },
+      "sentence": {
+        "fi": "Elävän puun saa kaataa vain maanomistajan luvalla.",
+        "selko": "Tarvitset luvan maanomistajalta, jos kaadat puun.",
+        "en": "You may fell a living tree only with the landowner's permission.",
+        "ja": "生きている木を切ってよいのは、土地の所有者の許可があるときだけです。"
+      },
+      "hint": {
+        "fi": "Eläviä puita ei saa kaataa eikä niistä saa ottaa oksia ilman maanomistajan lupaa. Myöskään kaatuneita tai kuivia puita tai sammalta ei saa viedä metsästä ilman lupaa.",
+        "selko": "Et saa kaataa puita ilman maanomistajan lupaa. Et saa myöskään viedä kaatuneita puita tai sammalta.",
+        "en": "You may not fell living trees or take branches from them without the landowner's permission. Fallen or dead wood and moss may not be taken from the forest without permission either.",
+        "ja": "所有者の許可なく生きている木を切ったり枝を取ったりすることはできません。倒れた木や枯れ木、苔（sammal）も無断で持ち帰れません。"
+      }
+    },
+    {
+      "id": "pihan-marjat",
+      "icon": "🏡",
+      "binId": "luvalla",
+      "label": {
+        "fi": "marjojen poimiminen mökin pihalta",
+        "en": "picking berries from a cottage yard",
+        "ja": "コテージの庭でベリーを摘むこと"
+      },
+      "sentence": {
+        "fi": "Toisen pihalta saa poimia marjoja vain omistajan luvalla.",
+        "selko": "Tarvitset luvan pihan omistajalta, jos poimit marjoja pihalta.",
+        "en": "You may pick berries from someone else's yard only with the owner's permission.",
+        "ja": "他人の庭のベリーを摘んでよいのは、持ち主の許可があるときだけです。"
+      },
+      "hint": {
+        "fi": "Metsästä marjoja saa poimia vapaasti, mutta pihapiiri ei kuulu jokaisenoikeuksiin. Toisen pihalle ei saa mennä eikä sieltä saa poimia mitään kysymättä lupaa.",
+        "selko": "Metsästä saat poimia marjoja vapaasti, mutta toisen piha on eri asia. Kysy aina lupa pihan omistajalta.",
+        "en": "You can pick berries freely in the forest, but a house or cottage yard (\"pihapiiri\") is not covered by everyman's rights. Do not enter someone's yard or pick anything there without asking permission.",
+        "ja": "森のベリーは自由に摘めますが、家のまわりの庭（pihapiiri）は自然享受権の対象外です。家の人に許可をもらう必要があります。"
+      }
+    },
+    {
+      "id": "virvelointi",
+      "icon": "🐟",
+      "binId": "luvalla",
+      "label": {
+        "fi": "kalastus virvelillä",
+        "en": "fishing with a spinning rod and lure",
+        "ja": "リール竿（ルアー）で釣りをすること"
+      },
+      "sentence": {
+        "fi": "Virvelillä saa kalastaa vain luvalla eli maksamalla kalastonhoitomaksun.",
+        "selko": "Tarvitset luvan eli kalastonhoitomaksun, kun kalastat virvelillä.",
+        "en": "You may fish with a spinning rod only with a permit, that is, by paying the fishing management fee.",
+        "ja": "リール竿で釣りをしてよいのは、釣りの管理料（kalastonhoitomaksu）を払っているときだけです。"
+      },
+      "hint": {
+        "fi": "Onkiminen ja pilkkiminen ovat maksuttomia, mutta virvelöintiin ja uisteluun pitää maksaa valtion kalastonhoitomaksu. Joillakin vesialueilla tarvitaan lisäksi erillinen paikallinen lupa.",
+        "selko": "Onkiminen on ilmaista, mutta virvelöinti ei ole. Maksa ensin kalastonhoitomaksu.",
+        "en": "Simple rod angling and ice fishing are free, but spinning (\"virvelöinti\") and trolling (\"uistelu\") require paying the state fishing management fee (\"kalastonhoitomaksu\"). Some waters also require a separate local permit.",
+        "ja": "のべ竿釣り（onkiminen）や穴釣り（pilkkiminen）は無料ですが、リール竿での釣り（virvelöinti）やトローリング（uistelu）には kalastonhoitomaksu（釣りの管理料）が必要です。"
+      }
+    },
+    {
+      "id": "monkija",
+      "icon": "🛻",
+      "binId": "luvalla",
+      "label": {
+        "fi": "mönkijällä ajaminen metsässä",
+        "en": "driving an ATV in the forest",
+        "ja": "森で四輪バギー（mönkijä）を走らせること"
+      },
+      "sentence": {
+        "fi": "Mönkijällä saa ajaa metsässä vain maanomistajan luvalla.",
+        "selko": "Tarvitset luvan maanomistajalta, jos ajat mönkijällä metsässä.",
+        "en": "You may drive an ATV in the forest only with the landowner's permission.",
+        "ja": "森で四輪バギーを走らせてよいのは、土地の所有者の許可があるときだけです。"
+      },
+      "hint": {
+        "fi": "Jokaisenoikeudet sallivat metsässä kävelyn, hiihdon ja pyöräilyn, mutta eivät moottoriajoneuvoja. Mönkijällä ajamiseen maastossa tarvitaan maanomistajan lupa.",
+        "selko": "Saat kävellä ja pyöräillä metsässä ilman lupaa. Moottoriajoneuvolla, kuten mönkijällä, saat ajaa vain maanomistajan luvalla.",
+        "en": "Everyman's rights allow walking, skiing and cycling in the forest, but not motor vehicles. Driving an ATV off-road requires the landowner's permission.",
+        "ja": "徒歩やスキー、自転車は自然享受権で認められていますが、四輪バギー（mönkijä）などのモーター車両を道路以外の森で走らせるには土地の所有者の許可が要ります。"
+      }
+    },
+    {
+      "id": "roskat",
+      "icon": "🗑️",
+      "binId": "ei-saa",
+      "label": {
+        "fi": "roskien jättäminen metsään",
+        "en": "leaving trash in the forest",
+        "ja": "森にごみを置いていくこと"
+      },
+      "sentence": {
+        "fi": "Metsään ei saa jättää roskia.",
+        "selko": "Et saa jättää roskia metsään.",
+        "en": "You must not leave trash in the forest.",
+        "ja": "森にごみを捨ててはいけません。"
+      },
+      "hint": {
+        "fi": "Roskaaminen on lailla kiellettyä. Kaikki, minkä viet mukanasi metsään, pitää myös tuoda sieltä pois.",
+        "selko": "Älä koskaan jätä roskia luontoon. Vie kaikki roskat mukanasi pois metsästä.",
+        "en": "Littering in nature is prohibited by law. Everything you carry into the forest must also be carried back out.",
+        "ja": "自然の中にごみを捨てることは禁じられています。森に持って行ったものはすべて持ち帰りましょう。"
+      }
+    },
+    {
+      "id": "linnunpesa",
+      "icon": "🐦",
+      "binId": "ei-saa",
+      "label": {
+        "fi": "linnunpesän koskeminen",
+        "en": "touching a bird's nest",
+        "ja": "鳥の巣に触ること"
+      },
+      "sentence": {
+        "fi": "Linnunpesään ei saa koskea.",
+        "selko": "Et saa koskea linnunpesään.",
+        "en": "You must not touch a bird's nest.",
+        "ja": "鳥の巣に触ってはいけません。"
+      },
+      "hint": {
+        "fi": "Lintujen pesiä, munia ja poikasia ei saa häiritä. Jos emo säikähtää ihmistä, se voi hylätä pesän.",
+        "selko": "Älä koske linnunpesään äläkä häiritse poikasia. Anna lintujen olla rauhassa.",
+        "en": "Birds' nests, eggs and chicks must not be disturbed. If a parent bird is frightened by a person, it may abandon the nest.",
+        "ja": "鳥の巣や卵、ひなを邪魔してはいけません。親鳥が驚いて巣を放棄してしまうことがあります。"
+      }
+    },
+    {
+      "id": "nuotio-varoitus",
+      "icon": "🚫",
+      "binId": "ei-saa",
+      "label": {
+        "fi": "nuotio maastopalovaroituksen aikana",
+        "en": "a campfire during a wildfire warning",
+        "ja": "山林火災警報が出ているときの焚き火"
+      },
+      "sentence": {
+        "fi": "Maastopalovaroituksen aikana ei saa tehdä nuotiota.",
+        "selko": "Et saa tehdä nuotiota, kun maastopalovaroitus on voimassa.",
+        "en": "You must not make a campfire during a wildfire warning.",
+        "ja": "山林火災警報（maastopalovaroitus）が出ている間は、焚き火をしてはいけません。"
+      },
+      "hint": {
+        "fi": "Tavallisesti nuotion saa tehdä maanomistajan luvalla, mutta maastopalovaroituksen aikana avotuli on kokonaan kielletty – myös omalla maalla ja virallisilla nuotiopaikoilla.",
+        "selko": "Kun maastopalovaroitus on voimassa, et saa tehdä nuotiota missään. Silloin maanomistajan lupakaan ei riitä.",
+        "en": "Normally you can make a campfire with the landowner's permission, but during a wildfire warning (\"maastopalovaroitus\") open fires are banned altogether—even on your own land and at official campfire sites.",
+        "ja": "ふだんは所有者の許可があれば焚き火ができますが、山林火災警報（maastopalovaroitus）の間は、許可があっても公式の焚き火場所でも全面禁止です。"
+      }
+    },
+    {
+      "id": "rauhoitettu-kasvi",
+      "icon": "🌸",
+      "binId": "ei-saa",
+      "label": {
+        "fi": "rauhoitetun kasvin poimiminen",
+        "en": "picking a protected plant",
+        "ja": "保護されている植物を摘むこと"
+      },
+      "sentence": {
+        "fi": "Rauhoitettuja kasveja ei saa poimia.",
+        "selko": "Et saa poimia rauhoitettuja kasveja.",
+        "en": "You must not pick protected plants.",
+        "ja": "保護植物（rauhoitettu kasvi）を摘んではいけません。"
+      },
+      "hint": {
+        "fi": "Tavallisia luonnonkukkia saa poimia, mutta rauhoitettuja kasveja, kuten neidonkenkää, ei saa poimia eikä vahingoittaa edes maanomistajan luvalla.",
+        "selko": "Saat poimia tavallisia kukkia. Rauhoitettuja kasveja, esimerkiksi neidonkenkää, et saa koskaan poimia.",
+        "en": "You may pick common wildflowers, but protected plants (\"rauhoitettu kasvi\"), such as the lady's slipper orchid (\"neidonkenkä\"), must not be picked or damaged even with the landowner's permission.",
+        "ja": "ふつうの野の花は摘めますが、アツモリソウの仲間（neidonkenkä）などの保護植物（rauhoitettu kasvi）は、所有者の許可があっても摘んだり傷つけたりしてはいけません。"
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "jokaisenoikeudet",
+      "translation": "everyman's rights; always plural",
+      "translationJa": "自然享受権（常に複数形）"
+    },
+    {
+      "word": "maanomistaja",
+      "translation": "landowner",
+      "translationJa": "土地の所有者"
+    },
+    {
+      "word": "lupa",
+      "translation": "permission, permit",
+      "translationJa": "許可・許可証"
+    },
+    {
+      "word": "poimia",
+      "translation": "to pick",
+      "translationJa": "摘む"
+    },
+    {
+      "word": "mustikka",
+      "translation": "bilberry, wild blueberry",
+      "translationJa": "ビルベリー（野生のブルーベリー）"
+    },
+    {
+      "word": "sieni",
+      "translation": "mushroom",
+      "translationJa": "キノコ"
+    },
+    {
+      "word": "nuotio",
+      "translation": "campfire",
+      "translationJa": "焚き火"
+    },
+    {
+      "word": "maastopalovaroitus",
+      "translation": "wildfire warning",
+      "translationJa": "山林火災警報"
+    },
+    {
+      "word": "pihapiiri",
+      "translation": "yard, the area around a house",
+      "translationJa": "家の敷地・庭まわり"
+    },
+    {
+      "word": "rauhoitettu",
+      "translation": "protected (plant, animal)",
+      "translationJa": "保護された（植物・動物）"
+    },
+    {
+      "word": "eksyä",
+      "translation": "to get lost (eksyä metsään)",
+      "translationJa": "道に迷う（eksyä metsään＝森で迷う）"
+    },
+    {
+      "word": "kalastonhoitomaksu",
+      "translation": "fishing management fee",
+      "translationJa": "釣りの管理料"
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "jokaisenoikeudet-1",
+      "title": {
+        "fi": "Mitä jokaisenoikeudet ovat?",
+        "selko": "Mitä jokaisenoikeudet tarkoittavat?",
+        "en": "What are everyman's rights?",
+        "ja": "自然享受権（jokaisenoikeudet）とは？"
+      },
+      "body": [
+        {
+          "fi": "Jokaisenoikeudet tarkoittavat, että kuka tahansa – myös matkailija – saa liikkua luonnossa sekä poimia luonnonmarjoja ja sieniä ilman maanomistajan lupaa. Aiemmin niistä käytettiin nimeä jokamiehenoikeudet.",
+          "selko": "Jokaisenoikeudet tarkoittavat, että jokainen saa kävellä luonnossa ja poimia marjoja ja sieniä ilman lupaa. Niiden vanha nimi on jokamiehenoikeudet.",
+          "en": "Everyman's rights (\"jokaisenoikeudet\") mean that anyone—including visitors—may move around in nature and pick wild berries and mushrooms without the landowner's permission. They used to be called \"jokamiehenoikeudet\".",
+          "ja": "jokaisenoikeudet（自然享受権）とは、旅行者を含めだれでも、土地の所有者の許可なしに自然の中を歩いたりベリーやキノコを摘んだりできる権利です。以前は jokamiehenoikeudet と呼ばれていました。"
+        },
+        {
+          "fi": "Luonnossa ei saa aiheuttaa haittaa tai häiriötä luonnolle eikä maanomistajalle. Toisen pihapiiriin, pellolle tai istutuksille ei saa mennä.",
+          "selko": "Älä vahingoita luontoa äläkä häiritse muita ihmisiä. Älä mene toisen pihalle tai pellolle.",
+          "en": "When in nature, you must not cause harm or disturbance to nature or to the landowner. You must not enter someone's yard (\"pihapiiri\"), fields or planted areas.",
+          "ja": "自然や土地の所有者に損害や迷惑を与えてはいけません。他人の家の庭（pihapiiri）や畑、植林地には入らないようにします。"
+        },
+        {
+          "fi": "Kansallispuistoissa ja muilla luonnonsuojelualueilla on omat sääntönsä, joten tarkista ohjeet aina etukäteen.",
+          "selko": "Kansallispuistoissa on omat säännöt. Tarkista säännöt aina etukäteen.",
+          "en": "National parks and other nature reserves have their own rules, so always check the guidelines beforehand.",
+          "ja": "国立公園などの自然保護区には独自のルールがあるため、出かける前に必ず案内を確かめましょう。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "saa + perusmuoto: Marjoja saa poimia. Nuotiota ei saa tehdä ilman lupaa.",
+        "selko": "Saat poimia marjoja. Et saa tehdä nuotiota ilman lupaa.",
+        "en": "saa / ei saa + infinitive expresses what is or isn't allowed: Marjoja saa poimia (\"You may pick berries\"). Nuotiota ei saa tehdä ilman lupaa (\"You must not make a campfire without permission\").",
+        "ja": "saa / ei saa＋不定詞（基本形）で「〜してよい／〜してはいけない」: Marjoja saa poimia.（ベリーは摘んでよい）Nuotiota ei saa tehdä ilman lupaa.（許可なく焚き火をしてはいけない）"
+      }
+    },
+    {
+      "id": "jokaisenoikeudet-2",
+      "title": {
+        "fi": "Marjat ja sienet",
+        "selko": "Marjat ja sienet metsässä",
+        "en": "Berries and mushrooms",
+        "ja": "ベリーとキノコ"
+      },
+      "body": [
+        {
+          "fi": "Suomen metsistä poimitaan paljon mustikoita ja puolukoita sekä ruokasieniä, kuten kantarelleja ja suppilovahveroita.",
+          "selko": "Ihmiset poimivat metsästä usein mustikoita, puolukoita, kantarelleja ja suppilovahveroita.",
+          "en": "People pick lots of bilberries (\"mustikka\") and lingonberries (\"puolukka\") in Finnish forests, as well as edible mushrooms such as chanterelles (\"kantarelli\") and funnel chanterelles (\"suppilovahvero\").",
+          "ja": "フィンランドの森では、ビルベリー（mustikka）やコケモモ（puolukka）、アンズタケ（kantarelli）やミキイロウスタケ（suppilovahvero）などの食用キノコがよく摘まれます。"
+        },
+        {
+          "fi": "Poimi vain sieniä, jotka varmasti tunnistat. Suomessa kasvaa myös tappavan myrkyllisiä sieniä, kuten valkokärpässieni, josta jo pieni pala on hengenvaarallinen.",
+          "selko": "Poimi vain sieniä, jotka varmasti tunnet. Esimerkiksi valkokärpässieni on hengenvaarallinen myrkkysieni.",
+          "en": "Only pick mushrooms that you can definitely identify. Deadly poisonous mushrooms also grow in Finland, such as the destroying angel (\"valkokärpässieni\"), of which even a small piece is life-threatening.",
+          "ja": "確実にわかるキノコだけを摘みましょう。ドクツルタケ（valkokärpässieni）のように、ほんの少量でも命にかかわる猛毒のキノコもあります。"
+        },
+        {
+          "fi": "Jos epäilet myrkytystä, soita Myrkytystietokeskukseen: maksuton numero 0800 147 111 palvelee ympäri vuorokauden. Jos ihminen on tajuton tai hänen on vaikea hengittää, soita heti 112.",
+          "selko": "Jos epäilet myrkytystä, soita Myrkytystietokeskukseen, numero 0800 147 111. Se on ilmainen ja auki aina. Jos ihminen ei herää tai hänen on vaikea hengittää, soita heti 112.",
+          "en": "If you suspect poisoning, call the Poison Information Center (\"Myrkytystietokeskus\") at the free 24-hour number 0800 147 111. If someone is unconscious or having trouble breathing, call 112 right away.",
+          "ja": "中毒が疑われるときは、中毒情報センター（Myrkytystietokeskus、無料・24 時間対応の 0800 147 111）に電話します。意識がない、息が苦しいなど症状が重いときは、すぐに 112 に電話します。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "poimia + partitiivi (monikko): poimia mustikoita, puolukoita, sieniä",
+        "selko": "Poimin mustikoita ja sieniä.",
+        "en": "poimia (to pick) + plural partitive: poimia mustikoita (bilberries), puolukoita (lingonberries), sieniä (mushrooms).",
+        "ja": "poimia＋複数分格で「〜を摘む」: poimia mustikoita（ビルベリーを）、puolukoita（コケモモを）、sieniä（キノコを）"
+      }
+    },
+    {
+      "id": "jokaisenoikeudet-3",
+      "title": {
+        "fi": "Jos eksyt metsään",
+        "selko": "Mitä teet, jos eksyt metsään?",
+        "en": "If you get lost in the forest",
+        "ja": "森で道に迷ったら"
+      },
+      "body": [
+        {
+          "fi": "Jos eksyt metsään etkä löydä takaisin, pysähdy ja soita hätänumeroon 112. Kerro, missä luulet olevasi ja mitä näet ympärilläsi.",
+          "selko": "Jos eksyt metsään, pysähdy ja soita numeroon 112. Kerro, mitä näet ympärilläsi.",
+          "en": "If you get lost in the forest and cannot find your way back, stop and call the emergency number 112. Tell the operator where you think you are and what you see around you.",
+          "ja": "森で迷って戻れなくなったら、その場で止まって緊急番号 112 に電話します。自分がどこにいると思うか、まわりに何が見えるかを伝えます。"
+        },
+        {
+          "fi": "Älä katkaise puhelua, ennen kuin päivystäjä antaa luvan. Kun soitat 112 Suomi -sovelluksella, sijaintisi välittyy hätäkeskukseen automaattisesti.",
+          "selko": "Älä lopeta puhelua ennen kuin saat luvan. Jos soitat 112 Suomi -sovelluksella, hätäkeskus näkee sijaintisi automaattisesti.",
+          "en": "Do not hang up until the dispatcher gives you permission. When you call through the 112 Suomi app, your location is sent to the emergency response center automatically.",
+          "ja": "担当者が切ってよいと言うまで、電話を切らないでください。「112 Suomi」アプリから電話をかけると、現在地が自動で緊急通報センターに届きます。"
+        },
+        {
+          "fi": "Lataa puhelimen akku täyteen aina ennen kuin lähdet metsään.",
+          "selko": "Lataa puhelin täyteen ennen kuin menet metsään.",
+          "en": "Always charge your phone battery fully before heading into the forest.",
+          "ja": "森へ出かける前には、必ず電話のバッテリーを満充電にしておきましょう。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "Käskymuoto: pysähdy, soita, kerro (pysähtyä, soittaa, kertoa)",
+        "selko": "Pysähdy. Soita 112. Kerro, missä olet.",
+        "en": "Imperative forms: pysähdy (stop, from pysähtyä), soita (call, from soittaa), kerro (tell, from kertoa).",
+        "ja": "命令形: pysähdy（止まれ ← pysähtyä）、soita（電話せよ ← soittaa）、kerro（伝えよ ← kertoa）"
+      }
+    }
+  ]
+}
