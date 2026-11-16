@@ -42,6 +42,7 @@ describe('Scene Index Module', () => {
 
     expect(getGamesByScene('kaupunki').map((g) => g.id)).toEqual(['ajanvaraus', 'pankkiautomaatti', 'virastot']);
     expect(getGamesByScene('terveys').map((g) => g.id)).toEqual(['mista-apua']);
+    expect(getGamesByScene('raha').map((g) => g.id)).toEqual(['laskut']);
 
     const unknownGames = getGamesByScene('unknown');
     expect(unknownGames).toEqual([]);
@@ -50,7 +51,7 @@ describe('Scene Index Module', () => {
   it('getRecommendedGames returns games with sequential numbers and scenes in order', () => {
     const recs = getRecommendedGames();
     expect(Array.isArray(recs)).toBe(true);
-    expect(recs.length).toBe(7);
+    expect(recs.length).toBe(8);
     expect(recs.map((r) => r.game.id)).toEqual([
       'vaatteet',
       'jatekatos',
@@ -58,7 +59,8 @@ describe('Scene Index Module', () => {
       'ajanvaraus',
       'pankkiautomaatti',
       'virastot',
-      'mista-apua'
+      'mista-apua',
+      'laskut'
     ]);
 
     recs.forEach((item, idx) => {
@@ -74,6 +76,7 @@ describe('Scene Index Module', () => {
     expect(getUpcomingGames('koti')).toEqual([]);
     expect(getUpcomingGames('kaupunki')).toEqual([]);
     expect(getUpcomingGames('terveys')).toEqual([]);
+    expect(getUpcomingGames('raha')).toEqual([]);
   });
 
   it('getNextRecommended returns the next game or null if last/unknown', () => {
@@ -92,7 +95,11 @@ describe('Scene Index Module', () => {
     expect(nextAfterVirastot.game.id).toBe('mista-apua');
     expect(nextAfterVirastot.number).toBe(7);
     expect(nextAfterVirastot.scene.id).toBe('terveys');
-    expect(getNextRecommended('mista-apua')).toBeNull();
+    const nextAfterMistaApua = getNextRecommended('mista-apua');
+    expect(nextAfterMistaApua.game.id).toBe('laskut');
+    expect(nextAfterMistaApua.number).toBe(8);
+    expect(nextAfterMistaApua.scene.id).toBe('raha');
+    expect(getNextRecommended('laskut')).toBeNull();
     expect(getNextRecommended('non-existent')).toBeNull();
     expect(getNextRecommended(null)).toBeNull();
   });

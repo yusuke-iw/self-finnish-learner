@@ -7,6 +7,7 @@ import ajanvaraus from '../scenes/ajanvaraus.json';
 import pankkiautomaatti from '../scenes/pankkiautomaatti.json';
 import virastot from '../scenes/virastot.json';
 import mistaApua from '../scenes/mista-apua.json';
+import laskut from '../scenes/laskut.json';
 import upcoming from '../scenes/upcoming.json';
 import { getUpcomingGames, getRecommendedGames } from '../scenes/index';
 import { findLessonById } from '../curriculumData';
@@ -14,7 +15,7 @@ import { hasJapanese } from '../../utils/sceneText';
 import { SPEAKERS } from '../../utils/speakers';
 
 describe('Scene Data Schema & Integrity', () => {
-  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua];
+  const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua, laskut];
 
   it('scenes.json items have valid IDs, order, and titles', () => {
     const seenIds = new Set();
@@ -536,7 +537,32 @@ describe('Scene Data Schema & Integrity', () => {
     expect(mistaApua.vocabulary.length).toBeGreaterThanOrEqual(10);
     expect(mistaApua.vocabulary.length).toBeLessThanOrEqual(12);
     const recs = getRecommendedGames();
-    expect(recs[recs.length - 1].game.id).toBe('mista-apua');
+    expect(recs[6].game.id).toBe('mista-apua');
+  });
+
+  it('raha is the 5th scene with the bill-payment procedure game: 3 procedures of 5-8 screens with a question, no machine keys, 3 info cards and 10-12 words', () => {
+    const raha = scenes.find((s) => s.id === 'raha');
+    expect(raha.order).toBe(5);
+    expect(raha.gameIds).toEqual(['laskut']);
+    expect(laskut.type).toBe('procedure');
+    expect(laskut.sceneId).toBe('raha');
+    expect(laskut.relatedLessonId).toBe('l10');
+    expect(laskut.procedures.map((p) => p.id)).toEqual(['uusi-maksu', 'e-lasku', 'maksumuistutus']);
+    for (const proc of laskut.procedures) {
+      expect(proc.steps.length).toBeGreaterThanOrEqual(5);
+      expect(proc.steps.length).toBeLessThanOrEqual(8);
+      expect(proc.steps.some((s) => s.question)).toBe(true);
+      for (const step of proc.steps) {
+        for (const btn of step.buttons) {
+          expect(btn.key).toBeNull();
+        }
+      }
+    }
+    expect(laskut.infoCards.length).toBe(3);
+    expect(laskut.vocabulary.length).toBeGreaterThanOrEqual(10);
+    expect(laskut.vocabulary.length).toBeLessThanOrEqual(12);
+    const recs = getRecommendedGames();
+    expect(recs[recs.length - 1].game.id).toBe('laskut');
   });
 
   it('upcoming.json is empty now that every announced game is built, and getUpcomingGames still works', () => {
@@ -555,5 +581,6 @@ describe('Scene Data Schema & Integrity', () => {
     expect(hasJapanese(pankkiautomaatti)).toBe(true);
     expect(hasJapanese(virastot)).toBe(true);
     expect(hasJapanese(mistaApua)).toBe(true);
+    expect(hasJapanese(laskut)).toBe(true);
   });
 });
