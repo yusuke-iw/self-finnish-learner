@@ -1,0 +1,1730 @@
+{
+  "id": "laskut",
+  "sceneId": "raha",
+  "type": "procedure",
+  "schemaVersion": 1,
+  "icon": "🧾",
+  "title": {
+    "fi": "Laskun maksaminen",
+    "en": "Paying a bill",
+    "ja": "請求書の支払い"
+  },
+  "place": {
+    "fi": "verkkopankki",
+    "en": "online bank",
+    "ja": "ネットバンク"
+  },
+  "instruction": {
+    "fi": "Maksat laskua verkkopankissa. Lue ruutu ja valitse oikea vaihtoehto.",
+    "selko": "Olet verkkopankissa. Lue ruudun teksti. Valitse oikea vaihtoehto.",
+    "en": "You are paying a bill in your online bank. Read the screen and choose the right option.",
+    "ja": "ネットバンクで請求書を払う。画面を読んで、合う選択肢を選ぼう。"
+  },
+  "playLength": 1,
+  "relatedLessonId": "l10",
+  "procedures": [
+    {
+      "id": "uusi-maksu",
+      "goal": {
+        "fi": "Sinulle tuli sähkölasku. Maksa se verkkopankissa ajoissa, eli viimeistään eräpäivänä.",
+        "selko": "Sait sähkölaskun. Maksa lasku verkkopankissa viimeistään eräpäivänä.",
+        "en": "You got an electricity bill. Pay it on time in your online bank, that is, no later than the due date.",
+        "ja": "電気料金の請求書が届いた。ネットバンクで期日どおりに、つまり遅くとも支払期日までに払おう。"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "screen": [
+            {
+              "fi": "Sähkölasku",
+              "selko": "Tämä on sähkölasku.",
+              "en": "Electricity bill",
+              "ja": "電気料金の請求書"
+            },
+            {
+              "fi": "Esimerkki Energia Oy",
+              "selko": "Laskun lähettäjä: Esimerkki Energia Oy",
+              "en": "Esimerkki Energia Oy",
+              "ja": "Esimerkki Energia Oy（電力会社）"
+            },
+            {
+              "fi": "Laskun päivä 16.11.2026",
+              "selko": "Yritys teki laskun 16.11.2026.",
+              "en": "Invoice date Nov 16, 2026",
+              "ja": "発行日 2026年11月16日"
+            },
+            {
+              "fi": "Kulutusjakso 1.10.–31.10.2026",
+              "selko": "Käytit sähköä 1.10.–31.10.2026.",
+              "en": "Usage period Oct 1–31, 2026",
+              "ja": "使用期間 2026年10月1日〜10月31日"
+            },
+            {
+              "fi": "Eräpäivä 30.11.2026",
+              "selko": "Maksa lasku viimeistään 30.11.2026.",
+              "en": "Due date Nov 30, 2026",
+              "ja": "支払期日 2026年11月30日"
+            },
+            {
+              "fi": "Summa 48,60 €",
+              "selko": "Laskun summa on 48 euroa ja 60 senttiä.",
+              "en": "Amount €48.60",
+              "ja": "金額 48.60 ユーロ"
+            },
+            {
+              "fi": "Viitenumero 1234 5672",
+              "selko": "Viitenumero on 1234 5672.",
+              "en": "Reference number 1234 5672",
+              "ja": "参照番号 1234 5672"
+            }
+          ],
+          "question": {
+            "fi": "Mihin päivään mennessä lasku pitää maksaa?",
+            "selko": "Milloin sinun pitää viimeistään maksaa lasku?",
+            "en": "By what date must the bill be paid?",
+            "ja": "請求書は何日までに支払わなければなりませんか？"
+          },
+          "buttons": [
+            {
+              "id": "30-11",
+              "label": {
+                "fi": "30.11.2026",
+                "en": "Nov 30, 2026",
+                "ja": "2026年11月30日"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! Eräpäivä kertoo, mihin päivään mennessä lasku pitää maksaa.",
+                "selko": "Oikein! Eräpäivä on 30.11.2026. Maksa lasku viimeistään silloin.",
+                "en": "Right! \"Eräpäivä\" (due date) tells you the last day by which the bill must be paid.",
+                "ja": "正解。「Eräpäivä（支払期日）」が、遅くともいつまでに払うかを表します。"
+              }
+            },
+            {
+              "id": "16-11",
+              "label": {
+                "fi": "16.11.2026",
+                "en": "Nov 16, 2026",
+                "ja": "2026年11月16日"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "16.11.2026 on laskun päivä eli päivä, jolloin lasku on tehty. Viimeinen maksupäivä on eräpäivä 30.11.2026.",
+                "selko": "Yritys teki laskun 16.11.2026. Katso kohtaa Eräpäivä: 30.11.2026.",
+                "en": "Nov 16, 2026 is \"laskun päivä\" (the invoice date), the day the bill was created. Look for \"Eräpäivä\" (due date): Nov 30, 2026.",
+                "ja": "2026年11月16日は「Laskun päivä（請求書の作成日）」です。支払いの期限は「Eräpäivä」の 30.11.2026 です。"
+              }
+            },
+            {
+              "id": "31-10",
+              "label": {
+                "fi": "31.10.2026",
+                "en": "Oct 31, 2026",
+                "ja": "2026年10月31日"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "31.10.2026 on kulutusjakson viimeinen päivä, ei maksupäivä. Valitse eräpäivä \"30.11.2026\".",
+                "selko": "31.10.2026 on kulutusjakson loppu. Se ei ole maksupäivä. Valitse eräpäivä 30.11.2026.",
+                "en": "Oct 31, 2026 is the end of the usage period (\"kulutusjakso\"), not the payment date. Choose the due date, Nov 30, 2026.",
+                "ja": "2026年10月31日は「Kulutusjakso（使用期間）」の終わりの日で、支払日ではありません。支払期日の「30.11.2026」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "screen": [
+            {
+              "fi": "Valitse toiminto",
+              "selko": "Valitse, mitä haluat tehdä.",
+              "en": "Select an action",
+              "ja": "操作を選んでください"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "uusi-maksu",
+              "label": {
+                "fi": "Uusi maksu",
+                "en": "New payment",
+                "ja": "新しい支払い"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Kun maksat laskun ja syötät tiedot itse, valitset \"Uusi maksu\".",
+                "selko": "Hyvä! Valitse Uusi maksu, kun maksat laskun itse.",
+                "en": "Good! When you pay a bill and enter the details yourself, you choose \"Uusi maksu\" (New payment).",
+                "ja": "請求書の情報を自分で入力して払うときは「Uusi maksu（新しい支払い）」を選びます。"
+              }
+            },
+            {
+              "id": "e-laskut",
+              "label": {
+                "fi": "E-laskut",
+                "en": "E-invoices",
+                "ja": "e-lasku（電子請求書）"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Tämä on tavallinen paperi- tai PDF-lasku, ei verkkopankkiin tilattu e-lasku. Valitse \"Uusi maksu\".",
+                "selko": "Tämä ei ole e-lasku. Sinun pitää kirjoittaa laskun tiedot itse. Valitse Uusi maksu.",
+                "en": "This is a regular paper or PDF bill, not an e-invoice delivered straight to your online bank. Choose \"Uusi maksu\".",
+                "ja": "これは紙や PDF の請求書で、ネットバンクに届く e-lasku ではありません。「Uusi maksu」を選びます。"
+              }
+            },
+            {
+              "id": "tilitapahtumat",
+              "label": {
+                "fi": "Tilitapahtumat",
+                "en": "Account transactions",
+                "ja": "入出金明細"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Tilitapahtumat\" näyttää vain tilin aiemmat maksut ja panot. Kun haluat maksaa laskun, valitse \"Uusi maksu\".",
+                "selko": "Tilitapahtumat näyttää vain vanhat maksut. Valitse Uusi maksu.",
+                "en": "\"Tilitapahtumat\" only shows past payments and deposits on the account. To pay a bill, choose \"Uusi maksu\".",
+                "ja": "「Tilitapahtumat」はこれまでの入出金の一覧を見るだけです。請求書を払うときは「Uusi maksu」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s3",
+          "screen": [
+            {
+              "fi": "Uusi maksu",
+              "selko": "Teet uuden maksun.",
+              "en": "New payment",
+              "ja": "新しい支払い"
+            },
+            {
+              "fi": "Saajan tilinumero (IBAN)",
+              "selko": "Kirjoita saajan tilinumero eli IBAN.",
+              "en": "Payee's account number (IBAN)",
+              "ja": "受取人の口座番号（IBAN）"
+            }
+          ],
+          "question": {
+            "fi": "Mikä numero kirjoitetaan tähän kenttään?",
+            "selko": "Minkä numeron kirjoitat tähän kohtaan?",
+            "en": "Which number do you enter in this field?",
+            "ja": "この欄にはどの番号を入力しますか？"
+          },
+          "buttons": [
+            {
+              "id": "iban",
+              "label": {
+                "fi": "FI21 1234 5600 0007 85",
+                "en": "FI21 1234 5600 0007 85",
+                "ja": "FI21 1234 5600 0007 85"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! Suomalainen IBAN-tilinumero alkaa kirjaimilla FI, joiden jälkeen tulee 16 numeroa.",
+                "selko": "Oikein! Tilinumero eli IBAN alkaa kirjaimilla FI, ja siinä on 16 numeroa.",
+                "en": "Right! A Finnish IBAN account number starts with the letters FI followed by 16 digits.",
+                "ja": "正解。フィンランドの IBAN 口座番号は「FI」と 16 桁の数字です。"
+              }
+            },
+            {
+              "id": "viite",
+              "label": {
+                "fi": "1234 5672",
+                "en": "1234 5672",
+                "ja": "1234 5672"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "1234 5672 on viitenumero, ei tilinumero. Tilinumero (IBAN) alkaa kirjaimilla FI, joten valitse \"FI21 1234 5600 0007 85\".",
+                "selko": "1234 5672 on viitenumero. Tilinumero alkaa kirjaimilla FI. Valitse FI21 1234 5600 0007 85.",
+                "en": "1234 5672 is the reference number (\"viitenumero\"), not the account number. The IBAN starts with FI, so choose \"FI21 1234 5600 0007 85\".",
+                "ja": "1234 5672 は参照番号（viitenumero）で、口座番号ではありません。FI で始まる「FI21 1234 5600 0007 85」を選びます。"
+              }
+            },
+            {
+              "id": "asiakasnumero",
+              "label": {
+                "fi": "908112",
+                "en": "908112",
+                "ja": "908112"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "908112 on asiakasnumero. Sitä ei käytetä maksamisessa. Valitse FI-alkuinen tilinumero \"FI21 1234 5600 0007 85\".",
+                "selko": "908112 on asiakasnumero. Älä kirjoita sitä maksuun. Valitse tilinumero FI21 1234 5600 0007 85.",
+                "en": "908112 is your customer number (\"asiakasnumero\"). It is not used when paying. Choose the IBAN account number \"FI21 1234 5600 0007 85\".",
+                "ja": "908112 は顧客番号（asiakasnumero）で、支払いには使いません。FI で始まる口座番号「FI21 1234 5600 0007 85」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "screen": [
+            {
+              "fi": "Viitenumero vai viesti?",
+              "selko": "Valitse viitenumero tai viesti.",
+              "en": "Reference number or message?",
+              "ja": "参照番号かメッセージか？"
+            },
+            {
+              "fi": "Kirjoita laskun viitenumero tai viesti saajalle.",
+              "selko": "Kirjoita tähän laskun viitenumero tai viesti.",
+              "en": "Enter the bill's reference number or a message to the payee.",
+              "ja": "請求書の参照番号、または受取人へのメッセージを入力してください。"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "viitenumero",
+              "label": {
+                "fi": "Viitenumero",
+                "en": "Reference number",
+                "ja": "参照番号"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Kun laskussa on viitenumero, käytä aina sitä. Viitenumeron avulla laskuttaja tunnistaa maksusi automaattisesti.",
+                "selko": "Hyvä! Laskussa on viitenumero, joten käytä sitä. Silloin laskuttaja näkee, kuka maksoi.",
+                "en": "Good! When a bill has a reference number (\"viitenumero\"), always use it. That is how the biller automatically identifies your payment.",
+                "ja": "請求書に参照番号（viitenumero）があるときは、必ずそれを使います。請求元がどの支払いかを自動で識別できます。"
+              }
+            },
+            {
+              "id": "viesti",
+              "label": {
+                "fi": "Viesti",
+                "en": "Message",
+                "ja": "メッセージ"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Viestikenttää käytetään vain, jos laskussa ei ole viitenumeroa. Jos kirjoitat viitenumeron sijasta viestin, laskuttajan on vaikea yhdistää maksua laskuusi. Valitse \"Viitenumero\".",
+                "selko": "Älä valitse viestiä, kun laskussa on viitenumero. Muuten laskuttaja ei löydä maksuasi helposti. Valitse Viitenumero.",
+                "en": "The message field is only for payments without a reference number. If you write a message instead of the reference number, the biller may have trouble matching your payment. Choose \"Viitenumero\".",
+                "ja": "「Viesti（メッセージ）」は参照番号がない支払いのための欄です。参照番号のかわりにメッセージを書くと、請求元が支払いを見つけにくくなります。「Viitenumero」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s5",
+          "screen": [
+            {
+              "fi": "Summa (€)",
+              "selko": "Kirjoita laskun summa euroina.",
+              "en": "Amount (€)",
+              "ja": "金額（€）"
+            }
+          ],
+          "question": {
+            "fi": "Minkä summan kirjoitat?",
+            "selko": "Minkä summan kirjoitat tähän?",
+            "en": "What amount do you enter?",
+            "ja": "どの金額を入力しますか？"
+          },
+          "buttons": [
+            {
+              "id": "48-60",
+              "label": {
+                "fi": "48,60",
+                "en": "48,60",
+                "ja": "48,60"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! Suomessa eurot ja sentit erotetaan pilkulla: 48,60 €.",
+                "selko": "Oikein! Laskun summa on 48 euroa ja 60 senttiä, eli 48,60.",
+                "en": "Right! In Finland, euros and cents are separated with a comma: 48,60 €.",
+                "ja": "正解。フィンランドではユーロとセントをコンマで区切るので、48,60 です。"
+              }
+            },
+            {
+              "id": "4860",
+              "label": {
+                "fi": "4 860",
+                "en": "4 860",
+                "ja": "4 860"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "4 860 euroa olisi sata kertaa liikaa! Muista pilkku eurojen ja senttien väliin: valitse \"48,60\".",
+                "selko": "4 860 euroa on aivan liian paljon. Pilkku tulee eurojen ja senttien väliin. Valitse 48,60.",
+                "en": "4,860 euros would be a hundred times too much! Remember the comma between euros and cents: choose \"48,60\".",
+                "ja": "4 860 ユーロでは 100 倍になってしまいます。ユーロとセントの間にコンマを入れて「48,60」を選びます。"
+              }
+            },
+            {
+              "id": "486",
+              "label": {
+                "fi": "486,00",
+                "en": "486,00",
+                "ja": "486,00"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Pilkku on väärässä paikassa: 486,00 € on kymmenen kertaa liikaa. Laskun summa on 48 euroa ja 60 senttiä, joten valitse \"48,60\".",
+                "selko": "486,00 euroa on liian paljon. Summa on 48 euroa ja 60 senttiä. Valitse 48,60.",
+                "en": "The comma is in the wrong place: €486.00 is ten times too much. The bill is 48 euros and 60 cents, so choose \"48,60\".",
+                "ja": "コンマの位置が違い、486.00 ユーロでは 10 倍になってしまいます。48 ユーロ 60 セントなので「48,60」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s6",
+          "screen": [
+            {
+              "fi": "Eräpäivä",
+              "selko": "Maksupäivä",
+              "en": "Due date",
+              "ja": "支払期日（引き落とし日）"
+            },
+            {
+              "fi": "Valitse päivä, jolloin maksu lähtee tililtä.",
+              "selko": "Valitse päivä, jolloin raha lähtee tililtä.",
+              "en": "Choose the date when the payment leaves your account.",
+              "ja": "口座から引き落とす日を選んでください。"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "30-11",
+              "label": {
+                "fi": "30.11.2026",
+                "en": "Nov 30, 2026",
+                "ja": "2026年11月30日"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Laskun eräpäivä on 30.11.2026. Voit maksaa laskun myös aiemmin, mutta maksupäivä ei saa olla eräpäivän jälkeen.",
+                "selko": "Hyvä! Eräpäivä on 30.11.2026. Voit maksaa myös aikaisemmin, mutta et myöhemmin.",
+                "en": "Good! The bill's due date is Nov 30, 2026. You can also pay earlier, but the payment date must not be later than the due date.",
+                "ja": "請求書の支払期日は 2026年11月30日です。それより早く払ってもよいですが、期日より遅くなってはいけません。"
+              }
+            },
+            {
+              "id": "3-12",
+              "label": {
+                "fi": "3.12.2026",
+                "en": "Dec 3, 2026",
+                "ja": "2026年12月3日"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "3.12.2026 on eräpäivän jälkeen, joten maksu myöhästyisi. Valitse eräpäivä \"30.11.2026\".",
+                "selko": "3.12.2026 on liian myöhään. Eräpäivä on 30.11.2026. Valitse se.",
+                "en": "Dec 3, 2026 is after the due date, so the payment would be late. Choose the due date, \"30.11.2026\".",
+                "ja": "2026年12月3日では支払期日を過ぎてしまい、支払いが遅れます。期日の「30.11.2026」を選びます。"
+              }
+            },
+            {
+              "id": "30-12",
+              "label": {
+                "fi": "30.12.2026",
+                "en": "Dec 30, 2026",
+                "ja": "2026年12月30日"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "12. kuukausi on joulukuu, joten maksu lähtisi kuukauden myöhässä. Marraskuu on 11. kuukausi: valitse \"30.11.2026\".",
+                "selko": "30.12.2026 on joulukuussa, eli kuukauden liian myöhään. Valitse 30.11.2026.",
+                "en": "Month 12 is December, so the payment would go out a month late. November is month 11: choose \"30.11.2026\".",
+                "ja": "12 月（30.12.）を選ぶと 1 か月遅れになってしまいます。11 月の「30.11.2026」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "screen": [
+            {
+              "fi": "Tarkista maksun tiedot",
+              "selko": "Tarkista, että maksun tiedot ovat oikein.",
+              "en": "Check the payment details",
+              "ja": "支払い内容を確認してください"
+            },
+            {
+              "fi": "Saaja: Esimerkki Energia Oy",
+              "selko": "Saaja on Esimerkki Energia Oy.",
+              "en": "Payee: Esimerkki Energia Oy",
+              "ja": "受取人: Esimerkki Energia Oy"
+            },
+            {
+              "fi": "Summa: 48,60 €",
+              "selko": "Summa on 48 euroa ja 60 senttiä.",
+              "en": "Amount: €48.60",
+              "ja": "金額: 48.60 ユーロ"
+            },
+            {
+              "fi": "Eräpäivä: 30.11.2026",
+              "selko": "Maksupäivä on 30.11.2026.",
+              "en": "Due date: Nov 30, 2026",
+              "ja": "支払期日: 2026年11月30日"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "hyvaksy",
+              "label": {
+                "fi": "Hyväksy",
+                "en": "Approve",
+                "ja": "承認する"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Kaikki tiedot täsmäävät laskun kanssa, joten voit hyväksyä maksun.",
+                "selko": "Hyvä! Tiedot ovat oikein. Voit hyväksyä maksun.",
+                "en": "Good! All the details match the bill, so you can approve the payment.",
+                "ja": "すべての情報が請求書と合っているので、「Hyväksy（承認する）」で支払いを確定します。"
+              }
+            },
+            {
+              "id": "muokkaa",
+              "label": {
+                "fi": "Muokkaa",
+                "en": "Edit",
+                "ja": "修正する"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Muokkaa\" vie takaisin muuttamaan tietoja. Saaja, summa ja eräpäivä ovat jo oikein, joten valitse \"Hyväksy\".",
+                "selko": "Tiedot ovat jo oikein. Sinun ei tarvitse muuttaa niitä. Valitse Hyväksy.",
+                "en": "\"Muokkaa\" (Edit) takes you back to change the details. The payee, amount and due date are already right, so choose \"Hyväksy\".",
+                "ja": "「Muokkaa（修正する）」は入力内容を直すときのボタンです。情報はすでに正しいので「Hyväksy」を選びます。"
+              }
+            },
+            {
+              "id": "peruuta",
+              "label": {
+                "fi": "Peruuta",
+                "en": "Cancel",
+                "ja": "取り消す"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Peruuta\" peruu koko maksun, ja lasku jää maksamatta. Valitse \"Hyväksy\".",
+                "selko": "Peruuta lopettaa maksun, ja lasku jää maksamatta. Valitse Hyväksy.",
+                "en": "\"Peruuta\" (Cancel) cancels the whole payment and leaves the bill unpaid. Choose \"Hyväksy\".",
+                "ja": "「Peruuta（取り消す）」を押すと支払いが取り消され、未払いのままになります。「Hyväksy」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s8",
+          "screen": [
+            {
+              "fi": "Maksu on hyväksytty.",
+              "selko": "Maksu on nyt valmis.",
+              "en": "Payment approved.",
+              "ja": "支払いが承認されました。"
+            },
+            {
+              "fi": "Maksu veloitetaan tililtäsi 30.11.2026.",
+              "selko": "Raha lähtee tililtäsi 30.11.2026.",
+              "en": "The payment will be debited from your account on Nov 30, 2026.",
+              "ja": "2026年11月30日に口座から引き落とされます。"
+            }
+          ],
+          "question": {
+            "fi": "Milloin raha lähtee tililtä?",
+            "selko": "Milloin raha lähtee tililtä?",
+            "en": "When does the money leave the account?",
+            "ja": "お金はいつ口座から引き落とされますか？"
+          },
+          "buttons": [
+            {
+              "id": "erapaivana",
+              "label": {
+                "fi": "Eräpäivänä 30.11.",
+                "en": "On the due date, Nov 30",
+                "ja": "支払期日の 11月30日"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hienoa! \"Veloitetaan 30.11.2026\" tarkoittaa, että raha lähtee tililtä eräpäivänä. Pidä huoli, että tilillä on silloin tarpeeksi rahaa.",
+                "selko": "Hienoa! Raha lähtee tililtä eräpäivänä 30.11. Pidä silloin tilillä tarpeeksi rahaa.",
+                "en": "Great! \"Veloitetaan 30.11.2026\" means the money will be taken from your account on the due date. Make sure there is enough money in the account then.",
+                "ja": "正解。「veloitetaan 30.11.2026」は 11月30日に口座から引き落とされるという意味です。その日に残高が足りるようにしておきましょう。"
+              }
+            },
+            {
+              "id": "heti",
+              "label": {
+                "fi": "Heti tänään",
+                "en": "Right away today",
+                "ja": "今日すぐ"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Maksu on hyväksytty tänään, mutta ruudulla lukee \"veloitetaan tililtäsi 30.11.2026\". Raha lähtee siis vasta eräpäivänä: valitse \"Eräpäivänä 30.11.\".",
+                "selko": "Hyväksyit maksun tänään, mutta raha lähtee vasta 30.11.2026. Valitse Eräpäivänä 30.11.",
+                "en": "You approved the payment today, but the screen says it will be debited on Nov 30, 2026. The money leaves on the due date: choose \"Eräpäivänä 30.11.\".",
+                "ja": "今日承認しましたが、画面には「veloitetaan tililtäsi 30.11.2026（11月30日に引き落とされます）」とあります。「Eräpäivänä 30.11.」を選びます。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e-lasku",
+      "goal": {
+        "fi": "Sinulle tuli e-lasku puhelinliittymästä. Tarkista summa ja hyväksy lasku maksuun. Haluat tarkistaa jokaisen laskun itse.",
+        "selko": "Sait puhelinlaskun e-laskuna. Tarkista summa ja hyväksy lasku. Haluat tarkistaa jokaisen laskun itse.",
+        "en": "You received an e-invoice for your phone plan. Check the amount and approve the bill for payment. You want to check every bill yourself.",
+        "ja": "携帯電話の契約の e-lasku（電子請求書）が届いた。金額を確かめて支払いを承認しよう。請求書は毎回自分で確かめたい。"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "screen": [
+            {
+              "fi": "Tervetuloa verkkopankkiin",
+              "selko": "Olet nyt verkkopankissa.",
+              "en": "Welcome to the online bank",
+              "ja": "ネットバンクへようこそ"
+            },
+            {
+              "fi": "Sinulle on 1 uusi e-lasku.",
+              "selko": "Sinulle on tullut yksi uusi e-lasku.",
+              "en": "You have 1 new e-invoice.",
+              "ja": "新しい e-lasku が 1 件あります。"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "e-laskut",
+              "label": {
+                "fi": "E-laskut",
+                "en": "E-invoices",
+                "ja": "e-lasku（電子請求書）"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Saapuneet e-laskut löytyvät kohdasta \"E-laskut\".",
+                "selko": "Hyvä! Näet uuden e-laskun kohdassa E-laskut.",
+                "en": "Good! Incoming e-invoices are found under \"E-laskut\".",
+                "ja": "届いた e-lasku は「E-laskut」の欄から確認できます。"
+              }
+            },
+            {
+              "id": "viestit",
+              "label": {
+                "fi": "Viestit",
+                "en": "Messages",
+                "ja": "メッセージ"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Viestit\" on pankin asiakasviestejä varten. E-laskut ovat omassa kohdassaan, joten valitse \"E-laskut\".",
+                "selko": "Viestit-kohdassa on pankin viestejä, ei laskuja. Valitse E-laskut.",
+                "en": "\"Viestit\" is for messages from the bank. E-invoices have their own section, so choose \"E-laskut\".",
+                "ja": "「Viestit」は銀行からのメッセージを見る欄です。電子請求書は「E-laskut」を選びます。"
+              }
+            },
+            {
+              "id": "tilitapahtumat",
+              "label": {
+                "fi": "Tilitapahtumat",
+                "en": "Account transactions",
+                "ja": "入出金明細"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Tilitapahtumat\" näyttää jo maksetut maksut. Uusi e-lasku odottaa hyväksymistä kohdassa \"E-laskut\".",
+                "selko": "Tilitapahtumat näyttää jo maksetut laskut. Uusi e-lasku on kohdassa E-laskut.",
+                "en": "\"Tilitapahtumat\" shows payments that have already gone through. A new e-invoice waiting for approval is under \"E-laskut\".",
+                "ja": "「Tilitapahtumat」はすでに引き落とされた明細です。承認待ちの新しい請求書は「E-laskut」にあります。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "screen": [
+            {
+              "fi": "E-laskut",
+              "selko": "Uusi e-lasku",
+              "en": "E-invoices",
+              "ja": "e-lasku（電子請求書）"
+            },
+            {
+              "fi": "Esimerkki Mobiili Oy",
+              "selko": "Laskuttaja on Esimerkki Mobiili Oy.",
+              "en": "Esimerkki Mobiili Oy",
+              "ja": "Esimerkki Mobiili Oy（携帯電話会社）"
+            },
+            {
+              "fi": "Summa 19,90 €",
+              "selko": "Summa on 19 euroa ja 90 senttiä.",
+              "en": "Amount €19.90",
+              "ja": "金額 19.90 ユーロ"
+            },
+            {
+              "fi": "Eräpäivä 5.12.2026",
+              "selko": "Eräpäivä on 5.12.2026.",
+              "en": "Due date Dec 5, 2026",
+              "ja": "支払期日 2026年12月5日"
+            }
+          ],
+          "question": {
+            "fi": "Paljonko puhelinlasku on?",
+            "selko": "Kuinka paljon puhelinlasku maksaa?",
+            "en": "How much is the phone bill?",
+            "ja": "電話料金はいくらですか？"
+          },
+          "buttons": [
+            {
+              "id": "19-90",
+              "label": {
+                "fi": "19,90 €",
+                "en": "€19.90",
+                "ja": "19.90 ユーロ"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! \"Summa 19,90 €\" kertoo, että lasku on 19 euroa ja 90 senttiä.",
+                "selko": "Oikein! Laskun summa on 19 euroa ja 90 senttiä.",
+                "en": "Right! \"Summa 19,90 €\" tells you the bill is 19 euros and 90 cents.",
+                "ja": "正解。「Summa 19,90 €」とあるので、19 ユーロ 90 セントです。"
+              }
+            },
+            {
+              "id": "5-12",
+              "label": {
+                "fi": "5,12 €",
+                "en": "€5.12",
+                "ja": "5.12 ユーロ"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "5.12.2026 on eräpäivä (5. joulukuuta), ei rahasumma. Katso kohtaa \"Summa\": valitse \"19,90 €\".",
+                "selko": "5.12.2026 on päivämäärä, ei summa. Summa on 19,90 €.",
+                "en": "5.12.2026 is the due date (December 5), not an amount of money. Look at \"Summa\" and choose \"19,90 €\".",
+                "ja": "5.12.2026 は支払期日（12月5日）で、金額ではありません。「Summa」の欄を見て「19,90 €」を選びます。"
+              }
+            },
+            {
+              "id": "1990",
+              "label": {
+                "fi": "1 990 €",
+                "en": "€1,990",
+                "ja": "1,990 ユーロ"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Suomessa pilkku erottaa eurot ja sentit: 19,90 € on 19 euroa ja 90 senttiä, ei 1 990 euroa. Valitse \"19,90 €\".",
+                "selko": "Pilkun jälkeen tulevat sentit. Lasku on 19 euroa ja 90 senttiä. Valitse 19,90 €.",
+                "en": "In Finnish, the comma separates euros and cents: 19,90 € is 19 euros and 90 cents, not 1,990 euros. Choose \"19,90 €\".",
+                "ja": "フィンランド語ではコンマでユーロとセントを区切ります。1,990 ユーロではなく 19 ユーロ 90 セントなので「19,90 €」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s3",
+          "screen": [
+            {
+              "fi": "Laskun tiedot",
+              "selko": "E-laskun tiedot",
+              "en": "Invoice details",
+              "ja": "請求書の詳細"
+            },
+            {
+              "fi": "Saajan tilinumero ja viitenumero ovat valmiina.",
+              "selko": "Tilinumero ja viitenumero ovat jo paikallaan.",
+              "en": "The payee's account number and reference number are already filled in.",
+              "ja": "受取人の口座番号と参照番号はすでに入力されています。"
+            }
+          ],
+          "question": {
+            "fi": "Pitääkö sinun kirjoittaa viitenumero itse?",
+            "selko": "Pitääkö sinun kirjoittaa viitenumero itse?",
+            "en": "Do you have to type the reference number yourself?",
+            "ja": "参照番号を自分で入力する必要がありますか？"
+          },
+          "buttons": [
+            {
+              "id": "ei",
+              "label": {
+                "fi": "Ei, se on valmiina",
+                "en": "No, it is already filled in",
+                "ja": "いいえ、最初から入っている"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! E-laskussa saajan tilinumero, viitenumero, summa ja eräpäivä ovat valmiina. Sinun tarvitsee vain tarkistaa ne.",
+                "selko": "Oikein! E-laskussa numerot ovat jo valmiina. Sinä vain tarkistat ne.",
+                "en": "Right! In an e-invoice, the account number, reference number, amount and due date are already filled in. You only need to check them.",
+                "ja": "正解。e-lasku では口座番号や参照番号、金額、期日が最初から入っているので、内容を確認するだけで済みます。"
+              }
+            },
+            {
+              "id": "kylla",
+              "label": {
+                "fi": "Kyllä, kirjoitan sen",
+                "en": "Yes, I type it in",
+                "ja": "はい、自分で入力する"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Ruudulla lukee \"ovat valmiina\". E-laskussa tilinumero ja viitenumero ovat valmiina, joten valitse \"Ei, se on valmiina\".",
+                "selko": "E-laskussa numerot ovat jo valmiina. Sinun ei tarvitse kirjoittaa niitä. Valitse Ei, se on valmiina.",
+                "en": "The screen says \"ovat valmiina\" (are already filled in). An e-invoice comes with the account and reference numbers filled in, so choose \"Ei, se on valmiina\".",
+                "ja": "画面には「ovat valmiina（すでに入っています）」とあります。e-lasku では口座番号と参照番号が最初から入っているので「Ei, se on valmiina」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "screen": [
+            {
+              "fi": "Mitä haluat tehdä laskulle?",
+              "selko": "Mitä teet tälle laskulle?",
+              "en": "What would you like to do with the invoice?",
+              "ja": "この請求書をどうしますか？"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "hyvaksy",
+              "label": {
+                "fi": "Hyväksy maksuun",
+                "en": "Approve for payment",
+                "ja": "支払いを承認する"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! \"Hyväksy maksuun\" laittaa e-laskun maksettavaksi eräpäivänä.",
+                "selko": "Hyvä! Kun valitset Hyväksy maksuun, pankki maksaa laskun eräpäivänä.",
+                "en": "Good! \"Hyväksy maksuun\" (Approve for payment) schedules the e-invoice to be paid on its due date.",
+                "ja": "「Hyväksy maksuun（支払いを承認する）」を選ぶと、支払期日に引き落とされるようになります。"
+              }
+            },
+            {
+              "id": "hylkaa",
+              "label": {
+                "fi": "Hylkää",
+                "en": "Reject",
+                "ja": "却下する"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Jos hylkäät e-laskun verkkopankissa, itse lasku ei katoa, vaan se pitää silti maksaa. Jos laskussa on virhe, ota yhteyttä laskuttajaan. Nyt lasku on oikein, joten valitse \"Hyväksy maksuun\".",
+                "selko": "Jos painat Hylkää, lasku ei katoa. Sinun pitää silti maksaa se. Jos lasku on väärin, ota yhteyttä laskuttajaan. Valitse nyt Hyväksy maksuun.",
+                "en": "Rejecting an e-invoice in the online bank does not make the bill go away; you still have to pay it. If there is a mistake on the bill, contact the biller. Here the bill is fine, so choose \"Hyväksy maksuun\".",
+                "ja": "ネットバンクで「Hylkää（却下）」を押しても請求自体は消えず、支払う必要があります。請求内容が間違っているときは請求元に連絡します。今回は正しいので「Hyväksy maksuun」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s5",
+          "screen": [
+            {
+              "fi": "Maksupäivä",
+              "selko": "Valitse maksupäivä.",
+              "en": "Payment date",
+              "ja": "支払日"
+            },
+            {
+              "fi": "Eräpäivä 5.12.2026",
+              "selko": "Laskun eräpäivä on 5.12.2026.",
+              "en": "Due date Dec 5, 2026",
+              "ja": "支払期日 2026年12月5日"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "erapaiva",
+              "label": {
+                "fi": "5.12.2026",
+                "en": "Dec 5, 2026",
+                "ja": "2026年12月5日"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Maksat laskun eräpäivänä 5.12.2026, joten se menee perille ajoissa.",
+                "selko": "Hyvä! Maksat laskun eräpäivänä 5.12.2026.",
+                "en": "Good! You pay the bill on the due date, Dec 5, 2026, so it arrives on time.",
+                "ja": "支払期日の 2026年12月5日を選んだので、期日どおりに支払われます。"
+              }
+            },
+            {
+              "id": "myohassa",
+              "label": {
+                "fi": "8.12.2026",
+                "en": "Dec 8, 2026",
+                "ja": "2026年12月8日"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "8.12.2026 on kolme päivää eräpäivän jälkeen, joten maksu myöhästyisi. Valitse eräpäivä \"5.12.2026\".",
+                "selko": "8.12.2026 on liian myöhään. Eräpäivä on 5.12.2026. Valitse se.",
+                "en": "Dec 8, 2026 is three days after the due date, so the payment would be late. Choose the due date, \"5.12.2026\".",
+                "ja": "2026年12月8日は支払期日を過ぎています。期日の「5.12.2026」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s6",
+          "screen": [
+            {
+              "fi": "Vahvista maksu",
+              "selko": "Vahvista maksu nyt.",
+              "en": "Confirm the payment",
+              "ja": "支払いを確定してください"
+            },
+            {
+              "fi": "Avaa pankin sovellus ja vahvista maksu.",
+              "selko": "Avaa pankin sovellus puhelimessa. Vahvista maksu.",
+              "en": "Open the bank's app and confirm the payment.",
+              "ja": "銀行のアプリを開いて、支払いを確定してください。"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "vahvista",
+              "label": {
+                "fi": "Vahvista",
+                "en": "Confirm",
+                "ja": "確定する"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Kun vahvistat maksun pankin sovelluksella, maksu on valmis.",
+                "selko": "Hyvä! Vahvistit maksun.",
+                "en": "Good! Once you confirm the payment with your bank's app, the payment is complete.",
+                "ja": "銀行のアプリで確定すれば、支払いの手続きは完了です。"
+              }
+            },
+            {
+              "id": "peruuta",
+              "label": {
+                "fi": "Peruuta",
+                "en": "Cancel",
+                "ja": "取り消す"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Peruuta\" keskeyttää vahvistuksen, ja e-lasku jää hyväksymättä. Valitse \"Vahvista\".",
+                "selko": "Peruuta lopettaa maksun. Valitse Vahvista.",
+                "en": "\"Peruuta\" cancels the confirmation and leaves the e-invoice unapproved. Choose \"Vahvista\".",
+                "ja": "「Peruuta（取り消す）」を押すと確定が中止され、未承認のままになります。「Vahvista」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "screen": [
+            {
+              "fi": "E-lasku on hyväksytty maksuun.",
+              "selko": "Hyväksyit e-laskun.",
+              "en": "The e-invoice has been approved for payment.",
+              "ja": "e-lasku の支払いが承認されました。"
+            },
+            {
+              "fi": "Haluatko, että tämän laskuttajan e-laskut maksetaan jatkossa automaattisesti?",
+              "selko": "Haluatko, että pankki maksaa tämän yrityksen e-laskut jatkossa automaattisesti?",
+              "en": "Would you like future e-invoices from this biller to be paid automatically?",
+              "ja": "今後、この請求元の e-lasku を自動で支払いますか？"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "ei",
+              "label": {
+                "fi": "Ei",
+                "en": "No",
+                "ja": "いいえ"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hienoa! Haluat tarkistaa jokaisen laskun itse ennen maksua, joten \"Ei\" on oikea valinta.",
+                "selko": "Hienoa! Haluat tarkistaa jokaisen laskun itse. Siksi valitset Ei.",
+                "en": "Great! You want to check every bill yourself before paying, so \"Ei\" (No) is the right choice.",
+                "ja": "毎回自分で請求書を確かめたいので、「Ei（いいえ）」で正解です。"
+              }
+            },
+            {
+              "id": "kylla",
+              "label": {
+                "fi": "Kyllä",
+                "en": "Yes",
+                "ja": "はい"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Automaattinen maksu on kätevä, mutta silloin lasku lähtee tililtä ilman, että hyväksyt sen joka kerta. Tällä kertaa haluat tarkistaa jokaisen laskun itse, joten valitse \"Ei\".",
+                "selko": "Automaattinen maksu maksaa laskun suoraan. Sinä haluat tarkistaa jokaisen laskun itse. Valitse Ei.",
+                "en": "Automatic payment is convenient, but then bills are paid without you approving them each time. Your goal is to check every bill yourself, so choose \"Ei\".",
+                "ja": "自動払いは便利ですが、払う前に自分で承認する手順がなくなります。今回は毎回自分で確かめたいので「Ei」を選びます。"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maksumuistutus",
+      "goal": {
+        "fi": "Sait maksumuistutuksen. Tarkista ensin tilitapahtumista, maksoitko laskun jo. Jos et maksanut, maksa se nyt.",
+        "selko": "Sait maksumuistutuksen. Katso ensin tilitapahtumista, maksoitko laskun jo. Jos et maksanut, maksa lasku nyt.",
+        "en": "You received a payment reminder. First check your account transactions to see whether you already paid the bill. If you didn't, pay it now.",
+        "ja": "支払いの督促状（maksumuistutus）が届いた。まず入出金明細で、すでに払ったかどうかを確かめよう。まだ払っていなければ、いま支払おう。"
+      },
+      "steps": [
+        {
+          "id": "s1",
+          "screen": [
+            {
+              "fi": "Maksumuistutus",
+              "selko": "Tämä kirje on maksumuistutus.",
+              "en": "Payment reminder",
+              "ja": "督促状"
+            },
+            {
+              "fi": "Esimerkki Energia Oy",
+              "selko": "Lähettäjä on Esimerkki Energia Oy.",
+              "en": "Esimerkki Energia Oy",
+              "ja": "Esimerkki Energia Oy"
+            },
+            {
+              "fi": "Emme ole saaneet maksuanne laskusta, jonka eräpäivä oli 31.10.2026.",
+              "selko": "Et ole vielä maksanut laskua. Laskun eräpäivä oli 31.10.2026.",
+              "en": "We have not received your payment for the invoice due on Oct 31, 2026.",
+              "ja": "支払期日が 2026年10月31日であった請求書のお支払いが確認できておりません。"
+            },
+            {
+              "fi": "Lasku 48,60 €",
+              "selko": "Alkuperäinen lasku on 48,60 €.",
+              "en": "Original invoice €48.60",
+              "ja": "元の請求額 48.60 ユーロ"
+            },
+            {
+              "fi": "Muistutusmaksu 5,00 €",
+              "selko": "Muistutusmaksu on 5,00 €.",
+              "en": "Reminder fee €5.00",
+              "ja": "督促手数料 5.00 ユーロ"
+            },
+            {
+              "fi": "Yhteensä 53,60 €",
+              "selko": "Maksettava summa on yhteensä 53,60 €.",
+              "en": "Total €53.60",
+              "ja": "合計 53.60 ユーロ"
+            },
+            {
+              "fi": "Uusi eräpäivä 30.11.2026",
+              "selko": "Maksa viimeistään 30.11.2026.",
+              "en": "New due date Nov 30, 2026",
+              "ja": "新しい支払期日 2026年11月30日"
+            },
+            {
+              "fi": "Viitenumero 1234 5672",
+              "selko": "Viitenumero on 1234 5672.",
+              "en": "Reference number 1234 5672",
+              "ja": "参照番号 1234 5672"
+            }
+          ],
+          "question": {
+            "fi": "Miksi sait tämän kirjeen?",
+            "selko": "Miksi sait tämän kirjeen?",
+            "en": "Why did you receive this letter?",
+            "ja": "なぜこの手紙が届いたのですか？"
+          },
+          "buttons": [
+            {
+              "id": "maksamatta",
+              "label": {
+                "fi": "Lasku on maksamatta",
+                "en": "The bill is unpaid",
+                "ja": "請求書が未払いだから"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! \"Maksumuistutus\" lähetetään, kun laskua ei ole maksettu eräpäivään mennessä.",
+                "selko": "Oikein! Maksumuistutus tulee, kun lasku on jäänyt maksamatta.",
+                "en": "Right! A \"maksumuistutus\" (payment reminder) is sent when a bill has not been paid by its due date.",
+                "ja": "正解。「Maksumuistutus（督促状）」は、支払期日までに請求書が支払われていないときに届きます。"
+              }
+            },
+            {
+              "id": "kahdesti",
+              "label": {
+                "fi": "Maksoit laskun kahdesti",
+                "en": "You paid the bill twice",
+                "ja": "請求書を 2 回払ったから"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Kirjeessä lukee \"Emme ole saaneet maksuanne\", eli maksua ei ole tullut lainkaan. Valitse \"Lasku on maksamatta\".",
+                "selko": "Kirje sanoo, että maksua ei ole tullut. Valitse Lasku on maksamatta.",
+                "en": "The letter says \"Emme ole saaneet maksuanne\" (We have not received your payment), meaning no payment has arrived. Choose \"Lasku on maksamatta\".",
+                "ja": "手紙には「Emme ole saaneet maksuanne（お支払いが確認できておりません）」とあるので、まだ払われていません。「Lasku on maksamatta」を選びます。"
+              }
+            },
+            {
+              "id": "sopimus",
+              "label": {
+                "fi": "Sähkösopimus on päättynyt",
+                "en": "Your electricity contract has ended",
+                "ja": "電気の契約が終了したから"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Kyse ei ole sopimuksen päättymisestä, vaan myöhässä olevasta maksusta. Valitse \"Lasku on maksamatta\".",
+                "selko": "Sopimus ei ole päättynyt. Lasku on myöhässä. Valitse Lasku on maksamatta.",
+                "en": "This is not about your contract ending, but about an overdue payment. Choose \"Lasku on maksamatta\".",
+                "ja": "契約の終了ではなく、支払いが遅れているという知らせです。「Lasku on maksamatta」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "screen": [
+            {
+              "fi": "Tilitapahtumat lokakuu 2026",
+              "selko": "Tilin maksut lokakuussa 2026",
+              "en": "Account transactions October 2026",
+              "ja": "入出金明細 2026年10月"
+            },
+            {
+              "fi": "2.10. Vuokra −650,00 €",
+              "selko": "2.10. maksoit vuokraa 650,00 €.",
+              "en": "Oct 2 Rent −€650.00",
+              "ja": "10月2日 家賃 −650.00 ユーロ"
+            },
+            {
+              "fi": "15.10. Ruokakauppa −42,30 €",
+              "selko": "15.10. maksoit ruokakaupassa 42,30 €.",
+              "en": "Oct 15 Grocery store −€42.30",
+              "ja": "10月15日 食料品店 −42.30 ユーロ"
+            },
+            {
+              "fi": "28.10. Palkka +1 850,00 €",
+              "selko": "28.10. tilille tuli palkkaa 1 850,00 €.",
+              "en": "Oct 28 Salary +€1,850.00",
+              "ja": "10月28日 給料 +1,850.00 ユーロ"
+            }
+          ],
+          "question": {
+            "fi": "Onko sähkölasku jo maksettu?",
+            "selko": "Oletko jo maksanut sähkölaskun?",
+            "en": "Has the electricity bill already been paid?",
+            "ja": "電気料金はすでに支払われていますか？"
+          },
+          "buttons": [
+            {
+              "id": "ei-ole",
+              "label": {
+                "fi": "Ei ole",
+                "en": "No, it hasn't",
+                "ja": "いいえ、まだ"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! Tilitapahtumissa on vain vuokra, ruokakauppa ja palkka. Esimerkki Energia Oy:n laskua ei näy, joten se on vielä maksamatta.",
+                "selko": "Oikein! Listassa ei ole sähkölaskua. Sinun pitää maksaa se nyt.",
+                "en": "Right! The transactions only show rent, the grocery store and your salary. There is no payment to Esimerkki Energia Oy, so the bill is still unpaid.",
+                "ja": "正解。明細にあるのは家賃、食料品店、給料だけで、Esimerkki Energia Oy への支払いはありません。"
+              }
+            },
+            {
+              "id": "on",
+              "label": {
+                "fi": "On, 2.10.",
+                "en": "Yes, on Oct 2",
+                "ja": "はい、10月2日に払った"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "2.10. maksettu 650,00 € on \"Vuokra\", ei sähkölasku. Sähkölaskua ei ole tilitapahtumissa, joten valitse \"Ei ole\".",
+                "selko": "2.10. maksoit vuokran, et sähkölaskua. Valitse Ei ole.",
+                "en": "The €650.00 paid on Oct 2 is \"Vuokra\" (Rent), not the electricity bill. The electricity bill is not in the transactions, so choose \"Ei ole\".",
+                "ja": "10月2日の 650.00 ユーロは「Vuokra（家賃）」で、電気料金ではありません。「Ei ole」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s3",
+          "screen": [
+            {
+              "fi": "Valitse toiminto",
+              "selko": "Valitse, mitä haluat tehdä.",
+              "en": "Select an action",
+              "ja": "操作を選んでください"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "uusi-maksu",
+              "label": {
+                "fi": "Uusi maksu",
+                "en": "New payment",
+                "ja": "新しい支払い"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Maksat maksumuistutuksen tiedoilla uuden maksun, joten valitse \"Uusi maksu\".",
+                "selko": "Hyvä! Nyt maksat laskun kohdassa Uusi maksu.",
+                "en": "Good! You pay using the details on the payment reminder, so choose \"Uusi maksu\".",
+                "ja": "督促状に書かれた情報で新しく支払うので、「Uusi maksu（新しい支払い）」を選びます。"
+              }
+            },
+            {
+              "id": "e-laskut",
+              "label": {
+                "fi": "E-laskut",
+                "en": "E-invoices",
+                "ja": "e-lasku（電子請求書）"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Maksumuistutus tuli kirjeenä, joten sen tiedot syötetään kohdassa \"Uusi maksu\".",
+                "selko": "Maksumuistutus on paperinen kirje. Valitse Uusi maksu.",
+                "en": "The payment reminder came as a letter, so you enter its details under \"Uusi maksu\".",
+                "ja": "督促状は手紙で届いたので、自分で入力する「Uusi maksu」を選びます。"
+              }
+            },
+            {
+              "id": "tilitapahtumat",
+              "label": {
+                "fi": "Tilitapahtumat",
+                "en": "Account transactions",
+                "ja": "入出金明細"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Tarkistit jo tilitapahtumat. Nyt on aika maksaa lasku, joten valitse \"Uusi maksu\".",
+                "selko": "Katsoit jo tilitapahtumat. Nyt maksat laskun. Valitse Uusi maksu.",
+                "en": "You already checked the account transactions. Now it is time to pay the bill, so choose \"Uusi maksu\".",
+                "ja": "入出金明細はもう確かめました。これから支払いをするので「Uusi maksu」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "screen": [
+            {
+              "fi": "Uusi maksu",
+              "selko": "Teet uuden maksun.",
+              "en": "New payment",
+              "ja": "新しい支払い"
+            },
+            {
+              "fi": "Viitenumero",
+              "selko": "Kirjoita viitenumero.",
+              "en": "Reference number",
+              "ja": "参照番号"
+            }
+          ],
+          "question": {
+            "fi": "Mistä löydät viitenumeron?",
+            "selko": "Mistä näet oikean viitenumeron?",
+            "en": "Where do you find the reference number?",
+            "ja": "参照番号はどこに書いてありますか？"
+          },
+          "buttons": [
+            {
+              "id": "muistutus",
+              "label": {
+                "fi": "Maksumuistutuksesta",
+                "en": "On the payment reminder",
+                "ja": "督促状"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! Käytä aina viimeisimmän laskun tai maksumuistutuksen viitenumeroa (1234 5672).",
+                "selko": "Oikein! Viitenumero lukee maksumuistutuksessa.",
+                "en": "Right! Always use the reference number on the latest bill or payment reminder (1234 5672).",
+                "ja": "正解。最新の請求書や督促状に書かれている参照番号（1234 5672）を使います。"
+              }
+            },
+            {
+              "id": "tapahtumat",
+              "label": {
+                "fi": "Tilitapahtumista",
+                "en": "In the account transactions",
+                "ja": "入出金明細"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Tilitapahtumissa ei ole tätä laskua, ja viitenumero voi muuttua joka laskussa. Katso numero saamastasi kirjeestä: valitse \"Maksumuistutuksesta\".",
+                "selko": "Tämä lasku ei ole tilitapahtumissa. Katso numero kirjeestä. Valitse Maksumuistutuksesta.",
+                "en": "This bill is not in your account transactions, and a reference number can change from bill to bill. Check the letter you received: choose \"Maksumuistutuksesta\".",
+                "ja": "この請求書は入出金明細にありませんし、参照番号は請求書ごとに変わることがあります。届いた手紙を見るので「Maksumuistutuksesta」を選びます。"
+              }
+            },
+            {
+              "id": "kortti",
+              "label": {
+                "fi": "Pankkikortista",
+                "en": "On your bank card",
+                "ja": "銀行カード"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Pankkikortissa on kortin numero, ei laskun viitenumeroa. Viitenumero on laskuttajan antama numero: valitse \"Maksumuistutuksesta\".",
+                "selko": "Pankkikortissa ei ole laskun viitenumeroa. Viitenumero on kirjeessä. Valitse Maksumuistutuksesta.",
+                "en": "Your bank card has your card number, not the bill's reference number. The reference number comes from the biller: choose \"Maksumuistutuksesta\".",
+                "ja": "銀行カードにあるのはカード番号で、請求書の参照番号ではありません。参照番号は督促状に書いてあるので「Maksumuistutuksesta」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s5",
+          "screen": [
+            {
+              "fi": "Summa (€)",
+              "selko": "Kirjoita maksettava summa euroina.",
+              "en": "Amount (€)",
+              "ja": "金額（€）"
+            }
+          ],
+          "question": {
+            "fi": "Minkä summan kirjoitat?",
+            "selko": "Minkä summan kirjoitat tähän?",
+            "en": "What amount do you enter?",
+            "ja": "どの金額を入力しますか？"
+          },
+          "buttons": [
+            {
+              "id": "53-60",
+              "label": {
+                "fi": "53,60",
+                "en": "53,60",
+                "ja": "53,60"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Oikein! Maksat yhteissumman 53,60 €, jossa on mukana sekä alkuperäinen lasku (48,60 €) että muistutusmaksu (5,00 €).",
+                "selko": "Oikein! Maksat koko summan 53,60 €. Siinä on lasku ja muistutusmaksu.",
+                "en": "Right! You pay the total amount of €53.60, which includes both the original bill (€48.60) and the reminder fee (€5.00).",
+                "ja": "正解。元の請求額（48.60 ユーロ）に督促手数料（5.00 ユーロ）を足した合計の 53,60 を払います。"
+              }
+            },
+            {
+              "id": "48-60",
+              "label": {
+                "fi": "48,60",
+                "en": "48,60",
+                "ja": "48,60"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "48,60 € on vain alkuperäinen lasku. Koska maksu myöhästyi, sinun pitää maksaa myös muistutusmaksu 5,00 €. Valitse \"Yhteensä\"-kohdan summa \"53,60\".",
+                "selko": "48,60 € ei riitä, koska mukana ei ole muistutusmaksua. Valitse yhteissumma 53,60.",
+                "en": "€48.60 is only the original bill. Because the payment was late, you also have to pay the €5.00 reminder fee. Choose the total amount, \"53,60\".",
+                "ja": "48,60 は元の請求額だけで、督促手数料（5.00 ユーロ）が足りません。「Yhteensä（合計）」の「53,60」を選びます。"
+              }
+            },
+            {
+              "id": "5",
+              "label": {
+                "fi": "5,00",
+                "en": "5,00",
+                "ja": "5,00"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "5,00 € on pelkkä muistutusmaksu. Myös itse sähkölasku on maksamatta, joten valitse yhteissumma \"53,60\".",
+                "selko": "5,00 € on vain muistutusmaksu. Sinun pitää maksaa myös sähkölasku. Valitse 53,60.",
+                "en": "€5.00 is only the reminder fee. The electricity bill itself is still unpaid too, so choose the total amount, \"53,60\".",
+                "ja": "5,00 は督促手数料だけです。元の電気料金も合わせて払う必要があるので、合計の「53,60」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s6",
+          "screen": [
+            {
+              "fi": "Tarkista maksun tiedot",
+              "selko": "Tarkista, että maksun tiedot ovat oikein.",
+              "en": "Check the payment details",
+              "ja": "支払い内容を確認してください"
+            },
+            {
+              "fi": "Saaja: Esimerkki Energia Oy",
+              "selko": "Saaja on Esimerkki Energia Oy.",
+              "en": "Payee: Esimerkki Energia Oy",
+              "ja": "受取人: Esimerkki Energia Oy"
+            },
+            {
+              "fi": "Summa: 53,60 €",
+              "selko": "Summa on 53 euroa ja 60 senttiä.",
+              "en": "Amount: €53.60",
+              "ja": "金額: 53.60 ユーロ"
+            },
+            {
+              "fi": "Viitenumero: 1234 5672",
+              "selko": "Viitenumero on 1234 5672.",
+              "en": "Reference number: 1234 5672",
+              "ja": "参照番号: 1234 5672"
+            }
+          ],
+          "question": null,
+          "buttons": [
+            {
+              "id": "hyvaksy",
+              "label": {
+                "fi": "Hyväksy",
+                "en": "Approve",
+                "ja": "承認する"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hyvä! Saaja, yhteissumma ja viitenumero ovat oikein, joten voit hyväksyä maksun.",
+                "selko": "Hyvä! Kaikki tiedot ovat oikein. Voit hyväksyä maksun.",
+                "en": "Good! The payee, total amount and reference number are right, so you can approve the payment.",
+                "ja": "受取人、合計金額、参照番号がすべて合っているので、「Hyväksy（承認する）」で支払いを確定します。"
+              }
+            },
+            {
+              "id": "muokkaa",
+              "label": {
+                "fi": "Muokkaa",
+                "en": "Edit",
+                "ja": "修正する"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Tiedot täsmäävät maksumuistutuksen kanssa, joten niitä ei tarvitse muokata. Valitse \"Hyväksy\".",
+                "selko": "Tiedot ovat jo oikein. Valitse Hyväksy.",
+                "en": "The details match the payment reminder, so there is nothing to edit. Choose \"Hyväksy\".",
+                "ja": "督促状の内容と合っているので、修正する必要はありません。「Hyväksy」を選びます。"
+              }
+            },
+            {
+              "id": "peruuta",
+              "label": {
+                "fi": "Peruuta",
+                "en": "Cancel",
+                "ja": "取り消す"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "\"Peruuta\" keskeyttää maksun, ja lasku jää edelleen maksamatta. Valitse \"Hyväksy\".",
+                "selko": "Peruuta lopettaa maksun. Valitse Hyväksy.",
+                "en": "\"Peruuta\" cancels the payment and leaves the bill unpaid. Choose \"Hyväksy\".",
+                "ja": "「Peruuta（取り消す）」を押すと支払いが中止されてしまいます。「Hyväksy」を選びます。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "screen": [
+            {
+              "fi": "Maksu on hyväksytty.",
+              "selko": "Maksu on nyt valmis.",
+              "en": "Payment approved.",
+              "ja": "支払いが承認されました。"
+            }
+          ],
+          "question": {
+            "fi": "Jos et joskus pysty maksamaan laskua ajoissa, mitä kannattaa tehdä?",
+            "selko": "Mitä sinun kannattaa tehdä, jos et pysty maksamaan laskua ajoissa?",
+            "en": "If you ever can't pay a bill on time, what should you do?",
+            "ja": "もし期日までに請求書を払えないときは、どうするのがよいですか？"
+          },
+          "buttons": [
+            {
+              "id": "yhteys",
+              "label": {
+                "fi": "Ottaa heti yhteyttä laskuttajaan",
+                "en": "Contact the biller right away",
+                "ja": "すぐに請求元へ連絡する"
+              },
+              "key": null,
+              "correct": true,
+              "feedback": {
+                "fi": "Hienoa! Kun otat yhteyttä laskuttajaan ennen eräpäivää, voit usein sopia lisämaksuajasta tai maksusuunnitelmasta ennen kuin kuluja kertyy.",
+                "selko": "Hienoa! Ota heti yhteyttä laskuttajaan. Voit pyytää lisää maksuaikaa tai maksusuunnitelman.",
+                "en": "Great! When you contact the biller before the due date, you can often agree on an extension or a payment plan before extra costs build up.",
+                "ja": "正解。期日の前に請求元へ連絡すれば、余分な費用が増える前に支払期限の延長や分割払いを相談できることがよくあります。"
+              }
+            },
+            {
+              "id": "odottaa",
+              "label": {
+                "fi": "Odottaa seuraavaa kirjettä",
+                "en": "Wait for the next letter",
+                "ja": "次の手紙が来るのを待つ"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Odottaminen kasvattaa kuluja: maksumuistutuksen jälkeen lasku voi siirtyä perintään, josta tulee lisää maksuja. Valitse \"Ottaa heti yhteyttä laskuttajaan\".",
+                "selko": "Älä odota. Jos odotat, lasku menee perintään ja maksat enemmän. Valitse Ottaa heti yhteyttä laskuttajaan.",
+                "en": "Waiting increases the costs: after a payment reminder, the bill can go to debt collection (\"perintä\"), which adds more fees. Choose \"Ottaa heti yhteyttä laskuttajaan\".",
+                "ja": "待っていると費用が増えてしまいます。督促状の次は債権回収（perintä）に回り、さらに手数料がかかることがあります。「Ottaa heti yhteyttä laskuttajaan」を選びます。"
+              }
+            },
+            {
+              "id": "jattaa",
+              "label": {
+                "fi": "Jättää kirjeen avaamatta",
+                "en": "Leave the letter unopened",
+                "ja": "手紙を開けずにそのままにする"
+              },
+              "key": null,
+              "correct": false,
+              "feedback": {
+                "fi": "Avaamaton kirje ei poista laskua, vaan kulut kasvavat ja lasku voi mennä perintään. Avaa kirjeet aina ja valitse \"Ottaa heti yhteyttä laskuttajaan\".",
+                "selko": "Lasku ei katoa, vaikka et avaa kirjettä. Avaa kirjeet aina. Valitse Ottaa heti yhteyttä laskuttajaan.",
+                "en": "Leaving a letter unopened does not make the bill go away; costs keep growing and the bill may go to debt collection. Always open your mail and choose \"Ottaa heti yhteyttä laskuttajaan\".",
+                "ja": "手紙を開けなくても請求は消えず、債権回収に進んで費用が増えてしまいます。手紙は必ず開け、「Ottaa heti yhteyttä laskuttajaan」を選びます。"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "infoCards": [
+    {
+      "id": "laskut-1",
+      "title": {
+        "fi": "Laskun tiedot",
+        "selko": "Laskun tärkeät tiedot",
+        "en": "Details on a bill",
+        "ja": "請求書の大事な欄"
+      },
+      "body": [
+        {
+          "fi": "Laskun tärkeimmät kohdat ovat eräpäivä (mihin päivään mennessä lasku pitää maksaa), summa, saaja ja saajan tilinumero eli IBAN. Suomalainen IBAN alkaa kirjaimilla FI, joiden jälkeen tulee 16 numeroa.",
+          "selko": "Tarkista laskusta eräpäivä, summa, saaja ja tilinumero eli IBAN. Suomalainen IBAN alkaa kirjaimilla FI, ja siinä on 16 numeroa.",
+          "en": "The most important fields on a bill are the due date (\"eräpäivä\", the date by which it must be paid), the amount, the payee (\"saaja\") and the payee's IBAN account number. A Finnish IBAN starts with FI followed by 16 digits.",
+          "ja": "請求書で特に大事な欄は、eräpäivä（支払期日＝いつまでに払うか）、金額、saaja（受取人）、saajan tilinumero（IBAN 口座番号）です。フィンランドの IBAN は「FI」と 16 桁の数字で書かれます。"
+        },
+        {
+          "fi": "Viitenumero on numero, jolla laskuttaja tunnistaa maksusi. Jos laskussa on viitenumero, kirjoita aina se äläkä viestiä.",
+          "selko": "Viitenumero kertoo laskuttajalle, kuka maksoi laskun. Kun laskussa on viitenumero, käytä aina sitä äläkä viestiä.",
+          "en": "The reference number (\"viitenumero\") is how the biller identifies your payment. If a bill has a reference number, always enter it instead of a message.",
+          "ja": "viitenumero（参照番号）は、請求元がだれの支払いかを識別するための番号です。請求書に viitenumero があれば、メッセージ欄（viesti）ではなく必ず viitenumero を入力します。"
+        },
+        {
+          "fi": "Älä sekoita laskun päivää ja eräpäivää: laskun päivä kertoo vain, milloin lasku on lähetetty.",
+          "selko": "Laskun päivä kertoo, milloin yritys lähetti laskun. Eräpäivä on viimeinen maksupäivä.",
+          "en": "Don't confuse the invoice date (\"laskun päivä\") with the due date (\"eräpäivä\"): the invoice date only tells you when the bill was issued.",
+          "ja": "laskun päivä（請求書の作成日）と eräpäivä（支払期日）を取り違えないようにしましょう。laskun päivä は請求書が作られた日を表すだけです。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "Mihin mennessä? eräpäivään mennessä (illatiivi + mennessä) – Milloin? eräpäivänä, 30. marraskuuta",
+        "selko": "Maksa lasku eräpäivään mennessä. Raha lähtee tililtä eräpäivänä.",
+        "en": "By when? eräpäivään mennessä (illative + mennessä, \"by the due date\"). When? eräpäivänä (essive, \"on the due date\"), 30. marraskuuta (\"on November 30\").",
+        "ja": "「いつまでに？」は入格＋mennessä: eräpäivään mennessä（支払期日までに）。「いつ？」は様格: eräpäivänä（支払期日に）、30. marraskuuta（11月30日に）。"
+      }
+    },
+    {
+      "id": "laskut-2",
+      "title": {
+        "fi": "E-lasku",
+        "selko": "Mikä on e-lasku?",
+        "en": "E-invoices",
+        "ja": "e-lasku（電子請求書）"
+      },
+      "body": [
+        {
+          "fi": "E-lasku on sähköinen lasku, joka saapuu suoraan omaan verkkopankkiisi. Siinä saajan tilinumero, viitenumero, summa ja eräpäivä ovat valmiina.",
+          "selko": "E-lasku tulee suoraan verkkopankkiin. Tilinumero, viitenumero, summa ja eräpäivä ovat siinä jo valmiina.",
+          "en": "An e-invoice (\"e-lasku\") is an electronic bill delivered straight to your online bank. The payee's account number, reference number, amount and due date are already filled in.",
+          "ja": "e-lasku はネットバンクに直接届く電子請求書です。受取人の口座番号、参照番号、金額、支払期日が最初から入っています。"
+        },
+        {
+          "fi": "Kun tarkistat e-laskun ja painat \"Hyväksy maksuun\", maksu lähtee tililtäsi eräpäivänä. Voit myös asettaa e-laskut maksettaviksi automaattisesti.",
+          "selko": "Tarkista e-lasku ja valitse Hyväksy maksuun. Voit myös valita, että pankki maksaa e-laskun automaattisesti.",
+          "en": "Once you check the e-invoice and press \"Hyväksy maksuun\" (Approve for payment), the payment goes out on the due date. You can also set e-invoices to be paid automatically.",
+          "ja": "内容を確かめて「Hyväksy maksuun（支払いを承認する）」を押せば、支払期日に口座から引き落とされます。自動で支払う設定にもできます。"
+        },
+        {
+          "fi": "Jos hylkäät e-laskun verkkopankissa, maksu ei lähde, mutta itse lasku ei katoa. Jos laskussa on virhe, ota yhteyttä laskuttajaan.",
+          "selko": "Jos painat Hylkää, lasku ei silti katoa. Jos lasku on väärin, ota yhteyttä laskuttajaan.",
+          "en": "If you reject (\"hylkää\") an e-invoice in the online bank, the payment won't go out, but the bill itself does not disappear. If there is a mistake on the bill, contact the biller.",
+          "ja": "ネットバンクで e-lasku を却下（hylkää）しても、引き落としが止まるだけで請求そのものは消えません。請求内容に間違いがあるときは請求元に連絡します。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "hyväksyä + mihin? → hyväksyä lasku maksuun",
+        "selko": "Hyväksy e-lasku maksuun.",
+        "en": "hyväksyä (to approve) + illative: hyväksyä lasku maksuun (\"to approve a bill for payment\").",
+        "ja": "hyväksyä＋入格: hyväksyä lasku maksuun（請求書の支払いを承認する。直訳は「支払いへ承認する」）"
+      }
+    },
+    {
+      "id": "laskut-3",
+      "title": {
+        "fi": "Jos maksu myöhästyy",
+        "selko": "Jos et pysty maksamaan ajoissa",
+        "en": "If a payment is late",
+        "ja": "支払いが遅れたら"
+      },
+      "body": [
+        {
+          "fi": "Jos laskua ei makseta eräpäivään mennessä, laskuttaja lähettää maksumuistutuksen. Silloin laskuun voidaan lisätä muistutusmaksu ja viivästyskorko.",
+          "selko": "Jos maksat laskun myöhässä, saat maksumuistutuksen. Silloin joudut ehkä maksamaan myös muistutusmaksun ja viivästyskorkoa.",
+          "en": "If a bill is not paid by the due date, the biller sends a payment reminder (\"maksumuistutus\"). A reminder fee (\"muistutusmaksu\") and late-payment interest (\"viivästyskorko\") may then be added.",
+          "ja": "支払期日までに払わないと、請求元から督促状（maksumuistutus）が届き、督促手数料（muistutusmaksu）や遅延利息（viivästyskorko）が加算されることがあります。"
+        },
+        {
+          "fi": "Jos huomaat, ettet pysty maksamaan laskua ajoissa, ota heti yhteyttä laskuttajaan ja pyydä lisää maksuaikaa tai maksusuunnitelmaa. Jos jätät muistutuksen huomiotta, lasku voi siirtyä perintään ja kulut kasvavat.",
+          "selko": "Jos et pysty maksamaan ajoissa, ota heti yhteyttä laskuttajaan. Pyydä lisää maksuaikaa tai maksusuunnitelmaa. Jos et tee mitään, lasku menee perintään ja maksat enemmän.",
+          "en": "If you see that you cannot pay on time, contact the biller right away and ask for more time to pay (\"lisää maksuaikaa\") or a payment plan (\"maksusuunnitelma\"). If you ignore the reminder, the bill can go to debt collection (\"perintä\") and costs will grow.",
+          "ja": "期日までに払えないと分かったら、すぐに請求元へ連絡して支払期限の延長（lisää maksuaikaa）や分割払い（maksusuunnitelma）を頼みましょう。放置すると債権回収（perintä）に進み、費用が増えてしまいます。"
+        },
+        {
+          "fi": "Jos rahat eivät riitä laskuihin, saat maksutonta apua julkisesta talous- ja velkaneuvonnasta.",
+          "selko": "Jos sinulla on vaikeuksia laskujen kanssa, saat ilmaista apua talous- ja velkaneuvonnasta.",
+          "en": "If your money is not enough to cover your bills, you can get free help from public financial and debt counseling (\"talous- ja velkaneuvonta\").",
+          "ja": "請求書の支払いに困ったときは、公的な家計・債務相談（talous- ja velkaneuvonta）で無料の相談が受けられます。"
+        }
+      ],
+      "grammarNote": {
+        "fi": "-maton / -mätön = ei tehty: maksaa → maksamaton lasku, avata → avaamaton kirje",
+        "selko": "Maksamaton lasku = lasku, jota et ole vielä maksanut.",
+        "en": "-maton / -mätön expresses \"un- / not done\": maksaa (to pay) → maksamaton lasku (unpaid bill), avata (to open) → avaamaton kirje (unopened letter).",
+        "ja": "-maton / -mätön は「未〜・〜されていない」を表す: maksaa（払う）→ maksamaton lasku（未払いの請求書）、avata（開ける）→ avaamaton kirje（未開封の手紙）"
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "lasku",
+      "translation": "bill, invoice",
+      "translationJa": "請求書"
+    },
+    {
+      "word": "eräpäivä",
+      "translation": "due date",
+      "translationJa": "支払期日"
+    },
+    {
+      "word": "viitenumero",
+      "translation": "reference number",
+      "translationJa": "参照番号"
+    },
+    {
+      "word": "tilinumero",
+      "translation": "account number (IBAN)",
+      "translationJa": "口座番号（IBAN）"
+    },
+    {
+      "word": "saaja",
+      "translation": "payee, recipient",
+      "translationJa": "受取人"
+    },
+    {
+      "word": "verkkopankki",
+      "translation": "online bank",
+      "translationJa": "ネットバンク"
+    },
+    {
+      "word": "e-lasku",
+      "translation": "e-invoice",
+      "translationJa": "e-lasku（電子請求書）"
+    },
+    {
+      "word": "hyväksyä",
+      "translation": "to approve, accept",
+      "translationJa": "承認する・受け入れる"
+    },
+    {
+      "word": "maksumuistutus",
+      "translation": "payment reminder",
+      "translationJa": "督促状"
+    },
+    {
+      "word": "viivästyskorko",
+      "translation": "late-payment interest",
+      "translationJa": "遅延利息"
+    },
+    {
+      "word": "maksuaika",
+      "translation": "time to pay (lisää maksuaikaa = an extension)",
+      "translationJa": "支払猶予・支払期間（lisää maksuaikaa＝期限の延長）"
+    },
+    {
+      "word": "tilitapahtuma",
+      "translation": "account transaction (usually plural: tilitapahtumat)",
+      "translationJa": "入出金明細（ふつう複数形: tilitapahtumat）"
+    }
+  ]
+}

@@ -53,5 +53,18 @@
     "gameIds": [
       "mista-apua"
     ]
+  },
+  {
+    "id": "raha",
+    "icon": "💶",
+    "order": 5,
+    "title": {
+      "fi": "Raha",
+      "en": "Money",
+      "ja": "お金"
+    },
+    "gameIds": [
+      "laskut"
+    ]
   }
 ]
