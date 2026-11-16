@@ -41,6 +41,7 @@ describe('Scene Index Module', () => {
     expect(lahioGames.map((g) => g.id)).toEqual(['jatekatos', 'rappukaytava']);
 
     expect(getGamesByScene('kaupunki').map((g) => g.id)).toEqual(['ajanvaraus', 'pankkiautomaatti', 'virastot']);
+    expect(getGamesByScene('terveys').map((g) => g.id)).toEqual(['mista-apua']);
 
     const unknownGames = getGamesByScene('unknown');
     expect(unknownGames).toEqual([]);
@@ -49,14 +50,15 @@ describe('Scene Index Module', () => {
   it('getRecommendedGames returns games with sequential numbers and scenes in order', () => {
     const recs = getRecommendedGames();
     expect(Array.isArray(recs)).toBe(true);
-    expect(recs.length).toBe(6);
+    expect(recs.length).toBe(7);
     expect(recs.map((r) => r.game.id)).toEqual([
       'vaatteet',
       'jatekatos',
       'rappukaytava',
       'ajanvaraus',
       'pankkiautomaatti',
-      'virastot'
+      'virastot',
+      'mista-apua'
     ]);
 
     recs.forEach((item, idx) => {
@@ -71,6 +73,7 @@ describe('Scene Index Module', () => {
     expect(getUpcomingGames('lahio')).toEqual([]);
     expect(getUpcomingGames('koti')).toEqual([]);
     expect(getUpcomingGames('kaupunki')).toEqual([]);
+    expect(getUpcomingGames('terveys')).toEqual([]);
   });
 
   it('getNextRecommended returns the next game or null if last/unknown', () => {
@@ -85,7 +88,11 @@ describe('Scene Index Module', () => {
     const nextAfterPankkiautomaatti = getNextRecommended('pankkiautomaatti');
     expect(nextAfterPankkiautomaatti.game.id).toBe('virastot');
     expect(nextAfterPankkiautomaatti.number).toBe(6);
-    expect(getNextRecommended('virastot')).toBeNull();
+    const nextAfterVirastot = getNextRecommended('virastot');
+    expect(nextAfterVirastot.game.id).toBe('mista-apua');
+    expect(nextAfterVirastot.number).toBe(7);
+    expect(nextAfterVirastot.scene.id).toBe('terveys');
+    expect(getNextRecommended('mista-apua')).toBeNull();
     expect(getNextRecommended('non-existent')).toBeNull();
     expect(getNextRecommended(null)).toBeNull();
   });

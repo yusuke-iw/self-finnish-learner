@@ -12,6 +12,7 @@ import rappukaytava from '../../data/scenes/rappukaytava.json';
 import ajanvaraus from '../../data/scenes/ajanvaraus.json';
 import pankkiautomaatti from '../../data/scenes/pankkiautomaatti.json';
 import virastot from '../../data/scenes/virastot.json';
+import mistaApua from '../../data/scenes/mista-apua.json';
 import { setSceneTextMode } from '../../utils/sceneText';
 import { hasJapanese } from '../../utils/sceneText';
 import { createProcedureRound } from '../../utils/procedureSim';
@@ -296,7 +297,7 @@ describe('SceneGame Page', () => {
     }
   );
 
-  it('plays the /scenes/virastot office game through with wrong taps, then marks it played and offers no next game', () => {
+  it('plays the /scenes/virastot office game through with wrong taps, then marks it played and offers the health game next', () => {
     renderGame('virastot');
     expect(screen.getByRole('heading', { level: 2, name: /Virastoissa/ })).toBeInTheDocument();
     expect(screen.getByText(/どの役所で手続きする？|Which office handles it\?/)).toBeInTheDocument();
@@ -319,9 +320,38 @@ describe('SceneGame Page', () => {
 
     expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
     expect(hasPlayed('virastot')).toBe(true);
-    expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /次のおすすめ|Next recommended/ }));
+    expect(mockNavigate).toHaveBeenCalledWith('/scenes/mista-apua');
     fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l12&level=1');
+  });
+
+  it('plays the /scenes/mista-apua health game through with wrong taps, then marks it played and offers no next game', () => {
+    renderGame('mista-apua');
+    expect(screen.getByRole('heading', { level: 2, name: /Mistä apua?/ })).toBeInTheDocument();
+    expect(screen.getByText(/どこで助けてもらう？|Where do you get help?/)).toBeInTheDocument();
+
+    for (let i = 0; i < mistaApua.playLength; i++) {
+      const item = mistaApua.items.find((it) => screen.queryByText(it.label.fi));
+      expect(item).toBeDefined();
+      const wrongBin = mistaApua.bins.find((b) => b.id !== item.binId);
+      const rightBin = mistaApua.bins.find((b) => b.id === item.binId);
+      const binsGroup = screen.getByRole('group', { name: /行き先|Places to get help/ });
+      const pick = (bin) =>
+        within(binsGroup).getAllByRole('button').find((btn) => btn.textContent.includes(bin.label.fi));
+
+      fireEvent.click(pick(wrongBin));
+      expect(pick(wrongBin)).toHaveClass('wrong-choice');
+      fireEvent.click(pick(rightBin));
+      expect(screen.getByText(item.sentence.fi)).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: /次へ|完了|Next|Valmis!/i }));
+    }
+
+    expect(screen.getByText(/Valmis!/)).toBeInTheDocument();
+    expect(hasPlayed('mista-apua')).toBe(true);
+    expect(screen.queryByRole('button', { name: /次のおすすめ|Next recommended/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /このテーマの例文を練習|Practice sentences/i }));
+    expect(mockNavigate).toHaveBeenCalledWith('/sessions?lessonId=l9&level=1');
   });
 
   it('offers the sort game as the next recommended game after the outfit game', () => {

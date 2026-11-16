@@ -5,11 +5,12 @@ import rappukaytava from './rappukaytava.json';
 import ajanvaraus from './ajanvaraus.json';
 import pankkiautomaatti from './pankkiautomaatti.json';
 import virastot from './virastot.json';
+import mistaApua from './mista-apua.json';
 import upcoming from './upcoming.json';
 
 export const scenes = [...rawScenes].sort((a, b) => a.order - b.order);
 
-export const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot];
+export const games = [vaatteet, jatekatos, rappukaytava, ajanvaraus, pankkiautomaatti, virastot, mistaApua];
 
 const gamesMap = new Map(games.map((g) => [g.id, g]));
 
