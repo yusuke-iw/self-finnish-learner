@@ -23,7 +23,7 @@ The client is React 19 + Vite and the server is Express + Mongoose. The app also
 
 | Route | What it does |
 | --- | --- |
-| `/` | Home and curriculum: 5 units, 15 lessons, each with a guidebook (key vocabulary and grammar notes) and level buttons. Shows your streak and daily goal, entry points for the other exercise types, and a sync ID field. |
+| `/` | Home and curriculum: 5 units, 19 lessons, each with a guidebook (key vocabulary and grammar notes) and level buttons. Shows your streak and daily goal, entry points for the other exercise types, and a sync ID field. |
 | `/sessions` | The quiz engine. Three levels per lesson: level 1 is multiple choice or matching, level 2 is a word bank, and level 3 mixes typing, fill-in-the-blank and speaking. Typing is typo-tolerant (Levenshtein distance, so a missing double consonant or a/ä mix-up is forgiven but the correct form is shown). Enter submits, ä/ö buttons help on any keyboard, and you need 80% to unlock the next level. Wrong answers can be re-run as a mistake review. Extra exercise types: dictation and spoken-to-written practice. The speaking question uses the browser's speech recognition (Chrome or Edge). |
 | `/review` | Today's review. Sentences, grammar questions and words are scheduled by spaced repetition; this screen lists what is due and starts the session. |
 | `/words` | Word book with flashcards on the same spaced-repetition schedule. Words are added from reading passages and from scene results. |
@@ -53,7 +53,7 @@ Each game explains why an answer is right or wrong, ends with info cards (re-rea
 ### Cross-cutting features
 
 - **Text-to-speech:** Google Cloud TTS (WaveNet) through the Express server, with an in-browser audio cache and several speaker voices.
-- **Spoken Finnish:** 216 of the 270 example sentences have a colloquial (puhekieli) version with notes, and there are exercises that map spoken forms back to written ones.
+- **Spoken Finnish:** 234 of the 342 example sentences have a colloquial (puhekieli) version with notes, and there are exercises that map spoken forms back to written ones.
 - **Progress and sync ID:** progress is stored in the browser and can be shared between devices with a sync ID that the server stores.
 - **Works without a database:** with no MongoDB connection the server falls back to `seedData.js`.
 - **Performance:** routes are lazy-loaded so the grammar data stays out of the main bundle.
@@ -75,7 +75,7 @@ Measured on 2026-11-09 from the `main` branch.
 
 | Content | Amount |
 | --- | --- |
-| Example sentences | 270 (5 units, 15 lessons, 18 sentences each) |
+| Example sentences | 342 (5 units, 19 lessons, 18 sentences each) |
 | Reading passages | 12 (A1/A2 to C1) |
 | Grammar topics | 22 in 5 categories |
 | Scene settings | 6 (Koti, Lähiö, Kaupunki, Terveys, Raha, Luonto) |
@@ -114,7 +114,7 @@ Planned work, grouped into milestones. Items are directions, not detailed design
 
 ### M6 Content depth
 
-- [ ] Even out the lessons per unit (currently 4, 2, 2, 1 and 6)
+- [x] Even out the lessons per unit (was 4, 2, 2, 1 and 6, now 4, 3, 3, 3 and 6)
 - [ ] Have a native speaker check the Finnish in the example sentences and scenes
 - [ ] More reading passages and grammar topics, especially for the categories that have only one topic today (rections, idioms)
 

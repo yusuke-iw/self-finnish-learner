@@ -35,6 +35,24 @@ describe('curriculumData helpers', () => {
     expect(findLessonByTitle(title)).toBe(lesson);
   });
 
+  it('gives every unit at least three lessons', () => {
+    expect(units.map((unit) => unit.lessons.length)).toEqual([4, 3, 3, 3, 6]);
+  });
+
+  it.each([
+    [2, 'l4b', 'Passiivi'],
+    [3, 'l6b', 'Media ja kulttuuri'],
+    [4, 'l7b', 'Sanonnat ja idiomit'],
+    [4, 'l7c', 'Asiatyyli ja argumentointi'],
+  ])('finds the added Unit %i lesson %s by id and title', (unitId, id, title) => {
+    const unit = units.find((item) => item.id === unitId);
+    const lesson = findLessonById(id);
+
+    expect(unit.lessons).toContain(lesson);
+    expect(lesson).toMatchObject({ id, title });
+    expect(findLessonByTitle(title)).toBe(lesson);
+  });
+
   it('keeps unit and lesson identifiers, titles, and colors unique', () => {
     const lessons = units.flatMap((unit) => unit.lessons);
 

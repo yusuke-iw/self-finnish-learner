@@ -28,6 +28,18 @@ describe('getMatchingVocab', () => {
     expect(unknown).toHaveLength(5);
     expect(unknown.every(v => vocabularyBank.includes(v))).toBe(true);
   });
+
+  it.each(['Passiivi', 'Media ja kulttuuri', 'Sanonnat ja idiomit', 'Asiatyyli ja argumentointi'])(
+    'has 8 distinct, complete words for the %s lesson',
+    (title) => {
+      const words = categoryVocab[title];
+      expect(words).toHaveLength(8);
+      expect(new Set(words.map(v => v.fi)).size).toBe(8);
+      for (const word of words) {
+        for (const field of ['fi', 'en', 'ja']) expect(word[field].trim()).not.toBe('');
+      }
+    }
+  );
 });
 
 describe('buildChoice', () => {

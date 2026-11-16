@@ -17,35 +17,39 @@ export const units = [
     id: 2,
     title: 'Unit 2: B1 Intermediate',
     titleJa: 'ユニット 2: B1 中級編',
-    description: 'Worklife and conditional mood',
-    descriptionJa: '仕事・学習と条件法（-isi-）',
+    description: 'Worklife, conditional mood, and the passive',
+    descriptionJa: '仕事・学習、条件法（-isi-）と受動形',
     color: '#ce82ff', // Purple
     lessons: [
       { id: 'l3', title: 'Työelämä ja Opiskelu', titleJa: '仕事・学業 (Työelämä & Opiskelu)', description: 'Worklife, job interviews', descriptionJa: '職場、面接、学校生活' },
       { id: 'l4', title: 'Konditionaali ja Potentiaali', titleJa: '条件法・可能性法', description: 'Conditional mood "-isi-"', descriptionJa: '条件法「〜なら・〜したい」' },
+      { id: 'l4b', title: 'Passiivi', titleJa: '受動形 (Passiivi)', description: 'Passive voice in present, past, and perfect, and suggestions (Mennään!)', descriptionJa: '受動形の現在・過去・完了と「〜しよう」の言い方' },
     ]
   },
   {
     id: 3,
     title: 'Unit 3: B2 Advanced',
     titleJa: 'ユニット 3: B2 上級編',
-    description: 'Society and participle phrases',
-    descriptionJa: '社会・環境と分詞構文',
+    description: 'Society, participle phrases, media and culture',
+    descriptionJa: '社会・環境、分詞構文、メディアと文化',
     color: '#00cd9c', // Cyan
     lessons: [
       { id: 'l5', title: 'Yhteiskunta ja Ympäristö', titleJa: '社会・環境 (Yhteiskunta & Ympäristö)', description: 'Society, politics', descriptionJa: '時事、社会制度、環境問題' },
       { id: 'l6', title: 'Lauseenvastikkeet', titleJa: '分詞構文 (Lauseenvastikkeet)', description: 'Complex participle phrases', descriptionJa: '高度な短縮複文・分詞構文' },
+      { id: 'l6b', title: 'Media ja kulttuuri', titleJa: 'メディア・文化 (Media & Kulttuuri)', description: 'News, source criticism, books, films, and music', descriptionJa: 'ニュース、情報の見きわめ、本・映画・音楽' },
     ]
   },
   {
     id: 4,
     title: 'Unit 4: C1 Mastery',
     titleJa: 'ユニット 4: C1 最上級編',
-    description: 'Abstract and nuanced discussions',
-    descriptionJa: '抽象的・高度な議論と慣用句',
+    description: 'Abstract discussions, idioms, and formal writing',
+    descriptionJa: '抽象的な議論、慣用句、論理的な書き言葉',
     color: '#ff9600', // Orange
     lessons: [
-      { id: 'l7', title: 'Abstraktit keskustelut', titleJa: '抽象表現 (Abstraktit keskustelut)', description: 'Nuanced abstract topics, idioms', descriptionJa: 'ニュアンスに富んだ成句と抽象議論' }
+      { id: 'l7', title: 'Abstraktit keskustelut', titleJa: '抽象表現 (Abstraktit keskustelut)', description: 'Nuanced abstract topics, idioms', descriptionJa: 'ニュアンスに富んだ成句と抽象議論' },
+      { id: 'l7b', title: 'Sanonnat ja idiomit', titleJa: '慣用句・ことわざ (Sanonnat & Idiomit)', description: 'Common idioms and proverbs in context', descriptionJa: 'よく使う慣用句とことわざを文脈の中で' },
+      { id: 'l7c', title: 'Asiatyyli ja argumentointi', titleJa: '論理的な書き言葉 (Asiatyyli & Argumentointi)', description: 'Linking words for essays, reports, and formal emails', descriptionJa: '意見文・レポート・正式なメールのつなぎ言葉' },
     ]
   },
   {
