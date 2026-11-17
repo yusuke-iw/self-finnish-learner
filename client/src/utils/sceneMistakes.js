@@ -21,6 +21,13 @@ export function collectFinnishTexts(...fragments) {
   return texts;
 }
 
+// The choices to learn from in a dialogue node: the best answers ('good'), or the acceptable ones.
+export function correctChoices(node) {
+  const choices = Array.isArray(node?.choices) ? node.choices : [];
+  const good = choices.filter((c) => c.quality === 'good');
+  return good.length > 0 ? good : choices.filter((c) => c.quality === 'ok');
+}
+
 function escapeRegExp(text) {
   return text.replace(/[\\^$.*+?()[\]{}|]/g, (ch) => `\\${ch}`);
 }
